@@ -11,28 +11,13 @@
         body { font-family: 'Poppins', sans-serif; background: #000; color: white; margin: 0; padding: 20px; text-align: center; }
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
         .plan-card { background: #0a0a0a; border-radius: 20px; padding: 15px; cursor: pointer; transition: 0.3s; border: 1px solid #1a1a1a; }
         .plan-card.active { border-color: #d4af37; background: #1a1505; transform: translateY(-5px); }
-        
         .payment-section { background: #070707; border-radius: 30px; padding: 25px; margin-top: 25px; border: 1px solid #1a1a1a; }
-        
-        /* Panel de información de pago - Oculto por defecto */
-        #info-display { 
-            display: none; 
-            background: #111; 
-            border-radius: 20px; 
-            padding: 20px; 
-            margin-bottom: 20px; 
-            border: 1px dashed #333;
-            animation: fadeIn 0.4s ease-out;
-        }
-
+        #info-display { display: none; background: #111; border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px dashed #333; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .method-tab { cursor: pointer; transition: 0.3s; opacity: 0.5; padding-bottom: 8px; border-bottom: 2px solid transparent; }
         .method-tab.active-tab { opacity: 1; color: #d4af37; border-bottom: 2px solid #d4af37; }
-
         .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; border: 2px solid #d4af37; padding: 20px; border-radius: 20px; z-index: 1000; width: 95%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
         input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 8px; border-radius: 8px; width: 100%; margin-bottom: 8px; }
         .flag-btn { font-size: 22px; cursor: pointer; opacity: 0.3; transition: 0.3s; }
@@ -46,8 +31,6 @@
         <p class="text-[10px] tracking-[0.4em] uppercase opacity-60">El Personaje del Azar</p>
     </header>
 
-    <p class="text-xs gold-text mt-6 mb-4 font-bold uppercase tracking-widest">Elige tu camino al éxito</p>
-
     <div class="flex gap-4 mb-8 justify-center flex-wrap">
         <span onclick="setCountry('CR')" id="f-CR" class="flag-btn">🇨🇷</span>
         <span onclick="setCountry('NI')" id="f-NI" class="flag-btn">🇳🇮</span>
@@ -59,16 +42,16 @@
     </div>
 
     <div class="grid grid-cols-1 gap-3 max-w-sm mx-auto mb-8">
-        <div onclick="setPlan(1)" id="p-1" class="plan-card">
+        <div onclick="setPlan(1, 'Membresía por Hoy')" id="p-1" class="plan-card">
             <h3 class="text-sm font-bold uppercase tracking-wider">Membresía por Hoy</h3>
             <p class="gold-text font-bold">$1 USD</p>
         </div>
-        <div onclick="setPlan(5)" id="p-5" class="plan-card active">
+        <div onclick="setPlan(5, 'Senda Ganadora')" id="p-5" class="plan-card active">
             <p class="text-[9px] uppercase opacity-50">Acceso 7 Días</p>
             <h3 class="text-sm font-bold uppercase tracking-wider">Senda Ganadora</h3>
             <p class="gold-text font-bold">$5 USD</p>
         </div>
-        <div onclick="setPlan(15)" id="p-15" class="plan-card">
+        <div onclick="setPlan(15, 'Membresía VIP')" id="p-15" class="plan-card">
             <p class="text-[9px] uppercase opacity-50">Acceso Mensual</p>
             <h3 class="text-sm font-bold uppercase tracking-wider">Membresía VIP</h3>
             <p class="gold-text font-bold">$15 USD</p>
@@ -94,32 +77,30 @@
             <p id="usd-reference" class="text-[9px] opacity-40 mt-1 uppercase tracking-widest">---</p>
         </div>
 
-        <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="processReceipt(this)">
+        <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="sendToWhatsApp(this)">
         <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest mt-8 hover:bg-gray-200 transition">
             Validar Comprobante con IA
         </button>
     </div>
 
     <div id="adminModal" class="admin-panel shadow-2xl">
-        <h3 class="gold-text font-bold mb-4 uppercase text-center text-sm">Configuración Administrativa</h3>
+        <h3 class="gold-text font-bold mb-4 uppercase text-center text-sm">Panel Maestro</h3>
         <input type="text" id="in-titular" placeholder="Nombre Titular">
         <input type="text" id="in-sinpe" placeholder="Número SINPE">
         <input type="text" id="in-iban" placeholder="Cuenta IBAN">
         <input type="text" id="in-paypal" placeholder="Correo PayPal">
-        <p class="text-[10px] text-yellow-500 my-2 uppercase font-bold">Tasas de Cambio ($1 = X)</p>
+        <input type="text" id="in-phone" placeholder="Tu WhatsApp (ej: 50688888888)">
+        <p class="text-[10px] text-yellow-500 my-2 uppercase font-bold">Tasas de Cambio</p>
         <div class="grid grid-cols-2 gap-2">
-            <div><label class="text-[9px]">CR (₡)</label><input type="number" id="ex-cr"></div>
-            <div><label class="text-[9px]">NI (C$)</label><input type="number" id="ex-ni"></div>
-            <div><label class="text-[9px]">GT (Q)</label><input type="number" id="ex-gt"></div>
-            <div><label class="text-[9px]">HN (L)</label><input type="number" id="ex-hn"></div>
+            <input type="number" id="ex-cr" placeholder="CR ₡">
+            <input type="number" id="ex-ni" placeholder="NI C$">
         </div>
         <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white p-3 rounded-xl font-bold text-xs mt-4 uppercase tracking-widest">Guardar Cambios</button>
-        <button onclick="closeAdmin()" class="w-full text-gray-500 text-[9px] mt-4 uppercase">Cerrar</button>
     </div>
 
     <script>
-        let adminClicks = 0;
-        let selectedPlan = 5;
+        let selectedPlanPrice = 5;
+        let selectedPlanName = "Senda Ganadora";
         let currentCountry = 'CR';
         let currentMethod = null;
 
@@ -128,40 +109,29 @@
             sinpe: "6453-5475",
             iban: "CR8008031500100003564",
             paypal: "pagos@francruzvip.com",
+            phone: "50688888888", // Cambia esto por tu número real en el panel
             rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, SV: 1, PA: 1, US: 1 }
         };
 
         let data = JSON.parse(localStorage.getItem('franCruzVIP')) || defaults;
 
         const geo = {
-            CR: { s: '₡', rateKey: 'CR' },
-            NI: { s: 'C$', rateKey: 'NI' },
-            PA: { s: '$', rateKey: 'PA' },
-            HN: { s: 'L', rateKey: 'HN' },
-            SV: { s: '$', rateKey: 'SV' },
-            GT: { s: 'Q', rateKey: 'GT' },
-            US: { s: '$', rateKey: 'US' }
+            CR: { s: '₡', rateKey: 'CR' }, NI: { s: 'C$', rateKey: 'NI' }, PA: { s: '$', rateKey: 'PA' },
+            HN: { s: 'L', rateKey: 'HN' }, SV: { s: '$', rateKey: 'SV' }, GT: { s: 'Q', rateKey: 'GT' }, US: { s: '$', rateKey: 'US' }
         };
-
-        async function init() {
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const resData = await res.json();
-                setCountry(geo[resData.country_code] ? resData.country_code : 'CR');
-            } catch { setCountry('CR'); }
-        }
 
         function setCountry(code) {
             currentCountry = code;
             document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
-            if(document.getElementById('f-' + code)) document.getElementById('f-' + code).classList.add('active');
+            document.getElementById('f-' + code).classList.add('active');
             updateDisplay();
         }
 
-        function setPlan(val) {
-            selectedPlan = val;
+        function setPlan(val, name) {
+            selectedPlanPrice = val;
+            selectedPlanName = name;
             document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
-            document.getElementById('p-' + val).classList.add('active');
+            event.currentTarget.classList.add('active');
             updateDisplay();
         }
 
@@ -169,8 +139,6 @@
             currentMethod = m;
             document.querySelectorAll('.method-tab').forEach(s => s.classList.remove('active-tab'));
             document.getElementById('m-' + m).classList.add('active-tab');
-            
-            // Mostrar el recuadro de información solo ahora
             document.getElementById('info-display').style.display = 'block';
             updateDisplay();
         }
@@ -178,66 +146,56 @@
         function updateDisplay() {
             const g = geo[currentCountry];
             const rate = data.rates[g.rateKey];
-            const total = (selectedPlan * rate).toLocaleString();
-            
+            const total = (selectedPlanPrice * rate).toLocaleString();
             document.getElementById('final-price').innerText = g.s + total;
-            document.getElementById('usd-reference').innerText = `Referencia: $${selectedPlan} USD`;
+            document.getElementById('usd-reference').innerText = `Referencia: $${selectedPlanPrice} USD`;
             document.getElementById('pay-titular').innerText = data.titular;
-
-            const label = document.getElementById('pay-label');
             const main = document.getElementById('pay-data');
-
-            if(currentMethod === 'sinpe') { label.innerText = "Número SINPE:"; main.innerText = data.sinpe; }
-            else if(currentMethod === 'paypal') { label.innerText = "Correo PayPal:"; main.innerText = data.paypal; }
-            else if(currentMethod === 'transfer') { label.innerText = "IBAN / Depósito:"; main.innerText = data.iban; }
-            else {
-                // Si no hay método, el recuadro se oculta por si acaso
-                document.getElementById('info-display').style.display = 'none';
-            }
+            if(currentMethod === 'sinpe') main.innerText = data.sinpe;
+            else if(currentMethod === 'paypal') main.innerText = data.paypal;
+            else if(currentMethod === 'transfer') main.innerText = data.iban;
         }
 
-        function processReceipt(input) {
+        function sendToWhatsApp(input) {
             if (input.files && input.files[0]) {
-                alert("Comprobante recibido. Iniciando análisis de IA para validar tu transacción...");
+                const message = `Hola Fran Cruz! Acabo de realizar el pago para el plan: *${selectedPlanName}* ($${selectedPlanPrice} USD) desde *${currentCountry}*. Adjunto mi comprobante para validación por IA.`;
+                const whatsappUrl = `https://wa.me/${data.phone}?text=${encodeURIComponent(message)}`;
+                
+                alert("Redirigiendo a WhatsApp... Por favor, adjunta la imagen del comprobante en el chat que se abrirá.");
+                window.open(whatsappUrl, '_blank');
             }
         }
 
         function handleAdminClicks() {
-            adminClicks++;
+            adminClicks = (window.adminClicks || 0) + 1;
+            window.adminClicks = adminClicks;
             if(adminClicks === 5) {
                 document.getElementById('adminModal').style.display = 'block';
                 document.getElementById('in-titular').value = data.titular;
                 document.getElementById('in-sinpe').value = data.sinpe;
                 document.getElementById('in-iban').value = data.iban;
                 document.getElementById('in-paypal').value = data.paypal;
+                document.getElementById('in-phone').value = data.phone;
                 document.getElementById('ex-cr').value = data.rates.CR;
                 document.getElementById('ex-ni').value = data.rates.NI;
-                document.getElementById('ex-gt').value = data.rates.GT;
-                document.getElementById('ex-hn').value = data.rates.HN;
             }
-            setTimeout(() => { adminClicks = 0; }, 3000);
+            setTimeout(() => window.adminClicks = 0, 3000);
         }
 
         function saveAdminData() {
-            data = {
-                titular: document.getElementById('in-titular').value,
-                sinpe: document.getElementById('in-sinpe').value,
-                iban: document.getElementById('in-iban').value,
-                paypal: document.getElementById('in-paypal').value,
-                rates: {
-                    CR: parseFloat(document.getElementById('ex-cr').value),
-                    NI: parseFloat(document.getElementById('ex-ni').value),
-                    GT: parseFloat(document.getElementById('ex-gt').value),
-                    HN: parseFloat(document.getElementById('ex-hn').value),
-                    SV: 1, PA: 1, US: 1
-                }
-            };
+            data.titular = document.getElementById('in-titular').value;
+            data.sinpe = document.getElementById('in-sinpe').value;
+            data.iban = document.getElementById('in-iban').value;
+            data.paypal = document.getElementById('in-paypal').value;
+            data.phone = document.getElementById('in-phone').value;
+            data.rates.CR = parseFloat(document.getElementById('ex-cr').value);
+            data.rates.NI = parseFloat(document.getElementById('ex-ni').value);
             localStorage.setItem('franCruzVIP', JSON.stringify(data));
             location.reload();
         }
 
         function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
-        init();
+        setCountry('CR');
     </script>
 </body>
 </html>
