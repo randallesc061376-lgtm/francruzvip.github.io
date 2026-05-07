@@ -18,8 +18,9 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .method-tab { cursor: pointer; transition: 0.3s; opacity: 0.5; padding-bottom: 8px; border-bottom: 2px solid transparent; }
         .method-tab.active-tab { opacity: 1; color: #d4af37; border-bottom: 2px solid #d4af37; }
-        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; border: 2px solid #d4af37; padding: 20px; border-radius: 20px; z-index: 1000; width: 95%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
-        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 8px; border-radius: 8px; width: 100%; margin-bottom: 8px; }
+        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; border: 2px solid #d4af37; padding: 20px; border-radius: 20px; z-index: 1000; width: 95%; max-width: 400px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 50px rgba(212, 175, 55, 0.2); }
+        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 12px; width: 100%; margin-bottom: 10px; font-size: 14px; }
+        input::placeholder { color: #555; }
         .flag-btn { font-size: 22px; cursor: pointer; opacity: 0.3; transition: 0.3s; }
         .flag-btn.active { opacity: 1; transform: scale(1.2); }
     </style>
@@ -32,7 +33,7 @@
     </header>
 
     <div class="flex gap-4 mb-8 justify-center flex-wrap">
-        <span onclick="setCountry('CR')" id="f-CR" class="flag-btn">🇨🇷</span>
+        <span onclick="setCountry('CR')" id="f-CR" class="flag-btn active">🇨🇷</span>
         <span onclick="setCountry('NI')" id="f-NI" class="flag-btn">🇳🇮</span>
         <span onclick="setCountry('PA')" id="f-PA" class="flag-btn">🇵🇦</span>
         <span onclick="setCountry('HN')" id="f-HN" class="flag-btn">🇭🇳</span>
@@ -83,22 +84,36 @@
         </button>
     </div>
 
-    <div id="adminModal" class="admin-panel shadow-2xl">
-        <h3 class="gold-text font-bold mb-4 uppercase text-center text-sm">Panel Maestro</h3>
-        <input type="text" id="in-titular" placeholder="Nombre Titular">
-        <input type="text" id="in-sinpe" placeholder="Número SINPE">
-        <input type="text" id="in-iban" placeholder="Cuenta IBAN">
-        <input type="text" id="in-paypal" placeholder="Correo PayPal">
-        <input type="text" id="in-phone" placeholder="Tu WhatsApp (ej: 50688888888)">
-        <p class="text-[10px] text-yellow-500 my-2 uppercase font-bold">Tasas de Cambio</p>
+    <div id="adminModal" class="admin-panel">
+        <h3 class="gold-text font-bold mb-4 uppercase text-center text-sm">Configuración Maestra</h3>
+        
+        <label class="text-[9px] uppercase opacity-50 block text-left ml-1">Nombre del Titular</label>
+        <input type="text" id="in-titular" placeholder="Ej: Randall Esteban Sánchez">
+        
+        <label class="text-[9px] uppercase opacity-50 block text-left ml-1">Número SINPE</label>
+        <input type="text" id="in-sinpe" placeholder="Ej: 64535475">
+        
+        <label class="text-[9px] uppercase opacity-50 block text-left ml-1">Cuenta IBAN / Depósito</label>
+        <input type="text" id="in-iban" placeholder="Ej: CR80080315001000035641">
+        
+        <label class="text-[9px] uppercase opacity-50 block text-left ml-1">Correo PayPal</label>
+        <input type="text" id="in-paypal" placeholder="Ej: pagos@francruzvip.com">
+        
+        <label class="text-[9px] uppercase gold-text block text-left ml-1 font-bold">Tu WhatsApp de Recepción</label>
+        <input type="text" id="in-phone" placeholder="Ej: 50664535475 (Sin signos)">
+
+        <p class="text-[10px] text-yellow-500 my-4 uppercase font-bold border-t border-white/10 pt-4">Tasas de Cambio ($1 = X)</p>
         <div class="grid grid-cols-2 gap-2">
-            <input type="number" id="ex-cr" placeholder="CR ₡">
-            <input type="number" id="ex-ni" placeholder="NI C$">
+            <div><label class="text-[8px] opacity-50">CR (₡)</label><input type="number" id="ex-cr"></div>
+            <div><label class="text-[8px] opacity-50">NI (C$)</label><input type="number" id="ex-ni"></div>
         </div>
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white p-3 rounded-xl font-bold text-xs mt-4 uppercase tracking-widest">Guardar Cambios</button>
+        
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-4 uppercase tracking-widest">Guardar y Actualizar</button>
+        <button onclick="closeAdmin()" class="w-full text-gray-500 text-[9px] mt-4 uppercase">Cancelar</button>
     </div>
 
     <script>
+        let adminClicks = 0;
         let selectedPlanPrice = 5;
         let selectedPlanName = "Senda Ganadora";
         let currentCountry = 'CR';
@@ -106,10 +121,10 @@
 
         const defaults = {
             titular: "Randall Esteban Sánchez",
-            sinpe: "6453-5475",
-            iban: "CR8008031500100003564",
+            sinpe: "64535475",
+            iban: "CR80080315001000035641",
             paypal: "pagos@francruzvip.com",
-            phone: "50688888888", // Cambia esto por tu número real en el panel
+            phone: "50664535475", 
             rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, SV: 1, PA: 1, US: 1 }
         };
 
@@ -158,39 +173,43 @@
 
         function sendToWhatsApp(input) {
             if (input.files && input.files[0]) {
-                const message = `Hola Fran Cruz! Acabo de realizar el pago para el plan: *${selectedPlanName}* ($${selectedPlanPrice} USD) desde *${currentCountry}*. Adjunto mi comprobante para validación por IA.`;
+                const message = `Hola Fran Cruz! Acabo de pagar: *${selectedPlanName}* ($${selectedPlanPrice} USD) desde *${currentCountry}*. Adjunto comprobante para validación IA.`;
                 const whatsappUrl = `https://wa.me/${data.phone}?text=${encodeURIComponent(message)}`;
-                
-                alert("Redirigiendo a WhatsApp... Por favor, adjunta la imagen del comprobante en el chat que se abrirá.");
+                alert("Redirigiendo a WhatsApp... Por favor, envía el mensaje y adjunta la imagen de tu comprobante.");
                 window.open(whatsappUrl, '_blank');
             }
         }
 
         function handleAdminClicks() {
-            adminClicks = (window.adminClicks || 0) + 1;
-            window.adminClicks = adminClicks;
+            adminClicks++;
             if(adminClicks === 5) {
                 document.getElementById('adminModal').style.display = 'block';
-                document.getElementById('in-titular').value = data.titular;
-                document.getElementById('in-sinpe').value = data.sinpe;
-                document.getElementById('in-iban').value = data.iban;
-                document.getElementById('in-paypal').value = data.paypal;
-                document.getElementById('in-phone').value = data.phone;
+                document.getElementById('in-titular').value = data.titular || "";
+                document.getElementById('in-sinpe').value = data.sinpe || "";
+                document.getElementById('in-iban').value = data.iban || "";
+                document.getElementById('in-paypal').value = data.paypal || "";
+                document.getElementById('in-phone').value = data.phone || "";
                 document.getElementById('ex-cr').value = data.rates.CR;
                 document.getElementById('ex-ni').value = data.rates.NI;
             }
-            setTimeout(() => window.adminClicks = 0, 3000);
+            setTimeout(() => adminClicks = 0, 3000);
         }
 
         function saveAdminData() {
-            data.titular = document.getElementById('in-titular').value;
-            data.sinpe = document.getElementById('in-sinpe').value;
-            data.iban = document.getElementById('in-iban').value;
-            data.paypal = document.getElementById('in-paypal').value;
-            data.phone = document.getElementById('in-phone').value;
-            data.rates.CR = parseFloat(document.getElementById('ex-cr').value);
-            data.rates.NI = parseFloat(document.getElementById('ex-ni').value);
+            data = {
+                titular: document.getElementById('in-titular').value,
+                sinpe: document.getElementById('in-sinpe').value,
+                iban: document.getElementById('in-iban').value,
+                paypal: document.getElementById('in-paypal').value,
+                phone: document.getElementById('in-phone').value,
+                rates: {
+                    ...data.rates,
+                    CR: parseFloat(document.getElementById('ex-cr').value),
+                    NI: parseFloat(document.getElementById('ex-ni').value)
+                }
+            };
             localStorage.setItem('franCruzVIP', JSON.stringify(data));
+            alert("¡Configuración guardada con éxito!");
             location.reload();
         }
 
