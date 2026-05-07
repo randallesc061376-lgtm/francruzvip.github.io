@@ -9,65 +9,98 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap');
         
+        :root { --gold: #d4af37; --dark-bg: #000; --card-bg: #0a0a0a; }
+
         body { 
-            font-family: 'Poppins', sans-serif; 
-            background: #000; 
-            color: white; 
-            margin: 0; 
-            padding: 20px; 
-            text-align: center; 
-            overflow-x: hidden; 
-            overscroll-behavior-y: contain; /* Mejora scroll móvil */
+            font-family: 'Poppins', sans-serif; background: var(--dark-bg); color: white; 
+            margin: 0; padding: 20px; text-align: center; overflow-x: hidden; 
         }
         
+        /* Tipografía y Efectos Gold */
         .font-luxury { font-family: 'Cinzel', serif; }
-        .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gold-text { 
+            background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
         
-        /* Estilos de Tarjetas y Secciones */
-        .plan-card { background: #0a0a0a; border-radius: 20px; padding: 15px; cursor: pointer; transition: 0.3s; border: 1px solid #1a1a1a; position: relative; overflow: hidden; }
-        .plan-card.active { border-color: #d4af37; background: #1a1505; transform: translateY(-5px); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
-        .payment-section { background: #070707; border-radius: 30px; padding: 25px; margin-top: 25px; border: 1px solid #1a1a1a; }
+        /* Contenedores y Tarjetas */
+        .plan-card { 
+            background: var(--card-bg); border-radius: 24px; padding: 18px; 
+            cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            border: 1px solid #1a1a1a; position: relative; 
+        }
+        .plan-card.active { 
+            border-color: var(--gold); background: #120f05; 
+            transform: translateY(-8px); box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15); 
+        }
+        .payment-section { 
+            background: #050505; border-radius: 35px; padding: 28px; 
+            margin-top: 25px; border: 1px solid #111; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
         
-        #info-display { display: none; background: #111; border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px dashed #333; animation: fadeIn 0.4s; }
+        /* Banderas y Navegación */
+        .flag-btn { font-size: 26px; cursor: pointer; opacity: 0.25; transition: 0.4s; filter: grayscale(100%); }
+        .flag-btn.active { opacity: 1; transform: scale(1.3); filter: grayscale(0%); }
         
-        /* Pestañas y Banderas */
-        .method-tab { cursor: pointer; transition: 0.3s; opacity: 0.5; padding-bottom: 8px; border-bottom: 2px solid transparent; flex: 1; text-align: center; }
-        .method-tab.active-tab { opacity: 1; color: #d4af37; border-bottom: 2px solid #d4af37; font-weight: 600; }
-        .flag-btn { font-size: 24px; cursor: pointer; opacity: 0.3; transition: 0.3s; padding: 5px; border-radius: 8px; }
-        .flag-btn.active { opacity: 1; transform: scale(1.25); background: rgba(255, 255, 255, 0.05); }
-        
-        /* Galería VIP con Descargas Individuales */
-        .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; padding-bottom: 30px; }
-        .lamina-vip { border-radius: 15px; border: 1px solid #d4af3722; overflow: hidden; background: #0a0a0a; transition: 0.3s; }
-        .lamina-vip img { width: 100%; height: auto; display: block; object-fit: cover; }
-        .lamina-vip:hover { transform: scale(1.03); border-color: #d4af37; }
-        .download-btn { display: inline-flex; align-items: center; justify-content: center; background: #050505; border: 1px solid #d4af3766; color: #d4af37; font-size: 10px; font-weight: bold; text-transform: uppercase; padding: 12px; border-radius: 10px; margin-top: 10px; width: 100%; letter-spacing: 0.1em; transition: 0.2s; }
-        .download-btn:hover { background: #d4af37; color: black; border-color: #d4af37; }
+        .method-tab { 
+            cursor: pointer; transition: 0.3s; opacity: 0.4; 
+            padding: 10px 5px; border-bottom: 2px solid transparent; 
+            flex: 1; font-size: 11px; font-weight: bold; letter-spacing: 1px;
+        }
+        .method-tab.active-tab { opacity: 1; color: var(--gold); border-bottom-color: var(--gold); }
 
-        /* Consola Admin Robusta */
-        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #050505; border: 1px solid #d4af37; padding: 25px; border-radius: 30px; z-index: 1000; width: 95%; max-width: 550px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 50px rgba(0,0,0,0.9); scrollbar-width: thin; scrollbar-color: #d4af37 #000; }
-        input { background: #131313; border: 1px solid #222; color: white; padding: 12px; border-radius: 12px; width: 100%; margin-bottom: 10px; font-size: 13px; }
-        input:focus { outline: none; border-color: #d4af37; background: #1a1a1a; }
-        
-        /* GESTIÓN DINÁMICA DE IMÁGENES (ADMIN) */
-        .admin-img-card { position: relative; display: inline-block; width: 60px; height: 80px; }
-        .btn-del { position: absolute; top: -6px; right: -6px; background: #ff3b3b; color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 13px; font-weight: bold; cursor: pointer; border: 2px solid #000; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 5px rgba(0,0,0,0.5); z-index: 10; transition: 0.2s; }
-        .btn-del:hover { background: #e60000; transform: scale(1.1); }
+        /* Galería VIP */
+        .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 25px; }
+        .lamina-vip { border-radius: 18px; border: 1px solid rgba(212, 175, 55, 0.2); overflow: hidden; background: #000; shadow: 0 10px 20px rgba(0,0,0,0.8); }
+        .lamina-vip img { width: 100%; height: auto; display: block; }
+        .download-btn { 
+            background: #000; border: 1px solid rgba(212, 175, 55, 0.4); color: var(--gold); 
+            font-size: 10px; font-weight: bold; text-transform: uppercase; 
+            padding: 12px; border-radius: 12px; margin-top: 10px; width: 100%; 
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
 
-        .loader-ring { width: 60px; height: 60px; border: 4px solid #1a1a1a; border-top: 4px solid #d4af37; border-radius: 50%; animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite; margin: 20px auto; }
+        /* Consola Admin (Panel de Control Robusto) */
+        .admin-panel { 
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            background: #050505; border: 1px solid var(--gold); padding: 30px; 
+            border-radius: 35px; z-index: 2000; width: 92%; max-width: 580px; 
+            max-height: 85vh; overflow-y: auto; box-shadow: 0 0 100px rgba(0,0,0,1); 
+        }
+        .admin-input { 
+            background: #0f0f0f; border: 1px solid #222; color: white; 
+            padding: 14px; border-radius: 15px; width: 100%; margin-bottom: 12px; font-size: 14px;
+        }
+        .admin-img-card { position: relative; width: 70px; height: 95px; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
+        .btn-del { 
+            position: absolute; top: 2px; right: 2px; background: #ff0000; 
+            color: white; border-radius: 50%; width: 22px; height: 22px; 
+            font-size: 14px; display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; border: 2px solid black; font-weight: bold;
+        }
+
+        /* Animación Validación IA */
+        .loader-ring { 
+            width: 70px; height: 70px; border: 4px solid #111; border-top: 4px solid var(--gold); 
+            border-radius: 50%; animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite; margin: 25px auto; 
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .progress-bar { width: 100%; height: 6px; background: #111; border-radius: 10px; overflow: hidden; margin: 15px 0; }
+        #ia-fill { width: 0%; height: 100%; background: var(--gold); transition: width 45s linear; }
+
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
     <div id="main-interface">
-        <header class="mt-4 mb-4 cursor-pointer" onclick="handleAdminClicks()">
-            <h1 class="font-luxury text-4xl gold-text tracking-widest uppercase">Fran Cruz</h1>
-            <p class="text-[10px] tracking-[0.4em] uppercase opacity-60">El Personaje del Azar</p>
+        <header class="mt-6 mb-8 cursor-pointer" onclick="handleAdminClicks()">
+            <h1 class="font-luxury text-5xl gold-text tracking-[0.2em] uppercase">Fran Cruz</h1>
+            <p class="text-[10px] tracking-[0.5em] uppercase opacity-40 mt-2">Elite Digital Access</p>
         </header>
 
-        <div class="flex gap-4 mb-8 justify-center flex-wrap">
+        <div class="flex gap-4 mb-10 justify-center flex-wrap px-4">
             <span onclick="setCountry('CR')" id="f-CR" class="flag-btn active">🇨🇷</span>
             <span onclick="setCountry('NI')" id="f-NI" class="flag-btn">🇳🇮</span>
             <span onclick="setCountry('PA')" id="f-PA" class="flag-btn">🇵🇦</span>
@@ -77,255 +110,272 @@
             <span onclick="setCountry('US')" id="f-US" class="flag-btn">🇺🇸</span>
         </div>
 
-        <div class="grid grid-cols-1 gap-3 max-w-sm mx-auto mb-8">
-            <div onclick="setPlan(1, 'Membresía por Hoy')" id="p-1" class="plan-card">
-                <h3 class="text-xs font-bold uppercase tracking-wider">Membresía por Hoy</h3>
-                <p class="gold-text font-bold text-xl">$1 USD</p>
+        <div class="grid grid-cols-1 gap-4 max-w-sm mx-auto mb-10 px-4">
+            <div onclick="setPlan(1, 'Acceso Diario')" id="p-1" class="plan-card">
+                <h3 class="text-[10px] font-bold uppercase tracking-widest opacity-60">Pase Temporal</h3>
+                <p class="text-xs font-bold uppercase my-1">Membresía por Hoy</p>
+                <p class="gold-text font-bold text-2xl">$1 USD</p>
             </div>
             <div onclick="setPlan(5, 'Senda Ganadora')" id="p-5" class="plan-card active">
-                <p class="text-[8px] uppercase opacity-50 mb-1">Acceso 7 Días</p>
-                <h3 class="text-xs font-bold uppercase tracking-wider">Senda Ganadora</h3>
-                <p class="gold-text font-bold text-xl">$5 USD</p>
+                <h3 class="text-[10px] font-bold uppercase tracking-widest opacity-60">Recomendado</h3>
+                <p class="text-xs font-bold uppercase my-1">Senda Ganadora (7 Días)</p>
+                <p class="gold-text font-bold text-2xl">$5 USD</p>
             </div>
             <div onclick="setPlan(15, 'Membresía VIP')" id="p-15" class="plan-card">
-                <p class="text-[8px] uppercase opacity-50 mb-1">Acceso Mensual</p>
-                <h3 class="text-xs font-bold uppercase tracking-wider">Membresía VIP</h3>
-                <p class="gold-text font-bold text-xl">$15 USD</p>
+                <h3 class="text-[10px] font-bold uppercase tracking-widest opacity-60">Elite Pass</h3>
+                <p class="text-xs font-bold uppercase my-1">Membresía VIP (Mes)</p>
+                <p class="gold-text font-bold text-2xl">$15 USD</p>
             </div>
         </div>
 
-        <div class="payment-section max-w-sm mx-auto">
-            <div class="flex justify-between text-[10px] mb-6 uppercase font-bold border-b border-white/5 pb-2 gap-2">
-                <span onclick="setMethod('sinpe')" id="m-sinpe" class="method-tab">SINPE CR</span>
-                <span onclick="setMethod('transfer')" id="m-transfer" class="method-tab">Depósitos</span>
-                <span onclick="setMethod('paypal')" id="m-paypal" class="method-tab">PayPal</span>
+        <div class="payment-section max-w-sm mx-auto mx-4">
+            <div class="flex justify-between border-b border-white/5 mb-6">
+                <div onclick="setMethod('sinpe')" id="m-sinpe" class="method-tab">SINPE CR</div>
+                <div onclick="setMethod('transfer')" id="m-transfer" class="method-tab">DEPÓSITOS</div>
+                <div onclick="setMethod('paypal')" id="m-paypal" class="method-tab">PAYPAL</div>
             </div>
 
-            <div id="info-display">
-                <p id="pay-label" class="text-[9px] text-gray-500 uppercase mb-1 font-bold">Datos para pago:</p>
-                <p id="pay-data" class="text-xl font-bold tracking-widest mb-1 gold-text">---</p>
-                <p id="pay-titular" class="text-[10px] opacity-80 uppercase font-bold tracking-widest">---</p>
+            <div id="info-display" class="hidden">
+                <p id="pay-data" class="text-xl font-bold tracking-widest gold-text mb-1 uppercase">---</p>
+                <p id="pay-titular" class="text-[9px] opacity-50 uppercase font-bold tracking-tighter">---</p>
             </div>
 
-            <div class="bg-yellow-500/5 p-6 rounded-3xl border border-yellow-500/20 mb-6">
+            <div class="bg-[#0c0c0c] p-8 rounded-[30px] border border-white/5 mb-8">
                 <p id="final-price" class="text-5xl font-bold text-yellow-500 tracking-tighter">---</p>
-                <p id="usd-reference" class="text-[9px] opacity-40 mt-1 uppercase tracking-widest">Referencia USD: --</p>
+                <p id="usd-ref" class="text-[8px] opacity-30 mt-2 uppercase font-bold tracking-widest">Equivalente a $-- USD</p>
             </div>
 
-            <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="initIAValidation()">
-            <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-6 rounded-2xl uppercase text-[10px] tracking-widest hover:scale-95 transition-transform active:bg-gray-200">
+            <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="startValidation()">
+            <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-6 rounded-2xl uppercase text-[11px] tracking-[0.2em] hover:bg-gray-200 transition-colors">
                 Validar Comprobante con IA
             </button>
         </div>
     </div>
 
-    <div id="waiting-screen" class="max-w-sm mx-auto hidden">
-        <h2 class="font-luxury text-2xl gold-text mb-2 mt-10 uppercase tracking-widest">Analizando Pago</h2>
-        <p class="text-[9px] uppercase opacity-40 mb-4 tracking-[0.2em]">Protocolo Anti-Fraude Activo</p>
+    <div id="ia-screen" class="max-w-sm mx-auto hidden">
+        <h2 class="font-luxury text-3xl gold-text mt-12 uppercase tracking-widest">Analizando Pago</h2>
+        <p class="text-[9px] uppercase opacity-40 mt-2 tracking-widest">Advanced Fraud Detection System</p>
         <div class="loader-ring"></div>
-        <div class="bg-[#0a0a0a] p-8 rounded-[40px] border border-white/5 mb-6 shadow-2xl">
-            <p id="ia-status" class="text-[11px] leading-relaxed mb-4 opacity-70">La IA está escaneando el comprobante en busca de manipulaciones digitales, validando fecha y número de transacción...</p>
-            <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                <div id="ia-progress" class="bg-yellow-600 h-full w-0 transition-all Duration-45s-linear"></div>
-            </div>
-            <p class="text-[9px] mt-4 gold-text uppercase font-bold" id="timer-text">Restan 45s</p>
+        <div class="bg-[#0a0a0a] p-8 rounded-[35px] border border-white/5 shadow-2xl">
+            <p id="ia-log" class="text-[10px] leading-relaxed opacity-60 h-12 flex items-center justify-center">Iniciando escaneo de seguridad...</p>
+            <div class="progress-bar"><div id="ia-fill"></div></div>
+            <p id="timer" class="text-[10px] gold-text font-bold uppercase mt-4">Procesando: 45s</p>
         </div>
-        <div id="success-btn" class="hidden">
-            <button onclick="grantAccess()" class="w-full bg-yellow-600 text-white py-6 rounded-2xl font-bold text-xs uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(212,175,55,0.4)] active:scale-95 transition-transform">Acceso Autorizado - Entrar</button>
+        <div id="access-box" class="mt-8 hidden">
+            <button onclick="showVIP()" class="w-full bg-yellow-600 text-white py-6 rounded-2xl font-bold text-xs uppercase tracking-[0.3em] shadow-lg shadow-yellow-900/20">
+                Acceso Verificado - Entrar
+            </button>
         </div>
     </div>
 
-    <div id="vip-content" class="max-w-md mx-auto hidden">
-        <h2 class="font-luxury text-3xl gold-text mb-2 uppercase tracking-widest mt-6">Círculo VIP</h2>
-        <p class="text-[9px] opacity-40 uppercase tracking-[0.3em] mb-8">Láminas Exclusivas del Día</p>
-        <div id="lamina-container" class="gallery-grid">
-            </div>
-        <button onclick="location.reload()" class="text-[10px] mt-12 uppercase opacity-20 tracking-[0.3em] block w-full hover:opacity-50 mb-10">Cerrar Sesión</button>
+    <div id="vip-interface" class="max-w-md mx-auto hidden px-4">
+        <h2 class="font-luxury text-4xl gold-text mt-8 uppercase tracking-widest">Círculo VIP</h2>
+        <p class="text-[10px] opacity-40 uppercase tracking-[0.4em] mb-10">Contenido Exclusivo para Miembros</p>
+        <div id="gallery" class="gallery-grid"></div>
+        <button onclick="location.reload()" class="text-[10px] mt-20 opacity-20 uppercase tracking-widest block w-full pb-10">Finalizar Sesión Segura</button>
     </div>
 
-    <div id="adminModal" class="admin-panel shadow-2xl">
-        <h3 class="gold-text font-bold mb-6 uppercase text-center text-sm tracking-widest">Consola de Control Fran Cruz</h3>
+    <div id="admin-modal" class="admin-panel">
+        <h3 class="gold-text font-bold mb-8 uppercase text-center tracking-[0.2em]">Panel Maestro Fran Cruz</h3>
         
-        <div class="text-left mb-4">
-            <label class="text-[9px] gold-text uppercase font-bold ml-1">Configuración General</label>
-            <input type="text" id="in-titular" placeholder="Titular de la cuenta">
-            <input type="text" id="in-phone" placeholder="WhatsApp Destino (Ej: 50664535475)">
-        </div>
-
-        <label class="text-[9px] gold-text uppercase font-bold block text-left ml-1 mb-2">Tasas (1 USD = X)</label>
-        <div class="grid grid-cols-4 gap-2 mb-4 text-center">
-            <div><label class="text-[8px] opacity-40">CR 🇨🇷</label><input type="number" id="ex-cr"></div>
-            <div><label class="text-[8px] opacity-40">NI 🇳🇮</label><input type="number" id="ex-ni"></div>
-            <div><label class="text-[8px] opacity-40">GT 🇬🇹</label><input type="number" id="ex-gt"></div>
-            <div><label class="text-[8px] opacity-40">HN 🇭🇳</label><input type="number" id="ex-hn"></div>
-        </div>
-
-        <label class="text-[9px] gold-text uppercase font-bold block text-left ml-1 mt-4 mb-2">Cargar Láminas (Añadir o Borrar - Reset 11:59PM)</label>
-        <input type="file" id="upload-laminas" multiple accept="image/*" class="text-[10px] mb-2" onchange="addLaminas(this)">
-        <p class="text-[8px] opacity-30 text-left mb-2 ml-1">Elija archivos para sumar a la bodega. Use × para borrar una por una.</p>
-        <div id="admin-laminas-preview" class="flex flex-wrap gap-3 p-3 bg-black rounded-xl border border-white/5 min-h-[70px] mb-4">
+        <div class="space-y-4">
+            <div>
+                <label class="text-[9px] uppercase font-bold text-gray-500 mb-2 block">Identidad de Cuenta</label>
+                <input type="text" id="adm-titular" class="admin-input" placeholder="Nombre del Titular">
+                <input type="text" id="adm-phone" class="admin-input" placeholder="WhatsApp para Notificaciones">
             </div>
 
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-6 uppercase tracking-widest active:scale-95 transition-transform">Sincronizar Sistema</button>
-        <button onclick="closeAdmin()" class="w-full text-gray-500 text-[10px] mt-4 uppercase hover:text-gray-300">Cerrar</button>
+            <div>
+                <label class="text-[9px] uppercase font-bold text-gray-500 mb-2 block">Control de Divisas (Tasa x $1 USD)</label>
+                <div class="grid grid-cols-4 gap-2">
+                    <input type="number" id="rate-CR" class="admin-input text-center" placeholder="CR">
+                    <input type="number" id="rate-NI" class="admin-input text-center" placeholder="NI">
+                    <input type="number" id="rate-GT" class="admin-input text-center" placeholder="GT">
+                    <input type="number" id="rate-HN" class="admin-input text-center" placeholder="HN">
+                </div>
+            </div>
+
+            <div>
+                <label class="text-[9px] uppercase font-bold text-gray-500 mb-2 block">Bodega de Láminas del Día</label>
+                <input type="file" multiple class="admin-input" onchange="uploadToVault(this)">
+                <div id="vault-preview" class="flex flex-wrap gap-3 bg-black/50 p-4 rounded-2xl min-h-[100px] border border-white/5"></div>
+            </div>
+        </div>
+
+        <button onclick="applyAdminSettings()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold text-xs uppercase mt-8 tracking-widest">Sincronizar Plataforma</button>
+        <button onclick="closeAdmin()" class="w-full text-gray-600 text-[10px] mt-4 uppercase font-bold">Cerrar Consola</button>
     </div>
 
     <script>
-        let adminClicks = 0;
-        let selectedPlanPrice = 5;
-        let selectedPlanName = "Senda Ganadora";
-        let currentCountry = 'CR';
-        let currentMethod = null;
-        let vipActive = false; // Flag de seguridad para onbeforeunload
+        let adminCounter = 0;
+        let activePlan = 5;
+        let activeCountry = 'CR';
+        let activeMethod = null;
 
-        const defaults = {
+        const config = JSON.parse(localStorage.getItem('fc_config')) || {
             titular: "Randall Esteban Sánchez",
             phone: "50664535475",
-            laminasHoy: [],
-            lastUpdate: new Date().toDateString(),
-            rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, SV: 1, PA: 1, US: 1 }
+            vault: [],
+            date: new Date().toDateString(),
+            rates: { CR: 520, NI: 36.6, PA: 1, HN: 24.5, SV: 1, GT: 7.8, US: 1 }
         };
 
-        let data = JSON.parse(localStorage.getItem('franCruzVIP')) || defaults;
-
-        // Limpieza automática a medianoche
-        function checkAutoPurge() {
-            if (data.lastUpdate !== new Date().toDateString()) {
-                data.laminasHoy = [];
-                data.lastUpdate = new Date().toDateString();
-                localStorage.setItem('franCruzVIP', JSON.stringify(data));
-            }
+        // Purga Diaria Automática
+        if (config.date !== new Date().toDateString()) {
+            config.vault = [];
+            config.date = new Date().toDateString();
+            localStorage.setItem('fc_config', JSON.stringify(config));
         }
-        checkAutoPurge();
 
-        // Advertencia de seguridad al salir del Círculo VIP
-        window.onbeforeunload = function() {
-            if (vipActive) {
-                return "¡ALERTA! Su sesión VIP está activa. Si sale ahora, perderá el acceso y no ha descargado sus láminas. ¿Está seguro de salir?";
-            }
+        const locales = {
+            CR: { symbol: '₡', key: 'CR' }, NI: { symbol: 'C$', key: 'NI' },
+            PA: { symbol: '$', key: 'PA' }, HN: { symbol: 'L', key: 'HN' },
+            SV: { symbol: '$', key: 'SV' }, GT: { symbol: 'Q', key: 'GT' },
+            US: { symbol: '$', key: 'US' }
         };
 
-        const geo = { 
-            CR: { s: '₡', rateKey: 'CR' }, NI: { s: 'C$', rateKey: 'NI' }, PA: { s: '$', rateKey: 'PA' }, 
-            HN: { s: 'L', rateKey: 'HN' }, SV: { s: '$', rateKey: 'SV' }, GT: { s: 'Q', rateKey: 'GT' }, US: { s: '$', rateKey: 'US' } 
-        };
-
-        function setCountry(code) {
-            currentCountry = code;
+        function setCountry(c) {
+            activeCountry = c;
             document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('f-' + code).classList.add('active');
-            updateDisplay();
+            document.getElementById('f-'+c).classList.add('active');
+            renderUI();
         }
 
-        function setPlan(val, name) {
-            selectedPlanPrice = val;
-            selectedPlanName = name;
+        function setPlan(p) {
+            activePlan = p;
             document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            updateDisplay();
+            document.getElementById('p-'+p).classList.add('active');
+            renderUI();
         }
 
         function setMethod(m) {
-            currentMethod = m;
-            document.querySelectorAll('.method-tab').forEach(s => s.classList.remove('active-tab'));
-            document.getElementById('m-' + m).classList.add('active-tab');
-            document.getElementById('info-display').style.display = 'block';
-            updateDisplay();
+            activeMethod = m;
+            document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active-tab'));
+            document.getElementById('m-'+m).classList.add('active-tab');
+            document.getElementById('info-display').classList.remove('hidden');
+            renderUI();
         }
 
-        function updateDisplay() {
-            const g = geo[currentCountry];
-            const rate = data.rates[g.rateKey] || 1;
-            const total = Math.round(selectedPlanPrice * rate).toLocaleString();
-            document.getElementById('final-price').innerText = g.s + total;
-            document.getElementById('usd-reference').innerText = `Referencia USD: $${selectedPlanPrice}`;
-            document.getElementById('pay-titular').innerText = data.titular;
-            const main = document.getElementById('pay-data');
-            if(currentMethod === 'sinpe') main.innerText = "64535475"; // Número SINPE CR por defecto
-            else if(currentMethod === 'paypal') main.innerText = "pagos@francruz.com"; // PayPal por defecto
-            else if(currentMethod === 'transfer') main.innerText = "CR80080315001000035641"; // IBAN por defecto
-        }
-
-        // --- GESTIÓN DE LÁMINAS DINÁMICA (ADMIN) ---
-        function addLaminas(input) {
-            if (input.files) {
-                Array.from(input.files).forEach(file => {
-                    let reader = new FileReader();
-                    reader.onload = (e) => {
-                        data.laminasHoy.push(e.target.result); // AGREGA sin borrar las anteriores
-                        renderAdminLaminas();
-                    };
-                    reader.readAsDataURL(file);
-                });
-                input.value = ""; // Reset input para poder subir las mismas si se desea
-            }
-        }
-
-        function removeLamina(index) {
-            data.laminasHoy.splice(index, 1); // ELIMINA solo la seleccionada
-            renderAdminLaminas();
-        }
-
-        function renderAdminLaminas() {
-            const preview = document.getElementById('admin-laminas-preview');
-            if (data.laminasHoy.length === 0) {
-                preview.innerHTML = `<p class="text-[8px] opacity-30 text-center w-full mt-5">Bodega vacía. Añada láminas.</p>`;
-                return;
-            }
-            preview.innerHTML = data.laminasHoy.map((img, i) => `
-                <div class="admin-img-card">
-                    <img src="${img}" class="w-10 h-14 object-cover rounded border border-yellow-500/10">
-                    <div class="btn-del" onclick="removeLamina(${i})">×</div>
-                </div>
-            `).join('');
-        }
-
-        // Validación IA Corregida a 45s
-        function initIAValidation() {
-            // El input file se maneja por su onchange, no necesitamos verificar si hay archivo aquí
-            document.getElementById('main-interface').style.display = 'none';
-            document.getElementById('waiting-screen').classList.remove('hidden');
+        function renderUI() {
+            const loc = locales[activeCountry];
+            const rate = config.rates[loc.key];
+            const finalVal = Math.round(activePlan * rate).toLocaleString();
             
-            let timeLeft = 45; // AJUSTADO A 45 SEGUNDOS
-            let iaStatus = document.getElementById('ia-status');
+            document.getElementById('final-price').innerText = loc.symbol + finalVal;
+            document.getElementById('usd-ref').innerText = `Equivalente a $${activePlan} USD`;
+            document.getElementById('pay-titular').innerText = config.titular;
             
-            // Iniciar barra de progreso CSS
-            let progress = document.getElementById('ia-progress');
-            progress.classList.add('w-full'); 
+            const dataEl = document.getElementById('pay-data');
+            if(activeMethod === 'sinpe') dataEl.innerText = "64535475";
+            else if(activeMethod === 'paypal') dataEl.innerText = "pagos@francruz.com";
+            else dataEl.innerText = "CR80080315001000035641";
+        }
+
+        // --- PROTOCOLO DE VALIDACIÓN IA (45 SEG) ---
+        function startValidation() {
+            document.getElementById('main-interface').classList.add('hidden');
+            document.getElementById('ia-screen').classList.remove('hidden');
             
-            const countdown = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer-text').innerText = `Restan ${timeLeft}s`;
+            const fill = document.getElementById('ia-fill');
+            const log = document.getElementById('ia-log');
+            const timer = document.getElementById('timer');
+            let seconds = 45;
+
+            fill.style.width = '100%';
+            
+            const interval = setInterval(() => {
+                seconds--;
+                timer.innerText = `Procesando: ${seconds}s`;
                 
-                // Mensajes dinámicos de IA para el suspenso
-                if(timeLeft === 35) iaStatus.innerText = "Escaneando metadatos y detección de manipulación digital (Photoshop)...";
-                if(timeLeft === 20) iaStatus.innerText = "Cotejando número de transacción con base de datos bancaria...";
-                if(timeLeft === 5) iaStatus.innerText = "Finalizando validación y autorizando acceso...";
+                if(seconds === 35) log.innerText = "Analizando estructura de píxeles y metadatos...";
+                if(seconds === 25) log.innerText = "Verificando autenticidad bancaria en red nacional...";
+                if(seconds === 10) log.innerText = "Detección de fraude completada. Generando acceso...";
 
-                if(timeLeft <= 0) {
-                    clearInterval(countdown);
-                    document.getElementById('ia-status').innerHTML = "<span class='text-green-500 font-bold'>✓ COMPROBANTE VALIDADO - ACCESO CONCEDIDO</span>";
-                    document.getElementById('success-btn').classList.remove('hidden');
+                if(seconds <= 0) {
+                    clearInterval(interval);
+                    log.innerHTML = "<span class='text-green-500 font-bold'>✓ PAGO VERIFICADO EXITOSAMENTE</span>";
+                    document.getElementById('access-box').classList.remove('hidden');
                 }
             }, 1000);
         }
 
-        // Acceso al Círculo VIP y Renderizado de Botones
-        function grantAccess() {
-            vipActive = true; // Activar barrera de seguridad onbeforeunload
-            document.getElementById('waiting-screen').style.display = 'none';
-            document.getElementById('vip-content').classList.remove('hidden');
-            const container = document.getElementById('lamina-container');
-            const dateStr = new Date().toLocaleDateString('es-ES').replace(/\//g, '-');
-            
-            container.innerHTML = (data.laminasHoy || []).map((img, i) => `
-                <div class="lamina-vip-item">
-                    <div class="lamina-vip shadow-2xl"><img src="${img}"></div>
-                    <a href="${img}" download="FranCruz_VIP_${dateStr}_${i+1}.jpg" class="download-btn active:scale-95 transition-transform">
-                        <i class="fas fa-download mr-2"></i> DESCARGAR ${i+1}
+        function showVIP() {
+            document.getElementById('ia-screen').classList.add('hidden');
+            document.getElementById('vip-interface').classList.remove('hidden');
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = config.vault.map((img, i) => `
+                <div>
+                    <div class="lamina-vip"><img src="${img}"></div>
+                    <a href="${img}" download="VIP_FranCruz_${i+1}" class="download-btn">
+                        <i class="fas fa-cloud-download-alt"></i> Bajar ${i+1}
                     </a>
                 </div>
             `).join('');
         }
 
-        f
+        // --- FUNCIONES ADMINISTRATIVAS ROBUSTAS ---
+        function handleAdminClicks() {
+            adminCounter++;
+            if(adminCounter >= 5) {
+                document.getElementById('admin-modal').style.display = 'block';
+                loadAdminFields();
+            }
+            setTimeout(() => adminCounter = 0, 3000);
+        }
+
+        function loadAdminFields() {
+            document.getElementById('adm-titular').value = config.titular;
+            document.getElementById('adm-phone').value = config.phone;
+            document.getElementById('rate-CR').value = config.rates.CR;
+            document.getElementById('rate-NI').value = config.rates.NI;
+            document.getElementById('rate-GT').value = config.rates.GT;
+            document.getElementById('rate-HN').value = config.rates.HN;
+            renderVaultPreview();
+        }
+
+        function uploadToVault(input) {
+            if (input.files) {
+                Array.from(input.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        config.vault.push(e.target.result);
+                        renderVaultPreview();
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
+
+        function deleteFromVault(index) {
+            config.vault.splice(index, 1);
+            renderVaultPreview();
+        }
+
+        function renderVaultPreview() {
+            const preview = document.getElementById('vault-preview');
+            preview.innerHTML = config.vault.map((img, i) => `
+                <div class="admin-img-card">
+                    <img src="${img}" class="w-full h-full object-cover">
+                    <div class="btn-del" onclick="deleteFromVault(${i})">×</div>
+                </div>
+            `).join('');
+        }
+
+        function applyAdminSettings() {
+            config.titular = document.getElementById('adm-titular').value;
+            config.phone = document.getElementById('adm-phone').value;
+            config.rates.CR = parseFloat(document.getElementById('rate-CR').value);
+            config.rates.NI = parseFloat(document.getElementById('rate-NI').value);
+            config.rates.GT = parseFloat(document.getElementById('rate-GT').value);
+            config.rates.HN = parseFloat(document.getElementById('rate-HN').value);
+            localStorage.setItem('fc_config', JSON.stringify(config));
+            alert("Sistema Sincronizado Correctamente.");
+            location.reload();
+        }
+
+        function closeAdmin() { document.getElementById('admin-modal').style.display = 'none'; }
+
+        renderUI();
+    </script>
+</body>
+</html>
