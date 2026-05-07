@@ -16,16 +16,15 @@
         .plan-card { background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; transition: 0.3s; }
         .plan-card.active { border-color: var(--gold); background: #120f05; box-shadow: 0 0 20px rgba(212,175,55,0.15); }
         
+        /* Pantalla de IA y Animaciones */
         .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #050505; border: 2px solid var(--gold); padding: 30px; border-radius: 35px; z-index: 9999; width: 92%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
-        .admin-input { background: #111; border: 1px solid #222; color: white; padding: 12px; border-radius: 15px; width: 100%; margin-bottom: 10px; font-size: 14px; }
-
-        .flag-btn { font-size: 28px; cursor: pointer; opacity: 0.3; transition: 0.4s; }
-        .flag-btn.active { opacity: 1; transform: scale(1.2); }
-
-        .method-tab { cursor: pointer; transition: 0.3s; opacity: 0.4; padding: 10px; border-bottom: 2px solid transparent; flex: 1; font-size: 10px; font-weight: bold; }
+        .loader-ring { width: 80px; height: 80px; border: 4px solid #111; border-top: 4px solid var(--gold); border-radius: 50%; animation: spin 1s infinite linear; margin: 20px auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        #ia-fill { width: 0%; height: 100%; background: var(--gold); transition: width 45s linear; }
+        .method-tab { cursor: pointer; opacity: 0.4; padding: 10px; border-bottom: 2px solid transparent; flex: 1; font-size: 10px; font-weight: bold; }
         .method-tab.active-tab { opacity: 1; color: var(--gold); border-bottom-color: var(--gold); }
 
-        #ia-fill { width: 0%; height: 100%; background: var(--gold); transition: width 45s linear; }
         .hidden { display: none !important; }
         .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 10px; margin-top: 10px; }
         .receipt-thumb { width: 100%; height: 80px; object-fit: cover; border-radius: 12px; border: 1px solid #333; }
@@ -71,7 +70,7 @@
                 <div onclick="setMethod('paypal')" id="m-paypal" class="method-tab uppercase">PAYPAL</div>
             </div>
 
-            <div id="payment-details" class="mb-6 h-16 flex flex-col justify-center">
+            <div class="mb-6 h-16 flex flex-col justify-center">
                 <p id="pay-data" class="text-xl font-bold gold-text tracking-tighter uppercase">---</p>
                 <p id="pay-titular" class="text-[9px] opacity-40 uppercase font-bold mt-1 tracking-widest">---</p>
             </div>
@@ -87,34 +86,67 @@
         </div>
     </div>
 
-    <div id="admin-modal" class="admin-panel">
-        <h3 class="gold-text font-bold text-lg mb-6 uppercase tracking-widest font-luxury">Configuración Maestra</h3>
+    <div id="ia-screen" class="hidden max-w-sm mx-auto pt-10 px-6">
+        <h2 class="font-luxury text-2xl gold-text mb-2 uppercase tracking-widest italic">Verificando Pago</h2>
+        <p class="text-[8px] opacity-40 uppercase tracking-[0.3em] mb-6">Protocolo de Seguridad Fran Cruz</p>
         
-        <input type="text" id="adm-titular" class="admin-input" placeholder="Titular de cuenta">
-        <input type="text" id="adm-sinpe" class="admin-input" placeholder="Número SINPE">
-        <input type="text" id="adm-iban" class="admin-input" placeholder="Cuenta IBAN">
-        <input type="text" id="adm-paypal" class="admin-input" placeholder="Email PayPal">
+        <div class="loader-ring"></div>
         
-        <p class="text-[10px] text-yellow-600 uppercase font-bold text-left mb-2 ml-1">Tasas de Cambio ($1 USD)</p>
-        <div class="grid grid-cols-4 gap-2 mb-6">
-            <input type="number" id="rate-CR" class="admin-input text-center" placeholder="CR">
-            <input type="number" id="rate-NI" class="admin-input text-center" placeholder="NI">
-            <input type="number" id="rate-GT" class="admin-input text-center" placeholder="GT">
-            <input type="number" id="rate-HN" class="admin-input text-center" placeholder="HN">
+        <div class="bg-[#0a0a0a] p-8 rounded-[35px] border border-white/5 shadow-2xl">
+            <p id="ia-status" class="text-[10px] italic gold-text mb-4 h-12 flex items-center justify-center leading-relaxed">Iniciando conexión segura...</p>
+            
+            <div class="w-full h-1.5 bg-black rounded-full overflow-hidden border border-white/5">
+                <div id="ia-fill"></div>
+            </div>
+            
+            <div class="mt-6 grid grid-cols-2 gap-4 text-[7px] uppercase opacity-30 tracking-widest">
+                <div class="text-left">Status: <span class="text-green-500">Encriptado</span></div>
+                <div class="text-right">Server: <span class="text-blue-500">Nodo VIP</span></div>
+            </div>
         </div>
 
-        <p class="text-[10px] text-white opacity-40 uppercase font-bold text-left mb-2 ml-1">Subir Láminas del Día</p>
+        <div id="success-box" class="mt-10 hidden">
+            <div class="bg-yellow-600/10 border border-yellow-600/30 p-6 rounded-[30px] mb-6">
+                <i class="fas fa-check-circle text-4xl text-yellow-500 mb-3"></i>
+                <h4 class="text-xl font-bold gold-text uppercase tracking-tighter">¡Acceso Concedido!</h4>
+                <p class="text-[9px] opacity-50 mt-2 uppercase">Tu credencial ha sido activada con éxito.</p>
+            </div>
+            <button onclick="enterVIP()" class="w-full bg-yellow-600 text-white py-6 rounded-2xl font-bold text-xs uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all">
+                Entrar al Círculo Elite
+            </button>
+        </div>
+    </div>
+
+    <div id="vip-interface" class="hidden max-w-md mx-auto pt-4 px-4">
+        <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+            <div class="text-left">
+                <h2 class="font-luxury text-3xl gold-text uppercase">Círculo VIP</h2>
+                <p class="text-[8px] opacity-40 uppercase tracking-widest font-bold">Láminas Exclusivas</p>
+            </div>
+            <button onclick="location.reload()" class="bg-white/5 border border-white/10 px-4 py-3 rounded-xl text-[9px] font-bold uppercase">
+                <i class="fas fa-home block text-lg mb-1"></i> Menú
+            </button>
+        </div>
+        <div id="vip-gallery" class="grid grid-cols-2 gap-4"></div>
+    </div>
+
+    <div id="admin-modal" class="admin-panel">
+        <h3 class="gold-text font-bold text-lg mb-6 uppercase tracking-widest font-luxury">Consola Administrativa</h3>
+        <input type="text" id="adm-titular" class="admin-input" placeholder="Titular">
+        <input type="text" id="adm-sinpe" class="admin-input" placeholder="SINPE">
+        <input type="text" id="adm-iban" class="admin-input" placeholder="IBAN">
+        <input type="text" id="adm-paypal" class="admin-input" placeholder="PayPal">
+        <div class="grid grid-cols-4 gap-2 mb-6">
+            <input type="number" id="rate-CR" class="admin-input text-center">
+            <input type="number" id="rate-NI" class="admin-input text-center">
+            <input type="number" id="rate-GT" class="admin-input text-center">
+            <input type="number" id="rate-HN" class="admin-input text-center">
+        </div>
         <input type="file" id="vault-input" multiple accept="image/*" class="hidden" onchange="handleVaultUpload(this)">
-        <button onclick="document.getElementById('vault-input').click()" class="w-full bg-[#111] border border-white/10 text-white py-3 rounded-xl text-[10px] font-bold uppercase mb-4">
-            Abrir Galería
-        </button>
+        <button onclick="document.getElementById('vault-input').click()" class="w-full bg-[#111] border border-white/10 text-white py-3 rounded-xl text-[10px] font-bold uppercase mb-4">Cargar Láminas</button>
         <div id="vault-preview" class="preview-grid mb-6"></div>
-
-        <p class="text-[10px] text-blue-500 uppercase font-bold text-left mb-2 ml-1 border-t border-white/10 pt-4">Bodega de Comprobantes (7 Días)</p>
         <div id="receipt-vault" class="preview-grid mb-8 p-3 bg-white/5 rounded-2xl min-h-[80px]"></div>
-
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold uppercase text-xs tracking-widest">Sincronizar Todo</button>
-        <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full text-gray-600 text-[9px] mt-4 uppercase font-bold">Cerrar</button>
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold uppercase text-xs tracking-widest">Sincronizar</button>
     </div>
 
     <script>
@@ -123,7 +155,7 @@
         let currentCountry = 'CR';
         let currentMethod = 'sinpe';
 
-        const storage = JSON.parse(localStorage.getItem('fc_master_v6')) || {
+        const storage = JSON.parse(localStorage.getItem('fc_master_v7')) || {
             titular: "Randall Esteban Sánchez",
             sinpe: "64535475",
             iban: "CR80080315001000035641",
@@ -133,19 +165,6 @@
             receipt_vault: [],
             date: new Date().toDateString()
         };
-
-        function autoClean() {
-            const now = new Date().getTime();
-            const sevenDays = 7 * 24 * 60 * 60 * 1000;
-            storage.receipt_vault = storage.receipt_vault.filter(item => (now - item.date) < sevenDays);
-            if(storage.date !== new Date().toDateString()) { 
-                storage.vault = []; 
-                storage.date = new Date().toDateString(); 
-            }
-            updateStorage();
-        }
-
-        function updateStorage() { localStorage.setItem('fc_master_v6', JSON.stringify(storage)); }
 
         function setCountry(c) {
             currentCountry = c;
@@ -176,54 +195,70 @@
             
             const dataP = document.getElementById('pay-data');
             const titP = document.getElementById('pay-titular');
-
             if(currentMethod === 'sinpe') { dataP.innerText = storage.sinpe; titP.innerText = storage.titular; }
             else if(currentMethod === 'paypal') { dataP.innerText = storage.paypal; titP.innerText = "SISTEMA AUTOMÁTICO"; }
             else { dataP.innerText = storage.iban; titP.innerText = storage.titular; }
         }
 
-        function handleVaultUpload(input) {
-            if(input.files) {
-                Array.from(input.files).forEach(f => {
-                    const r = new FileReader();
-                    r.onload = (e) => { storage.vault.push(e.target.result); renderPreview(); };
-                    r.readAsDataURL(f);
-                });
-            }
-        }
-
+        // LÓGICA DE VALIDACIÓN 45 SEGUNDOS
         function startValidation(input) {
             if(!input.files[0]) return;
+            
             const reader = new FileReader();
             reader.onload = (e) => {
                 storage.receipt_vault.unshift({ img: e.target.result, date: new Date().getTime() });
-                updateStorage();
-                alert("COMPROBANTE RECIBIDO. La IA está validando el pago...");
+                localStorage.setItem('fc_master_v7', JSON.stringify(storage));
             };
             reader.readAsDataURL(input.files[0]);
+
+            // Cambio de pantalla
+            document.getElementById('main-interface').classList.add('hidden');
+            document.getElementById('ia-screen').classList.remove('hidden');
+            
+            // Animación de barra
+            setTimeout(() => { document.getElementById('ia-fill').style.width = '100%'; }, 100);
+
+            const status = document.getElementById('ia-status');
+            const messages = [
+                "Extrayendo metadatos del comprobante...",
+                "Escaneando sellos digitales del banco...",
+                "Cruzando datos de transacción con servidores...",
+                "Validando fecha y hora de emisión...",
+                "Confirmando depósito en cuenta destino...",
+                "Analizando autenticidad de imagen con IA...",
+                "Verificando integridad de la operación...",
+                "Sincronizando acceso VIP exclusivo...",
+                "✓ Validación Completada con Éxito."
+            ];
+
+            let i = 0;
+            const msgInterval = setInterval(() => {
+                if(i < messages.length) {
+                    status.innerText = messages[i++];
+                } else {
+                    clearInterval(msgInterval);
+                    document.getElementById('success-box').classList.remove('hidden');
+                    status.classList.add('hidden');
+                    document.querySelector('.loader-ring').classList.add('hidden');
+                }
+            }, 5000); // Cambia cada 5 segundos para cubrir los 45 seg aprox.
         }
 
-        function renderPreview() {
-            document.getElementById('vault-preview').innerHTML = storage.vault.map((s,i) => `
-                <div class="relative h-16 border border-white/10 rounded-lg overflow-hidden">
-                    <img src="${s}" class="w-full h-full object-cover">
-                    <span onclick="storage.vault.splice(${i},1); renderPreview();" class="absolute top-0 right-0 bg-red-600 text-[10px] px-1 cursor-pointer">×</span>
+        function enterVIP() {
+            document.getElementById('ia-screen').classList.add('hidden');
+            document.getElementById('vip-interface').classList.remove('hidden');
+            const gal = document.getElementById('vip-gallery');
+            gal.innerHTML = storage.vault.map(img => `
+                <div class="relative rounded-2xl overflow-hidden border border-white/10">
+                    <img src="${img}" class="w-full">
+                    <button onclick="downloadFile('${img}')" class="w-full py-3 bg-black/80 gold-text text-[10px] font-bold uppercase">Descargar</button>
                 </div>
             `).join('');
+            window.scrollTo(0,0);
         }
 
-        function renderReceiptVault() {
-            const vaultEl = document.getElementById('receipt-vault');
-            if(storage.receipt_vault.length === 0) {
-                vaultEl.innerHTML = '<p class="text-[8px] opacity-20 col-span-4 py-4">Sin comprobantes.</p>';
-                return;
-            }
-            vaultEl.innerHTML = storage.receipt_vault.map(item => `
-                <div class="relative">
-                    <img src="${item.img}" class="receipt-thumb" onclick="window.open(this.src)">
-                    <p class="text-[6px] mt-1 opacity-40">${new Date(item.date).toLocaleDateString()}</p>
-                </div>
-            `).join('');
+        function downloadFile(s) {
+            const a = document.createElement('a'); a.href = s; a.download = `FRAN-CRUZ-VIP.png`; a.click();
         }
 
         function handleAdminClicks() {
@@ -249,6 +284,30 @@
             renderReceiptVault();
         }
 
+        function handleVaultUpload(input) {
+            if(input.files) {
+                Array.from(input.files).forEach(f => {
+                    const r = new FileReader();
+                    r.onload = (e) => { storage.vault.push(e.target.result); renderPreview(); };
+                    r.readAsDataURL(f);
+                });
+            }
+        }
+
+        function renderPreview() {
+            document.getElementById('vault-preview').innerHTML = storage.vault.map((s,i) => `
+                <div class="relative h-16 border border-white/10 rounded-lg overflow-hidden">
+                    <img src="${s}" class="w-full h-full object-cover">
+                    <span onclick="storage.vault.splice(${i},1); renderPreview();" class="absolute top-0 right-0 bg-red-600 text-[10px] px-1 cursor-pointer">×</span>
+                </div>
+            `).join('');
+        }
+
+        function renderReceiptVault() {
+            const vaultEl = document.getElementById('receipt-vault');
+            vaultEl.innerHTML = storage.receipt_vault.map(item => `<img src="${item.img}" class="receipt-thumb" onclick="window.open(this.src)">`).join('');
+        }
+
         function saveAdminData() {
             storage.titular = document.getElementById('adm-titular').value;
             storage.sinpe = document.getElementById('adm-sinpe').value;
@@ -258,11 +317,10 @@
             storage.rates.NI = parseFloat(document.getElementById('rate-NI').value);
             storage.rates.GT = parseFloat(document.getElementById('rate-GT').value);
             storage.rates.HN = parseFloat(document.getElementById('rate-HN').value);
-            updateStorage();
+            localStorage.setItem('fc_master_v7', JSON.stringify(storage));
             location.reload();
         }
 
-        autoClean();
         refreshPricing();
     </script>
 </body>
