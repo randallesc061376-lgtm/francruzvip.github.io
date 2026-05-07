@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fran Cruz VIP | El Personaje del Azar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap');
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: #000; 
+            color: white; 
+            margin: 0; 
+            padding: 20px; 
+            text-align: center; 
+        }
+
+        .font-luxury { font-family: 'Cinzel', serif; }
+        
+        .gold-text { 
+            background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+
+        .payment-card { 
+            background: #0a0a0a; 
+            border-radius: 30px; 
+            padding: 25px; 
+            border: 1px solid #1a1a1a; 
+            margin: 0 auto 20px auto; 
+            max-width: 400px;
+        }
+
+        .info-box { 
+            background: #111; 
+            border-radius: 20px; 
+            padding: 20px; 
+            margin: 15px 0; 
+            border: 1px solid #1a1a1a;
+        }
+
+        .btn-validate { 
+            background: #fff; 
+            color: #000; 
+            font-weight: 700; 
+            padding: 18px; 
+            border-radius: 20px; 
+            width: 100%; 
+            text-transform: uppercase; 
+            font-size: 12px; 
+            cursor: pointer; 
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .flag-btn { 
+            background: #0f0f0f; 
+            border: 1px solid #222; 
+            padding: 12px 16px; 
+            border-radius: 12px; 
+            font-size: 20px; 
+            cursor: pointer; 
+            transition: 0.3s;
+            color: #fff;
+        }
+
+        .flag-btn.active { 
+            border-color: #d4af37; 
+            background: #1a1505; 
+            box-shadow: 0 0 15px rgba(212,175,55,0.2);
+        }
+
+        .watermark { 
+            position: fixed; 
+            bottom: 15px; 
+            width: 100%; 
+            left: 0; 
+            opacity: 0.15; 
+            font-size: 9px; 
+            letter-spacing: 5px; 
+            pointer-events: none; 
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="mt-8 mb-8">
+        <h1 class="font-luxury text-3xl gold-text tracking-widest uppercase">Fran Cruz</h1>
+        <p class="text-[9px] tracking-[0.3em] uppercase opacity-50">El Personaje del Azar</p>
+    </header>
+
+    <div class="flex gap-2 mb-8 justify-center flex-wrap">
+        <button onclick="setCountry('CR')" id="f-CR" class="flag-btn active">🇨🇷</button>
+        <button onclick="setCountry('SV')" id="f-SV" class="flag-btn">🇸🇻</button>
+    </div>
+
+    <div class="payment-card">
+        <div class="flex justify-between items-start mb-4">
+            <div class="text-left">
+                <h2 id="method-title" class="text-sm font-bold uppercase tracking-wider">SINPE CR SIMPLE</h2>
+                <p id="method-sub" class="text-[9px] text-gray-500 uppercase">Costa Rica - Validación IA</p>
+            </div>
+            <i id="method-icon" class="fas fa-mobile-alt gold-text text-xl"></i>
+        </div>
+
+        <div class="info-box">
+            <p id="label-top" class="text-[8px] text-gray-500 uppercase mb-1">Número de destino:</p>
+            <p id="main-number" class="text-xl font-bold tracking-[0.1em] mb-1">506 8888 8888</p>
+            <p class="text-[10px] gold-text font-bold uppercase tracking-widest">Randall Fran Cruz</p>
+        </div>
+
+        <div class="bg-yellow-500/5 p-4 rounded-xl mb-4">
+             <p class="text-[9px] text-gray-500 uppercase mb-1">Total a transferir:</p>
+             <p id="local-price" class="text-xl font-bold text-yellow-500">₡525</p>
+        </div>
+
+        <button class="btn-validate">
+            <i class="fas fa-qrcode"></i>
+            Validar Comprobante
+        </button>
+    </div>
+
+    <div class="watermark">El personaje del azar</div>
+
+    <script>
+        const config = {
+            CR: { 
+                title: 'SINPE CR SIMPLE', 
+                sub: 'Costa Rica - Validación IA', 
+                num: '506 8888 8888', 
+                price: '₡525', 
+                icon: 'fa-mobile-alt' 
+            },
+            SV: { 
+                title: 'Transferencia Bancaria', 
+                sub: 'El Salvador - Validación IA', 
+                num: 'Agrícola 111 222 333', 
+                price: '$1', 
+                icon: 'fa-university' 
+            }
+        };
+
+        function setCountry(code) {
+            document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('f-' + code).classList.add('active');
+            
+            const data = config[code];
+            document.getElementById('method-title').innerText = data.title;
+            document.getElementById('method-sub').innerText = data.sub;
+            document.getElementById('main-number').innerText = data.num;
+            document.getElementById('local-price').innerText = data.price;
+            
+            const icon = document.getElementById('method-icon');
+            icon.className = 'fas gold-text text-xl ' + data.icon;
+            
+            document.getElementById('label-top').innerText = code === 'CR' ? 'Número de destino:' : 'Cuenta de destino:';
+        }
+    </script>
+</body>
+</html>
