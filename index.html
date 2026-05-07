@@ -18,98 +18,109 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .method-tab { cursor: pointer; transition: 0.3s; opacity: 0.5; padding-bottom: 8px; border-bottom: 2px solid transparent; }
         .method-tab.active-tab { opacity: 1; color: #d4af37; border-bottom: 2px solid #d4af37; }
-        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; border: 2px solid #d4af37; padding: 20px; border-radius: 20px; z-index: 1000; width: 95%; max-width: 400px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 50px rgba(212, 175, 55, 0.2); }
-        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 12px; width: 100%; margin-bottom: 10px; font-size: 14px; }
-        input::placeholder { color: #555; }
+        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; border: 2px solid #d4af37; padding: 20px; border-radius: 20px; z-index: 1000; width: 95%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 12px; width: 100%; margin-bottom: 10px; }
         .flag-btn { font-size: 22px; cursor: pointer; opacity: 0.3; transition: 0.3s; }
         .flag-btn.active { opacity: 1; transform: scale(1.2); }
+        .loader { width: 30px; height: 30px; border: 3px solid #1a1a1a; border-top: 3px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #vip-content { display: none; }
     </style>
 </head>
 <body>
 
-    <header class="mt-4 mb-2 cursor-pointer" onclick="handleAdminClicks()">
-        <h1 class="font-luxury text-4xl gold-text tracking-widest uppercase">Fran Cruz</h1>
-        <p class="text-[10px] tracking-[0.4em] uppercase opacity-60">El Personaje del Azar</p>
-    </header>
+    <div id="main-interface">
+        <header class="mt-4 mb-2 cursor-pointer" onclick="handleAdminClicks()">
+            <h1 class="font-luxury text-4xl gold-text tracking-widest uppercase">Fran Cruz</h1>
+            <p class="text-[10px] tracking-[0.4em] uppercase opacity-60">El Personaje del Azar</p>
+        </header>
 
-    <div class="flex gap-4 mb-8 justify-center flex-wrap">
-        <span onclick="setCountry('CR')" id="f-CR" class="flag-btn active">🇨🇷</span>
-        <span onclick="setCountry('NI')" id="f-NI" class="flag-btn">🇳🇮</span>
-        <span onclick="setCountry('PA')" id="f-PA" class="flag-btn">🇵🇦</span>
-        <span onclick="setCountry('HN')" id="f-HN" class="flag-btn">🇭🇳</span>
-        <span onclick="setCountry('SV')" id="f-SV" class="flag-btn">🇸🇻</span>
-        <span onclick="setCountry('GT')" id="f-GT" class="flag-btn">🇬🇹</span>
-        <span onclick="setCountry('US')" id="f-US" class="flag-btn">🇺🇸</span>
+        <div class="flex gap-4 mb-8 justify-center flex-wrap">
+            <span onclick="setCountry('CR')" id="f-CR" class="flag-btn active">🇨🇷</span>
+            <span onclick="setCountry('NI')" id="f-NI" class="flag-btn">🇳🇮</span>
+            <span onclick="setCountry('PA')" id="f-PA" class="flag-btn">🇵🇦</span>
+            <span onclick="setCountry('HN')" id="f-HN" class="flag-btn">🇭🇳</span>
+            <span onclick="setCountry('SV')" id="f-SV" class="flag-btn">🇸🇻</span>
+            <span onclick="setCountry('GT')" id="f-GT" class="flag-btn">🇬🇹</span>
+            <span onclick="setCountry('US')" id="f-US" class="flag-btn">🇺🇸</span>
+        </div>
+
+        <div class="grid grid-cols-1 gap-3 max-w-sm mx-auto mb-8">
+            <div onclick="setPlan(1, 'Membresía por Hoy')" id="p-1" class="plan-card">
+                <h3 class="text-sm font-bold uppercase tracking-wider">Membresía por Hoy</h3>
+                <p class="gold-text font-bold">$1 USD</p>
+            </div>
+            <div onclick="setPlan(5, 'Senda Ganadora')" id="p-5" class="plan-card active">
+                <p class="text-[9px] uppercase opacity-50">Acceso 7 Días</p>
+                <h3 class="text-sm font-bold uppercase tracking-wider">Senda Ganadora</h3>
+                <p class="gold-text font-bold">$5 USD</p>
+            </div>
+            <div onclick="setPlan(15, 'Membresía VIP')" id="p-15" class="plan-card">
+                <p class="text-[9px] uppercase opacity-50">Acceso Mensual</p>
+                <h3 class="text-sm font-bold uppercase tracking-wider">Membresía VIP</h3>
+                <p class="gold-text font-bold">$15 USD</p>
+            </div>
+        </div>
+
+        <div class="payment-section max-w-sm mx-auto">
+            <div class="flex justify-between text-[10px] mb-6 uppercase font-bold border-b border-white/5 pb-2">
+                <span onclick="setMethod('sinpe')" id="m-sinpe" class="method-tab">SINPE CR</span>
+                <span onclick="setMethod('transfer')" id="m-transfer" class="method-tab">Depósitos</span>
+                <span onclick="setMethod('paypal')" id="m-paypal" class="method-tab">PayPal</span>
+            </div>
+
+            <div id="info-display">
+                <p id="pay-label" class="text-[9px] text-gray-500 uppercase mb-1 font-bold">Datos para pago:</p>
+                <p id="pay-data" class="text-xl font-bold tracking-widest mb-1 gold-text">---</p>
+                <p id="pay-titular" class="text-[10px] opacity-80 uppercase font-bold tracking-widest">---</p>
+            </div>
+
+            <div class="bg-yellow-500/5 p-5 rounded-2xl border border-yellow-500/20">
+                <p id="final-price" class="text-4xl font-bold text-yellow-500 tracking-tighter">---</p>
+                <p id="usd-reference" class="text-[9px] opacity-40 mt-1 uppercase tracking-widest">---</p>
+            </div>
+
+            <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="initValidation(this)">
+            <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest mt-8 hover:bg-gray-200 transition">
+                Validar Comprobante con IA
+            </button>
+        </div>
     </div>
 
-    <div class="grid grid-cols-1 gap-3 max-w-sm mx-auto mb-8">
-        <div onclick="setPlan(1, 'Membresía por Hoy')" id="p-1" class="plan-card">
-            <h3 class="text-sm font-bold uppercase tracking-wider">Membresía por Hoy</h3>
-            <p class="gold-text font-bold">$1 USD</p>
+    <div id="waiting-screen" class="max-w-sm mx-auto" style="display:none;">
+        <h2 class="font-luxury text-2xl gold-text mb-2">VERIFICANDO PAGO</h2>
+        <div class="loader"></div>
+        <p class="text-[10px] uppercase tracking-widest opacity-70 mb-8">Análisis de seguridad en curso</p>
+        
+        <div class="bg-[#0a0a0a] p-8 rounded-3xl border border-white/5 mb-6">
+            <p class="text-xs mb-6 opacity-80">Una vez validado su pago por WhatsApp, ingrese el <span class="gold-text font-bold">Código VIP de 4 dígitos</span> enviado por el sistema.</p>
+            <input type="password" id="input-code" maxlength="4" placeholder="••••" class="text-center text-2xl tracking-[1em] gold-text border-yellow-500/30">
+            <button onclick="checkCode()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-2 uppercase tracking-widest">Desbloquear Acceso</button>
         </div>
-        <div onclick="setPlan(5, 'Senda Ganadora')" id="p-5" class="plan-card active">
-            <p class="text-[9px] uppercase opacity-50">Acceso 7 Días</p>
-            <h3 class="text-sm font-bold uppercase tracking-wider">Senda Ganadora</h3>
-            <p class="gold-text font-bold">$5 USD</p>
-        </div>
-        <div onclick="setPlan(15, 'Membresía VIP')" id="p-15" class="plan-card">
-            <p class="text-[9px] uppercase opacity-50">Acceso Mensual</p>
-            <h3 class="text-sm font-bold uppercase tracking-wider">Membresía VIP</h3>
-            <p class="gold-text font-bold">$15 USD</p>
-        </div>
+        <p class="text-[9px] uppercase opacity-40">Tiempo estimado de respuesta: 2-5 min</p>
     </div>
 
-    <div class="payment-section max-w-sm mx-auto">
-        <div class="flex justify-between text-[10px] mb-6 uppercase font-bold border-b border-white/5">
-            <span onclick="setMethod('sinpe')" id="m-sinpe" class="method-tab">SINPE CR</span>
-            <span onclick="setMethod('transfer')" id="m-transfer" class="method-tab">Depósitos</span>
-            <span onclick="setMethod('paypal')" id="m-paypal" class="method-tab">PayPal</span>
+    <div id="vip-content" class="max-w-md mx-auto">
+        <h2 class="font-luxury text-3xl gold-text mb-6 uppercase tracking-widest">Láminas del Día</h2>
+        <div class="bg-white/5 p-2 rounded-3xl border border-yellow-500/30 mb-4 overflow-hidden">
+            <div class="bg-[#111] aspect-[9/16] rounded-2xl flex items-center justify-center text-gray-700 uppercase text-[10px] tracking-widest">
+                [ Lámina VIP Cargada Correctamente ]
+            </div>
         </div>
-
-        <div id="info-display">
-            <p id="pay-label" class="text-[9px] text-gray-500 uppercase mb-1 font-bold">Datos para pago:</p>
-            <p id="pay-data" class="text-xl font-bold tracking-widest mb-1 gold-text">---</p>
-            <p id="pay-titular" class="text-[10px] opacity-80 uppercase font-bold tracking-widest">---</p>
-        </div>
-
-        <div class="bg-yellow-500/5 p-5 rounded-2xl border border-yellow-500/20">
-            <p class="text-[9px] text-gray-400 uppercase mb-1">Monto Neto Local:</p>
-            <p id="final-price" class="text-4xl font-bold text-yellow-500 tracking-tighter">---</p>
-            <p id="usd-reference" class="text-[9px] opacity-40 mt-1 uppercase tracking-widest">---</p>
-        </div>
-
-        <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="sendToWhatsApp(this)">
-        <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest mt-8 hover:bg-gray-200 transition">
-            Validar Comprobante con IA
-        </button>
+        <button onclick="location.reload()" class="text-[10px] uppercase opacity-30 tracking-widest">Cerrar Sesión Segura</button>
     </div>
 
-    <div id="adminModal" class="admin-panel">
+    <div id="adminModal" class="admin-panel shadow-2xl">
         <h3 class="gold-text font-bold mb-4 uppercase text-center text-sm">Configuración Maestra</h3>
-        
-        <label class="text-[9px] uppercase opacity-50 block text-left ml-1">Nombre del Titular</label>
-        <input type="text" id="in-titular" placeholder="Ej: Randall Esteban Sánchez">
-        
-        <label class="text-[9px] uppercase opacity-50 block text-left ml-1">Número SINPE</label>
-        <input type="text" id="in-sinpe" placeholder="Ej: 64535475">
-        
-        <label class="text-[9px] uppercase opacity-50 block text-left ml-1">Cuenta IBAN / Depósito</label>
-        <input type="text" id="in-iban" placeholder="Ej: CR80080315001000035641">
-        
-        <label class="text-[9px] uppercase opacity-50 block text-left ml-1">Correo PayPal</label>
-        <input type="text" id="in-paypal" placeholder="Ej: pagos@francruzvip.com">
-        
-        <label class="text-[9px] uppercase gold-text block text-left ml-1 font-bold">Tu WhatsApp de Recepción</label>
-        <input type="text" id="in-phone" placeholder="Ej: 50664535475 (Sin signos)">
-
-        <p class="text-[10px] text-yellow-500 my-4 uppercase font-bold border-t border-white/10 pt-4">Tasas de Cambio ($1 = X)</p>
-        <div class="grid grid-cols-2 gap-2">
-            <div><label class="text-[8px] opacity-50">CR (₡)</label><input type="number" id="ex-cr"></div>
-            <div><label class="text-[8px] opacity-50">NI (C$)</label><input type="number" id="ex-ni"></div>
-        </div>
-        
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-4 uppercase tracking-widest">Guardar y Actualizar</button>
-        <button onclick="closeAdmin()" class="w-full text-gray-500 text-[9px] mt-4 uppercase">Cancelar</button>
+        <input type="text" id="in-titular" placeholder="Titular">
+        <input type="text" id="in-sinpe" placeholder="SINPE">
+        <input type="text" id="in-iban" placeholder="IBAN">
+        <input type="text" id="in-paypal" placeholder="PayPal">
+        <input type="text" id="in-phone" placeholder="Tu WhatsApp (506...)">
+        <label class="text-[9px] gold-text block text-left ml-1 font-bold uppercase">Código de Desbloqueo</label>
+        <input type="text" id="in-pass" placeholder="Ej: 1234">
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-4 uppercase tracking-widest">Guardar Cambios</button>
+        <button onclick="closeAdmin()" class="w-full text-gray-500 text-[9px] mt-4 uppercase">Cerrar</button>
     </div>
 
     <script>
@@ -124,7 +135,8 @@
             sinpe: "64535475",
             iban: "CR80080315001000035641",
             paypal: "pagos@francruzvip.com",
-            phone: "50664535475", 
+            phone: "50664535475",
+            pass: "1234",
             rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, SV: 1, PA: 1, US: 1 }
         };
 
@@ -171,12 +183,25 @@
             else if(currentMethod === 'transfer') main.innerText = data.iban;
         }
 
-        function sendToWhatsApp(input) {
+        function initValidation(input) {
             if (input.files && input.files[0]) {
-                const message = `Hola Fran Cruz! Acabo de pagar: *${selectedPlanName}* ($${selectedPlanPrice} USD) desde *${currentCountry}*. Adjunto comprobante para validación IA.`;
-                const whatsappUrl = `https://wa.me/${data.phone}?text=${encodeURIComponent(message)}`;
-                alert("Redirigiendo a WhatsApp... Por favor, envía el mensaje y adjunta la imagen de tu comprobante.");
+                const msg = `FRAN CRUZ VIP\n\nAdjunto comprobante oficial.\nPlan: ${selectedPlanName}\nOrigen: ${currentCountry}\n\nSolicito validación y envío de CÓDIGO VIP.`;
+                const whatsappUrl = `https://wa.me/${data.phone}?text=${encodeURIComponent(msg)}`;
+                alert("AUTORIZACIÓN: Se abrirá WhatsApp para enviar su comprobante. Una vez enviado, regrese aquí para ingresar su código de acceso.");
                 window.open(whatsappUrl, '_blank');
+                document.getElementById('main-interface').style.display = 'none';
+                document.getElementById('waiting-screen').style.display = 'block';
+            }
+        }
+
+        function checkCode() {
+            const code = document.getElementById('input-code').value;
+            if(code === data.pass) {
+                document.getElementById('waiting-screen').style.display = 'none';
+                document.getElementById('vip-content').style.display = 'block';
+                alert("PAGO VERIFICADO. Bienvenido al Círculo VIP.");
+            } else {
+                alert("Código incorrecto o pendiente de activación.");
             }
         }
 
@@ -184,11 +209,12 @@
             adminClicks++;
             if(adminClicks === 5) {
                 document.getElementById('adminModal').style.display = 'block';
-                document.getElementById('in-titular').value = data.titular || "";
-                document.getElementById('in-sinpe').value = data.sinpe || "";
-                document.getElementById('in-iban').value = data.iban || "";
-                document.getElementById('in-paypal').value = data.paypal || "";
-                document.getElementById('in-phone').value = data.phone || "";
+                document.getElementById('in-titular').value = data.titular;
+                document.getElementById('in-sinpe').value = data.sinpe;
+                document.getElementById('in-iban').value = data.iban;
+                document.getElementById('in-paypal').value = data.paypal;
+                document.getElementById('in-phone').value = data.phone;
+                document.getElementById('in-pass').value = data.pass;
                 document.getElementById('ex-cr').value = data.rates.CR;
                 document.getElementById('ex-ni').value = data.rates.NI;
             }
@@ -202,14 +228,10 @@
                 iban: document.getElementById('in-iban').value,
                 paypal: document.getElementById('in-paypal').value,
                 phone: document.getElementById('in-phone').value,
-                rates: {
-                    ...data.rates,
-                    CR: parseFloat(document.getElementById('ex-cr').value),
-                    NI: parseFloat(document.getElementById('ex-ni').value)
-                }
+                pass: document.getElementById('in-pass').value,
+                rates: { ...data.rates, CR: parseFloat(document.getElementById('ex-cr').value), NI: parseFloat(document.getElementById('ex-ni').value) }
             };
             localStorage.setItem('franCruzVIP', JSON.stringify(data));
-            alert("¡Configuración guardada con éxito!");
             location.reload();
         }
 
@@ -217,4 +239,5 @@
         setCountry('CR');
     </script>
 </body>
-</html>
+                    </html>
+    
