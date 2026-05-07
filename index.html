@@ -13,14 +13,11 @@
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* Plan Cards con interactividad garantizada */
         .plan-card { background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; transition: 0.3s; cursor: pointer; position: relative; z-index: 10; }
         .plan-card.active { border-color: var(--gold); background: #120f05; box-shadow: 0 0 20px rgba(212,175,55,0.15); }
         
-        /* Panel de administración corregido */
         .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #050505; border: 2px solid var(--gold); padding: 30px; border-radius: 35px; z-index: 9999; width: 92%; max-width: 550px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 100px rgba(0,0,0,1); }
         .admin-input { background: #111; border: 1px solid #222; color: white; padding: 12px; border-radius: 15px; width: 100%; margin-bottom: 10px; font-size: 14px; outline: none; }
-        .admin-input:focus { border-color: var(--gold); }
 
         .flag-btn { font-size: 28px; cursor: pointer; opacity: 0.3; transition: 0.4s; padding: 5px; display: inline-block; }
         .flag-btn.active { opacity: 1; transform: scale(1.2); }
@@ -32,11 +29,11 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         
         #ia-fill { width: 0%; height: 100%; background: var(--gold); transition: width 45s linear; }
-
-        .lamina-vip { border-radius: 20px; border: 1px solid #1a1a1a; overflow: hidden; background: #050505; position: relative; margin-bottom: 15px; }
-        .lamina-vip img { width: 100%; height: auto; display: block; }
-
         .hidden { display: none !important; }
+
+        /* Estilos de Bodegas */
+        .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 8px; margin-top: 10px; }
+        .receipt-thumb { width: 100%; height: 80px; object-fit: cover; border-radius: 10px; border: 1px solid #333; }
     </style>
 </head>
 <body>
@@ -89,13 +86,12 @@
                 <p id="usd-ref" class="text-[9px] opacity-30 mt-2 uppercase font-bold tracking-widest">Equivalente a $5 USD</p>
             </div>
 
-            <input type="file" id="receipt-upload" class="hidden" onchange="startValidation()">
+            <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="startValidation(this)">
             <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[11px] tracking-widest shadow-xl active:scale-95 transition-all">
-                Validar Comprobante con IA
+                Validar Comprobante (Galería)
             </button>
 
             <div class="mt-8 pt-6 border-t border-white/5">
-                <p class="text-[9px] opacity-30 uppercase tracking-widest mb-3">¿Ya tienes un código activo?</p>
                 <div class="flex gap-2">
                     <input type="text" id="access-code-input" placeholder="TU CÓDIGO" class="bg-transparent border border-white/10 rounded-xl px-4 py-3 text-[10px] w-full text-center outline-none focus:border-yellow-600 transition-all uppercase">
                     <button onclick="checkExistingCode()" class="bg-yellow-600/20 text-yellow-500 border border-yellow-600/40 px-5 rounded-xl text-[10px] font-bold uppercase">Entrar</button>
@@ -117,7 +113,6 @@
             <div class="bg-yellow-600/10 border border-yellow-600/30 p-5 rounded-2xl mb-5">
                 <p class="text-[9px] gold-text uppercase mb-1 font-bold">Código de Acceso Único:</p>
                 <h4 id="generated-code-display" class="text-4xl font-bold tracking-widest gold-text">----</h4>
-                <p class="text-[8px] opacity-40 mt-2 uppercase italic">Guarda este código para volver a entrar hoy.</p>
             </div>
             <button onclick="enterVIP()" class="w-full bg-yellow-600 text-white py-6 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-2xl">
                 Ingresar al Círculo VIP
@@ -128,37 +123,39 @@
     <div id="vip-interface" class="hidden max-w-md mx-auto pt-4 px-4">
         <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
             <div class="text-left">
-                <h2 class="font-luxury text-3xl gold-text uppercase">Círculo VIP</h2>
-                <p class="text-[8px] opacity-40 uppercase tracking-widest">Acceso Concedido</p>
+                <h2 class="font-luxury text-4xl gold-text uppercase">Círculo VIP</h2>
+                <p class="text-[8px] opacity-40 uppercase tracking-widest font-bold">Contenido Exclusivo</p>
             </div>
             <button onclick="backToHome()" class="bg-white/5 border border-white/10 px-4 py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest">
                 <i class="fas fa-home block text-lg mb-1"></i> Menú
             </button>
         </div>
         <div id="vip-gallery" class="grid grid-cols-2 gap-4"></div>
-        <p class="mt-12 text-[8px] opacity-20 uppercase tracking-[0.5em] italic pb-10">Contenido Exclusivo Fran Cruz</p>
     </div>
 
     <div id="admin-modal" class="admin-panel">
-        <h3 class="gold-text font-bold text-lg mb-6 uppercase tracking-widest">Configuración Maestra</h3>
-        <input type="text" id="adm-titular" class="admin-input" placeholder="Titular de Cuentas">
-        <input type="text" id="adm-sinpe" class="admin-input" placeholder="Número SINPE CR">
-        <input type="text" id="adm-iban" class="admin-input" placeholder="Cuenta IBAN">
-        <input type="text" id="adm-paypal" class="admin-input" placeholder="Email PayPal">
+        <h3 class="gold-text font-bold text-lg mb-6 uppercase tracking-widest">Panel de Control Maestro</h3>
         
-        <p class="text-[9px] text-gray-500 uppercase font-bold text-left mb-2 mt-4 ml-1">Tipos de Cambio ($1 USD)</p>
+        <input type="text" id="adm-titular" class="admin-input" placeholder="Titular">
+        <input type="text" id="adm-sinpe" class="admin-input" placeholder="Número SINPE">
+        <input type="text" id="adm-iban" class="admin-input" placeholder="IBAN">
+        
         <div class="grid grid-cols-4 gap-2 mb-6">
-            <div><span class="text-[8px] opacity-40 uppercase">CR</span><input type="number" id="rate-CR" class="admin-input text-center"></div>
-            <div><span class="text-[8px] opacity-40 uppercase">NI</span><input type="number" id="rate-NI" class="admin-input text-center"></div>
-            <div><span class="text-[8px] opacity-40 uppercase">GT</span><input type="number" id="rate-GT" class="admin-input text-center"></div>
-            <div><span class="text-[8px] opacity-40 uppercase">HN</span><input type="number" id="rate-HN" class="admin-input text-center"></div>
+            <div><span class="text-[8px] opacity-40">CR</span><input type="number" id="rate-CR" class="admin-input text-center"></div>
+            <div><span class="text-[8px] opacity-40">NI</span><input type="number" id="rate-NI" class="admin-input text-center"></div>
+            <div><span class="text-[8px] opacity-40">GT</span><input type="number" id="rate-GT" class="admin-input text-center"></div>
+            <div><span class="text-[8px] opacity-40">HN</span><input type="number" id="rate-HN" class="admin-input text-center"></div>
         </div>
 
-        <p class="text-[9px] text-gray-500 uppercase font-bold text-left mb-2 ml-1">Cargar Láminas VIP</p>
-        <input type="file" multiple class="admin-input" onchange="handleVaultUpload(this)">
-        <div id="vault-preview" class="flex flex-wrap gap-2 mb-6 p-3 bg-black rounded-2xl min-h-[50px] border border-white/5"></div>
+        <p class="text-[10px] text-yellow-600 uppercase font-bold text-left mb-2 ml-1">Subir Láminas (Galería)</p>
+        <input type="file" multiple accept="image/*" class="admin-input" onchange="handleVaultUpload(this)">
+        <div id="vault-preview" class="preview-grid mb-6"></div>
 
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold uppercase text-xs tracking-widest shadow-lg">Sincronizar Todo</button>
+        <p class="text-[10px] text-blue-500 uppercase font-bold text-left mb-2 mt-4 ml-1 border-t border-white/10 pt-4">Bodega de Comprobantes (Últimos 7 días)</p>
+        <div id="receipt-vault" class="preview-grid mb-8 p-3 bg-white/5 rounded-2xl min-h-[100px]">
+            </div>
+
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold uppercase text-xs tracking-widest">Guardar y Sincronizar</button>
         <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full text-gray-600 text-[9px] mt-4 uppercase font-bold">Cerrar</button>
     </div>
 
@@ -168,22 +165,34 @@
         let currentCountry = 'CR';
         let currentMethod = 'sinpe';
 
-        const storage = JSON.parse(localStorage.getItem('fc_final_db')) || {
+        const storage = JSON.parse(localStorage.getItem('fc_master_v5')) || {
             titular: "Randall Esteban Sánchez",
             sinpe: "64535475",
             iban: "CR80080315001000035641",
             paypal: "pagos@francruz.com",
             rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, USD: 1 },
             vault: [],
+            receipt_vault: [], // Formato: {img: base64, date: timestamp}
             codes: {},
             date: new Date().toDateString()
         };
 
-        if(storage.date !== new Date().toDateString()) { storage.vault = []; storage.date = new Date().toDateString(); updateStorage(); }
+        // Limpieza Automática de 7 Días y Reset Diario de Láminas
+        function autoClean() {
+            const now = new Date().getTime();
+            const sevenDays = 7 * 24 * 60 * 60 * 1000;
+            // Filtra solo comprobantes de menos de 7 días
+            storage.receipt_vault = storage.receipt_vault.filter(item => (now - item.date) < sevenDays);
+            
+            if(storage.date !== new Date().toDateString()) { 
+                storage.vault = []; 
+                storage.date = new Date().toDateString(); 
+            }
+            updateStorage();
+        }
 
-        function updateStorage() { localStorage.setItem('fc_final_db', JSON.stringify(storage)); }
+        function updateStorage() { localStorage.setItem('fc_master_v5', JSON.stringify(storage)); }
 
-        // Funciones de interfaz principal
         function setCountry(c) {
             currentCountry = c;
             document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
@@ -209,7 +218,6 @@
             const sym = { CR: '₡', NI: 'C$', GT: 'Q', HN: 'L', PA: '$', SV: '$', US: '$' };
             const rk = (['PA','SV','US'].includes(currentCountry)) ? 'USD' : currentCountry;
             const price = Math.round(currentPlan * storage.rates[rk]);
-            
             document.getElementById('final-price').innerText = `${sym[currentCountry]}${price.toLocaleString()}`;
             document.getElementById('usd-ref').innerText = `Equivalente a $${currentPlan} USD`;
             
@@ -217,17 +225,26 @@
             const titP = document.getElementById('pay-titular');
 
             if(currentMethod === 'sinpe') { dataP.innerText = storage.sinpe; titP.innerText = storage.titular; }
-            else if(currentMethod === 'paypal') { dataP.innerText = storage.paypal; titP.innerText = "PAGO AUTOMÁTICO"; }
+            else if(currentMethod === 'paypal') { dataP.innerText = storage.paypal; titP.innerText = "SISTEMA AUTOMÁTICO"; }
             else { dataP.innerText = storage.iban; titP.innerText = storage.titular; }
         }
 
-        // Lógica de Validación y Códigos
-        function startValidation() {
+        function startValidation(input) {
+            if(!input.files[0]) return;
+            
+            // Guardar el comprobante en la bodega de 7 días antes de validar
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                storage.receipt_vault.unshift({ img: e.target.result, date: new Date().getTime() });
+                updateStorage();
+            };
+            reader.readAsDataURL(input.files[0]);
+
             document.getElementById('main-interface').classList.add('hidden');
             document.getElementById('ia-screen').classList.remove('hidden');
             document.getElementById('ia-fill').style.width = '100%';
             
-            let steps = ["Analizando imagen...", "Validando transacción...", "✓ Verificado"];
+            let steps = ["Iniciando Escaneo...", "Leyendo Comprobante...", "Verificando Monto...", "✓ Pago Autorizado"];
             let s = 0;
             const timer = setInterval(() => {
                 if(s < steps.length) document.getElementById('ia-status').innerText = steps[s++];
@@ -247,7 +264,7 @@
         function checkExistingCode() {
             const code = document.getElementById('access-code-input').value.toUpperCase().trim();
             if(storage.codes[code] && storage.codes[code] > new Date().getTime()) enterVIP();
-            else alert("CÓDIGO NO VÁLIDO O EXPIRADO");
+            else alert("CÓDIGO INVÁLIDO O EXPIRADO");
         }
 
         function enterVIP() {
@@ -256,16 +273,16 @@
             document.getElementById('vip-interface').classList.remove('hidden');
             const gal = document.getElementById('vip-gallery');
             gal.innerHTML = storage.vault.map(img => `
-                <div class="lamina-vip">
-                    <img src="${img}">
-                    <button onclick="downloadFile('${img}')" class="w-full py-3 bg-black/80 gold-text text-[9px] font-bold uppercase border-t border-white/5">Descargar</button>
+                <div class="relative rounded-2xl overflow-hidden border border-white/10">
+                    <img src="${img}" class="w-full">
+                    <button onclick="downloadFile('${img}')" class="w-full py-3 bg-black/80 gold-text text-[10px] font-bold uppercase">Descargar</button>
                 </div>
             `).join('');
             window.scrollTo(0,0);
         }
 
         function downloadFile(s) {
-            const a = document.createElement('a'); a.href = s; a.download = `FranCruz-VIP-${Date.now()}.png`; a.click();
+            const a = document.createElement('a'); a.href = s; a.download = `FRAN-CRUZ-ELITE.png`; a.click();
         }
 
         function backToHome() {
@@ -274,7 +291,6 @@
             window.scrollTo(0,0);
         }
 
-        // Admin Engine
         function handleAdminClicks() {
             adminTimer++;
             if(adminTimer >= 5) {
@@ -289,12 +305,12 @@
             document.getElementById('adm-titular').value = storage.titular;
             document.getElementById('adm-sinpe').value = storage.sinpe;
             document.getElementById('adm-iban').value = storage.iban;
-            document.getElementById('adm-paypal').value = storage.paypal;
             document.getElementById('rate-CR').value = storage.rates.CR;
             document.getElementById('rate-NI').value = storage.rates.NI;
             document.getElementById('rate-GT').value = storage.rates.GT;
             document.getElementById('rate-HN').value = storage.rates.HN;
             renderPreview();
+            renderReceiptVault();
         }
 
         function handleVaultUpload(input) {
@@ -309,29 +325,27 @@
 
         function renderPreview() {
             document.getElementById('vault-preview').innerHTML = storage.vault.map((s,i) => `
-                <div class="relative w-14 h-16 border border-white/10 rounded-lg overflow-hidden">
+                <div class="relative h-16 border border-white/10 rounded-lg overflow-hidden">
                     <img src="${s}" class="w-full h-full object-cover">
-                    <span onclick="storage.vault.splice(${i},1); renderPreview();" class="absolute top-0 right-0 bg-red-600 text-[8px] p-1 cursor-pointer">×</span>
+                    <span onclick="storage.vault.splice(${i},1); renderPreview();" class="absolute top-0 right-0 bg-red-600 text-[10px] p-1 cursor-pointer">×</span>
+                </div>
+            `).join('');
+        }
+
+        function renderReceiptVault() {
+            const vaultEl = document.getElementById('receipt-vault');
+            if(storage.receipt_vault.length === 0) {
+                vaultEl.innerHTML = '<p class="text-[8px] opacity-30 p-4">No hay comprobantes recientes.</p>';
+                return;
+            }
+            vaultEl.innerHTML = storage.receipt_vault.map(item => `
+                <div class="relative">
+                    <img src="${item.img}" class="receipt-thumb" onclick="window.open(this.src)">
+                    <p class="text-[6px] mt-1 opacity-40">${new Date(item.date).toLocaleDateString()}</p>
                 </div>
             `).join('');
         }
 
         function saveAdminData() {
             storage.titular = document.getElementById('adm-titular').value;
-            storage.sinpe = document.getElementById('adm-sinpe').value;
-            storage.iban = document.getElementById('adm-iban').value;
-            storage.paypal = document.getElementById('adm-paypal').value;
-            storage.rates.CR = parseFloat(document.getElementById('rate-CR').value);
-            storage.rates.NI = parseFloat(document.getElementById('rate-NI').value);
-            storage.rates.GT = parseFloat(document.getElementById('rate-GT').value);
-            storage.rates.HN = parseFloat(document.getElementById('rate-HN').value);
-            updateStorage();
-            location.reload();
-        }
-
-        // Inicialización
-        refreshPricing();
-    </script>
-</body>
-                        </html>
-                    
+            storage.
