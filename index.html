@@ -13,27 +13,29 @@
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* TARJETAS VIP Y BOTÓN DE DESCARGA */
         .vip-card { background: #0a0a0a; border-radius: 25px; overflow: hidden; border: 1px solid #1a1a1a; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .btn-download { background: linear-gradient(135deg, #f9e2af 0%, #d4af37 50%, #a67c00 100%); color: black; font-weight: 800; padding: 15px; width: 100%; display: block; text-transform: uppercase; font-size: 11px; letter-spacing: 1.5px; border: none; cursor: pointer; }
+        .btn-download { background: linear-gradient(135deg, #f9e2af 0%, #d4af37 50%, #a67c00 100%); color: black; font-weight: 800; padding: 15px; width: 100%; display: block; text-transform: uppercase; font-size: 11px; letter-spacing: 1.5px; }
 
-        /* CONSOLA ADMINISTRATIVA */
+        /* ADMIN PANEL */
         .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #080808; border: 1px solid var(--gold); padding: 20px; border-radius: 30px; z-index: 10000; width: 92%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
         .admin-section { border-bottom: 1px solid #1a1a1a; padding-bottom: 15px; margin-bottom: 15px; }
-        .admin-input { background: #111; border: 1px solid #222; color: white; padding: 12px; border-radius: 12px; width: 100%; font-size: 13px; margin-bottom: 10px; outline: none; }
+        .admin-input { background: #111; border: 1px solid #222; color: white; padding: 12px; border-radius: 12px; width: 100%; font-size: 11px; margin-bottom: 10px; outline: none; }
 
-        .img-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; background: #030303; padding: 10px; border-radius: 15px; border: 1px dashed #333; min-height: 60px; }
+        .img-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; background: #030303; padding: 10px; border-radius: 15px; border: 1px dashed #333; }
         .img-item { width: 55px; height: 55px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
         .img-item img { width: 100%; height: 100%; object-fit: cover; }
-        .img-del { position: absolute; top: 0; right: 0; background: #ff4444; color: white; font-size: 10px; padding: 2px 6px; cursor: pointer; border-bottom-left-radius: 8px; font-weight: bold; }
+        .img-del { position: absolute; top: 0; right: 0; background: #ff4444; color: white; font-size: 10px; padding: 2px 6px; cursor: pointer; border-bottom-left-radius: 8px; }
 
         .hidden { display: none !important; }
-        .plan-card { background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; cursor: pointer; }
-        .plan-card.active { border-color: var(--gold); background: #120f05; }
+        .plan-card { background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; }
+        .plan-card.active { border-color: var(--gold); background: #120f05; box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); }
         
-        #ia-fill { width: 0%; height: 100%; background: var(--gold); transition: width 10s linear; }
+        #ia-fill { width: 0%; height: 100%; background: var(--gold); transition: width 45s linear; }
         .loader-ring { width: 55px; height: 55px; border: 3px solid #111; border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s infinite linear; margin: 25px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        .method-tab { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 8px 5px; opacity: 0.4; cursor: pointer; border-bottom: 2px solid transparent; transition: 0.3s; }
+        .method-tab.active { opacity: 1; color: var(--gold); border-bottom-color: var(--gold); }
     </style>
 </head>
 <body>
@@ -60,21 +62,23 @@
             <div onclick="setPlan(15)" id="p-15" class="plan-card"><p class="text-[8px] uppercase opacity-40 mb-1">Membresía VIP (Mes)</p><h3 class="text-lg font-bold gold-text">$15 USD</h3></div>
         </div>
 
-        <div class="max-w-sm mx-auto bg-[#050505] rounded-[35px] p-8 border border-white/5 shadow-2xl">
-            <div class="flex justify-between text-[10px] uppercase opacity-40 font-bold mb-4 px-2">
-                <span>Sinpe CR</span><span>Depósitos IBAN</span><span>PayPal</span>
+        <div class="max-w-sm mx-auto bg-[#050505] rounded-[35px] p-6 border border-white/5 shadow-2xl">
+            <div class="flex justify-around mb-6 border-b border-white/5">
+                <div onclick="setMethod('sinpe')" id="m-sinpe" class="method-tab active">Sinpe CR</div>
+                <div onclick="setMethod('trans')" id="m-trans" class="method-tab">Transf. IBAN</div>
+                <div onclick="setMethod('paypal')" id="m-paypal" class="method-tab">PayPal / Int.</div>
             </div>
+            
             <p id="pay-data" class="text-xl font-bold gold-text uppercase mb-1">---</p>
             <p id="pay-titular" class="text-[8px] opacity-40 uppercase font-bold mb-6 italic">---</p>
             <p id="final-price" class="text-5xl font-bold text-yellow-500 tracking-tighter mb-8">---</p>
+            
             <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="startValidation(this)">
             <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest active:scale-95 transition-all">Validar Comprobante</button>
         </div>
 
         <div id="reentry-box" class="mt-12 hidden">
-            <button onclick="enterVIP()" class="border border-yellow-600/30 bg-yellow-600/5 px-10 py-5 rounded-full font-luxury text-[10px] tracking-[0.3em] uppercase gold-text animate-pulse">
-                Acceso VIP Activo
-            </button>
+            <button onclick="enterVIP()" class="border border-yellow-600/30 bg-yellow-600/5 px-10 py-5 rounded-full font-luxury text-[10px] tracking-[0.3em] uppercase gold-text animate-pulse">Acceso VIP Activo</button>
         </div>
     </div>
 
@@ -82,11 +86,13 @@
         <h2 class="font-luxury text-2xl gold-text mb-2 uppercase italic">Verificando</h2>
         <div class="loader-ring"></div>
         <div class="bg-[#0a0a0a] p-8 rounded-[35px] border border-white/5">
-            <p id="ia-status" class="text-[9px] italic gold-text mb-4 h-8 uppercase tracking-widest">Sincronizando con base de datos...</p>
+            <p id="ia-status" class="text-[9px] italic gold-text mb-4 h-12 uppercase tracking-[0.15em] leading-relaxed">Iniciando protocolo de seguridad...</p>
             <div class="w-full h-1 bg-black rounded-full overflow-hidden"><div id="ia-fill"></div></div>
         </div>
         <div id="success-box" class="mt-10 hidden">
-            <button onclick="activateAndEnter()" class="w-full bg-yellow-600 text-white py-6 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-2xl">Entrar a la Bodega</button>
+            <button onclick="activateAndEnter()" class="w-full bg-yellow-600 text-white py-6 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-2xl">
+                <i class="fas fa-check-circle mr-2"></i> Acceso Autorizado
+            </button>
         </div>
     </div>
 
@@ -99,13 +105,14 @@
     </div>
 
     <div id="admin-modal" class="admin-panel">
-        <h3 class="gold-text font-bold text-sm mb-6 uppercase tracking-[0.2em] font-luxury text-center">Configuración Maestra</h3>
+        <h3 class="gold-text font-bold text-sm mb-6 uppercase tracking-[0.2em] font-luxury text-center">Configuración Fran Cruz</h3>
         
         <div class="admin-section">
-            <label class="text-[8px] uppercase gold-text block mb-2 font-bold tracking-widest">Datos de Recepción</label>
+            <label class="text-[8px] uppercase gold-text block mb-2 font-bold tracking-widest">Cuentas de Pago</label>
             <input type="text" id="adm-titular" class="admin-input" placeholder="Nombre Titular">
             <input type="text" id="adm-sinpe" class="admin-input" placeholder="Número SINPE">
-            <input type="text" id="adm-iban" class="admin-input" placeholder="Cuenta IBAN">
+            <input type="text" id="adm-iban" class="admin-input" placeholder="Cuenta IBAN Completa">
+            <input type="text" id="adm-paypal" class="admin-input" placeholder="Email PayPal / Internacional">
         </div>
 
         <div class="admin-section">
@@ -119,161 +126,115 @@
         </div>
 
         <div class="admin-section">
-            <label class="text-[8px] uppercase gold-text block mb-2 font-bold tracking-widest">Cargar Láminas del Día</label>
+            <label class="text-[8px] uppercase gold-text block mb-2 font-bold tracking-widest">Láminas (Borrado Diario)</label>
             <input type="file" id="vault-input" multiple accept="image/*" class="hidden" onchange="handleVaultUpload(this)">
-            <button onclick="document.getElementById('vault-input').click()" class="w-full bg-[#111] border border-white/10 text-[9px] py-4 rounded-xl uppercase font-bold text-white mb-2 tracking-widest">Seleccionar Archivos</button>
+            <button onclick="document.getElementById('vault-input').click()" class="w-full bg-[#111] border border-white/10 text-[9px] py-4 rounded-xl uppercase font-bold text-white mb-2">Cargar Láminas</button>
             <div id="vault-preview" class="img-grid"></div>
         </div>
 
         <div class="admin-section">
-            <label class="text-[8px] uppercase gold-text block mb-2 font-bold tracking-widest">Comprobantes (IA - 7 Días)</label>
+            <label class="text-[8px] uppercase gold-text block mb-2 font-bold tracking-widest">Comprobantes (7 Días)</label>
             <div id="receipt-vault" class="img-grid"></div>
         </div>
 
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold uppercase text-[10px] tracking-[0.2em] shadow-xl">Guardar y Sincronizar</button>
-        <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full text-gray-600 text-[8px] mt-6 uppercase font-bold tracking-widest">Cerrar Sesión</button>
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold uppercase text-[10px] tracking-[0.2em]">Guardar y Sincronizar</button>
+        <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full text-gray-600 text-[8px] mt-6 uppercase font-bold">Cerrar</button>
     </div>
 
     <script>
         let adminTimer = 0;
         let currentPlan = 5;
         let currentCountry = 'CR';
+        let currentMethod = 'sinpe';
 
-        // CARGA DE DATOS DESDE LOCALSTORAGE
-        let storage = JSON.parse(localStorage.getItem('fc_pro_vault_v15')) || {
+        let storage = JSON.parse(localStorage.getItem('fc_pro_gold_v16')) || {
             titular: "Randall Esteban Sánchez",
             sinpe: "64535475",
             iban: "CR80080315001000035641",
+            paypal: "pagos@francruz.com",
             rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, USD: 1 },
-            vault: [], 
-            receipts: [],
-            is_active: false,
-            last_cleanup: new Date().toLocaleDateString()
+            vault: [], receipts: [], is_active: false, last_cleanup: new Date().toLocaleDateString()
         };
 
-        // LÓGICA DE LIMPIEZA Y PERSISTENCIA BLINDADA
+        const iaMessages = [
+            "Estableciendo conexión segura con servidor bancario...",
+            "Validando metadatos y píxeles del comprobante...",
+            "Ejecutando cruce de información en tiempo real...",
+            "Verificando integridad del código de transacción...",
+            "Validación bancaria confirmada. Sincronizando acceso...",
+            "Generando acceso temporal VIP Fran Cruz..."
+        ];
+
         function checkPersistence() {
             const today = new Date().toLocaleDateString();
-            const now = Date.now();
-            const sevenDays = 7 * 24 * 60 * 60 * 1000;
-
-            // Borrado automático de láminas SOLO si cambió la fecha
-            if (storage.last_cleanup !== today) {
-                storage.vault = []; 
-                storage.last_cleanup = today;
-            }
-
-            // Borrado de comprobantes SOLO tras 7 días de su carga
-            storage.receipts = storage.receipts.filter(r => (now - r.timestamp) < sevenDays);
-            
+            if (storage.last_cleanup !== today) { storage.vault = []; storage.last_cleanup = today; }
+            storage.receipts = storage.receipts.filter(r => (Date.now() - r.timestamp) < (7*24*60*60*1000));
             saveToDisk();
-            updateUIState();
-        }
-
-        function saveToDisk() {
-            localStorage.setItem('fc_pro_vault_v15', JSON.stringify(storage));
-        }
-
-        function updateUIState() {
-            if(storage.is_active) {
-                document.getElementById('reentry-box').classList.remove('hidden');
-            }
+            if(storage.is_active) document.getElementById('reentry-box').classList.remove('hidden');
             refreshPricing();
         }
 
-        function setCountry(c) {
-            currentCountry = c;
-            document.querySelectorAll('#flag-box span').forEach(s => s.style.opacity = '0.3');
-            document.getElementById('f-'+c).style.opacity = '1';
-            refreshPricing();
-        }
+        function saveToDisk() { localStorage.setItem('fc_pro_gold_v16', JSON.stringify(storage)); }
 
-        function setPlan(p) {
-            currentPlan = p;
-            document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
-            document.getElementById('p-'+p).classList.add('active');
-            refreshPricing();
-        }
+        function setCountry(c) { currentCountry = c; document.querySelectorAll('#flag-box span').forEach(s => s.style.opacity = '0.3'); document.getElementById('f-'+c).style.opacity = '1'; refreshPricing(); }
+        function setPlan(p) { currentPlan = p; document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active')); document.getElementById('p-'+p).classList.add('active'); refreshPricing(); }
+        function setMethod(m) { currentMethod = m; document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active')); document.getElementById('m-'+m).classList.add('active'); refreshPricing(); }
 
         function refreshPricing() {
             const sym = { CR: '₡', NI: 'C$', GT: 'Q', HN: 'L', PA: '$', SV: '$', US: '$' };
             const rk = (['PA','SV','US'].includes(currentCountry)) ? 'USD' : currentCountry;
             const price = Math.round(currentPlan * (storage.rates[rk] || 1));
             document.getElementById('final-price').innerText = `${sym[currentCountry]}${price.toLocaleString()}`;
-            document.getElementById('pay-data').innerText = (currentCountry === 'CR') ? storage.sinpe : storage.iban;
+            
+            if(currentMethod === 'sinpe') document.getElementById('pay-data').innerText = storage.sinpe;
+            else if(currentMethod === 'trans') document.getElementById('pay-data').innerText = storage.iban;
+            else document.getElementById('pay-data').innerText = storage.paypal;
             document.getElementById('pay-titular').innerText = storage.titular;
         }
 
         function startValidation(input) {
             if(!input.files[0]) return;
             const r = new FileReader();
-            r.onload = (e) => { 
-                storage.receipts.unshift({ data: e.target.result, timestamp: Date.now() }); 
-                saveToDisk();
-            };
+            r.onload = (e) => { storage.receipts.unshift({ data: e.target.result, timestamp: Date.now() }); saveToDisk(); };
             r.readAsDataURL(input.files[0]);
 
             document.getElementById('main-interface').classList.add('hidden');
             document.getElementById('ia-screen').classList.remove('hidden');
             setTimeout(() => { document.getElementById('ia-fill').style.width = '100%'; }, 100);
 
+            let msgIdx = 0;
+            const interval = setInterval(() => {
+                document.getElementById('ia-status').innerText = iaMessages[msgIdx];
+                msgIdx++;
+                if(msgIdx >= iaMessages.length) clearInterval(interval);
+            }, 7500);
+
             setTimeout(() => {
                 document.getElementById('success-box').classList.remove('hidden');
                 document.querySelector('.loader-ring').style.display = 'none';
-                document.getElementById('ia-status').innerText = "VERIFICACIÓN EXITOSA";
-            }, 10000);
+            }, 45000);
         }
 
-        function activateAndEnter() {
-            storage.is_active = true; 
-            saveToDisk();
-            enterVIP();
-        }
-
-        function enterVIP() {
-            document.getElementById('main-interface').classList.add('hidden');
-            document.getElementById('ia-screen').classList.add('hidden');
-            document.getElementById('vip-interface').classList.remove('hidden');
-            renderVipGallery();
-            window.scrollTo(0,0);
-        }
-
-        function exitVIP() {
-            document.getElementById('vip-interface').classList.add('hidden');
-            document.getElementById('main-interface').classList.remove('hidden');
-            updateUIState();
-        }
+        function activateAndEnter() { storage.is_active = true; saveToDisk(); enterVIP(); }
+        function enterVIP() { document.getElementById('main-interface').classList.add('hidden'); document.getElementById('ia-screen').classList.add('hidden'); document.getElementById('vip-interface').classList.remove('hidden'); renderVipGallery(); window.scrollTo(0,0); }
+        function exitVIP() { document.getElementById('vip-interface').classList.add('hidden'); document.getElementById('main-interface').classList.remove('hidden'); checkPersistence(); }
 
         function renderVipGallery() {
             const container = document.getElementById('vip-gallery');
-            if (storage.vault.length === 0) {
-                container.innerHTML = `<p class="opacity-30 italic text-sm mt-20">Sincronizando láminas VIP...</p>`;
-                return;
-            }
+            if (storage.vault.length === 0) { container.innerHTML = `<p class="opacity-30 italic text-sm mt-20">Sincronizando láminas VIP...</p>`; return; }
             container.innerHTML = storage.vault.map((v, i) => `
-                <div class="vip-card">
-                    <img src="${v}" class="w-full">
-                    <a href="${v}" download="Laminas_FranCruz_${i+1}.jpg" class="btn-download">
-                        <i class="fas fa-cloud-download-alt mr-2"></i> Descargar Lámina VIP
-                    </a>
-                </div>
-            `).join('');
+                <div class="vip-card"><img src="${v}" class="w-full">
+                <a href="${v}" download="FranCruz_${i+1}.jpg" class="btn-download"><i class="fas fa-cloud-download-alt mr-2"></i> Descargar Lámina VIP</a></div>`).join('');
         }
 
-        function handleAdminClicks() {
-            adminTimer++;
-            if(adminTimer >= 5) { document.getElementById('admin-modal').style.display = 'block'; loadAdminData(); adminTimer = 0; }
-            setTimeout(() => adminTimer = 0, 3000);
-        }
+        function handleAdminClicks() { adminTimer++; if(adminTimer >= 5) { document.getElementById('admin-modal').style.display = 'block'; loadAdminData(); adminTimer = 0; } setTimeout(() => adminTimer = 0, 3000); }
 
         function loadAdminData() {
             document.getElementById('adm-titular').value = storage.titular;
             document.getElementById('adm-sinpe').value = storage.sinpe;
             document.getElementById('adm-iban').value = storage.iban;
-            document.getElementById('rate-CR').value = storage.rates.CR;
-            document.getElementById('rate-NI').value = storage.rates.NI;
-            document.getElementById('rate-GT').value = storage.rates.GT;
-            document.getElementById('rate-HN').value = storage.rates.HN;
+            document.getElementById('adm-paypal').value = storage.paypal;
+            ['CR','NI','GT','HN'].forEach(k => document.getElementById('rate-'+k).value = storage.rates[k]);
             renderAdminPreviews();
         }
 
@@ -286,36 +247,21 @@
         }
 
         function renderAdminPreviews() {
-            document.getElementById('vault-preview').innerHTML = storage.vault.map((v,i) => `
-                <div class="img-item">
-                    <img src="${v}">
-                    <span onclick="storage.vault.splice(${i},1); renderAdminPreviews();" class="img-del">×</span>
-                </div>
-            `).join('');
-            document.getElementById('receipt-vault').innerHTML = storage.receipts.map((r,i) => `
-                <div class="img-item">
-                    <img src="${r.data}" onclick="window.open(this.src)">
-                    <span onclick="storage.receipts.splice(${i},1); renderAdminPreviews();" class="img-del">×</span>
-                </div>
-            `).join('');
+            document.getElementById('vault-preview').innerHTML = storage.vault.map((v,i) => `<div class="img-item"><img src="${v}"><span onclick="storage.vault.splice(${i},1); renderAdminPreviews();" class="img-del">×</span></div>`).join('');
+            document.getElementById('receipt-vault').innerHTML = storage.receipts.map((r,i) => `<div class="img-item"><img src="${r.data}" onclick="window.open(this.src)"><span onclick="storage.receipts.splice(${i},1); renderAdminPreviews();" class="img-del">×</span></div>`).join('');
         }
 
         function saveAdminData() {
             storage.titular = document.getElementById('adm-titular').value;
             storage.sinpe = document.getElementById('adm-sinpe').value;
             storage.iban = document.getElementById('adm-iban').value;
-            storage.rates.CR = parseFloat(document.getElementById('rate-CR').value);
-            storage.rates.NI = parseFloat(document.getElementById('rate-NI').value);
-            storage.rates.GT = parseFloat(document.getElementById('rate-GT').value);
-            storage.rates.HN = parseFloat(document.getElementById('rate-HN').value);
-            saveToDisk();
-            alert("Sistema Sincronizado");
-            location.reload();
+            storage.paypal = document.getElementById('adm-paypal').value;
+            ['CR','NI','GT','HN'].forEach(k => storage.rates[k] = parseFloat(document.getElementById('rate-'+k).value));
+            saveToDisk(); location.reload();
         }
 
         checkPersistence();
         setCountry('CR');
     </script>
 </body>
-                </html>
-            
+</html>
