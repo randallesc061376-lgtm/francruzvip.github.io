@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fran Cruz VIP | El Personaje del Azar</title>
+    <title>Fran Cruz | El Personaje del Azar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -11,24 +11,26 @@
         body { font-family: 'Poppins', sans-serif; background: #000; color: white; margin: 0; padding: 20px; text-align: center; }
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .payment-card { background: #0a0a0a; border-radius: 30px; padding: 25px; border: 1px solid #1a1a1a; margin: 0 auto; max-width: 400px; box-shadow: 0 15px 35px rgba(0,0,0,0.8); }
-        .method-tab { padding: 10px; font-size: 10px; border-bottom: 2px solid transparent; cursor: pointer; opacity: 0.5; text-transform: uppercase; font-weight: bold; }
-        .method-tab.active { opacity: 1; border-color: #d4af37; color: #d4af37; }
+        .gold-border { border: 1px solid rgba(212, 175, 55, 0.3); }
+        .plan-card { background: #0a0a0a; border-radius: 20px; padding: 15px; cursor: pointer; transition: 0.3s; border: 1px solid #1a1a1a; }
+        .plan-card.active { border-color: #d4af37; background: #1a1505; transform: translateY(-5px); }
+        .payment-section { background: #070707; border-radius: 30px; padding: 25px; margin-top: 25px; border: 1px solid #1a1a1a; }
         .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; border: 2px solid #d4af37; padding: 20px; border-radius: 20px; z-index: 1000; width: 95%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
-        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 8px; border-radius: 8px; width: 100%; margin-bottom: 8px; font-size: 13px; }
-        label { font-size: 10px; color: #888; display: block; text-align: left; margin-bottom: 2px; text-transform: uppercase; }
-        .flag-btn { font-size: 20px; cursor: pointer; opacity: 0.4; transition: 0.3s; }
+        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 8px; border-radius: 8px; width: 100%; margin-bottom: 8px; }
+        .flag-btn { font-size: 22px; cursor: pointer; opacity: 0.3; transition: 0.3s; }
         .flag-btn.active { opacity: 1; transform: scale(1.2); }
     </style>
 </head>
 <body>
 
-    <header class="mt-4 mb-6 cursor-pointer" onclick="handleAdminClicks()">
-        <h1 class="font-luxury text-3xl gold-text tracking-widest uppercase">Fran Cruz</h1>
-        <p class="text-[9px] tracking-[0.3em] uppercase opacity-50">El Personaje del Azar</p>
+    <header class="mt-4 mb-2 cursor-pointer" onclick="handleAdminClicks()">
+        <h1 class="font-luxury text-4xl gold-text tracking-widest uppercase">Fran Cruz</h1>
+        <p class="text-[10px] tracking-[0.4em] uppercase opacity-60">El Personaje del Azar</p>
     </header>
 
-    <div class="flex gap-4 mb-6 justify-center flex-wrap">
+    <p class="text-xs gold-text mt-6 mb-4 font-bold uppercase tracking-widest">Elige tu camino al éxito</p>
+
+    <div class="flex gap-4 mb-8 justify-center flex-wrap">
         <span onclick="setCountry('CR')" id="f-CR" class="flag-btn">🇨🇷</span>
         <span onclick="setCountry('NI')" id="f-NI" class="flag-btn">🇳🇮</span>
         <span onclick="setCountry('PA')" id="f-PA" class="flag-btn">🇵🇦</span>
@@ -38,62 +40,68 @@
         <span onclick="setCountry('US')" id="f-US" class="flag-btn">🇺🇸</span>
     </div>
 
-    <div class="payment-card">
-        <div class="flex justify-around mb-6 border-b border-white/5">
-            <div onclick="setMethod('sinpe')" id="t-sinpe" class="method-tab active">SINPE CR</div>
-            <div onclick="setMethod('transfer')" id="t-transfer" class="method-tab">Depósitos</div>
-            <div onclick="setMethod('paypal')" id="t-paypal" class="method-tab">PayPal</div>
+    <div class="grid grid-cols-1 gap-3 max-w-sm mx-auto mb-8">
+        <div onclick="setPlan(1)" id="p-1" class="plan-card">
+            <p class="text-[9px] uppercase opacity-50">Acceso 24h</p>
+            <h3 class="text-sm font-bold">Camino al Éxito</h3>
+            <p class="gold-text font-bold">$1 USD</p>
+        </div>
+        <div onclick="setPlan(5)" id="p-5" class="plan-card active">
+            <p class="text-[9px] uppercase opacity-50">Acceso 7 Días</p>
+            <h3 class="text-sm font-bold">Senda Ganadora</h3>
+            <p class="gold-text font-bold">$5 USD</p>
+        </div>
+        <div onclick="setPlan(15)" id="p-15" class="plan-card">
+            <p class="text-[9px] uppercase opacity-50">Acceso Mensual</p>
+            <h3 class="text-sm font-bold">Membresía VIP</h3>
+            <p class="gold-text font-bold">$15 USD</p>
+        </div>
+    </div>
+
+    <div class="payment-section max-w-sm mx-auto">
+        <div class="flex justify-between text-[10px] mb-4 opacity-50 uppercase font-bold border-b border-white/5 pb-2">
+            <span onclick="setMethod('sinpe')" id="m-sinpe" class="cursor-pointer text-yellow-500">SINPE CR</span>
+            <span onclick="setMethod('transfer')" id="m-transfer" class="cursor-pointer">Depósitos</span>
+            <span onclick="setMethod('paypal')" id="m-paypal" class="cursor-pointer">PayPal</span>
         </div>
 
-        <div id="content-area" class="text-left">
-            <div class="bg-[#111] p-4 rounded-2xl border border-white/5 mb-4">
-                <p id="label-top" class="text-[8px] text-gray-500 uppercase mb-1 font-bold">Cargando...</p>
-                <p id="main-data" class="text-lg font-bold tracking-widest mb-1">---</p>
-                <p id="main-titular" class="text-[10px] gold-text font-bold uppercase tracking-widest">---</p>
-            </div>
-
-            <div class="bg-yellow-500/5 p-4 rounded-2xl border border-yellow-500/10">
-                <p class="text-[9px] text-gray-500 uppercase mb-1 font-bold">Membresía VIP:</p>
-                <p id="display-price" class="text-3xl font-bold text-yellow-500 tracking-tight">---</p>
-            </div>
+        <div class="text-left mb-6">
+            <p id="pay-label" class="text-[8px] text-gray-500 uppercase mb-1">Destinatario:</p>
+            <p id="pay-data" class="text-lg font-bold tracking-widest mb-1">Cargando...</p>
+            <p id="pay-titular" class="text-[10px] gold-text font-bold uppercase">---</p>
         </div>
 
-        <button class="w-full bg-white text-black font-bold py-4 rounded-2xl uppercase text-[10px] tracking-widest mt-6">Validar Comprobante</button>
+        <div class="bg-yellow-500/5 p-5 rounded-2xl border border-yellow-500/20">
+            <p class="text-[9px] text-gray-400 uppercase mb-1">Inversión Total:</p>
+            <p id="final-price" class="text-4xl font-bold text-yellow-500 tracking-tighter">---</p>
+            <p id="usd-reference" class="text-[9px] opacity-40 mt-1 uppercase">Ref: $5 USD</p>
+        </div>
+
+        <button class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest mt-8 hover:bg-gray-200 transition">
+            Validar Comprobante
+        </button>
     </div>
 
     <div id="adminModal" class="admin-panel shadow-2xl">
-        <h3 class="gold-text font-bold mb-4 uppercase text-center">Panel Maestro</h3>
-        
-        <label>Titular General</label>
-        <input type="text" id="in-titular">
-        
-        <label>Número SINPE</label>
-        <input type="text" id="in-sinpe">
-        
-        <label>Cuenta IBAN</label>
-        <input type="text" id="in-iban">
-        
-        <label>Correo PayPal</label>
-        <input type="text" id="in-paypal">
-
-        <hr class="border-white/10 my-4">
-        <p class="text-[10px] text-yellow-500 mb-2 uppercase font-bold">Tipos de Cambio (1 USD = ?)</p>
-        
-        <label>CRC (Costa Rica)</label>
-        <input type="number" id="ex-cr">
-        <label>NIO (Nicaragua)</label>
-        <input type="number" id="ex-ni">
-        <label>GTQ (Guatemala)</label>
-        <input type="number" id="ex-gt">
-        <label>HNL (Honduras)</label>
-        <input type="number" id="ex-hn">
-
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white p-3 rounded-xl font-bold text-xs mt-2 uppercase">Guardar Cambios</button>
+        <h3 class="gold-text font-bold mb-4 uppercase text-center text-sm">Configuración Maestra</h3>
+        <input type="text" id="in-titular" placeholder="Nombre Titular">
+        <input type="text" id="in-sinpe" placeholder="Número SINPE">
+        <input type="text" id="in-iban" placeholder="Cuenta IBAN">
+        <input type="text" id="in-paypal" placeholder="Correo PayPal">
+        <p class="text-[10px] text-yellow-500 my-2 uppercase font-bold">Precios por $1 USD</p>
+        <div class="grid grid-cols-2 gap-2">
+            <div><label class="text-[9px]">CR (₡)</label><input type="number" id="ex-cr"></div>
+            <div><label class="text-[9px]">NI (C$)</label><input type="number" id="ex-ni"></div>
+            <div><label class="text-[9px]">GT (Q)</label><input type="number" id="ex-gt"></div>
+            <div><label class="text-[9px]">HN (L)</label><input type="number" id="ex-hn"></div>
+        </div>
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white p-3 rounded-xl font-bold text-xs mt-4 uppercase tracking-widest">Guardar Cambios</button>
         <button onclick="closeAdmin()" class="w-full text-gray-500 text-[9px] mt-4 uppercase">Cerrar</button>
     </div>
 
     <script>
         let adminClicks = 0;
+        let selectedPlan = 5;
         let currentCountry = 'CR';
         let currentMethod = 'sinpe';
 
@@ -102,19 +110,19 @@
             sinpe: "8888-8888",
             iban: "CR00-0000-0000-0000",
             paypal: "pagos@francruzvip.com",
-            rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, SV: 1, PA: 1, US: 1.5 }
+            rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, SV: 1, PA: 1, US: 1 }
         };
 
-        let data = JSON.parse(localStorage.getItem('franCruzMaster')) || defaults;
+        let data = JSON.parse(localStorage.getItem('franCruzVIP')) || defaults;
 
         const geo = {
-            CR: { n: 'Costa Rica', m: 'CRC', s: '₡' },
-            NI: { n: 'Nicaragua', m: 'NIO', s: 'C$' },
-            PA: { n: 'Panamá', m: 'USD', s: '$' },
-            HN: { n: 'Honduras', m: 'HNL', s: 'L' },
-            SV: { n: 'El Salvador', m: 'USD', s: '$' },
-            GT: { n: 'Guatemala', m: 'GTQ', s: 'Q' },
-            US: { n: 'USA', m: 'USD', s: '$' }
+            CR: { s: '₡', rateKey: 'CR' },
+            NI: { s: 'C$', rateKey: 'NI' },
+            PA: { s: '$', rateKey: 'PA' },
+            HN: { s: 'L', rateKey: 'HN' },
+            SV: { s: '$', rateKey: 'SV' },
+            GT: { s: 'Q', rateKey: 'GT' },
+            US: { s: '$', rateKey: 'US' }
         };
 
         async function init() {
@@ -132,36 +140,42 @@
             updateDisplay();
         }
 
+        function setPlan(val) {
+            selectedPlan = val;
+            document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
+            document.getElementById('p-' + val).classList.add('active');
+            updateDisplay();
+        }
+
         function setMethod(m) {
             currentMethod = m;
-            document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('t-' + m).classList.add('active');
+            document.querySelectorAll('.payment-section span').forEach(s => s.classList.remove('text-yellow-500'));
+            document.getElementById('m-' + m).classList.add('text-yellow-500');
             updateDisplay();
         }
 
         function updateDisplay() {
             const g = geo[currentCountry];
-            const rate = data.rates[currentCountry] || 1;
+            const rate = data.rates[g.rateKey];
+            const total = (selectedPlan * rate).toLocaleString();
             
-            // Lógica de Precios
-            let priceVal = currentCountry === 'SV' ? 1 : (currentCountry === 'US' ? 1.50 : rate);
-            document.getElementById('display-price').innerText = g.s + priceVal;
+            document.getElementById('final-price').innerText = g.s + total;
+            document.getElementById('usd-reference').innerText = `Ref: $${selectedPlan} USD`;
+            document.getElementById('pay-titular').innerText = data.titular;
 
-            // Lógica de Contenido
-            const label = document.getElementById('label-top');
-            const main = document.getElementById('main-data');
-            
+            const label = document.getElementById('pay-label');
+            const main = document.getElementById('pay-data');
+
             if(currentMethod === 'sinpe') {
                 label.innerText = "Número SINPE CR:";
                 main.innerText = data.sinpe;
             } else if(currentMethod === 'paypal') {
-                label.innerText = "Cuenta PayPal:";
+                label.innerText = "Correo PayPal:";
                 main.innerText = data.paypal;
             } else {
-                label.innerText = "Cuenta Interbancaria (IBAN):";
+                label.innerText = "Cuenta IBAN / Destino:";
                 main.innerText = data.iban;
             }
-            document.getElementById('main-titular').innerText = data.titular;
         }
 
         function handleAdminClicks() {
@@ -191,11 +205,11 @@
                     NI: parseFloat(document.getElementById('ex-ni').value),
                     GT: parseFloat(document.getElementById('ex-gt').value),
                     HN: parseFloat(document.getElementById('ex-hn').value),
-                    SV: 1, PA: 1, US: 1.5
+                    SV: 1, PA: 1, US: 1
                 }
             };
-            localStorage.setItem('franCruzMaster', JSON.stringify(data));
-            alert("¡Datos y Tipos de Cambio actualizados!");
+            localStorage.setItem('franCruzVIP', JSON.stringify(data));
+            alert("¡Éxito! Datos guardados.");
             location.reload();
         }
 
@@ -203,4 +217,5 @@
         init();
     </script>
 </body>
-</html>
+    </html>
+            
