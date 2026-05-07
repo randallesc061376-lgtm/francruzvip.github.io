@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fran Cruz | El Personaje del Azar</title>
+    <title>Fran Cruz VIP | Panel Maestro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -11,211 +11,128 @@
         body { font-family: 'Poppins', sans-serif; background: #000; color: white; margin: 0; padding: 20px; text-align: center; }
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .gold-border { border: 1px solid rgba(212, 175, 55, 0.3); }
-        .plan-card { background: #0a0a0a; border-radius: 20px; padding: 15px; cursor: pointer; transition: 0.3s; border: 1px solid #1a1a1a; }
-        .plan-card.active { border-color: #d4af37; background: #1a1505; transform: translateY(-5px); }
-        .payment-section { background: #070707; border-radius: 30px; padding: 25px; margin-top: 25px; border: 1px solid #1a1a1a; }
-        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; border: 2px solid #d4af37; padding: 20px; border-radius: 20px; z-index: 1000; width: 95%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
-        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 8px; border-radius: 8px; width: 100%; margin-bottom: 8px; }
-        .flag-btn { font-size: 22px; cursor: pointer; opacity: 0.3; transition: 0.3s; }
-        .flag-btn.active { opacity: 1; transform: scale(1.2); }
+        .glass-card { background: #0a0a0a; border: 1px solid rgba(255,255,255,0.05); border-radius: 25px; }
+        .admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 5000; padding: 20px; overflow-y: auto; }
+        input, select { background: #111; border: 1px solid #333; color: white; padding: 12px; border-radius: 12px; width: 100%; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
-    <header class="mt-4 mb-2 cursor-pointer" onclick="handleAdminClicks()">
-        <h1 class="font-luxury text-4xl gold-text tracking-widest uppercase">Fran Cruz</h1>
-        <p class="text-[10px] tracking-[0.4em] uppercase opacity-60">El Personaje del Azar</p>
-    </header>
+    <div id="user-view">
+        <header class="mt-6 mb-8 cursor-pointer" onclick="handleAdminClicks()">
+            <h1 class="font-luxury text-4xl gold-text tracking-widest uppercase">Fran Cruz</h1>
+            <p class="text-[9px] tracking-[0.5em] uppercase opacity-40">El Personaje del Azar</p>
+        </header>
 
-    <p class="text-xs gold-text mt-6 mb-4 font-bold uppercase tracking-widest">Elige tu camino al éxito</p>
-
-    <div class="flex gap-4 mb-8 justify-center flex-wrap">
-        <span onclick="setCountry('CR')" id="f-CR" class="flag-btn">🇨🇷</span>
-        <span onclick="setCountry('NI')" id="f-NI" class="flag-btn">🇳🇮</span>
-        <span onclick="setCountry('PA')" id="f-PA" class="flag-btn">🇵🇦</span>
-        <span onclick="setCountry('HN')" id="f-HN" class="flag-btn">🇭🇳</span>
-        <span onclick="setCountry('SV')" id="f-SV" class="flag-btn">🇸🇻</span>
-        <span onclick="setCountry('GT')" id="f-GT" class="flag-btn">🇬🇹</span>
-        <span onclick="setCountry('US')" id="f-US" class="flag-btn">🇺🇸</span>
-    </div>
-
-    <div class="grid grid-cols-1 gap-3 max-w-sm mx-auto mb-8">
-        <div onclick="setPlan(1)" id="p-1" class="plan-card">
-            <p class="text-[9px] uppercase opacity-50">Acceso 24h</p>
-            <h3 class="text-sm font-bold">Camino al Éxito</h3>
-            <p class="gold-text font-bold">$1 USD</p>
+        <div id="membership-ui">
+            <p class="text-[10px] gold-text mb-6 uppercase tracking-widest">Elige tu plan al éxito</p>
+            <div class="max-w-sm mx-auto space-y-4">
+                <button onclick="showPayment('SINPE CR')" class="glass-card w-full p-6 font-bold uppercase text-xs tracking-widest border-l-4 border-yellow-500">SINPE Costa Rica</button>
+                <button onclick="showPayment('Depósito')" class="glass-card w-full p-6 font-bold uppercase text-xs tracking-widest">Depósito Bancario</button>
+                <button onclick="showPayment('PayPal')" class="glass-card w-full p-6 font-bold uppercase text-xs tracking-widest">PayPal Global</button>
+            </div>
         </div>
-        <div onclick="setPlan(5)" id="p-5" class="plan-card active">
-            <p class="text-[9px] uppercase opacity-50">Acceso 7 Días</p>
-            <h3 class="text-sm font-bold">Senda Ganadora</h3>
-            <p class="gold-text font-bold">$5 USD</p>
-        </div>
-        <div onclick="setPlan(15)" id="p-15" class="plan-card">
-            <p class="text-[9px] uppercase opacity-50">Acceso Mensual</p>
-            <h3 class="text-sm font-bold">Membresía VIP</h3>
-            <p class="gold-text font-bold">$15 USD</p>
+
+        <div id="vip-content" class="hidden fade-in py-10">
+            <h2 class="font-luxury text-2xl gold-text mb-6">Lámina VIP</h2>
+            <img id="today-image" src="" class="max-w-full mx-auto rounded-2xl shadow-2xl border-2 border-yellow-500/50">
+            <p class="text-[10px] mt-4 opacity-40 uppercase">Válido hasta las 11:59 PM</p>
         </div>
     </div>
 
-    <div class="payment-section max-w-sm mx-auto">
-        <div class="flex justify-between text-[10px] mb-4 opacity-50 uppercase font-bold border-b border-white/5 pb-2">
-            <span onclick="setMethod('sinpe')" id="m-sinpe" class="cursor-pointer text-yellow-500">SINPE CR</span>
-            <span onclick="setMethod('transfer')" id="m-transfer" class="cursor-pointer">Depósitos</span>
-            <span onclick="setMethod('paypal')" id="m-paypal" class="cursor-pointer">PayPal</span>
-        </div>
+    <div id="adminPanel" class="admin-modal">
+        <div class="max-w-md mx-auto">
+            <h2 class="gold-text font-luxury text-2xl mb-8 uppercase tracking-tighter">Panel de Control</h2>
+            
+            <div class="text-left space-y-6">
+                <section>
+                    <label class="text-[10px] uppercase text-yellow-500 font-bold">1. Subir Lámina del Día</label>
+                    <input type="file" id="file-input" accept="image/*" onchange="previewImage()">
+                </section>
 
-        <div class="text-left mb-6">
-            <p id="pay-label" class="text-[8px] text-gray-500 uppercase mb-1">Destinatario:</p>
-            <p id="pay-data" class="text-lg font-bold tracking-widest mb-1">Cargando...</p>
-            <p id="pay-titular" class="text-[10px] gold-text font-bold uppercase">---</p>
-        </div>
+                <section>
+                    <label class="text-[10px] uppercase text-yellow-500 font-bold">2. Datos de Pago</label>
+                    <input type="text" id="adm-titular" placeholder="Nombre Titular">
+                    <input type="text" id="adm-sinpe" placeholder="Número SINPE">
+                    <input type="text" id="adm-iban" placeholder="Cuenta IBAN">
+                    <input type="text" id="adm-paypal" placeholder="Correo PayPal">
+                </section>
 
-        <div class="bg-yellow-500/5 p-5 rounded-2xl border border-yellow-500/20">
-            <p class="text-[9px] text-gray-400 uppercase mb-1">Inversión Total:</p>
-            <p id="final-price" class="text-4xl font-bold text-yellow-500 tracking-tighter">---</p>
-            <p id="usd-reference" class="text-[9px] opacity-40 mt-1 uppercase">Ref: $5 USD</p>
-        </div>
+                <section>
+                    <label class="text-[10px] uppercase text-yellow-500 font-bold">3. Tipos de Cambio ($1 = ?)</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" id="rate-cr" placeholder="CRC ₡">
+                        <input type="number" id="rate-ni" placeholder="NIO C$">
+                    </div>
+                </section>
 
-        <button class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest mt-8 hover:bg-gray-200 transition">
-            Validar Comprobante
-        </button>
-    </div>
-
-    <div id="adminModal" class="admin-panel shadow-2xl">
-        <h3 class="gold-text font-bold mb-4 uppercase text-center text-sm">Configuración Maestra</h3>
-        <input type="text" id="in-titular" placeholder="Nombre Titular">
-        <input type="text" id="in-sinpe" placeholder="Número SINPE">
-        <input type="text" id="in-iban" placeholder="Cuenta IBAN">
-        <input type="text" id="in-paypal" placeholder="Correo PayPal">
-        <p class="text-[10px] text-yellow-500 my-2 uppercase font-bold">Precios por $1 USD</p>
-        <div class="grid grid-cols-2 gap-2">
-            <div><label class="text-[9px]">CR (₡)</label><input type="number" id="ex-cr"></div>
-            <div><label class="text-[9px]">NI (C$)</label><input type="number" id="ex-ni"></div>
-            <div><label class="text-[9px]">GT (Q)</label><input type="number" id="ex-gt"></div>
-            <div><label class="text-[9px]">HN (L)</label><input type="number" id="ex-hn"></div>
+                <button onclick="saveAllAndClose()" class="w-full bg-yellow-600 text-black font-bold py-4 rounded-xl uppercase tracking-widest">Guardar y Publicar</button>
+                <button onclick="closeAdmin()" class="w-full text-gray-500 text-xs mt-4 uppercase">Cancelar</button>
+            </div>
         </div>
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white p-3 rounded-xl font-bold text-xs mt-4 uppercase tracking-widest">Guardar Cambios</button>
-        <button onclick="closeAdmin()" class="w-full text-gray-500 text-[9px] mt-4 uppercase">Cerrar</button>
     </div>
 
     <script>
         let adminClicks = 0;
-        let selectedPlan = 5;
-        let currentCountry = 'CR';
-        let currentMethod = 'sinpe';
-
-        const defaults = {
+        let config = JSON.parse(localStorage.getItem('franCruzMaster')) || {
             titular: "Randall Esteban Sánchez",
             sinpe: "8888-8888",
-            iban: "CR00-0000-0000-0000",
+            iban: "CR00-0000-0000",
             paypal: "pagos@francruzvip.com",
-            rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, SV: 1, PA: 1, US: 1 }
+            rates: { CR: 525, NI: 36.5 },
+            lamina: ""
         };
-
-        let data = JSON.parse(localStorage.getItem('franCruzVIP')) || defaults;
-
-        const geo = {
-            CR: { s: '₡', rateKey: 'CR' },
-            NI: { s: 'C$', rateKey: 'NI' },
-            PA: { s: '$', rateKey: 'PA' },
-            HN: { s: 'L', rateKey: 'HN' },
-            SV: { s: '$', rateKey: 'SV' },
-            GT: { s: 'Q', rateKey: 'GT' },
-            US: { s: '$', rateKey: 'US' }
-        };
-
-        async function init() {
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const resData = await res.json();
-                setCountry(geo[resData.country_code] ? resData.country_code : 'CR');
-            } catch { setCountry('CR'); }
-        }
-
-        function setCountry(code) {
-            currentCountry = code;
-            document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('f-' + code).classList.add('active');
-            updateDisplay();
-        }
-
-        function setPlan(val) {
-            selectedPlan = val;
-            document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
-            document.getElementById('p-' + val).classList.add('active');
-            updateDisplay();
-        }
-
-        function setMethod(m) {
-            currentMethod = m;
-            document.querySelectorAll('.payment-section span').forEach(s => s.classList.remove('text-yellow-500'));
-            document.getElementById('m-' + m).classList.add('text-yellow-500');
-            updateDisplay();
-        }
-
-        function updateDisplay() {
-            const g = geo[currentCountry];
-            const rate = data.rates[g.rateKey];
-            const total = (selectedPlan * rate).toLocaleString();
-            
-            document.getElementById('final-price').innerText = g.s + total;
-            document.getElementById('usd-reference').innerText = `Ref: $${selectedPlan} USD`;
-            document.getElementById('pay-titular').innerText = data.titular;
-
-            const label = document.getElementById('pay-label');
-            const main = document.getElementById('pay-data');
-
-            if(currentMethod === 'sinpe') {
-                label.innerText = "Número SINPE CR:";
-                main.innerText = data.sinpe;
-            } else if(currentMethod === 'paypal') {
-                label.innerText = "Correo PayPal:";
-                main.innerText = data.paypal;
-            } else {
-                label.innerText = "Cuenta IBAN / Destino:";
-                main.innerText = data.iban;
-            }
-        }
 
         function handleAdminClicks() {
             adminClicks++;
             if(adminClicks === 5) {
-                document.getElementById('adminModal').style.display = 'block';
-                document.getElementById('in-titular').value = data.titular;
-                document.getElementById('in-sinpe').value = data.sinpe;
-                document.getElementById('in-iban').value = data.iban;
-                document.getElementById('in-paypal').value = data.paypal;
-                document.getElementById('ex-cr').value = data.rates.CR;
-                document.getElementById('ex-ni').value = data.rates.NI;
-                document.getElementById('ex-gt').value = data.rates.GT;
-                document.getElementById('ex-hn').value = data.rates.HN;
+                document.getElementById('adminPanel').style.display = 'block';
+                // Cargar valores actuales en el panel
+                document.getElementById('adm-titular').value = config.titular;
+                document.getElementById('adm-sinpe').value = config.sinpe;
+                document.getElementById('adm-iban').value = config.iban;
+                document.getElementById('adm-paypal').value = config.paypal;
+                document.getElementById('rate-cr').value = config.rates.CR;
+                document.getElementById('rate-ni').value = config.rates.NI;
             }
-            setTimeout(() => { adminClicks = 0; }, 3000);
+            setTimeout(() => adminClicks = 0, 3000);
         }
 
-        function saveAdminData() {
-            data = {
-                titular: document.getElementById('in-titular').value,
-                sinpe: document.getElementById('in-sinpe').value,
-                iban: document.getElementById('in-iban').value,
-                paypal: document.getElementById('in-paypal').value,
-                rates: {
-                    CR: parseFloat(document.getElementById('ex-cr').value),
-                    NI: parseFloat(document.getElementById('ex-ni').value),
-                    GT: parseFloat(document.getElementById('ex-gt').value),
-                    HN: parseFloat(document.getElementById('ex-hn').value),
-                    SV: 1, PA: 1, US: 1
-                }
-            };
-            localStorage.setItem('franCruzVIP', JSON.stringify(data));
-            alert("¡Éxito! Datos guardados.");
+        function previewImage() {
+            const file = document.getElementById('file-input').files[0];
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                config.lamina = reader.result;
+            }
+            if (file) reader.readAsDataURL(file);
+        }
+
+        function saveAllAndClose() {
+            config.titular = document.getElementById('adm-titular').value;
+            config.sinpe = document.getElementById('adm-sinpe').value;
+            config.iban = document.getElementById('adm-iban').value;
+            config.paypal = document.getElementById('adm-paypal').value;
+            config.rates.CR = document.getElementById('rate-cr').value;
+            config.rates.NI = document.getElementById('rate-ni').value;
+            
+            localStorage.setItem('franCruzMaster', JSON.stringify(config));
+            alert("¡Plataforma Actualizada!");
             location.reload();
         }
 
-        function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
-        init();
+        function showPayment(method) {
+            // Aquí se activa la lógica de pago que ya hicimos
+            // Al detectar éxito por la IA:
+            if(config.lamina) {
+                document.getElementById('membership-ui').classList.add('hidden');
+                document.getElementById('vip-content').classList.remove('hidden');
+                document.getElementById('today-image').src = config.lamina;
+            } else {
+                alert("La lámina del día aún no ha sido cargada por el administrador.");
+            }
+        }
+
+        function closeAdmin() { document.getElementById('adminPanel').style.display = 'none'; }
     </script>
 </body>
-    </html>
-            
+</html>
