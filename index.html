@@ -24,7 +24,6 @@
         .flag-btn.active { opacity: 1; transform: scale(1.2); }
         .loader { width: 30px; height: 30px; border: 3px solid #1a1a1a; border-top: 3px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        #vip-content { display: none; }
     </style>
 </head>
 <body>
@@ -90,24 +89,21 @@
     <div id="waiting-screen" class="max-w-sm mx-auto" style="display:none;">
         <h2 class="font-luxury text-2xl gold-text mb-2">VERIFICANDO PAGO</h2>
         <div class="loader"></div>
-        <p class="text-[10px] uppercase tracking-widest opacity-70 mb-8">Análisis de seguridad en curso</p>
-        
         <div class="bg-[#0a0a0a] p-8 rounded-3xl border border-white/5 mb-6">
-            <p class="text-xs mb-6 opacity-80">Una vez validado su pago por WhatsApp, ingrese el <span class="gold-text font-bold">Código VIP de 4 dígitos</span> enviado por el sistema.</p>
+            <p class="text-xs mb-6 opacity-80">Una vez enviado el comprobante por WhatsApp, ingrese el <span class="gold-text font-bold">CÓDIGO VIP DE 4 DÍGITOS</span> que el sistema le proporcionará.</p>
             <input type="password" id="input-code" maxlength="4" placeholder="••••" class="text-center text-2xl tracking-[1em] gold-text border-yellow-500/30">
             <button onclick="checkCode()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-2 uppercase tracking-widest">Desbloquear Acceso</button>
         </div>
-        <p class="text-[9px] uppercase opacity-40">Tiempo estimado de respuesta: 2-5 min</p>
+        <p class="text-[9px] uppercase opacity-40">Tiempo de validación: 2-5 min</p>
     </div>
 
-    <div id="vip-content" class="max-w-md mx-auto">
+    <div id="vip-content" class="max-w-md mx-auto" style="display:none;">
         <h2 class="font-luxury text-3xl gold-text mb-6 uppercase tracking-widest">Láminas del Día</h2>
-        <div class="bg-white/5 p-2 rounded-3xl border border-yellow-500/30 mb-4 overflow-hidden">
-            <div class="bg-[#111] aspect-[9/16] rounded-2xl flex items-center justify-center text-gray-700 uppercase text-[10px] tracking-widest">
-                [ Lámina VIP Cargada Correctamente ]
-            </div>
+        <div class="bg-white/5 p-4 rounded-3xl border border-yellow-500/30 mb-4">
+            <p class="gold-text font-bold">¡ACCESO CONCEDIDO!</p>
+            <p class="text-xs mt-2 opacity-60">Aquí aparecerá el contenido exclusivo.</p>
         </div>
-        <button onclick="location.reload()" class="text-[10px] uppercase opacity-30 tracking-widest">Cerrar Sesión Segura</button>
+        <button onclick="location.reload()" class="text-[9px] uppercase opacity-30">Salir</button>
     </div>
 
     <div id="adminModal" class="admin-panel shadow-2xl">
@@ -116,11 +112,13 @@
         <input type="text" id="in-sinpe" placeholder="SINPE">
         <input type="text" id="in-iban" placeholder="IBAN">
         <input type="text" id="in-paypal" placeholder="PayPal">
-        <input type="text" id="in-phone" placeholder="Tu WhatsApp (506...)">
-        <label class="text-[9px] gold-text block text-left ml-1 font-bold uppercase">Código de Desbloqueo</label>
-        <input type="text" id="in-pass" placeholder="Ej: 1234">
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-4 uppercase tracking-widest">Guardar Cambios</button>
-        <button onclick="closeAdmin()" class="w-full text-gray-500 text-[9px] mt-4 uppercase">Cerrar</button>
+        <input type="text" id="in-phone" placeholder="WhatsApp (506...)">
+        <input type="text" id="in-pass" placeholder="Código VIP (ej: 1234)">
+        <div class="grid grid-cols-2 gap-2">
+            <input type="number" id="ex-cr" placeholder="Tasa CR">
+            <input type="number" id="ex-ni" placeholder="Tasa NI">
+        </div>
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-4 uppercase tracking-widest">Guardar y Cerrar</button>
     </div>
 
     <script>
@@ -185,10 +183,13 @@
 
         function initValidation(input) {
             if (input.files && input.files[0]) {
-                const msg = `FRAN CRUZ VIP\n\nAdjunto comprobante oficial.\nPlan: ${selectedPlanName}\nOrigen: ${currentCountry}\n\nSolicito validación y envío de CÓDIGO VIP.`;
+                const msg = `FRAN CRUZ VIP\n\nAdjunto comprobante.\nPlan: ${selectedPlanName}\nOrigen: ${currentCountry}\n\nSolicito CÓDIGO VIP de acceso.`;
                 const whatsappUrl = `https://wa.me/${data.phone}?text=${encodeURIComponent(msg)}`;
-                alert("AUTORIZACIÓN: Se abrirá WhatsApp para enviar su comprobante. Una vez enviado, regrese aquí para ingresar su código de acceso.");
+                
+                // Abrir WhatsApp directamente
                 window.open(whatsappUrl, '_blank');
+
+                // Cambiar a pantalla de código
                 document.getElementById('main-interface').style.display = 'none';
                 document.getElementById('waiting-screen').style.display = 'block';
             }
@@ -199,9 +200,8 @@
             if(code === data.pass) {
                 document.getElementById('waiting-screen').style.display = 'none';
                 document.getElementById('vip-content').style.display = 'block';
-                alert("PAGO VERIFICADO. Bienvenido al Círculo VIP.");
             } else {
-                alert("Código incorrecto o pendiente de activación.");
+                alert("Código pendiente de validación o incorrecto.");
             }
         }
 
@@ -235,9 +235,7 @@
             location.reload();
         }
 
-        function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
         setCountry('CR');
     </script>
 </body>
-                    </html>
-    
+</html>
