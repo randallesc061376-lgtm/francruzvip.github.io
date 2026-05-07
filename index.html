@@ -13,30 +13,24 @@
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* CONSOLA ADMINISTRATIVA ROBUSTA */
         .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #080808; border: 1px solid var(--gold); padding: 20px; border-radius: 30px; z-index: 10000; width: 92%; max-width: 400px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 40px rgba(0,0,0,1); }
         .admin-section { border-bottom: 1px solid #1a1a1a; padding-bottom: 15px; margin-bottom: 15px; }
         .admin-label { display: block; text-align: left; font-size: 8px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); opacity: 0.8; margin: 0 0 6px 4px; font-weight: bold; }
-        .admin-input { background: #111; border: 1px solid #222; color: white; padding: 12px 14px; border-radius: 12px; width: 100%; font-size: 13px; margin-bottom: 10px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        .admin-input:focus { border-color: var(--gold); background: #151515; }
+        .admin-input { background: #111; border: 1px solid #222; color: white; padding: 12px 14px; border-radius: 12px; width: 100%; font-size: 13px; margin-bottom: 10px; box-sizing: border-box; outline: none; }
 
-        /* VISOR DE IMÁGENES CORREGIDO */
         .img-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; min-height: 50px; background: #030303; padding: 10px; border-radius: 15px; border: 1px dashed #222; }
-        .img-item { width: 50px; height: 50px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #333; transition: transform 0.2s; }
+        .img-item { width: 50px; height: 50px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
         .img-item img { width: 100%; height: 100%; object-fit: cover; }
         .img-del { position: absolute; top: 0; right: 0; background: #ff4444; color: white; font-size: 10px; padding: 2px 6px; cursor: pointer; font-weight: bold; border-bottom-left-radius: 8px; z-index: 10; }
 
-        /* INTERFAZ DE USUARIO */
         .hidden { display: none !important; }
-        .plan-card { background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; transition: 0.3s; cursor: pointer; text-align: center; }
-        .plan-card.active { border-color: var(--gold); background: #120f05; box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); }
+        .plan-card { background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; cursor: pointer; }
+        .plan-card.active { border-color: var(--gold); background: #120f05; }
         
         .loader-ring { width: 55px; height: 55px; border: 3px solid #111; border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s infinite linear; margin: 25px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
         #ia-fill { width: 0%; height: 100%; background: var(--gold); transition: width 45s linear; }
-
-        .btn-gold { background: #d4af37; color: white; font-weight: bold; padding: 18px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; font-size: 11px; transition: 0.3s; width: 100%; }
-        .btn-gold:active { transform: scale(0.97); opacity: 0.9; }
+        .btn-gold { background: #d4af37; color: white; font-weight: bold; padding: 18px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; font-size: 11px; width: 100%; }
     </style>
 </head>
 <body>
@@ -68,15 +62,15 @@
             <p id="pay-titular" class="text-[8px] opacity-40 uppercase font-bold mb-6">---</p>
             <p id="final-price" class="text-5xl font-bold text-yellow-500 tracking-tighter mb-8">---</p>
             <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="startValidation(this)">
-            <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest active:scale-95 transition-all">Validar Comprobante</button>
+            <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest">Validar Comprobante</button>
         </div>
     </div>
 
     <div id="ia-screen" class="hidden max-w-sm mx-auto pt-10 px-6">
-        <h2 class="font-luxury text-2xl gold-text mb-2 uppercase italic tracking-widest">Verificando</h2>
+        <h2 class="font-luxury text-2xl gold-text mb-2 uppercase italic">Verificando</h2>
         <div class="loader-ring"></div>
-        <div class="bg-[#0a0a0a] p-8 rounded-[35px] border border-white/5 shadow-inner">
-            <p id="ia-status" class="text-[9px] italic gold-text mb-4 h-8">Iniciando protocolo de seguridad...</p>
+        <div class="bg-[#0a0a0a] p-8 rounded-[35px] border border-white/5">
+            <p id="ia-status" class="text-[9px] italic gold-text mb-4 h-8">Analizando metadatos...</p>
             <div class="w-full h-1 bg-black rounded-full overflow-hidden"><div id="ia-fill"></div></div>
         </div>
         <div id="success-box" class="mt-8 hidden">
@@ -87,7 +81,7 @@
     <div id="vip-interface" class="hidden max-w-md mx-auto pt-4 px-4">
         <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
             <h2 class="font-luxury text-2xl gold-text">Galería VIP</h2>
-            <button onclick="location.reload()" class="text-[10px] uppercase opacity-50 font-bold tracking-widest">Salir</button>
+            <button onclick="location.reload()" class="text-[10px] uppercase opacity-50 font-bold">Salir</button>
         </div>
         <div id="vip-gallery" class="grid grid-cols-2 gap-4 pb-20"></div>
     </div>
@@ -115,17 +109,17 @@
         <div class="admin-section">
             <label class="admin-label">Bodega de Láminas del Día</label>
             <input type="file" id="vault-input" multiple accept="image/*" class="hidden" onchange="handleVaultUpload(this)">
-            <button onclick="document.getElementById('vault-input').click()" class="w-full bg-[#111] border border-white/5 text-[9px] py-4 rounded-xl uppercase font-bold text-white mb-2 tracking-widest">Seleccionar Archivos</button>
+            <button onclick="document.getElementById('vault-input').click()" class="w-full bg-[#111] border border-white/5 text-[9px] py-4 rounded-xl uppercase font-bold text-white mb-2 tracking-widest">Cargar Láminas</button>
             <div id="vault-preview" class="img-grid"></div>
         </div>
 
         <div class="admin-section">
-            <label class="admin-label">Comprobantes Recibidos (IA)</label>
+            <label class="admin-label">Comprobantes (Historial 7 días)</label>
             <div id="receipt-vault" class="img-grid"></div>
         </div>
 
         <button onclick="saveAdminData()" class="btn-gold shadow-lg mt-4">Guardar y Sincronizar</button>
-        <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full text-gray-600 text-[8px] mt-6 uppercase font-bold tracking-widest">Cerrar Sesión</button>
+        <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full text-gray-600 text-[8px] mt-6 uppercase font-bold">Cerrar Sesión</button>
     </div>
 
     <script>
@@ -133,15 +127,35 @@
         let currentPlan = 5;
         let currentCountry = 'CR';
 
-        // Estructura de Memoria Sólida
-        const storage = JSON.parse(localStorage.getItem('fc_master_v11')) || {
+        // Estructura con Marcas de Tiempo
+        let storage = JSON.parse(localStorage.getItem('fc_pro_v12')) || {
             titular: "Randall Esteban Sánchez",
             sinpe: "64535475",
             iban: "CR80080315001000035641",
             rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, USD: 1 },
-            vault: [],
-            receipt_vault: []
+            vault: [], // {data: string, date: string}
+            receipts: [], // {data: string, timestamp: number}
+            last_vault_date: new Date().toLocaleDateString()
         };
+
+        // LÓGICA DE LIMPIEZA AUTOMÁTICA AL INICIAR
+        function autoCleanup() {
+            const today = new Date().toLocaleDateString();
+            const now = Date.now();
+            const sevenDays = 7 * 24 * 60 * 60 * 1000;
+
+            // 1. Limpiar láminas si cambió el día
+            if (storage.last_vault_date !== today) {
+                storage.vault = [];
+                storage.last_vault_date = today;
+            }
+
+            // 2. Limpiar comprobantes de más de 7 días
+            storage.receipts = storage.receipts.filter(r => (now - r.timestamp) < sevenDays);
+
+            localStorage.setItem('fc_pro_v12', JSON.stringify(storage));
+        }
+        autoCleanup();
 
         function setCountry(c) {
             currentCountry = c;
@@ -170,8 +184,8 @@
             if(!input.files[0]) return;
             const r = new FileReader();
             r.onload = (e) => { 
-                storage.receipt_vault.unshift(e.target.result); 
-                localStorage.setItem('fc_master_v11', JSON.stringify(storage));
+                storage.receipts.unshift({ data: e.target.result, timestamp: Date.now() }); 
+                localStorage.setItem('fc_pro_v12', JSON.stringify(storage));
             };
             r.readAsDataURL(input.files[0]);
 
@@ -180,15 +194,13 @@
             setTimeout(() => { document.getElementById('ia-fill').style.width = '100%'; }, 100);
 
             const status = document.getElementById('ia-status');
-            const msgs = ["Analizando metadatos...", "Verificando sellos digitales...", "Validando transacción...", "Acceso garantizado."];
+            const msgs = ["Analizando metadatos...", "Confirmando transferencia...", "Acceso garantizado."];
             let i = 0;
             const interval = setInterval(() => {
                 if(i < msgs.length) status.innerText = msgs[i++];
                 else {
                     clearInterval(interval);
                     document.getElementById('success-box').classList.remove('hidden');
-                    status.classList.add('hidden');
-                    document.querySelector('.loader-ring').classList.add('hidden');
                 }
             }, 8000);
         }
@@ -196,9 +208,9 @@
         function enterVIP() {
             document.getElementById('ia-screen').classList.add('hidden');
             document.getElementById('vip-interface').classList.remove('hidden');
-            document.getElementById('vip-gallery').innerHTML = storage.vault.map(img => `
+            document.getElementById('vip-gallery').innerHTML = storage.vault.map(v => `
                 <div class="rounded-xl overflow-hidden border border-white/10 shadow-lg">
-                    <img src="${img}" class="w-full">
+                    <img src="${v.data}" class="w-full">
                 </div>
             `).join('');
             window.scrollTo(0,0);
@@ -225,29 +237,30 @@
         function handleVaultUpload(input) {
             Array.from(input.files).forEach(f => {
                 const r = new FileReader();
-                r.onload = (e) => { storage.vault.push(e.target.result); renderVault(); };
+                r.onload = (e) => { storage.vault.push({ data: e.target.result }); renderVault(); };
                 r.readAsDataURL(f);
             });
         }
 
         function renderVault() {
-            document.getElementById('vault-preview').innerHTML = storage.vault.map((s,i) => `
+            document.getElementById('vault-preview').innerHTML = storage.vault.map((v,i) => `
                 <div class="img-item">
-                    <img src="${s}">
+                    <img src="${v.data}">
                     <span onclick="storage.vault.splice(${i},1); renderVault();" class="img-del">×</span>
                 </div>
             `).join('');
         }
 
         function renderReceipts() {
-            document.getElementById('receipt-vault').innerHTML = storage.receipt_vault.map(s => `
-                <div class="img-item"><img src="${s}" onclick="window.open(this.src)"></div>
+            document.getElementById('receipt-vault').innerHTML = storage.receipts.map((r,i) => `
+                <div class="img-item">
+                    <img src="${r.data}" onclick="window.open(this.src)">
+                    <span onclick="storage.receipts.splice(${i},1); renderReceipts();" class="img-del">×</span>
+                </div>
             `).join('');
         }
 
-        // --- CORRECCIÓN FINAL DEL BOTÓN DE SINCRONIZACIÓN ---
         function saveAdminData() {
-            // 1. Extraer todos los valores de los inputs
             storage.titular = document.getElementById('adm-titular').value;
             storage.sinpe = document.getElementById('adm-sinpe').value;
             storage.iban = document.getElementById('adm-iban').value;
@@ -256,26 +269,21 @@
             storage.rates.GT = parseFloat(document.getElementById('rate-GT').value) || 0;
             storage.rates.HN = parseFloat(document.getElementById('rate-HN').value) || 0;
             
-            // 2. Persistir en localStorage
-            localStorage.setItem('fc_master_v11', JSON.stringify(storage));
+            localStorage.setItem('fc_pro_v12', JSON.stringify(storage));
             
-            // 3. Efecto visual en el botón para confirmar éxito
             const btn = document.querySelector(".btn-gold");
-            btn.innerText = "Sincronización Exitosa ✓";
-            btn.style.background = "#16a34a"; // Verde esmeralda
+            btn.innerText = "SINCRO EXITOSA ✓";
+            btn.style.background = "#16a34a";
 
-            // 4. Cerrar y actualizar interfaz tras 800ms
             setTimeout(() => {
                 document.getElementById('admin-modal').style.display = 'none';
                 btn.innerText = "Guardar y Sincronizar";
                 btn.style.background = "";
                 refreshPricing();
-                alert("Sistema Actualizado Correctamente");
             }, 800);
         }
 
         setCountry('CR');
     </script>
 </body>
-    </html>
-            
+</html>
