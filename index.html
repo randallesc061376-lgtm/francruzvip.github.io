@@ -8,162 +8,142 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap');
-        
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: #000; 
-            color: white; 
-            margin: 0; 
-            padding: 20px; 
-            text-align: center; 
-        }
-
+        body { font-family: 'Poppins', sans-serif; background: #000; color: white; margin: 0; padding: 20px; text-align: center; }
         .font-luxury { font-family: 'Cinzel', serif; }
-        
-        .gold-text { 
-            background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-        }
-
-        .payment-card { 
-            background: #0a0a0a; 
-            border-radius: 30px; 
-            padding: 25px; 
-            border: 1px solid #1a1a1a; 
-            margin: 0 auto 20px auto; 
-            max-width: 400px;
-        }
-
-        .info-box { 
-            background: #111; 
-            border-radius: 20px; 
-            padding: 20px; 
-            margin: 15px 0; 
-            border: 1px solid #1a1a1a;
-        }
-
-        .btn-validate { 
-            background: #fff; 
-            color: #000; 
-            font-weight: 700; 
-            padding: 18px; 
-            border-radius: 20px; 
-            width: 100%; 
-            text-transform: uppercase; 
-            font-size: 12px; 
-            cursor: pointer; 
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: 0.3s;
-        }
-
-        .flag-btn { 
-            background: #0f0f0f; 
-            border: 1px solid #222; 
-            padding: 12px 16px; 
-            border-radius: 12px; 
-            font-size: 20px; 
-            cursor: pointer; 
-            transition: 0.3s;
-            color: #fff;
-        }
-
-        .flag-btn.active { 
-            border-color: #d4af37; 
-            background: #1a1505; 
-            box-shadow: 0 0 15px rgba(212,175,55,0.2);
-        }
-
-        .watermark { 
-            position: fixed; 
-            bottom: 15px; 
-            width: 100%; 
-            left: 0; 
-            opacity: 0.15; 
-            font-size: 9px; 
-            letter-spacing: 5px; 
-            pointer-events: none; 
-            text-transform: uppercase;
-        }
+        .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .payment-card { background: #0a0a0a; border-radius: 30px; padding: 25px; border: 1px solid #1a1a1a; margin: 0 auto 20px auto; max-width: 400px; }
+        .info-box { background: #111; border-radius: 20px; padding: 20px; margin: 15px 0; border: 1px solid #1a1a1a; }
+        .flag-btn { background: #0f0f0f; border: 1px solid #222; padding: 10px; border-radius: 50%; font-size: 22px; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .flag-btn.active { border-color: #d4af37; background: #1a1505; transform: scale(1.1); }
+        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; border: 2px solid #d4af37; padding: 25px; border-radius: 20px; z-index: 100; width: 90%; max-width: 350px; }
+        input { background: #222; border: 1px solid #333; color: white; padding: 10px; border-radius: 10px; width: 100%; margin-bottom: 10px; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <header class="mt-8 mb-8">
+    <header class="mt-8 mb-8 cursor-pointer" onclick="handleAdminClicks()">
         <h1 class="font-luxury text-3xl gold-text tracking-widest uppercase">Fran Cruz</h1>
         <p class="text-[9px] tracking-[0.3em] uppercase opacity-50">El Personaje del Azar</p>
     </header>
 
-    <div class="flex gap-2 mb-8 justify-center flex-wrap">
-        <button onclick="setCountry('CR')" id="f-CR" class="flag-btn active">🇨🇷</button>
+    <div class="flex gap-2 mb-8 justify-center flex-wrap max-w-md mx-auto">
+        <button onclick="setCountry('CR')" id="f-CR" class="flag-btn">🇨🇷</button>
+        <button onclick="setCountry('NI')" id="f-NI" class="flag-btn">🇳🇮</button>
+        <button onclick="setCountry('PA')" id="f-PA" class="flag-btn">🇵🇦</button>
+        <button onclick="setCountry('HN')" id="f-HN" class="flag-btn">🇭🇳</button>
         <button onclick="setCountry('SV')" id="f-SV" class="flag-btn">🇸🇻</button>
+        <button onclick="setCountry('GT')" id="f-GT" class="flag-btn">🇬🇹</button>
+        <button onclick="setCountry('US')" id="f-US" class="flag-btn">🇺🇸</button>
     </div>
 
     <div class="payment-card">
-        <div class="flex justify-between items-start mb-4">
-            <div class="text-left">
-                <h2 id="method-title" class="text-sm font-bold uppercase tracking-wider">SINPE CR SIMPLE</h2>
-                <p id="method-sub" class="text-[9px] text-gray-500 uppercase">Costa Rica - Validación IA</p>
-            </div>
-            <i id="method-icon" class="fas fa-mobile-alt gold-text text-xl"></i>
+        <div class="text-left mb-4">
+            <h2 id="method-title" class="text-sm font-bold uppercase gold-text">Cargando...</h2>
+            <p id="method-sub" class="text-[10px] text-gray-500 uppercase">Validación Automática</p>
         </div>
 
         <div class="info-box">
-            <p id="label-top" class="text-[8px] text-gray-500 uppercase mb-1">Número de destino:</p>
-            <p id="main-number" class="text-xl font-bold tracking-[0.1em] mb-1">506 8888 8888</p>
-            <p class="text-[10px] gold-text font-bold uppercase tracking-widest">Randall Fran Cruz</p>
+            <p id="label-dest" class="text-[8px] text-gray-500 uppercase mb-1">Cargando datos...</p>
+            <p id="display-number" class="text-lg font-bold tracking-wider mb-1">---</p>
+            <p id="display-name" class="text-[10px] gold-text font-bold uppercase">---</p>
         </div>
 
-        <div class="bg-yellow-500/5 p-4 rounded-xl mb-4">
-             <p class="text-[9px] text-gray-500 uppercase mb-1">Total a transferir:</p>
-             <p id="local-price" class="text-xl font-bold text-yellow-500">₡525</p>
+        <div class="bg-yellow-500/5 p-4 rounded-xl mb-4 border border-yellow-500/20">
+             <p class="text-[9px] text-gray-500 uppercase mb-1">Membresía VIP:</p>
+             <p id="display-price" class="text-2xl font-bold text-yellow-500">---</p>
         </div>
 
-        <button class="btn-validate">
-            <i class="fas fa-qrcode"></i>
-            Validar Comprobante
-        </button>
+        <button class="w-full bg-white text-black font-bold py-4 rounded-2xl uppercase text-xs">Validar Comprobante</button>
     </div>
 
-    <div class="watermark">El personaje del azar</div>
+    <div id="adminModal" class="admin-panel shadow-2xl">
+        <h3 class="gold-text font-bold mb-4 uppercase text-sm">Configuración Fran Cruz</h3>
+        <input type="text" id="in-sinpe" placeholder="Número SINPE (CR)">
+        <input type="text" id="in-iban" placeholder="Cuenta IBAN (Otros)">
+        <input type="text" id="in-titular" placeholder="Nombre del Titular">
+        <input type="text" id="in-paypal" placeholder="Correo PayPal">
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white p-3 rounded-lg font-bold text-sm mt-2">GUARDAR DATOS</button>
+        <button onclick="closeAdmin()" class="w-full text-gray-500 text-[10px] mt-4 uppercase">Cerrar</button>
+    </div>
 
     <script>
-        const config = {
-            CR: { 
-                title: 'SINPE CR SIMPLE', 
-                sub: 'Costa Rica - Validación IA', 
-                num: '506 8888 8888', 
-                price: '₡525', 
-                icon: 'fa-mobile-alt' 
-            },
-            SV: { 
-                title: 'Transferencia Bancaria', 
-                sub: 'El Salvador - Validación IA', 
-                num: 'Agrícola 111 222 333', 
-                price: '$1', 
-                icon: 'fa-university' 
-            }
+        let adminClicks = 0;
+        const defaultData = {
+            sinpe: "8888 8888",
+            iban: "CR00 0000 0000 0000 0000",
+            titular: "Randall Esteban Sánchez",
+            paypal: "pagos@francruzvip.com"
         };
+
+        const countries = {
+            CR: { name: 'Costa Rica', method: 'SINPE SIMPLE', price: '₡525', label: 'Número:' },
+            NI: { name: 'Nicaragua', method: 'Transferencia', price: '$1', label: 'IBAN:' },
+            PA: { name: 'Panamá', method: 'Yappy / Transf.', price: '$1', label: 'IBAN/Cel:' },
+            HN: { name: 'Honduras', method: 'Transferencia', price: '$1', label: 'IBAN:' },
+            SV: { name: 'El Salvador', method: 'Chivo / Agrícola', price: '$1', label: 'IBAN:' },
+            GT: { name: 'Guatemala', method: 'Transferencia', price: 'Q8', label: 'IBAN:' },
+            US: { name: 'Estados Unidos', method: 'PayPal / Zelle', price: '$1.50', label: 'Correo:' }
+        };
+
+        // Cargar datos de Admin o usar por defecto
+        let adminData = JSON.parse(localStorage.getItem('franCruzConfig')) || defaultData;
+
+        async function init() {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                setCountry(countries[data.country_code] ? data.country_code : 'CR');
+            } catch { setCountry('CR'); }
+        }
 
         function setCountry(code) {
             document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('f-' + code).classList.add('active');
             
-            const data = config[code];
-            document.getElementById('method-title').innerText = data.title;
-            document.getElementById('method-sub').innerText = data.sub;
-            document.getElementById('main-number').innerText = data.num;
-            document.getElementById('local-price').innerText = data.price;
-            
-            const icon = document.getElementById('method-icon');
-            icon.className = 'fas gold-text text-xl ' + data.icon;
-            
-            document.getElementById('label-top').innerText = code === 'CR' ? 'Número de destino:' : 'Cuenta de destino:';
+            const c = countries[code];
+            document.getElementById('method-title').innerText = c.method;
+            document.getElementById('method-sub').innerText = c.name + " - Validación IA";
+            document.getElementById('display-price').innerText = c.price;
+            document.getElementById('label-dest').innerText = c.label;
+
+            if(code === 'CR') {
+                document.getElementById('display-number').innerText = adminData.sinpe;
+            } else if(code === 'US') {
+                document.getElementById('display-number').innerText = adminData.paypal;
+            } else {
+                document.getElementById('display-number').innerText = adminData.iban;
+            }
+            document.getElementById('display-name').innerText = adminData.titular;
         }
+
+        function handleAdminClicks() {
+            adminClicks++;
+            if(adminClicks === 5) {
+                document.getElementById('adminModal').style.display = 'block';
+                document.getElementById('in-sinpe').value = adminData.sinpe;
+                document.getElementById('in-iban').value = adminData.iban;
+                document.getElementById('in-titular').value = adminData.titular;
+                document.getElementById('in-paypal').value = adminData.paypal;
+                adminClicks = 0;
+            }
+            setTimeout(() => { adminClicks = 0; }, 3000);
+        }
+
+        function saveAdminData() {
+            adminData = {
+                sinpe: document.getElementById('in-sinpe').value,
+                iban: document.getElementById('in-iban').value,
+                titular: document.getElementById('in-titular').value,
+                paypal: document.getElementById('in-paypal').value
+            };
+            localStorage.setItem('franCruzConfig', JSON.stringify(adminData));
+            alert("Datos actualizados correctamente");
+            location.reload();
+        }
+
+        function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
+
+        init();
     </script>
 </body>
 </html>
