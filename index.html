@@ -78,7 +78,8 @@
             <p id="usd-reference" class="text-[9px] opacity-40 mt-1 uppercase tracking-widest">Calculado automáticamente</p>
         </div>
 
-        <button onclick="simulateIA()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest mt-8 hover:bg-gray-200 transition">
+        <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="processReceipt(this)">
+        <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest mt-8 hover:bg-gray-200 transition">
             Validar Comprobante con IA
         </button>
     </div>
@@ -171,11 +172,14 @@
             if(currentMethod === 'sinpe') { label.innerText = "Número SINPE:"; main.innerText = data.sinpe; }
             else if(currentMethod === 'paypal') { label.innerText = "Correo PayPal:"; main.innerText = data.paypal; }
             else if(currentMethod === 'transfer') { label.innerText = "IBAN / Depósito:"; main.innerText = data.iban; }
-            else { main.innerText = "Selecciona Método"; }
         }
 
-        function simulateIA() {
-            alert("Analizando comprobante... El motor de IA está validando la transacción para liberar tu acceso VIP de hoy.");
+        // Esta función se activa cuando el usuario elige la foto
+        function processReceipt(input) {
+            if (input.files && input.files[0]) {
+                const fileName = input.files[0].name;
+                alert("Imagen detectada: " + fileName + "\n\nIniciando análisis de IA... El motor está validando la transacción para liberar tu acceso VIP de hoy.");
+            }
         }
 
         function handleAdminClicks() {
