@@ -13,14 +13,12 @@
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* Plan Cards */
         .plan-card { background: var(--card-bg); border-radius: 24px; padding: 18px; cursor: pointer; transition: 0.4s; border: 1px solid #1a1a1a; position: relative; overflow: hidden; }
         .plan-card.active { border-color: var(--gold); background: #120f05; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(212,175,55,0.15); }
         .plan-card::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(212,175,55,0.1), transparent 30%); animation: rotate 4s linear infinite; display: none; }
         .plan-card.active::after { display: block; }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* Payment Section */
         .payment-section { background: #050505; border-radius: 35px; padding: 28px; margin-top: 25px; border: 1px solid #111; }
         .flag-btn { font-size: 26px; cursor: pointer; opacity: 0.25; transition: 0.4s; filter: grayscale(100%); }
         .flag-btn.active { opacity: 1; transform: scale(1.3); filter: grayscale(0%); }
@@ -28,17 +26,14 @@
         .method-tab { cursor: pointer; transition: 0.3s; opacity: 0.4; padding: 10px 5px; border-bottom: 2px solid transparent; flex: 1; font-size: 11px; font-weight: bold; letter-spacing: 1px; }
         .method-tab.active-tab { opacity: 1; color: var(--gold); border-bottom-color: var(--gold); }
 
-        /* Gallery */
         .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 25px; }
         .lamina-vip { border-radius: 18px; border: 1px solid rgba(212,175,55,0.2); overflow: hidden; background: #000; position: relative; }
         .lamina-vip img { width: 100%; height: auto; display: block; }
         
-        /* Admin */
         .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #050505; border: 1px solid var(--gold); padding: 30px; border-radius: 35px; z-index: 2000; width: 92%; max-width: 580px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 100px rgba(0,0,0,1); }
-        .admin-input { background: #0f0f0f; border: 1px solid #222; color: white; padding: 14px; border-radius: 15px; width: 100%; margin-bottom: 12px; font-size: 14px; outline: none; }
+        .admin-input { background: #0f0f0f; border: 1px solid #222; color: white; padding: 14px; border-radius: 15px; width: 100%; margin-bottom: 12px; font-size: 13px; outline: none; }
         .admin-input:focus { border-color: var(--gold); }
 
-        /* IA Animation */
         .loader-ring { width: 80px; height: 80px; border: 4px solid #111; border-top: 4px solid var(--gold); border-radius: 50%; animation: spin 1.2s infinite; margin: 25px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .progress-bar { width: 100%; height: 8px; background: #111; border-radius: 10px; overflow: hidden; margin: 20px 0; border: 1px solid #222; }
@@ -83,7 +78,7 @@
         <div class="payment-section max-w-sm mx-auto shadow-2xl">
             <div class="flex justify-between border-b border-white/5 mb-8">
                 <div onclick="setMethod('sinpe')" id="m-sinpe" class="method-tab">SINPE CR</div>
-                <div onclick="setMethod('transfer')" id="m-transfer" class="method-tab">DEPÓSITOS</div>
+                <div onclick="setMethod('transfer')" id="m-transfer" class="method-tab">DEPÓSITOS IBAN</div>
                 <div onclick="setMethod('paypal')" id="m-paypal" class="method-tab">PAYPAL</div>
             </div>
 
@@ -107,87 +102,79 @@
 
     <div id="ia-screen" class="max-w-sm mx-auto hidden pt-12">
         <h2 class="font-luxury text-4xl gold-text mb-2 uppercase tracking-widest">Verificando</h2>
-        <p class="text-[10px] opacity-40 uppercase tracking-[0.5em] mb-8 font-bold">Análisis de Seguridad IA</p>
-        
         <div class="loader-ring"></div>
-        
         <div class="bg-[#0a0a0a] p-10 rounded-[40px] border border-white/5 shadow-2xl">
-            <p id="ia-log" class="text-[11px] opacity-70 h-16 flex items-center justify-center italic leading-relaxed px-4 text-center">
-                Iniciando escaneo de fuentes y metadatos bancarios...
-            </p>
+            <p id="ia-log" class="text-[11px] opacity-70 h-16 flex items-center justify-center italic leading-relaxed px-4 text-center">Analizando...</p>
             <div class="progress-bar"><div id="ia-fill"></div></div>
             <p id="timer" class="text-[10px] gold-text font-bold uppercase mt-4 tracking-[0.3em]">Tiempo estimado: 45s</p>
         </div>
-
         <div id="access-box" class="mt-12 hidden">
-            <button onclick="showVIP()" class="w-full bg-yellow-600 text-white py-7 rounded-2xl font-bold text-sm uppercase tracking-[0.3em] shadow-[0_0_30px_rgba(212,175,55,0.3)] animate-bounce active:scale-95 transition-all">
-                Entrar al Círculo VIP
-            </button>
+            <button onclick="showVIP()" class="w-full bg-yellow-600 text-white py-7 rounded-2xl font-bold text-sm uppercase tracking-[0.3em] shadow-[0_0_30px_rgba(212,175,55,0.3)] animate-bounce active:scale-95 transition-all">Entrar al Círculo VIP</button>
         </div>
     </div>
 
     <div id="vip-interface" class="max-w-md mx-auto hidden px-6 pt-8">
-        <header class="mb-12">
-            <h2 class="font-luxury text-5xl gold-text uppercase tracking-widest">Círculo VIP</h2>
-            <div class="w-20 h-[1px] bg-yellow-600/30 mx-auto mt-4"></div>
-            <p class="text-[11px] opacity-40 uppercase tracking-[0.6em] mt-4 font-bold">Láminas Exclusivas del Día</p>
-        </header>
+        <h2 class="font-luxury text-5xl gold-text uppercase tracking-widest">Círculo VIP</h2>
         <div id="gallery" class="gallery-grid"></div>
-        <button onclick="location.reload()" class="text-[10px] mt-24 opacity-20 uppercase tracking-[0.5em] block w-full pb-10 hover:opacity-100 transition-opacity font-bold italic">
-            Cerrar Sesión Segura
-        </button>
+        <button onclick="location.reload()" class="text-[10px] mt-24 opacity-20 uppercase tracking-[0.5em] block w-full pb-10 font-bold italic">Cerrar Sesión</button>
     </div>
 
     <div id="admin-modal" class="admin-panel shadow-2xl border-2">
-        <h3 class="gold-text font-bold text-xl mb-10 uppercase text-center tracking-[0.3em]">Panel Maestro</h3>
+        <h3 class="gold-text font-bold text-xl mb-8 uppercase text-center tracking-[0.3em]">Panel Maestro</h3>
         
-        <label class="text-[10px] uppercase font-bold text-gray-500 mb-2 block tracking-widest">Identidad de Cuenta</label>
-        <input type="text" id="adm-titular" class="admin-input" placeholder="Nombre Titular">
-        <input type="text" id="adm-phone" class="admin-input" placeholder="WhatsApp Notificaciones">
-        
-        <label class="text-[10px] uppercase font-bold text-gray-500 mt-4 mb-2 block tracking-widest">Control de Divisas (Tasa x $1 USD)</label>
-        <div class="grid grid-cols-4 gap-3 mb-6">
-            <div class="text-center"><span class="text-[8px] text-gray-600 font-bold">CR</span><input type="number" id="rate-CR" class="admin-input text-center p-2"></div>
-            <div class="text-center"><span class="text-[8px] text-gray-600 font-bold">NI</span><input type="number" id="rate-NI" class="admin-input text-center p-2"></div>
-            <div class="text-center"><span class="text-[8px] text-gray-600 font-bold">GT</span><input type="number" id="rate-GT" class="admin-input text-center p-2"></div>
-            <div class="text-center"><span class="text-[8px] text-gray-600 font-bold">HN</span><input type="number" id="rate-HN" class="admin-input text-center p-2"></div>
+        <div class="grid grid-cols-1 gap-2 mb-6">
+            <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Configuración SINPE Móvil CR</label>
+            <input type="text" id="adm-titular-sinpe" class="admin-input" placeholder="Titular SINPE">
+            <input type="text" id="adm-num-sinpe" class="admin-input" placeholder="Número SINPE (64535475)">
+            
+            <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Configuración Depósitos IBAN</label>
+            <input type="text" id="adm-titular-iban" class="admin-input" placeholder="Titular Cuenta IBAN">
+            <input type="text" id="adm-num-iban" class="admin-input" placeholder="Cuenta IBAN (CR...)">
+            
+            <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Configuración PayPal</label>
+            <input type="text" id="adm-paypal-mail" class="admin-input" placeholder="Correo PayPal">
         </div>
-
-        <label class="text-[10px] uppercase font-bold text-gray-500 mb-2 block tracking-widest">Bodega de Láminas del Día</label>
-        <input type="file" multiple accept="image/*" class="admin-input" onchange="uploadToVault(this)">
-        <div id="vault-preview" class="flex flex-wrap gap-3 bg-black/80 p-5 rounded-3xl min-h-[120px] border border-white/5 mb-8"></div>
         
-        <button onclick="applyAdminSettings()" class="w-full bg-yellow-600 text-white py-6 rounded-2xl font-bold text-xs uppercase tracking-[0.3em] shadow-lg active:scale-95 transition-all">
-            Sincronizar Sistema
-        </button>
-        <button onclick="closeAdmin()" class="w-full text-gray-600 text-[10px] mt-6 uppercase font-bold tracking-widest">Cerrar Consola</button>
+        <label class="text-[9px] uppercase font-bold text-gray-500 mb-2 block tracking-widest">Tipos de Cambio (x $1 USD)</label>
+        <div class="grid grid-cols-5 gap-2 mb-6">
+            <div class="text-center"><span class="text-[8px] text-gray-600 font-bold">CR</span><input type="number" id="rate-CR" class="admin-input text-center p-2 mb-0"></div>
+            <div class="text-center"><span class="text-[8px] text-gray-600 font-bold">NI</span><input type="number" id="rate-NI" class="admin-input text-center p-2 mb-0"></div>
+            <div class="text-center"><span class="text-[8px] text-gray-600 font-bold">GT</span><input type="number" id="rate-GT" class="admin-input text-center p-2 mb-0"></div>
+            <div class="text-center"><span class="text-[8px] text-gray-600 font-bold">HN</span><input type="number" id="rate-HN" class="admin-input text-center p-2 mb-0"></div>
+            <div class="text-center"><span class="text-[8px] text-gray-600 font-bold">USD*</span><input type="number" id="rate-USD-GRP" class="admin-input text-center p-2 mb-0" placeholder="1"></div>
+        </div>
+        <p class="text-[7px] text-gray-500 mb-6 uppercase text-left">* USD unifica Panamá, El Salvador y USA.</p>
+
+        <label class="text-[10px] uppercase font-bold text-gray-500 mb-2 block tracking-widest">Bodega de Láminas</label>
+        <input type="file" multiple accept="image/*" class="admin-input" onchange="uploadToVault(this)">
+        <div id="vault-preview" class="flex flex-wrap gap-2 bg-black/80 p-4 rounded-2xl min-h-[100px] border border-white/5 mb-6"></div>
+        
+        <button onclick="applyAdminSettings()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold text-xs uppercase tracking-[0.3em] shadow-lg">Sincronizar</button>
+        <button onclick="closeAdmin()" class="w-full text-gray-600 text-[10px] mt-4 uppercase font-bold tracking-widest">Cerrar</button>
     </div>
 
     <script>
         let adminCounter = 0;
         let activePlan = 5;
         let activeCountry = 'CR';
-        let activeMethod = null;
+        let activeMethod = 'sinpe';
 
         const config = JSON.parse(localStorage.getItem('fc_config')) || {
-            titular: "Randall Esteban Sánchez",
-            phone: "50664535475",
+            sinpe_titular: "Randall Esteban Sánchez",
+            sinpe_num: "64535475",
+            iban_titular: "Fran Cruz Elite",
+            iban_num: "CR80080315001000035641",
+            paypal_mail: "pagos@francruz.com",
             vault: [],
             date: new Date().toDateString(),
-            rates: { CR: 520, NI: 36.6, PA: 1, HN: 24.5, SV: 1, GT: 7.8, US: 1 }
+            rates: { CR: 520, NI: 36.6, GT: 7.8, HN: 24.5, USD_GRP: 1 }
         };
-
-        // Reset automático diario de láminas
-        if (config.date !== new Date().toDateString()) { 
-            config.vault = []; 
-            config.date = new Date().toDateString(); 
-            localStorage.setItem('fc_config', JSON.stringify(config)); 
-        }
 
         const locales = {
             CR: { symbol: '₡', key: 'CR' }, NI: { symbol: 'C$', key: 'NI' },
-            PA: { symbol: '$', key: 'PA' }, HN: { symbol: 'L', key: 'HN' },
-            SV: { symbol: '$', key: 'SV' }, GT: { symbol: 'Q', key: 'GT' }, US: { symbol: '$', key: 'US' }
+            GT: { symbol: 'Q', key: 'GT' }, HN: { symbol: 'L', key: 'HN' },
+            PA: { symbol: '$', key: 'USD_GRP' }, SV: { symbol: '$', key: 'USD_GRP' }, 
+            US: { symbol: '$', key: 'USD_GRP' }
         };
 
         function setCountry(c) {
@@ -218,12 +205,20 @@
             const finalVal = Math.round(activePlan * rate).toLocaleString();
             document.getElementById('final-price').innerText = loc.symbol + finalVal;
             document.getElementById('usd-ref').innerText = `Referencia: $${activePlan} USD`;
-            document.getElementById('pay-titular').innerText = config.titular;
             
             const dataEl = document.getElementById('pay-data');
-            if(activeMethod === 'sinpe') dataEl.innerText = "64535475";
-            else if(activeMethod === 'paypal') dataEl.innerText = "pagos@francruz.com";
-            else dataEl.innerText = "CR80080315001000035641";
+            const titEl = document.getElementById('pay-titular');
+
+            if(activeMethod === 'sinpe') {
+                dataEl.innerText = config.sinpe_num;
+                titEl.innerText = config.sinpe_titular;
+            } else if(activeMethod === 'paypal') {
+                dataEl.innerText = config.paypal_mail;
+                titEl.innerText = "PAGO GLOBAL PAYPAL";
+            } else {
+                dataEl.innerText = config.iban_num;
+                titEl.innerText = config.iban_titular;
+            }
         }
 
         function startValidation() {
@@ -231,66 +226,46 @@
             document.getElementById('ia-screen').classList.remove('hidden');
             const fill = document.getElementById('ia-fill');
             const log = document.getElementById('ia-log');
-            
             fill.style.width = '100%';
-            
-            const steps = [
-                "Analizando metadatos del archivo...",
-                "Verificando coherencia de píxeles y fuentes...",
-                "Cruzando datos con registro bancario...",
-                "Validando fecha y hora de la transacción...",
-                "✓ Comprobante autenticado por Fran Cruz IA"
-            ];
-            
-            let current = 0;
+            const steps = ["Escaneando archivo...", "Verificando fuentes...", "Validando transacción...", "Acceso verificado"];
+            let i = 0;
             const interval = setInterval(() => {
-                if(current < steps.length) {
-                    log.innerText = steps[current];
-                    current++;
-                } else {
-                    clearInterval(interval);
-                    document.getElementById('access-box').classList.remove('hidden');
-                    document.getElementById('timer').innerText = "ACCESO CONCEDIDO";
-                    document.getElementById('timer').classList.add('text-green-500');
-                }
-            }, 9000); // Repartido en 45s
+                if(i < steps.length) log.innerText = steps[i++];
+                else { clearInterval(interval); document.getElementById('access-box').classList.remove('hidden'); }
+            }, 10000);
         }
 
         function showVIP() {
             document.getElementById('ia-screen').classList.add('hidden');
             document.getElementById('vip-interface').classList.remove('hidden');
             const gallery = document.getElementById('gallery');
-            gallery.innerHTML = config.vault.map(img => `
-                <div class="lamina-vip shadow-2xl">
-                    <img src="${img}">
-                    <button onclick="downloadImg('${img}')" class="download-btn"><i class="fas fa-download"></i> Guardar</button>
-                </div>
-            `).join('');
+            gallery.innerHTML = config.vault.map(img => `<div class="lamina-vip"><img src="${img}"><button onclick="downloadImg('${img}')" class="w-full bg-black/80 py-2 text-[8px] gold-text uppercase font-bold">Descargar</button></div>`).join('');
         }
 
         function downloadImg(base64) {
             const link = document.createElement('a');
             link.href = base64;
-            link.download = `VIP-Laminas-${Date.now()}.png`;
+            link.download = `FRAN-CRUZ-VIP.png`;
             link.click();
         }
 
         function handleAdminClicks() {
             adminCounter++;
-            if(adminCounter >= 5) {
-                document.getElementById('admin-modal').style.display = 'block';
-                loadAdminFields();
-            }
+            if(adminCounter >= 5) { document.getElementById('admin-modal').style.display = 'block'; loadAdminFields(); }
             setTimeout(() => adminCounter = 0, 3000);
         }
 
         function loadAdminFields() {
-            document.getElementById('adm-titular').value = config.titular;
-            document.getElementById('adm-phone').value = config.phone;
+            document.getElementById('adm-titular-sinpe').value = config.sinpe_titular;
+            document.getElementById('adm-num-sinpe').value = config.sinpe_num;
+            document.getElementById('adm-titular-iban').value = config.iban_titular;
+            document.getElementById('adm-num-iban').value = config.iban_num;
+            document.getElementById('adm-paypal-mail').value = config.paypal_mail;
             document.getElementById('rate-CR').value = config.rates.CR;
             document.getElementById('rate-NI').value = config.rates.NI;
             document.getElementById('rate-GT').value = config.rates.GT;
             document.getElementById('rate-HN').value = config.rates.HN;
+            document.getElementById('rate-USD-GRP').value = config.rates.USD_GRP;
             renderVaultPreview();
         }
 
@@ -298,32 +273,32 @@
             if (input.files) {
                 Array.from(input.files).forEach(file => {
                     const reader = new FileReader();
-                    reader.onload = (e) => {
-                        config.vault.push(e.target.result);
-                        renderVaultPreview();
-                    };
+                    reader.onload = (e) => { config.vault.push(e.target.result); renderVaultPreview(); };
                     reader.readAsDataURL(file);
                 });
             }
         }
 
         function renderVaultPreview() {
-            const preview = document.getElementById('vault-preview');
-            preview.innerHTML = config.vault.map((img, i) => `
-                <div class="admin-img-card">
+            document.getElementById('vault-preview').innerHTML = config.vault.map((img, i) => `
+                <div class="relative w-16 h-16 border border-white/10 rounded-lg overflow-hidden">
                     <img src="${img}" class="w-full h-full object-cover">
-                    <div class="btn-del" onclick="config.vault.splice(${i},1); renderVaultPreview();">×</div>
+                    <div class="absolute top-0 right-0 bg-red-600 text-white text-[10px] px-1 cursor-pointer" onclick="config.vault.splice(${i},1); renderVaultPreview();">×</div>
                 </div>
             `).join('');
         }
 
         function applyAdminSettings() {
-            config.titular = document.getElementById('adm-titular').value;
-            config.phone = document.getElementById('adm-phone').value;
+            config.sinpe_titular = document.getElementById('adm-titular-sinpe').value;
+            config.sinpe_num = document.getElementById('adm-num-sinpe').value;
+            config.iban_titular = document.getElementById('adm-titular-iban').value;
+            config.iban_num = document.getElementById('adm-num-iban').value;
+            config.paypal_mail = document.getElementById('adm-paypal-mail').value;
             config.rates.CR = parseFloat(document.getElementById('rate-CR').value);
             config.rates.NI = parseFloat(document.getElementById('rate-NI').value);
             config.rates.GT = parseFloat(document.getElementById('rate-GT').value);
             config.rates.HN = parseFloat(document.getElementById('rate-HN').value);
+            config.rates.USD_GRP = parseFloat(document.getElementById('rate-USD-GRP').value);
             localStorage.setItem('fc_config', JSON.stringify(config));
             location.reload();
         }
@@ -332,4 +307,5 @@
         renderUI();
     </script>
 </body>
-</html>
+                </html>
+    
