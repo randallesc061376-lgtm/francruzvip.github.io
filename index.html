@@ -19,10 +19,12 @@
         .method-tab { cursor: pointer; transition: 0.3s; opacity: 0.5; padding-bottom: 8px; border-bottom: 2px solid transparent; }
         .method-tab.active-tab { opacity: 1; color: #d4af37; border-bottom: 2px solid #d4af37; }
         
+        /* Galería VIP con Descargas Individuales */
         .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
         .lamina-vip-item { text-align: center; }
         .lamina-vip { border-radius: 15px; border: 1px solid #d4af3722; overflow: hidden; background: #0a0a0a; transition: 0.3s; }
         .lamina-vip img { width: 100%; height: auto; display: block; }
+        .lamina-vip:hover { transform: scale(1.02); border-color: #d4af37; }
         .download-btn { display: inline-flex; align-items: center; justify-content: center; background: #050505; border: 1px solid #d4af3766; color: #d4af37; font-size: 10px; font-weight: bold; text-transform: uppercase; padding: 10px 15px; border-radius: 10px; margin-top: 10px; transition: 0.3s; width: 100%; }
         .download-btn:hover { background: #d4af37; color: black; border-color: #d4af37; }
 
@@ -31,12 +33,11 @@
         .flag-btn { font-size: 24px; cursor: pointer; opacity: 0.3; transition: 0.3s; }
         .flag-btn.active { opacity: 1; transform: scale(1.2); }
         
-        /* Contenedor de borrar para Admin */
-        .admin-img-card { position: relative; display: inline-block; }
-        .btn-del { position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; font-weight: bold; cursor: pointer; border: 1px solid black; }
-
         .loader-ring { width: 60px; height: 60px; border: 4px solid #1a1a1a; border-top: 4px solid #d4af37; border-radius: 50%; animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .storage-box { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 10px; margin-top: 10px; max-height: 120px; overflow-y: auto; }
+        .receipt-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #111; font-size: 10px; color: #888; }
     </style>
 </head>
 <body>
@@ -100,21 +101,23 @@
 
     <div id="waiting-screen" class="max-w-sm mx-auto" style="display:none;">
         <h2 class="font-luxury text-2xl gold-text mb-2 mt-10 uppercase tracking-widest">Analizando Pago</h2>
+        <p class="text-[9px] uppercase opacity-40 mb-4">Protocolo Anti-Fraude Activo</p>
         <div class="loader-ring"></div>
         <div class="bg-[#0a0a0a] p-8 rounded-[40px] border border-white/5 mb-6">
-            <p id="ia-status" class="text-[11px] leading-relaxed mb-4 opacity-70">La IA está escaneando el comprobante y validando la transacción...</p>
+            <p id="ia-status" class="text-[11px] leading-relaxed mb-4 opacity-70">La IA está escaneando el comprobante en busca de manipulaciones digitales, validando fecha y número de transacción...</p>
             <div class="w-full bg-white/5 h-1 rounded-full overflow-hidden">
-                <div id="ia-progress" class="bg-yellow-600 h-full w-0 transition-all duration-[45000ms] linear"></div>
+                <div id="ia-progress" class="bg-yellow-600 h-full w-0 transition-all duration-[90000ms] linear"></div>
             </div>
-            <p class="text-[9px] mt-4 gold-text uppercase font-bold" id="timer-text">Restan 45s</p>
+            <p class="text-[9px] mt-4 gold-text uppercase font-bold" id="timer-text">Restan 90s</p>
         </div>
         <div id="success-btn" style="display:none;">
-            <button onclick="grantAccess()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold text-xs uppercase tracking-[0.3em]">Acceso Autorizado - Entrar</button>
+            <button onclick="grantAccess()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold text-xs uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(212,175,55,0.4)]">Acceso Autorizado - Entrar</button>
         </div>
     </div>
 
     <div id="vip-content" class="max-w-md mx-auto" style="display:none;">
         <h2 class="font-luxury text-3xl gold-text mb-2 uppercase tracking-widest mt-6">Círculo VIP</h2>
+        <p class="text-[9px] opacity-40 uppercase tracking-[0.3em] mb-8">Láminas Exclusivas del Día</p>
         <div id="lamina-container" class="gallery-grid"></div>
         <button onclick="location.reload()" class="text-[10px] mt-12 uppercase opacity-20 tracking-[0.3em] block w-full">Cerrar Sesión</button>
     </div>
@@ -123,21 +126,27 @@
         <h3 class="gold-text font-bold mb-6 uppercase text-center text-sm tracking-widest">Consola Fran Cruz</h3>
         <input type="text" id="in-titular" placeholder="Titular">
         <input type="text" id="in-phone" placeholder="WhatsApp Destino">
-        
-        <label class="text-[9px] gold-text uppercase font-bold block text-left ml-1 mt-4 mb-2">Bodega de Láminas (Añadir o Borrar)</label>
+        <div class="grid grid-cols-4 gap-2 mb-4">
+            <div><label class="text-[8px] opacity-40">CR</label><input type="number" id="ex-cr"></div>
+            <div><label class="text-[8px] opacity-40">NI</label><input type="number" id="ex-ni"></div>
+            <div><label class="text-[8px] opacity-40">GT</label><input type="number" id="ex-gt"></div>
+            <div><label class="text-[8px] opacity-40">HN</label><input type="number" id="ex-hn"></div>
+        </div>
+        <label class="text-[9px] gold-text uppercase font-bold block text-left ml-1 mt-4 mb-2">Cargar Láminas (Ilimitado - Borrado 11:59PM)</label>
         <input type="file" id="upload-laminas" multiple accept="image/*" class="text-[10px]" onchange="handleLaminasUpload(this)">
-        <div id="admin-laminas-preview" class="flex flex-wrap gap-2 mb-4 p-2 bg-black rounded-xl border border-white/5 min-h-[60px]"></div>
-        
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-6 uppercase tracking-widest">Sincronizar Bodega</button>
+        <div id="admin-laminas-preview" class="flex gap-2 overflow-x-auto mb-4 p-2 bg-black rounded-xl border border-white/5 min-h-[60px]"></div>
+        <div id="storage-list" class="storage-box"></div>
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-6 uppercase tracking-widest">Sincronizar</button>
         <button onclick="closeAdmin()" class="w-full text-gray-500 text-[10px] mt-4 uppercase">Cerrar</button>
     </div>
 
     <script>
         let adminClicks = 0;
         let selectedPlanPrice = 5;
+        let selectedPlanName = "Senda Ganadora";
         let currentCountry = 'CR';
         let currentMethod = null;
-        let vipActive = false;
+        let vipActive = false; // Flag para la advertencia de salida
 
         const defaults = {
             titular: "Randall Esteban Sánchez",
@@ -150,19 +159,26 @@
         let data = JSON.parse(localStorage.getItem('franCruzVIP')) || defaults;
 
         function checkAutoPurge() {
-            if (data.lastUpdate !== new Date().toDateString()) {
+            const today = new Date().toDateString();
+            if (data.lastUpdate !== today) {
                 data.laminasHoy = [];
-                data.lastUpdate = new Date().toDateString();
+                data.lastUpdate = today;
                 localStorage.setItem('franCruzVIP', JSON.stringify(data));
             }
         }
         checkAutoPurge();
 
+        // ADVERTENCIA DE SALIDA (Barrera de Seguridad)
         window.onbeforeunload = function() {
-            if (vipActive) return "¡ALERTA! Si sale ahora perderá el acceso.";
+            if (vipActive) {
+                return "¡ALERTA! Su sesión VIP está activa. Si sale ahora, perderá el acceso y no ha descargado sus láminas. ¿Está seguro de salir?";
+            }
         };
 
-        const geo = { CR: { s: '₡', r: 'CR' }, NI: { s: 'C$', r: 'NI' }, PA: { s: '$', r: 'PA' }, HN: { s: 'L', r: 'HN' }, SV: { s: '$', r: 'SV' }, GT: { s: 'Q', r: 'GT' }, US: { s: '$', r: 'US' } };
+        const geo = {
+            CR: { s: '₡', rateKey: 'CR' }, NI: { s: 'C$', rateKey: 'NI' }, PA: { s: '$', rateKey: 'PA' },
+            HN: { s: 'L', rateKey: 'HN' }, SV: { s: '$', rateKey: 'SV' }, GT: { s: 'Q', rateKey: 'GT' }, US: { s: '$', rateKey: 'US' }
+        };
 
         function setCountry(code) {
             currentCountry = code;
@@ -173,6 +189,7 @@
 
         function setPlan(val, name) {
             selectedPlanPrice = val;
+            selectedPlanName = name;
             document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
             event.currentTarget.classList.add('active');
             updateDisplay();
@@ -188,7 +205,7 @@
 
         function updateDisplay() {
             const g = geo[currentCountry];
-            const rate = data.rates[g.r] || 1;
+            const rate = data.rates[g.rateKey] || 1;
             document.getElementById('final-price').innerText = g.s + Math.round(selectedPlanPrice * rate).toLocaleString();
             document.getElementById('pay-titular').innerText = data.titular;
             const main = document.getElementById('pay-data');
@@ -203,14 +220,16 @@
                 document.getElementById('waiting-screen').style.display = 'block';
                 let bar = document.getElementById('ia-progress');
                 let timerText = document.getElementById('timer-text');
-                let timeLeft = 45; // AJUSTADO A 45 SEGUNDOS
+                let timeLeft = 90;
                 bar.style.width = '100%';
                 const countdown = setInterval(() => {
                     timeLeft--;
                     timerText.innerText = `Restan ${timeLeft}s`;
+                    if(timeLeft === 45) document.getElementById('ia-status').innerText = "Validando autenticidad de fuentes y metadatos de imagen...";
+                    if(timeLeft === 15) document.getElementById('ia-status').innerText = "Cotejando transacción con base de datos bancaria...";
                     if(timeLeft <= 0) {
                         clearInterval(countdown);
-                        document.getElementById('ia-status').innerHTML = "<span class='text-green-500 font-bold'>✓ VALIDADO</span>";
+                        document.getElementById('ia-status').innerHTML = "<span class='text-green-500 font-bold'>✓ COMPROBANTE VALIDADO CON ÉXITO</span>";
                         document.getElementById('success-btn').style.display = 'block';
                     }
                 }, 1000);
@@ -218,27 +237,35 @@
         }
 
         function grantAccess() {
-            vipActive = true;
+            vipActive = true; // Activar barrera de seguridad
             document.getElementById('waiting-screen').style.display = 'none';
             document.getElementById('vip-content').style.display = 'block';
             const container = document.getElementById('lamina-container');
-            const dateShort = new Date().toLocaleDateString('es-ES').replace(/\//g, '-');
             
-            container.innerHTML = (data.laminasHoy || []).map((img, i) => `
-                <div class="lamina-vip-item">
-                    <div class="lamina-vip"><img src="${img}"></div>
-                    <a href="${img}" download="FranCruz_VIP_${i+1}_${dateShort}.jpg" class="download-btn">Descargar ${i+1}</a>
-                </div>
-            `).join('');
+            // Renderizado con Botón de Descarga Único
+            container.innerHTML = (data.laminasHoy || []).map((img, index) => {
+                const dateShort = new Date().toLocaleDateString('es-ES').replace(/\//g, '-');
+                const uniqueName = `FranCruz_VIP_${currentCountry}_${index+1}_${dateShort}.jpeg`;
+                return `
+                    <div class="lamina-vip-item">
+                        <div class="lamina-vip shadow-2xl">
+                            <img src="${img}" alt="${uniqueName}">
+                        </div>
+                        <a href="${img}" download="${uniqueName}" class="download-btn">
+                            <i class="fas fa-download mr-2"></i> Descargar ${index+1}
+                        </a>
+                    </div>
+                `;
+            }).join('');
         }
 
-        // --- GESTIÓN DE BODEGA DINÁMICA ---
         function handleLaminasUpload(input) {
             if (input.files) {
-                Array.from(input.files).forEach(file => {
+                data.laminasHoy = []; // Ilimitado, solo sobreescribe
+                Array.from(input.files).forEach((file, i) => {
                     let reader = new FileReader();
                     reader.onload = (e) => {
-                        data.laminasHoy.push(e.target.result); // AÑADE SIN BORRAR LAS ANTERIORES
+                        data.laminasHoy.push(e.target.result);
                         renderAdminLaminas();
                     };
                     reader.readAsDataURL(file);
@@ -246,19 +273,9 @@
             }
         }
 
-        function removeLamina(index) {
-            data.laminasHoy.splice(index, 1);
-            renderAdminLaminas();
-        }
-
         function renderAdminLaminas() {
             const preview = document.getElementById('admin-laminas-preview');
-            preview.innerHTML = (data.laminasHoy || []).map((img, i) => `
-                <div class="admin-img-card">
-                    <img src="${img}" class="w-10 h-14 object-cover rounded">
-                    <div class="btn-del" onclick="removeLamina(${i})">×</div>
-                </div>
-            `).join('');
+            preview.innerHTML = (data.laminasHoy || []).map(img => `<img src="${img}" class="w-10 h-14 object-cover rounded border border-yellow-500/20">`).join('');
         }
 
         function handleAdminClicks() {
@@ -267,14 +284,23 @@
                 document.getElementById('adminModal').style.display = 'block';
                 document.getElementById('in-titular').value = data.titular;
                 document.getElementById('in-phone').value = data.phone;
+                document.getElementById('ex-cr').value = data.rates.CR;
+                document.getElementById('ex-ni').value = data.rates.NI;
+                document.getElementById('ex-gt').value = data.rates.GT;
+                document.getElementById('ex-hn').value = data.rates.HN;
                 renderAdminLaminas();
             }
             setTimeout(() => adminClicks = 0, 3000);
         }
 
         function saveAdminData() {
-            data.titular = document.getElementById('in-titular').value;
-            data.phone = document.getElementById('in-phone').value;
+            data = {
+                ...data,
+                titular: document.getElementById('in-titular').value,
+                phone: document.getElementById('in-phone').value,
+                lastUpdate: new Date().toDateString(),
+                rates: { ...data.rates, CR: parseFloat(document.getElementById('ex-cr').value), NI: parseFloat(document.getElementById('ex-ni').value), GT: parseFloat(document.getElementById('ex-gt').value), HN: parseFloat(document.getElementById('ex-hn').value) }
+            };
             localStorage.setItem('franCruzVIP', JSON.stringify(data));
             location.reload();
         }
