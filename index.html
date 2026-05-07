@@ -13,21 +13,25 @@
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
+        /* Estilos Consola Reparada */
+        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #050505; border: 1px solid var(--gold); padding: 25px; border-radius: 35px; z-index: 9999; width: 94%; max-width: 450px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
+        .admin-input { background: #111; border: 1px solid #222; color: white; padding: 12px 15px; border-radius: 15px; width: 100%; margin-bottom: 12px; font-size: 13px; outline: none; }
+        .admin-input:focus { border-color: var(--gold); }
+        .admin-label { display: block; text-align: left; font-[6px] uppercase tracking-widest opacity-40 mb-1 ml-2 font-bold; }
+
         .plan-card { background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; transition: 0.3s; }
-        .plan-card.active { border-color: var(--gold); background: #120f05; box-shadow: 0 0 20px rgba(212,175,55,0.15); }
+        .plan-card.active { border-color: var(--gold); background: #120f05; }
         
-        /* Pantalla de IA y Animaciones */
-        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #050505; border: 2px solid var(--gold); padding: 30px; border-radius: 35px; z-index: 9999; width: 92%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
-        .loader-ring { width: 80px; height: 80px; border: 4px solid #111; border-top: 4px solid var(--gold); border-radius: 50%; animation: spin 1s infinite linear; margin: 20px auto; }
+        .loader-ring { width: 60px; height: 60px; border: 3px solid #111; border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s infinite linear; margin: 20px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
         #ia-fill { width: 0%; height: 100%; background: var(--gold); transition: width 45s linear; }
-        .method-tab { cursor: pointer; opacity: 0.4; padding: 10px; border-bottom: 2px solid transparent; flex: 1; font-size: 10px; font-weight: bold; }
+        .method-tab { cursor: pointer; opacity: 0.4; padding: 12px; border-bottom: 2px solid transparent; flex: 1; font-size: 10px; font-weight: bold; }
         .method-tab.active-tab { opacity: 1; color: var(--gold); border-bottom-color: var(--gold); }
 
         .hidden { display: none !important; }
-        .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 10px; margin-top: 10px; }
-        .receipt-thumb { width: 100%; height: 80px; object-fit: cover; border-radius: 12px; border: 1px solid #333; }
+        .preview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+        .receipt-thumb { width: 100%; height: 60px; object-fit: cover; border-radius: 10px; border: 1px solid #222; }
     </style>
 </head>
 <body>
@@ -39,114 +43,88 @@
 
     <div id="main-interface">
         <div class="flex gap-4 mb-8 justify-center flex-wrap px-2">
-            <span onclick="setCountry('CR')" id="f-CR" class="flag-btn active">🇨🇷</span>
-            <span onclick="setCountry('NI')" id="f-NI" class="flag-btn">🇳🇮</span>
-            <span onclick="setCountry('PA')" id="f-PA" class="flag-btn">🇵🇦</span>
-            <span onclick="setCountry('HN')" id="f-HN" class="flag-btn">🇭🇳</span>
-            <span onclick="setCountry('SV')" id="f-SV" class="flag-btn">🇸🇻</span>
-            <span onclick="setCountry('GT')" id="f-GT" class="flag-btn">🇬🇹</span>
-            <span onclick="setCountry('US')" id="f-US" class="flag-btn">🇺🇸</span>
+            <span onclick="setCountry('CR')" id="f-CR" class="text-3xl opacity-30 active">🇨🇷</span>
+            <span onclick="setCountry('NI')" id="f-NI" class="text-3xl opacity-30">🇳🇮</span>
+            <span onclick="setCountry('PA')" id="f-PA" class="text-3xl opacity-30">🇵🇦</span>
+            <span onclick="setCountry('HN')" id="f-HN" class="text-3xl opacity-30">🇭🇳</span>
+            <span onclick="setCountry('SV')" id="f-SV" class="text-3xl opacity-30">🇸🇻</span>
+            <span onclick="setCountry('GT')" id="f-GT" class="text-3xl opacity-30">🇬🇹</span>
+            <span onclick="setCountry('US')" id="f-US" class="text-3xl opacity-30">🇺🇸</span>
         </div>
 
         <div class="max-w-sm mx-auto px-4 mb-8">
-            <div onclick="setPlan(1)" id="p-1" class="plan-card">
-                <p class="text-[9px] uppercase tracking-widest opacity-40 mb-1">Acceso Diario</p>
-                <h3 class="text-xl font-bold">Membresía por Hoy <span class="gold-text">$1 USD</span></h3>
-            </div>
-            <div onclick="setPlan(5)" id="p-5" class="plan-card active">
-                <p class="text-[9px] uppercase tracking-widest opacity-40 mb-1">Acceso 7 Días</p>
-                <h3 class="text-xl font-bold">Senda Ganadora <span class="gold-text">$5 USD</span></h3>
-            </div>
-            <div onclick="setPlan(15)" id="p-15" class="plan-card">
-                <p class="text-[9px] uppercase tracking-widest opacity-40 mb-1">Acceso Mensual</p>
-                <h3 class="text-xl font-bold">Membresía VIP <span class="gold-text">$15 USD</span></h3>
-            </div>
+            <div onclick="setPlan(1)" id="p-1" class="plan-card"><p class="text-[8px] uppercase opacity-40 mb-1">Diario</p><h3 class="text-lg font-bold">Membresía Hoy <span class="gold-text">$1</span></h3></div>
+            <div onclick="setPlan(5)" id="p-5" class="plan-card active"><p class="text-[8px] uppercase opacity-40 mb-1">7 Días</p><h3 class="text-lg font-bold">Senda Ganadora <span class="gold-text">$5</span></h3></div>
+            <div onclick="setPlan(15)" id="p-15" class="plan-card"><p class="text-[8px] uppercase opacity-40 mb-1">Mensual</p><h3 class="text-lg font-bold">VIP Mensual <span class="gold-text">$15</span></h3></div>
         </div>
 
-        <div class="max-w-sm mx-auto bg-[#050505] rounded-[35px] p-6 border border-white/5 shadow-2xl">
-            <div class="flex justify-between border-b border-white/5 mb-6">
-                <div onclick="setMethod('sinpe')" id="m-sinpe" class="method-tab active-tab uppercase">SINPE CR</div>
+        <div class="max-w-sm mx-auto bg-[#050505] rounded-[35px] p-6 border border-white/5">
+            <div class="flex border-b border-white/5 mb-6">
+                <div onclick="setMethod('sinpe')" id="m-sinpe" class="method-tab active-tab uppercase">SINPE</div>
                 <div onclick="setMethod('transfer')" id="m-transfer" class="method-tab uppercase">IBAN</div>
                 <div onclick="setMethod('paypal')" id="m-paypal" class="method-tab uppercase">PAYPAL</div>
             </div>
-
-            <div class="mb-6 h-16 flex flex-col justify-center">
-                <p id="pay-data" class="text-xl font-bold gold-text tracking-tighter uppercase">---</p>
-                <p id="pay-titular" class="text-[9px] opacity-40 uppercase font-bold mt-1 tracking-widest">---</p>
+            <div class="mb-6 h-14 flex flex-col justify-center">
+                <p id="pay-data" class="text-xl font-bold gold-text uppercase">---</p>
+                <p id="pay-titular" class="text-[8px] opacity-40 uppercase font-bold mt-1">---</p>
             </div>
-
-            <div class="bg-black p-6 rounded-3xl mb-6 border border-white/5">
-                <p id="final-price" class="text-5xl font-bold text-yellow-500 tracking-tighter">---</p>
-            </div>
-
+            <p id="final-price" class="text-5xl font-bold text-yellow-500 tracking-tighter mb-6">---</p>
             <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="startValidation(this)">
-            <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[11px] tracking-widest shadow-xl active:scale-95 transition-all">
-                Cargar Comprobante
-            </button>
+            <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest active:scale-95 transition-all">Validar Comprobante con IA</button>
         </div>
     </div>
 
     <div id="ia-screen" class="hidden max-w-sm mx-auto pt-10 px-6">
-        <h2 class="font-luxury text-2xl gold-text mb-2 uppercase tracking-widest italic">Verificando Pago</h2>
-        <p class="text-[8px] opacity-40 uppercase tracking-[0.3em] mb-6">Protocolo de Seguridad Fran Cruz</p>
-        
+        <h2 class="font-luxury text-2xl gold-text mb-2 uppercase tracking-widest italic">Verificando</h2>
         <div class="loader-ring"></div>
-        
-        <div class="bg-[#0a0a0a] p-8 rounded-[35px] border border-white/5 shadow-2xl">
-            <p id="ia-status" class="text-[10px] italic gold-text mb-4 h-12 flex items-center justify-center leading-relaxed">Iniciando conexión segura...</p>
-            
-            <div class="w-full h-1.5 bg-black rounded-full overflow-hidden border border-white/5">
-                <div id="ia-fill"></div>
-            </div>
-            
-            <div class="mt-6 grid grid-cols-2 gap-4 text-[7px] uppercase opacity-30 tracking-widest">
-                <div class="text-left">Status: <span class="text-green-500">Encriptado</span></div>
-                <div class="text-right">Server: <span class="text-blue-500">Nodo VIP</span></div>
-            </div>
+        <div class="bg-[#0a0a0a] p-8 rounded-[35px] border border-white/5">
+            <p id="ia-status" class="text-[9px] italic gold-text mb-4 h-10 flex items-center justify-center">Iniciando protocolo...</p>
+            <div class="w-full h-1 bg-black rounded-full overflow-hidden"><div id="ia-fill"></div></div>
         </div>
-
-        <div id="success-box" class="mt-10 hidden">
-            <div class="bg-yellow-600/10 border border-yellow-600/30 p-6 rounded-[30px] mb-6">
-                <i class="fas fa-check-circle text-4xl text-yellow-500 mb-3"></i>
-                <h4 class="text-xl font-bold gold-text uppercase tracking-tighter">¡Acceso Concedido!</h4>
-                <p class="text-[9px] opacity-50 mt-2 uppercase">Tu credencial ha sido activada con éxito.</p>
-            </div>
-            <button onclick="enterVIP()" class="w-full bg-yellow-600 text-white py-6 rounded-2xl font-bold text-xs uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all">
-                Entrar al Círculo Elite
-            </button>
+        <div id="success-box" class="mt-8 hidden">
+            <i class="fas fa-check-circle text-4xl text-yellow-500 mb-4"></i>
+            <button onclick="enterVIP()" class="w-full bg-yellow-600 text-white py-6 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-2xl">Obtener mis Láminas</button>
         </div>
     </div>
 
-    <div id="vip-interface" class="hidden max-w-md mx-auto pt-4 px-4">
+    <div id="vip-interface" class="hidden max-w-md mx-auto pt-4 px-4 text-left">
         <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
-            <div class="text-left">
-                <h2 class="font-luxury text-3xl gold-text uppercase">Círculo VIP</h2>
-                <p class="text-[8px] opacity-40 uppercase tracking-widest font-bold">Láminas Exclusivas</p>
-            </div>
-            <button onclick="location.reload()" class="bg-white/5 border border-white/10 px-4 py-3 rounded-xl text-[9px] font-bold uppercase">
-                <i class="fas fa-home block text-lg mb-1"></i> Menú
-            </button>
+            <h2 class="font-luxury text-2xl gold-text">Círculo VIP</h2>
+            <button onclick="location.reload()" class="text-[9px] uppercase opacity-50">Cerrar</button>
         </div>
         <div id="vip-gallery" class="grid grid-cols-2 gap-4"></div>
     </div>
 
     <div id="admin-modal" class="admin-panel">
-        <h3 class="gold-text font-bold text-lg mb-6 uppercase tracking-widest font-luxury">Consola Administrativa</h3>
-        <input type="text" id="adm-titular" class="admin-input" placeholder="Titular">
-        <input type="text" id="adm-sinpe" class="admin-input" placeholder="SINPE">
-        <input type="text" id="adm-iban" class="admin-input" placeholder="IBAN">
-        <input type="text" id="adm-paypal" class="admin-input" placeholder="PayPal">
-        <div class="grid grid-cols-4 gap-2 mb-6">
-            <input type="number" id="rate-CR" class="admin-input text-center">
-            <input type="number" id="rate-NI" class="admin-input text-center">
-            <input type="number" id="rate-GT" class="admin-input text-center">
-            <input type="number" id="rate-HN" class="admin-input text-center">
+        <h3 class="gold-text font-bold text-sm mb-6 uppercase tracking-[0.2em] font-luxury">Consola Administrativa</h3>
+        
+        <label class="admin-label">Titular de Cuenta</label>
+        <input type="text" id="adm-titular" class="admin-input" placeholder="Nombre completo">
+        
+        <label class="admin-label">Número SINPE</label>
+        <input type="text" id="adm-sinpe" class="admin-input" placeholder="Ej: 6453...">
+        
+        <label class="admin-label">Cuenta IBAN</label>
+        <input type="text" id="adm-iban" class="admin-input" placeholder="CR80...">
+        
+        <label class="admin-label">Tasas de Cambio</label>
+        <div class="grid grid-cols-4 gap-2 mb-4">
+            <input type="number" id="rate-CR" class="admin-input text-center mb-0" placeholder="CR">
+            <input type="number" id="rate-NI" class="admin-input text-center mb-0" placeholder="NI">
+            <input type="number" id="rate-GT" class="admin-input text-center mb-0" placeholder="GT">
+            <input type="number" id="rate-HN" class="admin-input text-center mb-0" placeholder="HN">
         </div>
+
+        <label class="admin-label">Láminas del Día</label>
         <input type="file" id="vault-input" multiple accept="image/*" class="hidden" onchange="handleVaultUpload(this)">
-        <button onclick="document.getElementById('vault-input').click()" class="w-full bg-[#111] border border-white/10 text-white py-3 rounded-xl text-[10px] font-bold uppercase mb-4">Cargar Láminas</button>
-        <div id="vault-preview" class="preview-grid mb-6"></div>
-        <div id="receipt-vault" class="preview-grid mb-8 p-3 bg-white/5 rounded-2xl min-h-[80px]"></div>
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold uppercase text-xs tracking-widest">Sincronizar</button>
+        <button onclick="document.getElementById('vault-input').click()" class="w-full bg-white/5 border border-white/10 text-white py-3 rounded-xl text-[10px] font-bold uppercase mb-4">Abrir Galería</button>
+        <div id="vault-preview" class="preview-grid mb-4"></div>
+
+        <label class="admin-label">Bodega de Comprobantes</label>
+        <div id="receipt-vault" class="preview-grid mb-6 p-2 bg-white/5 rounded-xl min-h-[50px]"></div>
+
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest shadow-lg">Sincronizar Todo</button>
+        <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full text-gray-600 text-[8px] mt-4 uppercase font-bold">Cerrar Consola</button>
     </div>
 
     <script>
@@ -155,7 +133,7 @@
         let currentCountry = 'CR';
         let currentMethod = 'sinpe';
 
-        const storage = JSON.parse(localStorage.getItem('fc_master_v7')) || {
+        const storage = JSON.parse(localStorage.getItem('fc_master_final')) || {
             titular: "Randall Esteban Sánchez",
             sinpe: "64535475",
             iban: "CR80080315001000035641",
@@ -168,8 +146,8 @@
 
         function setCountry(c) {
             currentCountry = c;
-            document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('f-'+c).classList.add('active');
+            document.querySelectorAll('#main-interface span').forEach(b => b.style.opacity = '0.3');
+            document.getElementById('f-'+c).style.opacity = '1';
             refreshPricing();
         }
 
@@ -193,81 +171,53 @@
             const price = Math.round(currentPlan * storage.rates[rk]);
             document.getElementById('final-price').innerText = `${sym[currentCountry]}${price.toLocaleString()}`;
             
-            const dataP = document.getElementById('pay-data');
-            const titP = document.getElementById('pay-titular');
-            if(currentMethod === 'sinpe') { dataP.innerText = storage.sinpe; titP.innerText = storage.titular; }
-            else if(currentMethod === 'paypal') { dataP.innerText = storage.paypal; titP.innerText = "SISTEMA AUTOMÁTICO"; }
-            else { dataP.innerText = storage.iban; titP.innerText = storage.titular; }
+            const d = document.getElementById('pay-data'), t = document.getElementById('pay-titular');
+            if(currentMethod === 'sinpe') { d.innerText = storage.sinpe; t.innerText = storage.titular; }
+            else if(currentMethod === 'paypal') { d.innerText = storage.paypal; t.innerText = "AUTOMÁTICO"; }
+            else { d.innerText = storage.iban; t.innerText = storage.titular; }
         }
 
-        // LÓGICA DE VALIDACIÓN 45 SEGUNDOS
         function startValidation(input) {
             if(!input.files[0]) return;
-            
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = (e) => { 
                 storage.receipt_vault.unshift({ img: e.target.result, date: new Date().getTime() });
-                localStorage.setItem('fc_master_v7', JSON.stringify(storage));
+                localStorage.setItem('fc_master_final', JSON.stringify(storage));
             };
             reader.readAsDataURL(input.files[0]);
 
-            // Cambio de pantalla
             document.getElementById('main-interface').classList.add('hidden');
             document.getElementById('ia-screen').classList.remove('hidden');
-            
-            // Animación de barra
             setTimeout(() => { document.getElementById('ia-fill').style.width = '100%'; }, 100);
 
             const status = document.getElementById('ia-status');
-            const messages = [
-                "Extrayendo metadatos del comprobante...",
-                "Escaneando sellos digitales del banco...",
-                "Cruzando datos de transacción con servidores...",
-                "Validando fecha y hora de emisión...",
-                "Confirmando depósito en cuenta destino...",
-                "Analizando autenticidad de imagen con IA...",
-                "Verificando integridad de la operación...",
-                "Sincronizando acceso VIP exclusivo...",
-                "✓ Validación Completada con Éxito."
-            ];
-
+            const msgs = ["Extrayendo metadata...","Escaneando sellos digitales...","Cruzando transacciones...","Validando autenticidad...","Confirmando depósito...","Sincronizando acceso..."];
             let i = 0;
-            const msgInterval = setInterval(() => {
-                if(i < messages.length) {
-                    status.innerText = messages[i++];
-                } else {
-                    clearInterval(msgInterval);
+            const interval = setInterval(() => {
+                if(i < msgs.length) status.innerText = msgs[i++];
+                else {
+                    clearInterval(interval);
                     document.getElementById('success-box').classList.remove('hidden');
                     status.classList.add('hidden');
                     document.querySelector('.loader-ring').classList.add('hidden');
                 }
-            }, 5000); // Cambia cada 5 segundos para cubrir los 45 seg aprox.
+            }, 7500);
         }
 
         function enterVIP() {
             document.getElementById('ia-screen').classList.add('hidden');
             document.getElementById('vip-interface').classList.remove('hidden');
-            const gal = document.getElementById('vip-gallery');
-            gal.innerHTML = storage.vault.map(img => `
-                <div class="relative rounded-2xl overflow-hidden border border-white/10">
+            document.getElementById('vip-gallery').innerHTML = storage.vault.map(img => `
+                <div class="rounded-xl overflow-hidden border border-white/10">
                     <img src="${img}" class="w-full">
-                    <button onclick="downloadFile('${img}')" class="w-full py-3 bg-black/80 gold-text text-[10px] font-bold uppercase">Descargar</button>
                 </div>
             `).join('');
             window.scrollTo(0,0);
         }
 
-        function downloadFile(s) {
-            const a = document.createElement('a'); a.href = s; a.download = `FRAN-CRUZ-VIP.png`; a.click();
-        }
-
         function handleAdminClicks() {
             adminTimer++;
-            if(adminTimer >= 5) {
-                document.getElementById('admin-modal').style.display = 'block';
-                loadAdminData();
-                adminTimer = 0;
-            }
+            if(adminTimer >= 5) { document.getElementById('admin-modal').style.display = 'block'; loadAdminData(); adminTimer = 0; }
             setTimeout(() => adminTimer = 0, 3000);
         }
 
@@ -275,53 +225,45 @@
             document.getElementById('adm-titular').value = storage.titular;
             document.getElementById('adm-sinpe').value = storage.sinpe;
             document.getElementById('adm-iban').value = storage.iban;
-            document.getElementById('adm-paypal').value = storage.paypal;
             document.getElementById('rate-CR').value = storage.rates.CR;
             document.getElementById('rate-NI').value = storage.rates.NI;
             document.getElementById('rate-GT').value = storage.rates.GT;
             document.getElementById('rate-HN').value = storage.rates.HN;
             renderPreview();
-            renderReceiptVault();
+            document.getElementById('receipt-vault').innerHTML = storage.receipt_vault.map(v => `<img src="${v.img}" class="receipt-thumb">`).join('');
         }
 
         function handleVaultUpload(input) {
-            if(input.files) {
-                Array.from(input.files).forEach(f => {
-                    const r = new FileReader();
-                    r.onload = (e) => { storage.vault.push(e.target.result); renderPreview(); };
-                    r.readAsDataURL(f);
-                });
-            }
+            Array.from(input.files).forEach(f => {
+                const r = new FileReader();
+                r.onload = (e) => { storage.vault.push(e.target.result); renderPreview(); };
+                r.readAsDataURL(f);
+            });
         }
 
         function renderPreview() {
             document.getElementById('vault-preview').innerHTML = storage.vault.map((s,i) => `
-                <div class="relative h-16 border border-white/10 rounded-lg overflow-hidden">
+                <div class="relative h-12 border border-white/10 rounded-lg overflow-hidden">
                     <img src="${s}" class="w-full h-full object-cover">
-                    <span onclick="storage.vault.splice(${i},1); renderPreview();" class="absolute top-0 right-0 bg-red-600 text-[10px] px-1 cursor-pointer">×</span>
+                    <span onclick="storage.vault.splice(${i},1); renderPreview();" class="absolute top-0 right-0 bg-red-600 text-[8px] px-1">×</span>
                 </div>
             `).join('');
-        }
-
-        function renderReceiptVault() {
-            const vaultEl = document.getElementById('receipt-vault');
-            vaultEl.innerHTML = storage.receipt_vault.map(item => `<img src="${item.img}" class="receipt-thumb" onclick="window.open(this.src)">`).join('');
         }
 
         function saveAdminData() {
             storage.titular = document.getElementById('adm-titular').value;
             storage.sinpe = document.getElementById('adm-sinpe').value;
             storage.iban = document.getElementById('adm-iban').value;
-            storage.paypal = document.getElementById('adm-paypal').value;
             storage.rates.CR = parseFloat(document.getElementById('rate-CR').value);
             storage.rates.NI = parseFloat(document.getElementById('rate-NI').value);
             storage.rates.GT = parseFloat(document.getElementById('rate-GT').value);
             storage.rates.HN = parseFloat(document.getElementById('rate-HN').value);
-            localStorage.setItem('fc_master_v7', JSON.stringify(storage));
+            localStorage.setItem('fc_master_final', JSON.stringify(storage));
             location.reload();
         }
 
         refreshPricing();
     </script>
 </body>
-</html>
+                    </html>
+                
