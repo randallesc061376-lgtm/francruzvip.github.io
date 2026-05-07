@@ -14,16 +14,16 @@
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
         .vip-card { background: #0a0a0a; border-radius: 25px; overflow: hidden; border: 1px solid #1a1a1a; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .btn-download { background: linear-gradient(135deg, #f9e2af 0%, #d4af37 50%, #a67c00 100%); color: black; font-weight: 800; padding: 15px; width: 100%; display: block; text-transform: uppercase; font-size: 11px; letter-spacing: 1.5px; text-decoration: none; border: none; cursor: pointer; }
+        .btn-download { background: linear-gradient(135deg, #f9e2af 0%, #d4af37 50%, #a67c00 100%); color: black; font-weight: 800; padding: 15px; width: 100%; display: block; text-transform: uppercase; font-size: 11px; letter-spacing: 1.5px; text-decoration: none; border: none; }
 
         .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #080808; border: 1px solid var(--gold); padding: 20px; border-radius: 30px; z-index: 10000; width: 92%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
         .admin-section { border-bottom: 1px solid #1a1a1a; padding-bottom: 15px; margin-bottom: 15px; }
         .admin-input { background: #111; border: 1px solid #222; color: white; padding: 12px; border-radius: 12px; width: 100%; font-size: 11px; margin-bottom: 10px; outline: none; }
 
-        .img-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; background: #030303; padding: 10px; border-radius: 15px; border: 1px dashed #333; }
+        .img-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; background: #030303; padding: 10px; border-radius: 15px; border: 1px dashed #333; min-height: 60px; }
         .img-item { width: 55px; height: 55px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
         .img-item img { width: 100%; height: 100%; object-fit: cover; }
-        .img-del { position: absolute; top: 0; right: 0; background: #ff4444; color: white; font-size: 10px; padding: 2px 6px; cursor: pointer; border-bottom-left-radius: 8px; }
+        .img-del { position: absolute; top: 0; right: 0; background: #ff4444; color: white; font-size: 10px; padding: 2px 6px; cursor: pointer; border-bottom-left-radius: 8px; font-weight: bold; }
 
         .hidden { display: none !important; }
         .plan-card { background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; cursor: pointer; }
@@ -33,8 +33,8 @@
         .loader-ring { width: 55px; height: 55px; border: 3px solid #111; border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s infinite linear; margin: 25px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .method-tab { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 8px 5px; opacity: 0.4; cursor: pointer; border-bottom: 2px solid transparent; }
-        .method-tab.active { opacity: 1; color: var(--gold); border-bottom-color: var(--gold); }
+        .method-tab { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 8px 5px; opacity: 0.4; cursor: pointer; }
+        .method-tab.active { opacity: 1; color: var(--gold); border-bottom: 2px solid var(--gold); }
     </style>
 </head>
 <body>
@@ -56,22 +56,20 @@
         </div>
 
         <div class="max-w-sm mx-auto px-4 mb-8">
-            <div onclick="setPlan(1)" id="p-1" class="plan-card"><p class="text-[8px] uppercase opacity-40 mb-1">Membresía por Hoy</p><h3 class="text-lg font-bold gold-text">$1 USD</h3></div>
-            <div onclick="setPlan(5)" id="p-5" class="plan-card active"><p class="text-[8px] uppercase opacity-40 mb-1">Senda Ganadora (7 Días)</p><h3 class="text-lg font-bold gold-text">$5 USD</h3></div>
-            <div onclick="setPlan(15)" id="p-15" class="plan-card"><p class="text-[8px] uppercase opacity-40 mb-1">Membresía VIP (Mes)</p><h3 class="text-lg font-bold gold-text">$15 USD</h3></div>
+            <div onclick="setPlan(1)" id="p-1" class="plan-card"><p class="text-[8px] uppercase opacity-40 mb-1">Membresía Hoy</p><h3 class="text-lg font-bold gold-text">$1 USD</h3></div>
+            <div onclick="setPlan(5)" id="p-5" class="plan-card active"><p class="text-[8px] uppercase opacity-40 mb-1">Senda Ganadora</p><h3 class="text-lg font-bold gold-text">$5 USD</h3></div>
+            <div onclick="setPlan(15)" id="p-15" class="plan-card"><p class="text-[8px] uppercase opacity-40 mb-1">Membresía VIP</p><h3 class="text-lg font-bold gold-text">$15 USD</h3></div>
         </div>
 
         <div class="max-w-sm mx-auto bg-[#050505] rounded-[35px] p-6 border border-white/5 shadow-2xl">
             <div class="flex justify-around mb-6 border-b border-white/5">
                 <div onclick="setMethod('sinpe')" id="m-sinpe" class="method-tab active">Sinpe CR</div>
                 <div onclick="setMethod('trans')" id="m-trans" class="method-tab">Transf. IBAN</div>
-                <div onclick="setMethod('paypal')" id="m-paypal" class="method-tab">PayPal / Int.</div>
+                <div onclick="setMethod('paypal')" id="m-paypal" class="method-tab">PayPal</div>
             </div>
-            
             <p id="pay-data" class="text-xl font-bold gold-text uppercase mb-1">---</p>
             <p id="pay-titular" class="text-[8px] opacity-40 uppercase font-bold mb-6 italic">---</p>
             <p id="final-price" class="text-5xl font-bold text-yellow-500 tracking-tighter mb-8">---</p>
-            
             <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="startValidation(this)">
             <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest active:scale-95 transition-all">Validar Comprobante</button>
         </div>
@@ -104,34 +102,24 @@
     </div>
 
     <div id="admin-modal" class="admin-panel">
-        <h3 class="gold-text font-bold text-sm mb-6 uppercase tracking-[0.2em] font-luxury text-center">Configuración Fran Cruz</h3>
+        <h3 class="gold-text font-bold text-sm mb-6 uppercase tracking-[0.2em] font-luxury text-center">Admin Fran Cruz</h3>
         <div class="admin-section">
-            <label class="text-[8px] uppercase gold-text block mb-2 font-bold">Cuentas</label>
             <input type="text" id="adm-titular" class="admin-input" placeholder="Nombre Titular">
             <input type="text" id="adm-sinpe" class="admin-input" placeholder="Número SINPE">
             <input type="text" id="adm-iban" class="admin-input" placeholder="Cuenta IBAN">
             <input type="text" id="adm-paypal" class="admin-input" placeholder="Email PayPal">
         </div>
         <div class="admin-section">
-            <label class="text-[8px] uppercase gold-text block mb-2 font-bold">Tasas de Cambio</label>
-            <div class="grid grid-cols-4 gap-2">
-                <input type="number" id="rate-CR" class="admin-input text-center">
-                <input type="number" id="rate-NI" class="admin-input text-center">
-                <input type="number" id="rate-GT" class="admin-input text-center">
-                <input type="number" id="rate-HN" class="admin-input text-center">
-            </div>
-        </div>
-        <div class="admin-section">
-            <label class="text-[8px] uppercase gold-text block mb-2 font-bold">Láminas VIP</label>
+            <label class="text-[8px] uppercase gold-text block mb-2 font-bold">Láminas (Borrado Diario)</label>
             <input type="file" id="vault-input" multiple accept="image/*" class="hidden" onchange="handleVaultUpload(this)">
             <button onclick="document.getElementById('vault-input').click()" class="w-full bg-[#111] border border-white/10 text-[9px] py-4 rounded-xl uppercase font-bold text-white mb-2">Cargar Láminas</button>
             <div id="vault-preview" class="img-grid"></div>
         </div>
         <div class="admin-section">
-            <label class="text-[8px] uppercase gold-text block mb-2 font-bold">Comprobantes Recibidos</label>
+            <label class="text-[8px] uppercase gold-text block mb-2 font-bold">Comprobantes (7 Días)</label>
             <div id="receipt-vault" class="img-grid"></div>
         </div>
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold uppercase text-[10px]">Guardar y Sincronizar</button>
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold uppercase text-[10px]">Guardar y Refrescar</button>
         <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full text-gray-600 text-[8px] mt-6 uppercase font-bold">Cerrar</button>
     </div>
 
@@ -141,39 +129,45 @@
         let currentCountry = 'CR';
         let currentMethod = 'sinpe';
 
-        // CARGA SEGURA INICIAL
-        let storage = JSON.parse(localStorage.getItem('fc_pro_gold_v17')) || {
-            titular: "Randall Esteban Sánchez", sinpe: "64535475", iban: "CR80080315001000035641", paypal: "pagos@francruz.com",
-            rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, USD: 1 },
-            vault: [], receipts: [], is_active: false, last_cleanup: new Date().toLocaleDateString()
-        };
+        // LÓGICA DE PERSISTENCIA ULTRA-REFORZADA
+        function getStorage() {
+            const data = localStorage.getItem('fc_final_vault_v20');
+            return data ? JSON.parse(data) : {
+                titular: "Randall Esteban Sánchez", sinpe: "64535475", iban: "CR80080315001000035641", paypal: "pagos@francruz.com",
+                rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, USD: 1 },
+                vault: [], receipts: [], is_active: false, last_cleanup: new Date().toLocaleDateString()
+            };
+        }
 
-        const iaMessages = [
-            "Conectando con pasarela de pago...", "Analizando metadatos del archivo...", "Cotejando transacción con base de datos bancaria...",
-            "Validando integridad del comprobante...", "Sincronizando acceso VIP...", "Finalizando protocolo de seguridad..."
-        ];
+        let storage = getStorage();
+
+        function saveToDisk() {
+            localStorage.setItem('fc_final_vault_v20', JSON.stringify(storage));
+        }
 
         function checkPersistence() {
             const today = new Date().toLocaleDateString();
-            // Solo borra láminas si CAMBIÓ el día
-            if (storage.last_cleanup !== today) {
-                storage.vault = [];
-                storage.last_cleanup = today;
+            const now = Date.now();
+            const sevenDays = 7 * 24 * 60 * 60 * 1000;
+
+            // BLINDAJE: Solo limpiar si hay una fecha guardada y es diferente a hoy
+            if (storage.last_cleanup && storage.last_cleanup !== today) {
+                storage.vault = []; 
                 storage.is_active = false;
+                storage.last_cleanup = today;
+            } else if (!storage.last_cleanup) {
+                storage.last_cleanup = today;
             }
-            // Borra comprobantes antiguos de 7 días
-            storage.receipts = storage.receipts.filter(r => (Date.now() - r.timestamp) < (7*24*60*60*1000));
-            saveToDisk();
+
+            // Filtro de 7 días para comprobantes
+            storage.receipts = storage.receipts.filter(r => (now - r.timestamp) < sevenDays);
             
+            saveToDisk();
             if(storage.is_active) document.getElementById('reentry-box').classList.remove('hidden');
             refreshPricing();
         }
 
-        function saveToDisk() {
-            localStorage.setItem('fc_pro_gold_v17', JSON.stringify(storage));
-        }
-
-        function setCountry(c) { currentCountry = c; document.querySelectorAll('#flag-box span').forEach(s => s.style.opacity = '0.3'); document.getElementById('f-'+c).style.opacity = '1'; refreshPricing(); }
+        function setCountry(c) { currentCountry = c; refreshPricing(); }
         function setPlan(p) { currentPlan = p; document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active')); document.getElementById('p-'+p).classList.add('active'); refreshPricing(); }
         function setMethod(m) { currentMethod = m; document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active')); document.getElementById('m-'+m).classList.add('active'); refreshPricing(); }
 
@@ -200,13 +194,7 @@
             document.getElementById('main-interface').classList.add('hidden');
             document.getElementById('ia-screen').classList.remove('hidden');
             setTimeout(() => { document.getElementById('ia-fill').style.width = '100%'; }, 100);
-
-            let msgIdx = 0;
-            const msgInt = setInterval(() => {
-                document.getElementById('ia-status').innerText = iaMessages[msgIdx];
-                msgIdx++; if(msgIdx >= iaMessages.length) clearInterval(msgInt);
-            }, 7500);
-
+            
             setTimeout(() => {
                 document.getElementById('ia-loader').classList.add('hidden');
                 document.getElementById('success-box').classList.remove('hidden');
@@ -229,19 +217,19 @@
         function exitVIP() {
             document.getElementById('vip-interface').classList.add('hidden');
             document.getElementById('main-interface').classList.remove('hidden');
-            checkPersistence();
+            if(storage.is_active) document.getElementById('reentry-box').classList.remove('hidden');
         }
 
         function renderVipGallery() {
             const container = document.getElementById('vip-gallery');
             if (storage.vault.length === 0) {
-                container.innerHTML = `<p class="opacity-30 italic text-sm mt-20">Sincronizando láminas VIP...</p>`;
+                container.innerHTML = `<p class="opacity-30 italic text-sm mt-20">No hay láminas disponibles hoy.</p>`;
                 return;
             }
             container.innerHTML = storage.vault.map((v, i) => `
                 <div class="vip-card">
                     <img src="${v}" class="w-full">
-                    <a href="${v}" download="Laminas_FranCruz_${i+1}.jpg" class="btn-download">
+                    <a href="${v}" download="Laminas_FranCruz_${i+1}.jpg" class="btn-download py-4">
                         <i class="fas fa-cloud-download-alt mr-2"></i> Descargar Lámina VIP
                     </a>
                 </div>
@@ -259,7 +247,6 @@
             document.getElementById('adm-sinpe').value = storage.sinpe;
             document.getElementById('adm-iban').value = storage.iban;
             document.getElementById('adm-paypal').value = storage.paypal;
-            ['CR','NI','GT','HN'].forEach(k => document.getElementById('rate-'+k).value = storage.rates[k]);
             renderAdminPreviews();
         }
 
@@ -283,12 +270,11 @@
             storage.sinpe = document.getElementById('adm-sinpe').value;
             storage.iban = document.getElementById('adm-iban').value;
             storage.paypal = document.getElementById('adm-paypal').value;
-            ['CR','NI','GT','HN'].forEach(k => storage.rates[k] = parseFloat(document.getElementById('rate-'+k).value));
-            saveToDisk(); location.reload();
+            saveToDisk();
+            location.reload();
         }
 
-        checkPersistence();
-        setCountry('CR');
+        window.onload = checkPersistence;
     </script>
 </body>
 </html>
