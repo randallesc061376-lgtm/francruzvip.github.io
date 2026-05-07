@@ -19,17 +19,20 @@
         .method-tab { cursor: pointer; transition: 0.3s; opacity: 0.5; padding-bottom: 8px; border-bottom: 2px solid transparent; }
         .method-tab.active-tab { opacity: 1; color: #d4af37; border-bottom: 2px solid #d4af37; }
         
-        /* Panel Admin Mejorado */
+        /* Galería VIP */
+        .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+        .lamina-vip { border-radius: 15px; border: 1px solid #d4af3722; overflow: hidden; background: #0a0a0a; }
+        .lamina-vip img { width: 100%; height: auto; display: block; }
+
+        /* Panel Admin */
         .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #050505; border: 1px solid #d4af37; padding: 25px; border-radius: 30px; z-index: 1000; width: 95%; max-width: 550px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
         input, textarea { background: #131313; border: 1px solid #222; color: white; padding: 12px; border-radius: 12px; width: 100%; margin-bottom: 10px; font-size: 13px; }
-        .admin-grid { display: grid; grid-cols: 1fr 1fr; gap: 10px; }
-        
         .flag-btn { font-size: 24px; cursor: pointer; opacity: 0.3; transition: 0.3s; }
         .flag-btn.active { opacity: 1; transform: scale(1.2); }
         .loader { width: 40px; height: 40px; border: 4px solid #1a1a1a; border-top: 4px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .storage-box { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 10px; margin-top: 10px; max-height: 150px; overflow-y: auto; }
+        .storage-box { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 10px; margin-top: 10px; max-height: 120px; overflow-y: auto; }
         .receipt-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #111; font-size: 10px; color: #888; }
     </style>
 </head>
@@ -94,58 +97,56 @@
     </div>
 
     <div id="waiting-screen" class="max-w-sm mx-auto" style="display:none;">
-        <h2 class="font-luxury text-2xl gold-text mb-2 mt-10">VERIFICANDO PAGO</h2>
+        <h2 class="font-luxury text-2xl gold-text mb-2 mt-10 uppercase">Verificando</h2>
         <div class="loader"></div>
         <div class="bg-[#0a0a0a] p-8 rounded-[40px] border border-white/5 mb-6">
-            <p class="text-[11px] leading-relaxed mb-8 opacity-70">El sistema está analizando su transacción en la base de datos. Ingrese el <span class="gold-text font-bold">CÓDIGO VIP</span> que recibió por WhatsApp para desbloquear.</p>
+            <p class="text-[11px] leading-relaxed mb-8 opacity-70">Su comprobante está en bodega. Ingrese el <span class="gold-text font-bold">CÓDIGO VIP</span> para autorizar el acceso.</p>
             <input type="password" id="input-code" maxlength="4" placeholder="••••" class="text-center text-3xl tracking-[0.8em] gold-text border-yellow-500/30 py-4 mb-4">
-            <button onclick="checkCode()" class="w-full bg-yellow-600 text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-lg">Desbloquear Acceso</button>
+            <button onclick="checkCode()" class="w-full bg-yellow-600 text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-widest">Desbloquear Láminas</button>
         </div>
-        <p class="text-[9px] uppercase opacity-40 tracking-widest">Tiempo estimado: 2 a 5 minutos</p>
     </div>
 
     <div id="vip-content" class="max-w-md mx-auto" style="display:none;">
-        <h2 class="font-luxury text-3xl gold-text mb-6 uppercase tracking-widest mt-6">Acceso VIP</h2>
-        <div class="bg-white/5 p-6 rounded-[40px] border border-yellow-500/30 mb-6">
-            <div id="vip-message-display" class="text-xs leading-relaxed opacity-90 mb-4 whitespace-pre-wrap"></div>
-            <div class="p-8 border border-dashed border-white/10 rounded-3xl">
-                <p class="gold-text font-bold text-sm tracking-widest">¡CONTENIDO LIBERADO!</p>
+        <h2 class="font-luxury text-3xl gold-text mb-2 uppercase tracking-widest mt-6">Acceso Autorizado</h2>
+        <p class="text-[9px] opacity-40 uppercase tracking-[0.3em] mb-8">Contenido Exclusivo Fran Cruz</p>
+        
+        <div id="lamina-container" class="gallery-grid">
             </div>
-        </div>
-        <button onclick="location.reload()" class="text-[10px] uppercase opacity-30 tracking-[0.3em]">Cerrar Sesión</button>
+
+        <button onclick="location.reload()" class="text-[10px] mt-12 uppercase opacity-20 tracking-[0.3em] block w-full">Finalizar Sesión</button>
     </div>
 
     <div id="adminModal" class="admin-panel shadow-2xl">
-        <h3 class="gold-text font-bold mb-6 uppercase text-center text-sm tracking-widest">Consola de Control Fran Cruz</h3>
+        <h3 class="gold-text font-bold mb-6 uppercase text-center text-sm tracking-widest">Consola de Control</h3>
         
         <div class="text-left mb-4">
-            <label class="text-[9px] gold-text uppercase font-bold ml-1">Cuentas y Titular</label>
-            <input type="text" id="in-titular" placeholder="Nombre del Titular">
+            <label class="text-[9px] gold-text uppercase font-bold ml-1">Configuración General</label>
+            <input type="text" id="in-titular" placeholder="Titular">
             <div class="flex gap-2">
-                <input type="text" id="in-sinpe" placeholder="WhatsApp/SINPE">
-                <input type="text" id="in-paypal" placeholder="Correo PayPal">
+                <input type="text" id="in-sinpe" placeholder="SINPE">
+                <input type="text" id="in-pass" placeholder="Código VIP">
             </div>
-            <input type="text" id="in-iban" placeholder="Cuenta IBAN Completa">
-            <input type="text" id="in-phone" placeholder="WhatsApp Receptor (Ej: 50664535475)">
-            <input type="text" id="in-pass" placeholder="Código de Acceso (Ej: 5522)">
+            <input type="text" id="in-iban" placeholder="Cuenta IBAN">
+            <input type="text" id="in-paypal" placeholder="PayPal">
+            <input type="text" id="in-phone" placeholder="WhatsApp Destino (506...)">
         </div>
 
-        <label class="text-[9px] gold-text uppercase font-bold block text-left ml-1 mb-2">Tasas de Cambio (1 USD = X)</label>
-        <div class="grid grid-cols-3 gap-2 mb-4">
-            <div><label class="text-[8px] opacity-40">CR 🇨🇷</label><input type="number" id="ex-cr"></div>
-            <div><label class="text-[8px] opacity-40">NI 🇳🇮</label><input type="number" id="ex-ni"></div>
-            <div><label class="text-[8px] opacity-40">GT 🇬🇹</label><input type="number" id="ex-gt"></div>
-            <div><label class="text-[8px] opacity-40">HN 🇭🇳</label><input type="number" id="ex-hn"></div>
-            <div><label class="text-[8px] opacity-40">SV/PA/US</label><input type="number" value="1" disabled></div>
+        <label class="text-[9px] gold-text uppercase font-bold block text-left ml-1 mb-2">Tasas (1 USD = X)</label>
+        <div class="grid grid-cols-4 gap-2 mb-4 text-center">
+            <div><label class="text-[8px] opacity-40">CR</label><input type="number" id="ex-cr"></div>
+            <div><label class="text-[8px] opacity-40">NI</label><input type="number" id="ex-ni"></div>
+            <div><label class="text-[8px] opacity-40">GT</label><input type="number" id="ex-gt"></div>
+            <div><label class="text-[8px] opacity-40">HN</label><input type="number" id="ex-hn"></div>
         </div>
 
-        <label class="text-[9px] gold-text uppercase font-bold block text-left ml-1 mb-1">Mensaje/Láminas VIP</label>
-        <textarea id="in-content" placeholder="Escribe aquí los links o mensaje que verá el cliente VIP" rows="3"></textarea>
+        <label class="text-[9px] gold-text uppercase font-bold block text-left ml-1 mt-4 mb-2">Cargar Láminas del Día (Máx 10)</label>
+        <input type="file" id="upload-laminas" multiple accept="image/*" class="text-[10px]" onchange="handleLaminasUpload(this)">
+        <div id="admin-laminas-preview" class="flex gap-2 overflow-x-auto mb-4 p-2 bg-black rounded-xl border border-white/5 min-h-[60px]"></div>
 
-        <label class="text-[9px] gold-text uppercase font-bold block text-left ml-1 mt-2">Bodega de Comprobantes (7 días)</label>
+        <label class="text-[9px] gold-text uppercase font-bold block text-left ml-1 mt-2">Bodega de Pagos</label>
         <div id="storage-list" class="storage-box"></div>
 
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-4 uppercase tracking-widest">Sincronizar Sistema</button>
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-6 uppercase tracking-widest">Sincronizar Todo</button>
         <button onclick="closeAdmin()" class="w-full text-gray-500 text-[10px] mt-4 uppercase">Cerrar</button>
     </div>
 
@@ -163,7 +164,7 @@
             paypal: "pagos@francruzvip.com",
             phone: "50664535475",
             pass: "1234",
-            contentVip: "¡Bienvenido! Aquí tienes tus láminas de hoy.",
+            laminasHoy: [],
             rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, SV: 1, PA: 1, US: 1 }
         };
 
@@ -210,43 +211,59 @@
             else if(currentMethod === 'transfer') main.innerText = data.iban;
         }
 
-        function storeReceipt(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const receipt = {
-                    id: Date.now(),
-                    date: new Date().toLocaleString(),
-                    img: e.target.result,
-                    plan: selectedPlanName,
-                    country: currentCountry
-                };
-                let receipts = JSON.parse(localStorage.getItem('franCruzReceipts')) || [];
-                receipts.unshift(receipt);
-                if(receipts.length > 30) receipts.pop(); // Limite de 30 para no saturar
-                localStorage.setItem('franCruzReceipts', JSON.stringify(receipts));
-            };
-            reader.readAsDataURL(file);
+        // CARGA DE LÁMINAS POR EL ADMIN
+        function handleLaminasUpload(input) {
+            if (input.files) {
+                let filesArray = Array.from(input.files);
+                data.laminasHoy = []; // Reset para nuevas
+                filesArray.forEach((file, index) => {
+                    if(index < 10) {
+                        let reader = new FileReader();
+                        reader.onload = (e) => {
+                            data.laminasHoy.push(e.target.result);
+                            renderAdminLaminas();
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        }
+
+        function renderAdminLaminas() {
+            const preview = document.getElementById('admin-laminas-preview');
+            preview.innerHTML = (data.laminasHoy || []).map(img => `
+                <img src="${img}" class="w-10 h-14 object-cover rounded border border-yellow-500/20">
+            `).join('');
         }
 
         function initValidation(input) {
             if (input.files && input.files[0]) {
-                storeReceipt(input.files[0]);
-                const msg = `FRAN CRUZ VIP\n\nAdjunto comprobante.\nPlan: ${selectedPlanName}\nOrigen: ${currentCountry}\n\nSolicito validación y CÓDIGO de acceso.`;
-                const whatsappUrl = `https://wa.me/${data.phone}?text=${encodeURIComponent(msg)}`;
-                window.open(whatsappUrl, '_blank');
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    let receipts = JSON.parse(localStorage.getItem('franCruzReceipts')) || [];
+                    receipts.unshift({ date: new Date().toLocaleString(), country: currentCountry, img: e.target.result });
+                    if(receipts.length > 20) receipts.pop();
+                    localStorage.setItem('franCruzReceipts', JSON.stringify(receipts));
+                };
+                reader.readAsDataURL(input.files[0]);
+
+                const msg = `FRAN CRUZ VIP\n\nAdjunto comprobante.\nPlan: ${selectedPlanName}\nOrigen: ${currentCountry}\n\nSolicito validación.`;
+                window.open(`https://wa.me/${data.phone}?text=${encodeURIComponent(msg)}`, '_blank');
                 document.getElementById('main-interface').style.display = 'none';
                 document.getElementById('waiting-screen').style.display = 'block';
             }
         }
 
         function checkCode() {
-            const code = document.getElementById('input-code').value;
-            if(code === data.pass) {
+            if(document.getElementById('input-code').value === data.pass) {
                 document.getElementById('waiting-screen').style.display = 'none';
                 document.getElementById('vip-content').style.display = 'block';
-                document.getElementById('vip-message-display').innerText = data.contentVip;
+                const container = document.getElementById('lamina-container');
+                container.innerHTML = (data.laminasHoy || []).map(img => `
+                    <div class="lamina-vip shadow-2xl"><img src="${img}" loading="lazy"></div>
+                `).join('');
             } else {
-                alert("Validación en curso. El código será enviado a su WhatsApp en unos minutos.");
+                alert("Código pendiente de validación.");
             }
         }
 
@@ -260,11 +277,11 @@
                 document.getElementById('in-paypal').value = data.paypal;
                 document.getElementById('in-phone').value = data.phone;
                 document.getElementById('in-pass').value = data.pass;
-                document.getElementById('in-content').value = data.contentVip;
                 document.getElementById('ex-cr').value = data.rates.CR;
                 document.getElementById('ex-ni').value = data.rates.NI;
                 document.getElementById('ex-gt').value = data.rates.GT;
                 document.getElementById('ex-hn').value = data.rates.HN;
+                renderAdminLaminas();
                 renderReceipts();
             }
             setTimeout(() => adminClicks = 0, 3000);
@@ -273,42 +290,29 @@
         function renderReceipts() {
             const list = document.getElementById('storage-list');
             const receipts = JSON.parse(localStorage.getItem('franCruzReceipts')) || [];
-            if(receipts.length === 0) list.innerHTML = "<p class='text-[8px] opacity-30 text-center mt-4'>No hay comprobantes recientes</p>";
-            else {
-                list.innerHTML = receipts.map(r => `
-                    <div class="receipt-item">
-                        <span>${r.date} - ${r.country}</span>
-                        <button onclick="window.open('${r.img}')" class="text-yellow-500 font-bold">VER FOTO</button>
-                    </div>
-                `).join('');
-            }
+            list.innerHTML = receipts.map(r => `
+                <div class="receipt-item"><span>${r.date}</span><button onclick="window.open('${r.img}')" class="text-yellow-500">VER</button></div>
+            `).join('');
         }
 
         function saveAdminData() {
             data = {
+                ...data,
                 titular: document.getElementById('in-titular').value,
                 sinpe: document.getElementById('in-sinpe').value,
                 iban: document.getElementById('in-iban').value,
                 paypal: document.getElementById('in-paypal').value,
                 phone: document.getElementById('in-phone').value,
                 pass: document.getElementById('in-pass').value,
-                contentVip: document.getElementById('in-content').value,
-                rates: { 
-                    ...data.rates, 
-                    CR: parseFloat(document.getElementById('ex-cr').value), 
-                    NI: parseFloat(document.getElementById('ex-ni').value),
-                    GT: parseFloat(document.getElementById('ex-gt').value),
-                    HN: parseFloat(document.getElementById('ex-hn').value)
-                }
+                rates: { ...data.rates, CR: parseFloat(document.getElementById('ex-cr').value), NI: parseFloat(document.getElementById('ex-ni').value), GT: parseFloat(document.getElementById('ex-gt').value), HN: parseFloat(document.getElementById('ex-hn').value) }
             };
             localStorage.setItem('franCruzVIP', JSON.stringify(data));
             location.reload();
         }
 
         function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
-
-        // Inicio por defecto
         setCountry('CR');
     </script>
 </body>
-</html>
+    </html>
+    
