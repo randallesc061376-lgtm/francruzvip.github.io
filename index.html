@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fran Cruz | El Personaje del Azar</title>
+    <title>Fran Cruz | VIP Access</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap');
-        body { font-family: 'Poppins', sans-serif; background: #000; color: white; margin: 0; padding: 20px; text-align: center; }
+        body { font-family: 'Poppins', sans-serif; background: #000; color: white; margin: 0; padding: 20px; text-align: center; overflow-x: hidden; }
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .plan-card { background: #0a0a0a; border-radius: 20px; padding: 15px; cursor: pointer; transition: 0.3s; border: 1px solid #1a1a1a; }
         .plan-card.active { border-color: #d4af37; background: #1a1505; transform: translateY(-5px); }
         .payment-section { background: #070707; border-radius: 30px; padding: 25px; margin-top: 25px; border: 1px solid #1a1a1a; }
-        #info-display { display: none; background: #111; border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px dashed #333; animation: fadeIn 0.4s ease-out; }
+        #info-display { display: none; background: #111; border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px dashed #333; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .method-tab { cursor: pointer; transition: 0.3s; opacity: 0.5; padding-bottom: 8px; border-bottom: 2px solid transparent; }
         .method-tab.active-tab { opacity: 1; color: #d4af37; border-bottom: 2px solid #d4af37; }
-        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; border: 2px solid #d4af37; padding: 20px; border-radius: 20px; z-index: 1000; width: 95%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
-        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 12px; width: 100%; margin-bottom: 10px; }
-        .flag-btn { font-size: 22px; cursor: pointer; opacity: 0.3; transition: 0.3s; }
+        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; border: 2px solid #d4af37; padding: 20px; border-radius: 24px; z-index: 1000; width: 90%; max-width: 400px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
+        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 12px; width: 100%; margin-bottom: 12px; font-size: 14px; }
+        .flag-btn { font-size: 24px; cursor: pointer; opacity: 0.3; transition: 0.3s; }
         .flag-btn.active { opacity: 1; transform: scale(1.2); }
-        .loader { width: 30px; height: 30px; border: 3px solid #1a1a1a; border-top: 3px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
+        .loader { width: 40px; height: 40px; border: 4px solid #1a1a1a; border-top: 4px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div id="main-interface">
-        <header class="mt-4 mb-2 cursor-pointer" onclick="handleAdminClicks()">
+        <header class="mt-4 mb-4 cursor-pointer" onclick="handleAdminClicks()">
             <h1 class="font-luxury text-4xl gold-text tracking-widest uppercase">Fran Cruz</h1>
             <p class="text-[10px] tracking-[0.4em] uppercase opacity-60">El Personaje del Azar</p>
         </header>
@@ -46,17 +46,17 @@
 
         <div class="grid grid-cols-1 gap-3 max-w-sm mx-auto mb-8">
             <div onclick="setPlan(1, 'Membresía por Hoy')" id="p-1" class="plan-card">
-                <h3 class="text-sm font-bold uppercase tracking-wider">Membresía por Hoy</h3>
+                <h3 class="text-xs font-bold uppercase tracking-wider">Membresía por Hoy</h3>
                 <p class="gold-text font-bold">$1 USD</p>
             </div>
             <div onclick="setPlan(5, 'Senda Ganadora')" id="p-5" class="plan-card active">
-                <p class="text-[9px] uppercase opacity-50">Acceso 7 Días</p>
-                <h3 class="text-sm font-bold uppercase tracking-wider">Senda Ganadora</h3>
+                <p class="text-[8px] uppercase opacity-50">Acceso 7 Días</p>
+                <h3 class="text-xs font-bold uppercase tracking-wider">Senda Ganadora</h3>
                 <p class="gold-text font-bold">$5 USD</p>
             </div>
             <div onclick="setPlan(15, 'Membresía VIP')" id="p-15" class="plan-card">
-                <p class="text-[9px] uppercase opacity-50">Acceso Mensual</p>
-                <h3 class="text-sm font-bold uppercase tracking-wider">Membresía VIP</h3>
+                <p class="text-[8px] uppercase opacity-50">Acceso Mensual</p>
+                <h3 class="text-xs font-bold uppercase tracking-wider">Membresía VIP</h3>
                 <p class="gold-text font-bold">$15 USD</p>
             </div>
         </div>
@@ -74,51 +74,55 @@
                 <p id="pay-titular" class="text-[10px] opacity-80 uppercase font-bold tracking-widest">---</p>
             </div>
 
-            <div class="bg-yellow-500/5 p-5 rounded-2xl border border-yellow-500/20">
+            <div class="bg-yellow-500/5 p-6 rounded-3xl border border-yellow-500/20">
                 <p id="final-price" class="text-4xl font-bold text-yellow-500 tracking-tighter">---</p>
                 <p id="usd-reference" class="text-[9px] opacity-40 mt-1 uppercase tracking-widest">---</p>
             </div>
 
             <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="initValidation(this)">
-            <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest mt-8 hover:bg-gray-200 transition">
+            <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest mt-8 hover:scale-95 transition-transform">
                 Validar Comprobante con IA
             </button>
         </div>
     </div>
 
     <div id="waiting-screen" class="max-w-sm mx-auto" style="display:none;">
-        <h2 class="font-luxury text-2xl gold-text mb-2">VERIFICANDO PAGO</h2>
+        <h2 class="font-luxury text-2xl gold-text mb-2 mt-10">VERIFICANDO PAGO</h2>
         <div class="loader"></div>
-        <div class="bg-[#0a0a0a] p-8 rounded-3xl border border-white/5 mb-6">
-            <p class="text-xs mb-6 opacity-80">Una vez enviado el comprobante por WhatsApp, ingrese el <span class="gold-text font-bold">CÓDIGO VIP DE 4 DÍGITOS</span> que el sistema le proporcionará.</p>
-            <input type="password" id="input-code" maxlength="4" placeholder="••••" class="text-center text-2xl tracking-[1em] gold-text border-yellow-500/30">
-            <button onclick="checkCode()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-2 uppercase tracking-widest">Desbloquear Acceso</button>
+        <div class="bg-[#0a0a0a] p-8 rounded-[40px] border border-white/5 mb-6">
+            <p class="text-[11px] leading-relaxed mb-8 opacity-70">El sistema está analizando su transacción. Ingrese el <span class="gold-text font-bold">CÓDIGO VIP</span> que recibió por WhatsApp para desbloquear las láminas.</p>
+            <input type="password" id="input-code" maxlength="4" placeholder="••••" class="text-center text-3xl tracking-[0.8em] gold-text border-yellow-500/30 py-4 mb-4">
+            <button onclick="checkCode()" class="w-full bg-yellow-600 text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-lg">Desbloquear Acceso</button>
         </div>
-        <p class="text-[9px] uppercase opacity-40">Tiempo de validación: 2-5 min</p>
+        <p class="text-[9px] uppercase opacity-40 tracking-widest">Validación oficial: 2 a 5 minutos</p>
     </div>
 
     <div id="vip-content" class="max-w-md mx-auto" style="display:none;">
-        <h2 class="font-luxury text-3xl gold-text mb-6 uppercase tracking-widest">Láminas del Día</h2>
-        <div class="bg-white/5 p-4 rounded-3xl border border-yellow-500/30 mb-4">
-            <p class="gold-text font-bold">¡ACCESO CONCEDIDO!</p>
-            <p class="text-xs mt-2 opacity-60">Aquí aparecerá el contenido exclusivo.</p>
+        <h2 class="font-luxury text-3xl gold-text mb-6 uppercase tracking-widest mt-6">Láminas VIP</h2>
+        <div class="bg-white/5 p-4 rounded-[40px] border border-yellow-500/30 mb-6">
+            <div class="p-10 border border-dashed border-white/10 rounded-3xl">
+                <p class="gold-text font-bold text-sm tracking-widest">¡BIENVENIDO AL CÍRCULO!</p>
+                <p class="text-[10px] mt-4 opacity-50 uppercase">Las láminas del día se cargarán aquí.</p>
+            </div>
         </div>
-        <button onclick="location.reload()" class="text-[9px] uppercase opacity-30">Salir</button>
+        <button onclick="location.reload()" class="text-[10px] uppercase opacity-30 tracking-[0.3em]">Cerrar Sesión</button>
     </div>
 
     <div id="adminModal" class="admin-panel shadow-2xl">
-        <h3 class="gold-text font-bold mb-4 uppercase text-center text-sm">Configuración Maestra</h3>
+        <h3 class="gold-text font-bold mb-6 uppercase text-center text-sm tracking-widest">Ajustes del Sistema</h3>
         <input type="text" id="in-titular" placeholder="Titular">
-        <input type="text" id="in-sinpe" placeholder="SINPE">
-        <input type="text" id="in-iban" placeholder="IBAN">
-        <input type="text" id="in-paypal" placeholder="PayPal">
-        <input type="text" id="in-phone" placeholder="WhatsApp (506...)">
-        <input type="text" id="in-pass" placeholder="Código VIP (ej: 1234)">
-        <div class="grid grid-cols-2 gap-2">
-            <input type="number" id="ex-cr" placeholder="Tasa CR">
-            <input type="number" id="ex-ni" placeholder="Tasa NI">
+        <input type="text" id="in-sinpe" placeholder="Número SINPE">
+        <input type="text" id="in-iban" placeholder="Cuenta IBAN">
+        <input type="text" id="in-paypal" placeholder="Correo PayPal">
+        <input type="text" id="in-phone" placeholder="WhatsApp Receptor (506...)">
+        <label class="text-[10px] gold-text block text-left ml-2 mb-1 font-bold uppercase">Código de Acceso (4 dígitos)</label>
+        <input type="text" id="in-pass" placeholder="Ej: 5522">
+        <div class="grid grid-cols-2 gap-2 mt-4">
+            <div><label class="text-[8px] opacity-40">Tasa CR</label><input type="number" id="ex-cr"></div>
+            <div><label class="text-[8px] opacity-40">Tasa NI</label><input type="number" id="ex-ni"></div>
         </div>
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-4 uppercase tracking-widest">Guardar y Cerrar</button>
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold text-xs mt-4 uppercase tracking-widest">Guardar Todo</button>
+        <button onclick="closeAdmin()" class="w-full text-gray-500 text-[10px] mt-4 uppercase">Cancelar</button>
     </div>
 
     <script>
@@ -183,13 +187,13 @@
 
         function initValidation(input) {
             if (input.files && input.files[0]) {
-                const msg = `FRAN CRUZ VIP\n\nAdjunto comprobante.\nPlan: ${selectedPlanName}\nOrigen: ${currentCountry}\n\nSolicito CÓDIGO VIP de acceso.`;
+                const msg = `FRAN CRUZ VIP\n\nAdjunto comprobante.\nPlan: ${selectedPlanName}\nOrigen: ${currentCountry}\n\nSolicito validación y CÓDIGO de acceso.`;
                 const whatsappUrl = `https://wa.me/${data.phone}?text=${encodeURIComponent(msg)}`;
                 
-                // Abrir WhatsApp directamente
+                // Abre WhatsApp inmediatamente
                 window.open(whatsappUrl, '_blank');
 
-                // Cambiar a pantalla de código
+                // Salta a la pantalla de código
                 document.getElementById('main-interface').style.display = 'none';
                 document.getElementById('waiting-screen').style.display = 'block';
             }
@@ -201,7 +205,7 @@
                 document.getElementById('waiting-screen').style.display = 'none';
                 document.getElementById('vip-content').style.display = 'block';
             } else {
-                alert("Código pendiente de validación o incorrecto.");
+                alert("Validación pendiente. Por favor espere el código vía WhatsApp.");
             }
         }
 
@@ -238,4 +242,5 @@
         setCountry('CR');
     </script>
 </body>
-</html>
+    </html>
+    
