@@ -13,30 +13,27 @@
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
+        /* BOTÓN DE DESCARGA ROMÁNTICO */
+        .vip-card { background: #0a0a0a; border-radius: 25px; overflow: hidden; border: 1px solid #1a1a1a; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .btn-download { background: linear-gradient(135deg, #f9e2af 0%, #d4af37 50%, #a67c00 100%); color: black; font-weight: 800; padding: 15px; width: 100%; display: block; text-transform: uppercase; font-size: 11px; letter-spacing: 1.5px; }
+
         /* CONSOLA ADMINISTRATIVA */
-        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #080808; border: 1px solid var(--gold); padding: 20px; border-radius: 30px; z-index: 10000; width: 92%; max-width: 400px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 50px rgba(0,0,0,1); }
+        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #080808; border: 1px solid var(--gold); padding: 20px; border-radius: 30px; z-index: 10000; width: 92%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
         .admin-section { border-bottom: 1px solid #1a1a1a; padding-bottom: 15px; margin-bottom: 15px; }
-        .admin-label { display: block; text-align: left; font-size: 8px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); opacity: 0.8; margin: 0 0 6px 4px; font-weight: bold; }
-        .admin-input { background: #111; border: 1px solid #222; color: white; padding: 12px 14px; border-radius: 12px; width: 100%; font-size: 13px; margin-bottom: 10px; box-sizing: border-box; outline: none; }
+        .admin-input { background: #111; border: 1px solid #222; color: white; padding: 12px; border-radius: 12px; width: 100%; font-size: 13px; margin-bottom: 10px; outline: none; }
 
-        /* VISOR DE IMÁGENES */
-        .img-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; min-height: 50px; background: #030303; padding: 10px; border-radius: 15px; border: 1px dashed #333; }
-        .img-item { width: 50px; height: 50px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
+        .img-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; background: #030303; padding: 10px; border-radius: 15px; border: 1px dashed #333; }
+        .img-item { width: 55px; height: 55px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
         .img-item img { width: 100%; height: 100%; object-fit: cover; }
-        .img-del { position: absolute; top: 0; right: 0; background: #ff4444; color: white; font-size: 10px; padding: 2px 6px; cursor: pointer; font-weight: bold; border-bottom-left-radius: 8px; z-index: 10; }
-
-        /* GALERÍA VIP Y BOTÓN ROMÁNTICO */
-        .vip-card { background: #0a0a0a; border-radius: 20px; overflow: hidden; border: 1px solid #1a1a1a; margin-bottom: 20px; position: relative; }
-        .btn-download { background: linear-gradient(135deg, #f9e2af 0%, #d4af37 50%, #a67c00 100%); color: black; font-weight: 800; padding: 12px; width: 100%; display: block; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; transition: 0.3s; }
-        .btn-download:active { transform: scale(0.98); filter: brightness(1.2); }
+        .img-del { position: absolute; top: 0; right: 0; background: #ff4444; color: white; font-size: 10px; padding: 2px 6px; cursor: pointer; border-bottom-left-radius: 8px; }
 
         .hidden { display: none !important; }
-        .plan-card { background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; }
+        .plan-card { background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; cursor: pointer; }
         .plan-card.active { border-color: var(--gold); background: #120f05; }
         
+        #ia-fill { width: 0%; height: 100%; background: var(--gold); transition: width 45s linear; }
         .loader-ring { width: 55px; height: 55px; border: 3px solid #111; border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s infinite linear; margin: 25px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        #ia-fill { width: 0%; height: 100%; background: var(--gold); transition: width 45s linear; }
     </style>
 </head>
 <body>
@@ -70,52 +67,57 @@
             <input type="file" id="receipt-upload" accept="image/*" class="hidden" onchange="startValidation(this)">
             <button onclick="document.getElementById('receipt-upload').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[10px] tracking-widest active:scale-95 transition-all">Validar Comprobante</button>
         </div>
+
+        <div id="reentry-box" class="mt-10 hidden">
+            <button onclick="enterVIP()" class="border-2 border-yellow-600/50 gold-text px-8 py-4 rounded-full font-luxury text-sm tracking-widest uppercase animate-pulse">
+                <i class="fas fa-crown mr-2"></i> Acceso VIP Activo
+            </button>
+        </div>
     </div>
 
     <div id="ia-screen" class="hidden max-w-sm mx-auto pt-10 px-6">
         <h2 class="font-luxury text-2xl gold-text mb-2 uppercase italic">Verificando</h2>
         <div class="loader-ring"></div>
         <div class="bg-[#0a0a0a] p-8 rounded-[35px] border border-white/5">
-            <p id="ia-status" class="text-[9px] italic gold-text mb-4 h-8">Analizando integridad del pago...</p>
+            <p id="ia-status" class="text-[9px] italic gold-text mb-4 h-8">Sincronizando con base de datos...</p>
             <div class="w-full h-1 bg-black rounded-full overflow-hidden"><div id="ia-fill"></div></div>
         </div>
         <div id="success-box" class="mt-8 hidden">
-            <button onclick="enterVIP()" class="w-full bg-yellow-600 text-white py-6 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-2xl">Entrar a la Bodega</button>
+            <button onclick="activateAndEnter()" class="w-full bg-yellow-600 text-white py-6 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-2xl">Entrar a la Bodega</button>
         </div>
     </div>
 
     <div id="vip-interface" class="hidden max-w-md mx-auto pt-4 px-4">
         <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
-            <h2 class="font-luxury text-2xl gold-text">Mis Láminas</h2>
-            <button onclick="exitVIP()" class="text-[10px] uppercase bg-white/10 px-4 py-2 rounded-full font-bold tracking-widest">Salir al Menú</button>
+            <h2 class="font-luxury text-2xl gold-text">Bodega VIP</h2>
+            <button onclick="exitVIP()" class="text-[9px] uppercase bg-white/5 border border-white/10 px-4 py-2 rounded-full font-bold tracking-widest">Regresar</button>
         </div>
         <div id="vip-gallery" class="grid grid-cols-1 gap-6 pb-24"></div>
     </div>
 
     <div id="admin-modal" class="admin-panel">
-        <h3 class="gold-text font-bold text-sm mb-6 uppercase tracking-[0.2em] font-luxury text-center">Consola Administrativa</h3>
+        <h3 class="gold-text font-bold text-sm mb-6 uppercase tracking-[0.2em] font-luxury text-center">Admin Fran Cruz</h3>
         
         <div class="admin-section">
-            <label class="admin-label">Datos de la Cuenta</label>
+            <label class="text-[8px] uppercase gold-text block mb-2 font-bold">Configuración de Cuenta</label>
             <input type="text" id="adm-titular" class="admin-input" placeholder="Nombre Titular">
-            <input type="text" id="adm-sinpe" class="admin-input" placeholder="Número SINPE / ID">
-            <input type="text" id="adm-iban" class="admin-input" placeholder="Cuenta Alternativa">
+            <input type="text" id="adm-sinpe" class="admin-input" placeholder="Número SINPE">
         </div>
 
         <div class="admin-section">
-            <label class="admin-label">Bodega: Láminas del Día</label>
+            <label class="text-[8px] uppercase gold-text block mb-2 font-bold">Bodega: Láminas (Borrado Diario)</label>
             <input type="file" id="vault-input" multiple accept="image/*" class="hidden" onchange="handleVaultUpload(this)">
-            <button onclick="document.getElementById('vault-input').click()" class="w-full bg-[#111] border border-white/5 text-[9px] py-4 rounded-xl uppercase font-bold text-white mb-2 tracking-widest">Cargar Nuevas Láminas</button>
+            <button onclick="document.getElementById('vault-input').click()" class="w-full bg-[#111] border border-white/10 text-[9px] py-4 rounded-xl uppercase font-bold text-white mb-2">Cargar Láminas</button>
             <div id="vault-preview" class="img-grid"></div>
         </div>
 
         <div class="admin-section">
-            <label class="admin-label">Historial de Comprobantes (7 Días)</label>
+            <label class="text-[8px] uppercase gold-text block mb-2 font-bold">Comprobantes (7 Días)</label>
             <div id="receipt-vault" class="img-grid"></div>
         </div>
 
-        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest shadow-lg mt-4">Guardar y Sincronizar</button>
-        <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full text-gray-600 text-[8px] mt-6 uppercase font-bold">Cerrar Sesión</button>
+        <button onclick="saveAdminData()" class="w-full bg-yellow-600 text-white py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest">Guardar Cambios</button>
+        <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full text-gray-600 text-[8px] mt-6 uppercase font-bold">Cerrar Consola</button>
     </div>
 
     <script>
@@ -123,41 +125,44 @@
         let currentPlan = 5;
         let currentCountry = 'CR';
 
-        // BASE DE DATOS BLINDADA
-        let storage = JSON.parse(localStorage.getItem('fc_final_v13')) || {
+        // CARGA DE MEMORIA BLINDADA
+        let storage = JSON.parse(localStorage.getItem('fran_cruz_final_v14')) || {
             titular: "Randall Esteban Sánchez",
             sinpe: "64535475",
-            iban: "CR80080315001000035641",
             rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, USD: 1 },
             vault: [], 
             receipts: [],
+            is_active: false,
             last_cleanup: new Date().toLocaleDateString()
         };
 
-        // LÓGICA DE PERSISTENCIA ABSOLUTA
         function checkPersistence() {
             const today = new Date().toLocaleDateString();
             const now = Date.now();
             const weekInMs = 7 * 24 * 60 * 60 * 1000;
 
-            // Borrado automático de láminas SOLO al cambio de día (23:59:59)
+            // 1. Persistencia de Láminas (Solo se borran si cambió el día)
             if (storage.last_cleanup !== today) {
-                storage.vault = []; // Se limpian las láminas del día anterior
+                storage.vault = []; 
                 storage.last_cleanup = today;
             }
 
-            // Borrado de comprobantes SOLO tras 7 días
+            // 2. Persistencia de Comprobantes (7 días exactos)
             storage.receipts = storage.receipts.filter(r => (now - r.timestamp) < weekInMs);
             
             saveToDisk();
+            toggleReentryButton();
         }
 
         function saveToDisk() {
-            localStorage.setItem('fc_final_v13', JSON.stringify(storage));
+            localStorage.setItem('fran_cruz_final_v14', JSON.stringify(storage));
         }
 
-        // Al iniciar, limpiar solo lo que corresponde
-        checkPersistence();
+        function toggleReentryButton() {
+            if(storage.is_active) {
+                document.getElementById('reentry-box').classList.remove('hidden');
+            }
+        }
 
         function setCountry(c) {
             currentCountry = c;
@@ -186,7 +191,6 @@
             if(!input.files[0]) return;
             const r = new FileReader();
             r.onload = (e) => { 
-                // Guardar comprobante con marca de tiempo exacta
                 storage.receipts.unshift({ data: e.target.result, timestamp: Date.now() }); 
                 saveToDisk();
             };
@@ -199,10 +203,17 @@
             setTimeout(() => {
                 document.getElementById('success-box').classList.remove('hidden');
                 document.querySelector('.loader-ring').style.display = 'none';
-            }, 15000);
+            }, 10000);
+        }
+
+        function activateAndEnter() {
+            storage.is_active = true; // Activa la membresía para este dispositivo
+            saveToDisk();
+            enterVIP();
         }
 
         function enterVIP() {
+            document.getElementById('main-interface').classList.add('hidden');
             document.getElementById('ia-screen').classList.add('hidden');
             document.getElementById('vip-interface').classList.remove('hidden');
             renderVipGallery();
@@ -212,20 +223,20 @@
         function exitVIP() {
             document.getElementById('vip-interface').classList.add('hidden');
             document.getElementById('main-interface').classList.remove('hidden');
-            location.reload(); // Asegura reinicio limpio
+            toggleReentryButton(); // Mostrar el botón de re-ingreso
         }
 
         function renderVipGallery() {
             const container = document.getElementById('vip-gallery');
             if (storage.vault.length === 0) {
-                container.innerHTML = `<p class="opacity-30 italic text-sm mt-10">No hay láminas disponibles por ahora...</p>`;
+                container.innerHTML = `<p class="opacity-30 italic text-sm mt-20">Preparando láminas nuevas...</p>`;
                 return;
             }
             container.innerHTML = storage.vault.map((v, i) => `
                 <div class="vip-card">
-                    <img src="${v}" class="w-full h-auto">
-                    <a href="${v}" download="FranCruz_Lamina_${i+1}.jpg" class="btn-download">
-                        <i class="fas fa-download mr-2"></i> Descargar Lámina VIP
+                    <img src="${v}" class="w-full">
+                    <a href="${v}" download="Laminas_FranCruz_${i+1}.jpg" class="btn-download">
+                        <i class="fas fa-cloud-download-alt mr-2"></i> Descargar Lámina VIP
                     </a>
                 </div>
             `).join('');
@@ -240,7 +251,6 @@
         function loadAdminData() {
             document.getElementById('adm-titular').value = storage.titular;
             document.getElementById('adm-sinpe').value = storage.sinpe;
-            document.getElementById('adm-iban').value = storage.iban;
             renderAdminPreviews();
         }
 
@@ -253,14 +263,12 @@
         }
 
         function renderAdminPreviews() {
-            // Láminas
             document.getElementById('vault-preview').innerHTML = storage.vault.map((v,i) => `
                 <div class="img-item">
                     <img src="${v}">
                     <span onclick="storage.vault.splice(${i},1); renderAdminPreviews();" class="img-del">×</span>
                 </div>
             `).join('');
-            // Comprobantes
             document.getElementById('receipt-vault').innerHTML = storage.receipts.map((r,i) => `
                 <div class="img-item">
                     <img src="${r.data}" onclick="window.open(this.src)">
@@ -272,12 +280,12 @@
         function saveAdminData() {
             storage.titular = document.getElementById('adm-titular').value;
             storage.sinpe = document.getElementById('adm-sinpe').value;
-            storage.iban = document.getElementById('adm-iban').value;
             saveToDisk();
-            alert("Sistema Sincronizado y Protegido");
             location.reload();
         }
 
+        // Inicio del sistema
+        checkPersistence();
         setCountry('CR');
     </script>
 </body>
