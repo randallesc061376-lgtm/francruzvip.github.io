@@ -9,31 +9,34 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap');
         :root { --gold: #d4af37; --card-bg: #0a0a0a; }
-        body { font-family: 'Poppins', sans-serif; background: #000; color: white; margin: 0; padding: 15px; text-align: center; }
+        body { font-family: 'Poppins', sans-serif; background: #000; color: white; margin: 0; padding: 15px; text-align: center; -webkit-tap-highlight-color: transparent; }
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
         .vip-card { background: #0a0a0a; border-radius: 25px; overflow: hidden; border: 1px solid #1a1a1a; margin-bottom: 25px; }
-        .btn-download { background: linear-gradient(135deg, #f9e2af 0%, #d4af37 50%, #a67c00 100%); color: black; font-weight: 800; padding: 15px; width: 100%; display: block; text-transform: uppercase; font-size: 11px; letter-spacing: 1.5px; text-decoration: none; }
+        .btn-download { background: linear-gradient(135deg, #f9e2af 0%, #d4af37 50%, #a67c00 100%); color: black; font-weight: 800; padding: 15px; width: 100%; display: block; text-transform: uppercase; font-size: 11px; letter-spacing: 1.5px; text-decoration: none; border: none; }
 
         .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #080808; border: 1px solid var(--gold); padding: 20px; border-radius: 30px; z-index: 10000; width: 92%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
         .admin-input { background: #111; border: 1px solid #222; color: white; padding: 12px; border-radius: 12px; width: 100%; font-size: 11px; margin-bottom: 10px; outline: none; }
 
-        .img-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; background: #030303; padding: 10px; border-radius: 15px; min-height: 60px; }
-        .img-item { width: 55px; height: 55px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
+        .img-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; background: #030303; padding: 10px; border-radius: 15px; min-height: 60px; border: 1px dashed #333; }
+        .img-item { width: 55px; height: 55px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #444; }
         .img-item img { width: 100%; height: 100%; object-fit: cover; }
-        .img-del { position: absolute; top: 0; right: 0; background: #ff4444; color: white; font-size: 10px; padding: 2px 6px; cursor: pointer; }
+        .img-del { position: absolute; top: 0; right: 0; background: #ff4444; color: white; font-size: 10px; padding: 2px 6px; cursor: pointer; font-weight: bold; }
 
         .hidden { display: none !important; }
-        .plan-card { background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; cursor: pointer; }
+        .plan-card { background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; }
         .plan-card.active { border-color: var(--gold); background: #120f05; }
         
         #ia-fill { width: 0%; height: 100%; background: var(--gold); transition: width 45s linear; }
         .loader-ring { width: 55px; height: 55px; border: 3px solid #111; border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s infinite linear; margin: 25px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .method-tab { font-size: 8px; text-transform: uppercase; padding: 8px 5px; opacity: 0.4; cursor: pointer; }
+        .method-tab { font-size: 8px; text-transform: uppercase; padding: 10px 5px; opacity: 0.4; cursor: pointer; transition: 0.3s; border-bottom: 2px solid transparent; }
         .method-tab.active { opacity: 1; color: var(--gold); border-bottom: 2px solid var(--gold); }
+        
+        .flag-btn { font-size: 30px; cursor: pointer; transition: 0.3s; opacity: 0.3; display: inline-block; padding: 5px; }
+        .flag-btn.active { opacity: 1; transform: scale(1.2); }
     </style>
 </head>
 <body>
@@ -44,27 +47,27 @@
     </header>
 
     <div id="main-interface">
-        <div class="flex gap-4 mb-8 justify-center flex-wrap opacity-60 px-2" id="flag-box">
-            <span onclick="setCountry('CR')" id="f-CR" class="text-3xl cursor-pointer">🇨🇷</span>
-            <span onclick="setCountry('NI')" id="f-NI" class="text-3xl cursor-pointer">🇳🇮</span>
-            <span onclick="setCountry('PA')" id="f-PA" class="text-3xl cursor-pointer">🇵🇦</span>
-            <span onclick="setCountry('HN')" id="f-HN" class="text-3xl cursor-pointer">🇭🇳</span>
-            <span onclick="setCountry('SV')" id="f-SV" class="text-3xl cursor-pointer">🇸🇻</span>
-            <span onclick="setCountry('GT')" id="f-GT" class="text-3xl cursor-pointer">🇬🇹</span>
-            <span onclick="setCountry('US')" id="f-US" class="text-3xl cursor-pointer">🇺🇸</span>
+        <div class="flex gap-2 mb-8 justify-center flex-wrap px-2" id="flag-box">
+            <span onclick="setCountry('CR')" id="f-CR" class="flag-btn active">🇨🇷</span>
+            <span onclick="setCountry('NI')" id="f-NI" class="flag-btn">🇳🇮</span>
+            <span onclick="setCountry('PA')" id="f-PA" class="flag-btn">🇵🇦</span>
+            <span onclick="setCountry('HN')" id="f-HN" class="flag-btn">🇭🇳</span>
+            <span onclick="setCountry('SV')" id="f-SV" class="flag-btn">🇸🇻</span>
+            <span onclick="setCountry('GT')" id="f-GT" class="flag-btn">🇬🇹</span>
+            <span onclick="setCountry('US')" id="f-US" class="flag-btn">🇺🇸</span>
         </div>
 
         <div class="max-w-sm mx-auto px-4 mb-8">
             <div onclick="setPlan(1)" id="p-1" class="plan-card"><p class="text-[8px] uppercase opacity-40 mb-1">Membresía Hoy</p><h3 class="text-lg font-bold gold-text">$1 USD</h3></div>
-            <div onclick="setPlan(5)" id="p-5" class="plan-card active"><p class="text-[8px] uppercase opacity-40 mb-1">Senda Ganadora</p><h3 class="text-lg font-bold gold-text">$5 USD</h3></div>
-            <div onclick="setPlan(15)" id="p-15" class="plan-card"><p class="text-[8px] uppercase opacity-40 mb-1">Membresía VIP</p><h3 class="text-lg font-bold gold-text">$15 USD</h3></div>
+            <div onclick="setPlan(5)" id="p-5" class="plan-card active"><p class="text-[8px] uppercase opacity-40 mb-1">Senda Ganadora (7 días)</p><h3 class="text-lg font-bold gold-text">$5 USD</h3></div>
+            <div onclick="setPlan(15)" id="p-15" class="plan-card"><p class="text-[8px] uppercase opacity-40 mb-1">Membresía VIP (Mes)</p><h3 class="text-lg font-bold gold-text">$15 USD</h3></div>
         </div>
 
         <div class="max-w-sm mx-auto bg-[#050505] rounded-[35px] p-6 border border-white/5 shadow-2xl">
             <div class="flex justify-around mb-6 border-b border-white/5">
                 <div onclick="setMethod('sinpe')" id="m-sinpe" class="method-tab active">Sinpe CR</div>
                 <div onclick="setMethod('trans')" id="m-trans" class="method-tab">Transf. IBAN</div>
-                <div onclick="setMethod('paypal')" id="m-paypal" class="method-tab">PayPal</div>
+                <div onclick="setMethod('paypal')" id="m-paypal" class="method-tab">PayPal / Int.</div>
             </div>
             <p id="pay-data" class="text-xl font-bold gold-text uppercase mb-1">---</p>
             <p id="pay-titular" class="text-[8px] opacity-40 uppercase font-bold mb-6 italic">---</p>
@@ -82,7 +85,7 @@
         <h2 class="font-luxury text-2xl gold-text mb-2 uppercase italic">Verificando</h2>
         <div id="ia-loader" class="loader-ring"></div>
         <div class="bg-[#0a0a0a] p-8 rounded-[35px] border border-white/5">
-            <p id="ia-status" class="text-[9px] italic gold-text mb-4 h-12 uppercase tracking-[0.15em] leading-relaxed">Iniciando protocolo de seguridad...</p>
+            <p id="ia-status" class="text-[9px] italic gold-text mb-4 h-12 uppercase tracking-[0.15em] leading-relaxed">Estableciendo conexión bancaria...</p>
             <div class="w-full h-1 bg-black rounded-full overflow-hidden"><div id="ia-fill"></div></div>
         </div>
         <div id="success-box" class="mt-10 hidden">
@@ -95,31 +98,31 @@
     <div id="vip-interface" class="hidden max-w-md mx-auto pt-4 px-4">
         <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
             <h2 class="font-luxury text-2xl gold-text">Bodega VIP</h2>
-            <button onclick="exitVIP()" class="text-[9px] uppercase bg-white/5 border border-white/10 px-4 py-2 rounded-full font-bold tracking-widest">Regresar</button>
+            <button onclick="location.reload()" class="text-[9px] uppercase bg-white/5 border border-white/10 px-4 py-2 rounded-full font-bold tracking-widest">Cerrar Sesión</button>
         </div>
         <div id="vip-gallery" class="grid grid-cols-1 gap-6 pb-24"></div>
     </div>
 
     <div id="admin-modal" class="admin-panel">
         <h3 class="gold-text font-bold text-sm mb-6 uppercase font-luxury text-center">Admin Fran Cruz</h3>
-        <div class="admin-section border-b border-white/5 mb-4 pb-4">
-            <input type="text" id="adm-titular" class="admin-input" placeholder="Nombre Titular">
-            <input type="text" id="adm-sinpe" class="admin-input" placeholder="Número SINPE">
-            <input type="text" id="adm-iban" class="admin-input" placeholder="Cuenta IBAN">
+        <div class="admin-section mb-4 pb-4 border-b border-white/5">
+            <input type="text" id="adm-titular" class="admin-input" placeholder="Titular">
+            <input type="text" id="adm-sinpe" class="admin-input" placeholder="SINPE">
+            <input type="text" id="adm-iban" class="admin-input" placeholder="IBAN">
             <input type="text" id="adm-paypal" class="admin-input" placeholder="Email PayPal">
         </div>
         <div class="admin-section mb-4">
-            <label class="text-[8px] uppercase gold-text block mb-2 font-bold">Láminas (Borrado Diario)</label>
+            <label class="text-[8px] uppercase gold-text block mb-2 font-bold">Láminas VIP (Hoy)</label>
             <input type="file" id="vault-input" multiple accept="image/*" class="hidden" onchange="handleVaultUpload(this)">
-            <button onclick="document.getElementById('vault-input').click()" class="w-full bg-[#111] border border-white/10 text-[9px] py-4 rounded-xl uppercase font-bold text-white mb-2">Cargar Láminas</button>
+            <button onclick="document.getElementById('vault-input').click()" class="w-full bg-[#111] border border-white/10 text-[9px] py-4 rounded-xl uppercase font-bold text-white mb-2">Cargar Fotos</button>
             <div id="vault-preview" class="img-grid"></div>
         </div>
         <div class="admin-section">
             <label class="text-[8px] uppercase gold-text block mb-2 font-bold">Comprobantes (7 Días)</label>
             <div id="receipt-vault" class="img-grid"></div>
         </div>
-        <button onclick="saveAdminSettings()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold uppercase text-[10px] mt-4">Guardar Configuración</button>
-        <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full text-gray-600 text-[8px] mt-6 uppercase font-bold">Cerrar</button>
+        <button onclick="saveAdminSettings()" class="w-full bg-yellow-600 text-white py-5 rounded-2xl font-bold uppercase text-[10px] mt-4">Guardar Todo</button>
+        <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full text-gray-500 text-[8px] mt-6 uppercase font-bold">Cerrar</button>
     </div>
 
     <script>
@@ -129,124 +132,110 @@
         let currentMethod = 'sinpe';
         let adminTimer = 0;
 
-        // INICIALIZACIÓN DE INDEXEDDB (Base de datos del navegador)
-        const request = indexedDB.open("FranCruzDB", 1);
-        request.onupgradeneeded = (e) => {
+        // VALORES POR DEFECTO MIENTRAS CARGA DB
+        let currentSettings = {
+            titular: "Randall Esteban Sánchez",
+            sinpe: "64535475",
+            iban: "CR80080315001000035641",
+            paypal: "pagos@francruz.com",
+            rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, USD: 1 },
+            is_active: false, last_cleanup: new Date().toLocaleDateString()
+        };
+
+        const iaMsgs = ["Estableciendo conexión bancaria...", "Validando metadatos...", "Ejecutando cruce de información...", "Sincronizando con el banco...", "Verificación exitosa...", "Abriendo bodega VIP..."];
+
+        // INICIAR BASE DE DATOS PROFESIONAL
+        const req = indexedDB.open("FranCruzV3", 1);
+        req.onupgradeneeded = (e) => {
             db = e.target.result;
             db.createObjectStore("settings");
             db.createObjectStore("images", { keyPath: "id", autoIncrement: true });
         };
-        request.onsuccess = (e) => {
+        req.onsuccess = (e) => {
             db = e.target.result;
-            loadAllData();
+            initSystem();
         };
 
-        async function loadAllData() {
-            const settings = await getFromDB("settings", "config") || {
-                titular: "Randall Esteban Sánchez", sinpe: "64535475", iban: "CR80080315001000035641", paypal: "pagos@francruz.com",
-                rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, USD: 1 },
-                is_active: false, last_cleanup: new Date().toLocaleDateString()
-            };
+        async function initSystem() {
+            const saved = await getFromDB("settings", "config");
+            if(saved) currentSettings = saved;
 
-            const allImages = await getAllFromDB("images");
+            const allImgs = await getAllFromDB("images");
             const today = new Date().toLocaleDateString();
             const now = Date.now();
 
-            // Lógica de limpieza al cargar
-            if (settings.last_cleanup !== today) {
-                // Borrar láminas del día anterior
-                allImages.filter(img => img.type === 'vault').forEach(img => deleteFromDB("images", img.id));
-                settings.is_active = false;
-                settings.last_cleanup = today;
-                await saveToDB("settings", "config", settings);
+            // Limpieza Automática: Láminas (Diario)
+            if (currentSettings.last_cleanup !== today) {
+                allImgs.filter(i => i.type === 'vault').forEach(i => deleteFromDB("images", i.id));
+                currentSettings.is_active = false;
+                currentSettings.last_cleanup = today;
+                await saveToDB("settings", "config", currentSettings);
             }
 
-            // Borrar comprobantes de más de 7 días
-            allImages.filter(img => img.type === 'receipt' && (now - img.timestamp) > (7*24*60*60*1000))
-                     .forEach(img => deleteFromDB("images", img.id));
+            // Limpieza Automática: Comprobantes (7 Días)
+            allImgs.filter(i => i.type === 'receipt' && (now - i.timestamp) > (7*24*60*60*1000))
+                   .forEach(i => deleteFromDB("images", i.id));
 
-            updateUI(settings);
+            setCountry('CR'); // Carga inicial
+            if(currentSettings.is_active) document.getElementById('reentry-box').classList.remove('hidden');
         }
 
-        async function updateUI(settings) {
-            document.getElementById('adm-titular').value = settings.titular;
-            document.getElementById('adm-sinpe').value = settings.sinpe;
-            document.getElementById('adm-iban').value = settings.iban;
-            document.getElementById('adm-paypal').value = settings.paypal;
-            
-            if(settings.is_active) document.getElementById('reentry-box').classList.remove('hidden');
+        // CONTROL DE BANDERAS Y PRECIOS
+        function setCountry(c) {
+            currentCountry = c;
+            document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('f-'+c).classList.add('active');
             refreshPricing();
-            renderPreviews();
         }
 
-        // FUNCIONES DE BASE DE DATOS
-        function saveToDB(storeName, key, value) {
-            return new Promise(resolve => {
-                const tx = db.transaction(storeName, "readwrite");
-                tx.objectStore(storeName).put(value, key);
-                tx.oncomplete = () => resolve();
-            });
+        function setPlan(p) {
+            currentPlan = p;
+            document.querySelectorAll('.plan-card').forEach(b => b.classList.remove('active'));
+            document.getElementById('p-'+p).classList.add('active');
+            refreshPricing();
         }
 
-        function addImgToDB(value) {
-            return new Promise(resolve => {
-                const tx = db.transaction("images", "readwrite");
-                tx.objectStore("images").add(value);
-                tx.oncomplete = () => resolve();
-            });
+        function setMethod(m) {
+            currentMethod = m;
+            document.querySelectorAll('.method-tab').forEach(b => b.classList.remove('active'));
+            document.getElementById('m-'+m).classList.add('active');
+            refreshPricing();
         }
 
-        function getFromDB(storeName, key) {
-            return new Promise(resolve => {
-                const tx = db.transaction(storeName, "readonly");
-                const request = tx.objectStore(storeName).get(key);
-                request.onsuccess = () => resolve(request.result);
-            });
-        }
-
-        function getAllFromDB(storeName) {
-            return new Promise(resolve => {
-                const tx = db.transaction(storeName, "readonly");
-                const request = tx.objectStore(storeName).getAll();
-                request.onsuccess = () => resolve(request.result);
-            });
-        }
-
-        function deleteFromDB(storeName, key) {
-            const tx = db.transaction(storeName, "readwrite");
-            tx.objectStore(storeName).delete(key);
-        }
-
-        // LÓGICA DE INTERFAZ
-        function setCountry(c) { currentCountry = c; refreshPricing(); }
-        function setPlan(p) { currentPlan = p; document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active')); document.getElementById('p-'+p).classList.add('active'); refreshPricing(); }
-        function setMethod(m) { currentMethod = m; document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active')); document.getElementById('m-'+m).classList.add('active'); refreshPricing(); }
-
-        async function refreshPricing() {
-            const settings = await getFromDB("settings", "config");
-            if(!settings) return;
+        function refreshPricing() {
             const sym = { CR: '₡', NI: 'C$', PA: '$', HN: 'L', SV: '$', GT: 'Q', US: '$' };
             const rk = (['PA','SV','US'].includes(currentCountry)) ? 'USD' : currentCountry;
-            const price = Math.round(currentPlan * (settings.rates[rk] || 1));
+            const rate = currentSettings.rates[rk] || 1;
+            const price = Math.round(currentPlan * rate);
+
             document.getElementById('final-price').innerText = `${sym[currentCountry]}${price.toLocaleString()}`;
-            document.getElementById('pay-titular').innerText = settings.titular;
-            if(currentMethod === 'sinpe') document.getElementById('pay-data').innerText = settings.sinpe;
-            else if(currentMethod === 'trans') document.getElementById('pay-data').innerText = settings.iban;
-            else document.getElementById('pay-data').innerText = settings.paypal;
+            document.getElementById('pay-titular').innerText = currentSettings.titular;
+            
+            if(currentMethod === 'sinpe') document.getElementById('pay-data').innerText = currentSettings.sinpe;
+            else if(currentMethod === 'trans') document.getElementById('pay-data').innerText = currentSettings.iban;
+            else document.getElementById('pay-data').innerText = currentSettings.paypal;
         }
 
+        // VALIDACIÓN IA
         function startValidation(input) {
             if(!input.files[0]) return;
             const r = new FileReader();
-            r.onload = async (e) => { 
+            r.onload = async (e) => {
                 await addImgToDB({ type: 'receipt', data: e.target.result, timestamp: Date.now() });
-                renderPreviews();
+                renderAdminPreviews();
             };
             r.readAsDataURL(input.files[0]);
 
             document.getElementById('main-interface').classList.add('hidden');
             document.getElementById('ia-screen').classList.remove('hidden');
-            setTimeout(() => { document.getElementById('ia-fill').style.width = '100%'; }, 100);
+            setTimeout(() => document.getElementById('ia-fill').style.width = '100%', 100);
+
+            let mIdx = 0;
+            const mInt = setInterval(() => {
+                document.getElementById('ia-status').innerText = iaMsgs[mIdx];
+                mIdx++; if(mIdx >= iaMsgs.length) clearInterval(mInt);
+            }, 7500);
+
             setTimeout(() => {
                 document.getElementById('ia-loader').classList.add('hidden');
                 document.getElementById('success-box').classList.remove('hidden');
@@ -254,9 +243,8 @@
         }
 
         async function activateAndEnter() {
-            const settings = await getFromDB("settings", "config");
-            settings.is_active = true;
-            await saveToDB("settings", "config", settings);
+            currentSettings.is_active = true;
+            await saveToDB("settings", "config", currentSettings);
             enterVIP();
         }
 
@@ -266,26 +254,72 @@
             document.getElementById('vip-interface').classList.remove('hidden');
             
             const imgs = await getAllFromDB("images");
-            const container = document.getElementById('vip-gallery');
-            const vaultImgs = imgs.filter(i => i.type === 'vault');
+            const gallery = document.getElementById('vip-gallery');
+            const vault = imgs.filter(i => i.type === 'vault');
             
-            if (vaultImgs.length === 0) {
-                container.innerHTML = `<p class="opacity-30 italic text-sm mt-20">No hay láminas hoy.</p>`;
+            if(vault.length === 0) {
+                gallery.innerHTML = `<p class="opacity-20 italic mt-20">No hay láminas hoy.</p>`;
             } else {
-                container.innerHTML = vaultImgs.map((v, i) => `
+                gallery.innerHTML = vault.map((v, i) => `
                     <div class="vip-card">
                         <img src="${v.data}" class="w-full">
-                        <a href="${v.data}" download="FranCruz_${i+1}.jpg" class="btn-download py-4">Descargar Lámina VIP</a>
+                        <a href="${v.data}" download="FranCruz_VIP_${i+1}.jpg" class="btn-download py-4">Descargar Lámina VIP</a>
                     </div>`).join('');
             }
         }
 
-        function exitVIP() { location.reload(); }
+        // FUNCIONES DB
+        function saveToDB(store, key, val) {
+            return new Promise(res => {
+                const tx = db.transaction(store, "readwrite");
+                tx.objectStore(store).put(val, key);
+                tx.oncomplete = () => res();
+            });
+        }
 
+        function addImgToDB(val) {
+            return new Promise(res => {
+                const tx = db.transaction("images", "readwrite");
+                tx.objectStore("images").add(val);
+                tx.oncomplete = () => res();
+            });
+        }
+
+        function getFromDB(store, key) {
+            return new Promise(res => {
+                const tx = db.transaction(store, "readonly");
+                const r = tx.objectStore(store).get(key);
+                r.onsuccess = () => res(r.result);
+            });
+        }
+
+        function getAllFromDB(store) {
+            return new Promise(res => {
+                const tx = db.transaction(store, "readonly");
+                const r = tx.objectStore(store).getAll();
+                r.onsuccess = () => res(r.result);
+            });
+        }
+
+        function deleteFromDB(store, key) {
+            const tx = db.transaction(store, "readwrite");
+            tx.objectStore(store).delete(key);
+        }
+
+        // ADMIN
         function handleAdminClicks() {
             adminTimer++;
-            if(adminTimer >= 5) { document.getElementById('admin-modal').style.display = 'block'; adminTimer = 0; }
-            setTimeout(() => adminTimer = 0, 3000);
+            if(adminTimer >= 5) { document.getElementById('admin-modal').style.display='block'; renderAdminPreviews(); adminTimer=0; }
+            setTimeout(() => adminTimer=0, 3000);
+        }
+
+        async function saveAdminSettings() {
+            currentSettings.titular = document.getElementById('adm-titular').value;
+            currentSettings.sinpe = document.getElementById('adm-sinpe').value;
+            currentSettings.iban = document.getElementById('adm-iban').value;
+            currentSettings.paypal = document.getElementById('adm-paypal').value;
+            await saveToDB("settings", "config", currentSettings);
+            location.reload();
         }
 
         function handleVaultUpload(input) {
@@ -293,35 +327,27 @@
                 const r = new FileReader();
                 r.onload = async (e) => { 
                     await addImgToDB({ type: 'vault', data: e.target.result, timestamp: Date.now() });
-                    renderPreviews();
+                    renderAdminPreviews();
                 };
                 r.readAsDataURL(f);
             });
         }
 
-        async function renderPreviews() {
+        async function renderAdminPreviews() {
             const imgs = await getAllFromDB("images");
             document.getElementById('vault-preview').innerHTML = imgs.filter(i => i.type === 'vault').map(v => `
                 <div class="img-item"><img src="${v.data}"><span onclick="deleteImg(${v.id})" class="img-del">×</span></div>`).join('');
             document.getElementById('receipt-vault').innerHTML = imgs.filter(i => i.type === 'receipt').map(r => `
                 <div class="img-item"><img src="${r.data}" onclick="window.open(this.src)"><span onclick="deleteImg(${r.id})" class="img-del">×</span></div>`).join('');
+            
+            document.getElementById('adm-titular').value = currentSettings.titular;
+            document.getElementById('adm-sinpe').value = currentSettings.sinpe;
+            document.getElementById('adm-iban').value = currentSettings.iban;
+            document.getElementById('adm-paypal').value = currentSettings.paypal;
         }
 
-        async function deleteImg(id) {
-            await deleteFromDB("images", id);
-            renderPreviews();
-        }
-
-        async function saveAdminSettings() {
-            const settings = await getFromDB("settings", "config");
-            settings.titular = document.getElementById('adm-titular').value;
-            settings.sinpe = document.getElementById('adm-sinpe').value;
-            settings.iban = document.getElementById('adm-iban').value;
-            settings.paypal = document.getElementById('adm-paypal').value;
-            await saveToDB("settings", "config", settings);
-            alert("Configuración Guardada");
-            location.reload();
-        }
+        async function deleteImg(id) { await deleteFromDB("images", id); renderAdminPreviews(); }
     </script>
 </body>
-</html>
+        </html>
+        
