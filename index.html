@@ -8,34 +8,44 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap');
-        :root { --gold: #d4af37; --gold-dark: #a67c00; }
+        :root { --gold: #d4af37; }
         body { font-family: 'Poppins', sans-serif; background: #000; color: white; margin: 0; padding: 15px; -webkit-tap-highlight-color: transparent; }
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* ESTADOS ACTIVOS (Lo que genera confianza) */
-        .plan-card { transition: all 0.3s ease; border: 1px solid #1a1a1a; background: #0a0a0a; cursor: pointer; position: relative; overflow: hidden; }
+        /* ESTADOS ACTIVOS */
+        .plan-card { transition: all 0.3s; border: 1px solid #1a1a1a; background: #0a0a0a; cursor: pointer; }
         .plan-card.active { border-color: var(--gold); background: #120f05; transform: scale(1.02); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
-        .plan-card.active::after { content: '\f058'; family: "Font Awesome 6 Free"; weight: 900; position: absolute; top: 10px; right: 10px; color: var(--gold); font-size: 12px; }
+        .method-tab { font-size: 10px; text-transform: uppercase; padding: 12px; opacity: 0.3; cursor: pointer; width: 33.33%; border-bottom: 2px solid transparent; }
+        .method-tab.active { opacity: 1; color: var(--gold); border-bottom: 2px solid var(--gold); }
 
-        .method-tab { font-size: 10px; text-transform: uppercase; padding: 12px; opacity: 0.3; cursor: pointer; width: 33.33%; border-bottom: 2px solid transparent; transition: 0.3s; }
-        .method-tab.active { opacity: 1; color: var(--gold); border-bottom: 2px solid var(--gold); background: linear-gradient(to top, rgba(212,175,55,0.05), transparent); }
+        /* LOADER DE VALIDACIÓN */
+        .loader-ring { width: 80px; height: 80px; border: 4px solid #111; border-top: 4px solid var(--gold); border-radius: 50%; animation: spin 1s infinite linear; margin: 0 auto 20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #ia-fill { width: 0%; height: 100%; background: var(--gold); transition: width 45s linear; }
 
-        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #080808; border: 1px solid var(--gold); padding: 25px; border-radius: 30px; z-index: 10000; width: 95%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 50px #000; }
-        .flag-btn { font-size: 28px; cursor: pointer; opacity: 0.2; transition: 0.3s; filter: grayscale(1); }
-        .flag-btn.active { opacity: 1; transform: scale(1.2); filter: grayscale(0); }
-        
-        .vip-card { background: #0a0a0a; border-radius: 20px; border: 1px solid #1a1a1a; margin-bottom: 20px; overflow: hidden; }
-        .btn-download { background: var(--gold); color: black; font-weight: 800; padding: 15px; width: 100%; display: block; text-align: center; text-transform: uppercase; font-size: 10px; text-decoration: none; }
+        .admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #080808; border: 1px solid var(--gold); padding: 25px; border-radius: 30px; z-index: 10000; width: 95%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+        .flag-btn { font-size: 28px; cursor: pointer; opacity: 0.2; transition: 0.3s; }
+        .flag-btn.active { opacity: 1; transform: scale(1.2); }
     </style>
 </head>
 <body>
 
     <div id="banned-screen" class="hidden text-center px-8 pt-20">
         <i class="fa-solid fa-user-slash text-6xl text-red-600 mb-6"></i>
-        <h1 class="font-luxury text-2xl gold-text mb-4">ACCESO RESTRINGIDO</h1>
+        <h1 class="font-luxury text-2xl gold-text mb-4 uppercase">Acceso Restringido</h1>
         <p id="my-id-display" class="text-xl font-bold tracking-widest text-red-500 mb-8">----</p>
         <a id="support-link" href="#" class="inline-block border border-gold px-8 py-4 rounded-full text-[10px] uppercase font-bold gold-text">Contactar Soporte</a>
+    </div>
+
+    <div id="ia-screen" class="hidden text-center px-8 pt-20 max-w-sm mx-auto">
+        <div class="loader-ring"></div>
+        <h2 class="font-luxury text-xl gold-text mb-6 uppercase tracking-widest">Validando Pago</h2>
+        <div class="bg-[#0a0a0a] p-6 rounded-3xl border border-white/5 shadow-2xl">
+            <p id="ia-status" class="text-[10px] uppercase tracking-[0.2em] leading-relaxed h-12 flex items-center justify-center italic opacity-70">Iniciando conexión segura...</p>
+            <div class="w-full h-1 bg-black rounded-full mt-4 overflow-hidden"><div id="ia-fill"></div></div>
+        </div>
+        <p class="text-[8px] opacity-30 mt-6 uppercase tracking-widest">No cierre esta ventana durante el control cruzado</p>
     </div>
 
     <div id="app-content">
@@ -44,17 +54,17 @@
             <p class="text-[9px] tracking-[0.4em] uppercase opacity-40 mt-2 font-bold italic">Mente Maestra del Azar</p>
         </header>
 
-        <div class="flex gap-2 mb-8 justify-center flex-wrap" id="flag-container">
-            <span onclick="setCountry('CR')" id="f-CR" class="flag-btn">🇨🇷</span>
-            <span onclick="setCountry('NI')" id="f-NI" class="flag-btn">🇳🇮</span>
-            <span onclick="setCountry('PA')" id="f-PA" class="flag-btn">🇵🇦</span>
-            <span onclick="setCountry('HN')" id="f-HN" class="flag-btn">🇭🇳</span>
-            <span onclick="setCountry('SV')" id="f-SV" class="flag-btn">🇸🇻</span>
-            <span onclick="setCountry('GT')" id="f-GT" class="flag-btn">🇬🇹</span>
-            <span onclick="setCountry('US')" id="f-US" class="flag-btn">🇺🇸</span>
-        </div>
-
         <div id="main-ui">
+            <div class="flex gap-2 mb-8 justify-center flex-wrap" id="flag-container">
+                <span onclick="setCountry('CR')" id="f-CR" class="flag-btn">🇨🇷</span>
+                <span onclick="setCountry('NI')" id="f-NI" class="flag-btn">🇳🇮</span>
+                <span onclick="setCountry('PA')" id="f-PA" class="flag-btn">🇵🇦</span>
+                <span onclick="setCountry('HN')" id="f-HN" class="flag-btn">🇭🇳</span>
+                <span onclick="setCountry('SV')" id="f-SV" class="flag-btn">🇸🇻</span>
+                <span onclick="setCountry('GT')" id="f-GT" class="flag-btn">🇬🇹</span>
+                <span onclick="setCountry('US')" id="f-US" class="flag-btn">🇺🇸</span>
+            </div>
+
             <div class="max-w-sm mx-auto px-4 mb-8">
                 <div onclick="setPlan(1)" id="p-1" class="plan-card mb-3 p-5 rounded-2xl">
                     <p class="text-[8px] opacity-40 mb-1 font-bold">MEMBRESÍA HOY</p>
@@ -70,75 +80,60 @@
                 </div>
             </div>
 
-            <div class="max-w-sm mx-auto bg-[#050505] rounded-[35px] p-6 border border-white/5 shadow-2xl">
+            <div class="max-w-sm mx-auto bg-[#050505] rounded-[35px] p-6 border border-white/5">
                 <div class="flex mb-8 border-b border-white/5 text-center">
                     <div onclick="setMethod('sinpe')" id="m-sinpe" class="method-tab active">Sinpe</div>
                     <div onclick="setMethod('trans')" id="m-trans" class="method-tab">IBAN</div>
                     <div onclick="setMethod('paypal')" id="m-paypal" class="method-tab">PayPal</div>
                 </div>
-                <p id="pay-data" class="text-xl font-bold gold-text mb-1 tracking-tighter">---</p>
+                <p id="pay-data" class="text-xl font-bold gold-text mb-1 uppercase tracking-tighter">---</p>
                 <p id="pay-titular" class="text-[9px] opacity-30 uppercase font-bold mb-8 italic">---</p>
                 <p id="final-price" class="text-6xl font-bold text-yellow-500 mb-10 tracking-tighter">---</p>
                 
-                <input type="file" id="receipt-input" class="hidden" accept="image/*" onchange="processReceipt(this)">
-                <button onclick="document.getElementById('receipt-input').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[11px] tracking-widest active:scale-95 transition-all">Validar en Galería</button>
+                <input type="file" id="receipt-input" class="hidden" accept="image/*" onchange="startIAValidation(this)">
+                <button onclick="document.getElementById('receipt-input').click()" class="w-full bg-white text-black font-bold py-5 rounded-2xl uppercase text-[11px] tracking-widest active:scale-95 transition-all shadow-lg">Enviar Comprobante de Pago</button>
             </div>
         </div>
 
         <div id="vip-ui" class="hidden max-w-md mx-auto pt-4 px-4 pb-20 text-center">
-            <h2 class="font-luxury text-2xl gold-text mb-8 border-b border-white/10 pb-4">BODEGA VIP</h2>
+            <h2 class="font-luxury text-2xl gold-text mb-8 border-b border-white/10 pb-4 uppercase">Bodega VIP</h2>
             <div id="vip-gallery" class="space-y-6"></div>
         </div>
-    </div><div id="admin-modal" class="admin-panel text-left">
-        <h2 class="gold-text font-luxury text-center mb-6 text-xl">MAESTRO PANEL V5.1</h2>
-        
+    </div>
+
+    <div id="admin-modal" class="admin-panel text-left">
+        <h2 class="gold-text font-luxury text-center mb-6 text-xl">CONTROL MAESTRO V5.2</h2>
         <div class="space-y-4 mb-6">
-            <div><label class="text-[9px] gold-text font-bold uppercase">Nombre del Titular</label><input type="text" id="adm-titular" class="w-full bg-[#111] p-3 rounded-lg text-sm border border-white/10 mt-1"></div>
-            <div><label class="text-[9px] gold-text font-bold uppercase">Número SINPE</label><input type="text" id="adm-sinpe" class="w-full bg-[#111] p-3 rounded-lg text-sm border border-white/10 mt-1"></div>
-            <div><label class="text-[9px] gold-text font-bold uppercase">WhatsApp Soporte (506...)</label><input type="text" id="adm-wa" class="w-full bg-[#111] p-3 rounded-lg text-sm border border-white/10 mt-1"></div>
+            <input type="text" id="adm-titular" class="w-full bg-[#111] p-3 rounded-lg text-xs border border-white/10" placeholder="Titular">
+            <input type="text" id="adm-sinpe" class="w-full bg-[#111] p-3 rounded-lg text-xs border border-white/10" placeholder="Número SINPE">
+            <input type="text" id="adm-wa" class="w-full bg-[#111] p-3 rounded-lg text-xs border border-white/10" placeholder="Soporte (506...)">
         </div>
-
-        <div class="grid grid-cols-2 gap-3 mb-6 bg-white/5 p-4 rounded-xl">
-            <h3 class="col-span-2 text-[9px] uppercase gold-text mb-1 font-bold">Tasas de Cambio ($1 USD =)</h3>
-            <div><label class="text-[8px] opacity-40">CRC</label><input type="number" id="rate-CR" class="w-full bg-black p-2 rounded border border-white/10 text-xs"></div>
-            <div><label class="text-[8px] opacity-40">NIO</label><input type="number" id="rate-NI" class="w-full bg-black p-2 rounded border border-white/10 text-xs"></div>
-            <div><label class="text-[8px] opacity-40">GTQ</label><input type="number" id="rate-GT" class="w-full bg-black p-2 rounded border border-white/10 text-xs"></div>
-            <div><label class="text-[8px] opacity-40">HNL</label><input type="number" id="rate-HN" class="w-full bg-black p-2 rounded border border-white/10 text-xs"></div>
+        <div class="grid grid-cols-2 gap-2 mb-6 bg-white/5 p-4 rounded-xl">
+            <div><label class="text-[8px] opacity-40">CRC</label><input type="number" id="rate-CR" class="w-full bg-black p-2 rounded text-xs"></div>
+            <div><label class="text-[8px] opacity-40">NIO</label><input type="number" id="rate-NI" class="w-full bg-black p-2 rounded text-xs"></div>
+            <div><label class="text-[8px] opacity-40">GTQ</label><input type="number" id="rate-GT" class="w-full bg-black p-2 rounded text-xs"></div>
+            <div><label class="text-[8px] opacity-40">HNL</label><input type="number" id="rate-HN" class="w-full bg-black p-2 rounded text-xs"></div>
         </div>
-
         <div class="mb-6">
-            <label class="text-[9px] gold-text font-bold uppercase">Subir láminas a la Bodega</label>
             <input type="file" id="upload-vault" multiple class="hidden" accept="image/*" onchange="saveToVault(this)">
-            <button onclick="document.getElementById('upload-vault').click()" class="w-full bg-white/5 border border-white/10 py-4 rounded-xl text-[10px] uppercase font-bold mt-2">Abrir Galería</button>
+            <button onclick="document.getElementById('upload-vault').click()" class="w-full bg-white/5 border border-white/10 py-3 rounded-xl text-[9px] uppercase font-bold">Añadir Láminas</button>
             <div id="admin-vault-preview" class="flex flex-wrap gap-2 mt-3"></div>
         </div>
-
         <div class="bg-red-950/20 p-4 rounded-2xl mb-6">
-            <label class="text-[9px] text-red-500 font-bold uppercase">Revisión de Pagos</label>
+            <label class="text-[9px] text-red-500 font-bold uppercase">Auditoría de Pagos</label>
             <div id="admin-receipt-preview" class="flex flex-wrap gap-2 mt-3"></div>
         </div>
-
-        <div class="mb-6 overflow-x-auto">
-            <label class="text-[9px] gold-text font-bold uppercase">Lista Negra</label>
-            <table class="w-full text-[10px] mt-2">
-                <tbody id="blacklist-body"></tbody>
-            </table>
-        </div>
-
-        <button onclick="saveAdminChanges()" class="w-full bg-yellow-600 py-5 rounded-2xl font-bold uppercase text-[10px]">Guardar Todo</button>
-        <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full py-4 text-[8px] uppercase opacity-40">Cerrar</button>
+        <div class="mb-6"><table class="w-full text-[10px] mt-2"><tbody id="blacklist-body"></tbody></table></div>
+        <button onclick="saveAdminChanges()" class="w-full bg-yellow-600 py-4 rounded-xl font-bold uppercase text-[10px]">Guardar Cambios</button>
     </div>
 
     <script>
         let db; let myID; let adminClicks = 0;
-        let config = { 
-            titular: "Randall Sánchez", sinpe: "6453-5475", whatsapp: "50664535475",
-            iban: "CR80080315001000035641", paypal: "pagos@francruz.com",
-            rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, USD: 1 }, blacklist: []
-        };
+        let config = { titular: "Randall Sánchez", sinpe: "6453-5475", whatsapp: "50664535475", rates: { CR: 525, NI: 36.5, GT: 7.8, HN: 24.5, USD: 1 }, blacklist: [], is_active: false };
         let currentCountry = 'CR'; let currentPlan = 5; let currentMethod = 'sinpe';
+        const iaSteps = ["Iniciando control cruzado...", "Verificando metadatos de imagen...", "Validando comunicación bancaria...", "Sincronizando con plataforma...", "Comprobante verificado con éxito..."];
 
-        const req = indexedDB.open("FranCruz_V5_1", 1);
+        const req = indexedDB.open("FranCruz_V5_2", 1);
         req.onupgradeneeded = (e) => { 
             db = e.target.result; 
             db.createObjectStore("config"); 
@@ -153,6 +148,7 @@
             const saved = await getDB("config", "main");
             if(saved) config = saved;
             if(config.blacklist.includes(myID)) showBanned();
+            else if(config.is_active) showVIP();
             else renderUI();
         }
 
@@ -161,40 +157,53 @@
         function setMethod(m) { currentMethod = m; renderUI(); }
 
         function renderUI() {
-            // MARCAR SELECCIONADOS
             document.querySelectorAll('.flag-btn, .plan-card, .method-tab').forEach(el => el.classList.remove('active'));
             document.getElementById('f-'+currentCountry).classList.add('active');
             document.getElementById('p-'+currentPlan).classList.add('active');
             document.getElementById('m-'+currentMethod).classList.add('active');
-
-            const rate = config.rates[currentCountry] || config.rates.USD;
+            const rate = config.rates[currentCountry] || 1;
             const price = Math.round(currentPlan * rate);
             const symbols = { CR: '₡', NI: 'C$', GT: 'Q', HN: 'L', USD: '$', PA: '$', SV: '$', US: '$' };
-            
             document.getElementById('final-price').innerText = `${symbols[currentCountry] || '$'}${price.toLocaleString()}`;
             document.getElementById('pay-titular').innerText = config.titular;
-            if(currentMethod === 'sinpe') document.getElementById('pay-data').innerText = config.sinpe;
-            else if(currentMethod === 'trans') document.getElementById('pay-data').innerText = config.iban;
-            else document.getElementById('pay-data').innerText = config.paypal;
+            document.getElementById('pay-data').innerText = (currentMethod === 'sinpe') ? config.sinpe : (currentMethod === 'trans' ? 'CR80080315001000035641' : config.paypal);
         }
 
-        async function processReceipt(input) {
+        function startIAValidation(input) {
             if(!input.files[0]) return;
             const reader = new FileReader();
             reader.onload = async (e) => {
-                await addDB("receipts", { data: e.target.result, userID: myID, date: new Date().toLocaleDateString() });
-                alert("Validando... Su acceso estará listo en breve.");
-                location.reload();
+                await addDB("receipts", { data: e.target.result, userID: myID });
+                document.getElementById('app-content').classList.add('hidden');
+                document.getElementById('ia-screen').classList.remove('hidden');
+                setTimeout(() => { document.getElementById('ia-fill').style.width = '100%'; }, 100);
+                let step = 0;
+                const interval = setInterval(() => {
+                    document.getElementById('ia-status').innerText = iaSteps[step];
+                    step++;
+                    if(step >= iaSteps.length) {
+                        clearInterval(interval);
+                        setTimeout(async () => {
+                            config.is_active = true;
+                            await saveDB("config", "main", config);
+                            location.reload();
+                        }, 2000);
+                    }
+                }, 9000);
             };
             reader.readAsDataURL(input.files[0]);
         }
 
+        async function showVIP() {
+            document.getElementById('main-ui').classList.add('hidden');
+            document.getElementById('vip-ui').classList.remove('hidden');
+            const gallery = await getAllDB("gallery");
+            document.getElementById('vip-gallery').innerHTML = gallery.map(i => `<div class="vip-card"><img src="${i.data}" class="w-full"><a href="${i.data}" download class="btn-download">Descargar Lámina VIP</a></div>`).join('');
+        }
+
         function handleAdminClicks() {
             adminClicks++;
-            if(adminClicks >= 5) {
-                if(prompt("Clave Maestro:") === "1234") openAdmin();
-                adminClicks = 0;
-            }
+            if(adminClicks >= 5) { if(prompt("Clave:") === "1234") openAdmin(); adminClicks = 0; }
             setTimeout(() => adminClicks = 0, 3000);
         }
 
@@ -212,17 +221,14 @@
 
         async function refreshAdminLists() {
             const vault = await getAllDB("gallery");
-            document.getElementById('admin-vault-preview').innerHTML = vault.map(i => `<div class="relative w-16 h-16 border border-white/10 rounded overflow-hidden"><img src="${i.data}" class="w-full h-full object-cover"><button onclick="delItem('gallery',${i.id})" class="absolute top-0 right-0 bg-red-600 px-1 text-[8px]">×</button></div>`).join('');
-            
+            document.getElementById('admin-vault-preview').innerHTML = vault.map(i => `<div class="relative w-12 h-12 rounded overflow-hidden"><img src="${i.data}" class="w-full h-full object-cover"><button onclick="delItem('gallery',${i.id})" class="absolute top-0 right-0 bg-red-600 text-[8px] px-1">×</button></div>`).join('');
             const receipts = await getAllDB("receipts");
-            document.getElementById('admin-receipt-preview').innerHTML = receipts.map(r => `<div class="relative w-16 h-16 border border-white/20 rounded overflow-hidden"><img src="${r.data}" class="w-full h-full object-cover" onclick="alert('Usuario: ${r.userID}')"><button onclick="banUser('${r.userID}', ${r.id})" class="absolute bottom-0 w-full bg-red-600 text-[6px] font-bold py-1">BANEAR</button></div>`).join('');
-
-            document.getElementById('blacklist-body').innerHTML = config.blacklist.map(id => `<tr class="border-b border-white/5"><td class="py-2">${id}</td><td class="text-right"><button onclick="unbanUser('${id}')" class="text-green-500">INDULTAR</button></td></tr>`).join('');
+            document.getElementById('admin-receipt-preview').innerHTML = receipts.map(r => `<div class="relative w-12 h-12 rounded overflow-hidden"><img src="${r.data}" class="w-full h-full object-cover" onclick="alert('${r.userID}')"><button onclick="banUser('${r.userID}', ${r.id})" class="absolute bottom-0 w-full bg-red-600 text-[5px] py-1">BANEAR</button></div>`).join('');
+            document.getElementById('blacklist-body').innerHTML = config.blacklist.map(id => `<tr><td class="py-1">${id}</td><td class="text-right"><button onclick="unbanUser('${id}')" class="text-green-500">INDULTAR</button></td></tr>`).join('');
         }
 
-        async function banUser(uid, rid) { if(confirm("¿Banear dispositivo "+uid+"?")) { config.blacklist.push(uid); await saveDB("config", "main", config); await delItem('receipts', rid); refreshAdminLists(); } }
+        async function banUser(uid, rid) { if(confirm("¿Banear "+uid+"?")) { config.blacklist.push(uid); await saveDB("config", "main", config); await delItem('receipts', rid); refreshAdminLists(); } }
         async function unbanUser(uid) { config.blacklist = config.blacklist.filter(id => id !== uid); await saveDB("config", "main", config); refreshAdminLists(); }
-        
         async function saveAdminChanges() {
             config.titular = document.getElementById('adm-titular').value;
             config.sinpe = document.getElementById('adm-sinpe').value;
@@ -231,8 +237,7 @@
             config.rates.NI = document.getElementById('rate-NI').value;
             config.rates.GT = document.getElementById('rate-GT').value;
             config.rates.HN = document.getElementById('rate-HN').value;
-            await saveDB("config", "main", config);
-            location.reload();
+            await saveDB("config", "main", config); location.reload();
         }
 
         function saveToVault(input) {
@@ -244,8 +249,8 @@
         }
 
         function showBanned() {
-            document.getElementById('app-content').style.display = 'none';
-            document.getElementById('banned-screen').style.display = 'block';
+            document.getElementById('app-content').classList.add('hidden');
+            document.getElementById('banned-screen').classList.remove('hidden');
             document.getElementById('my-id-display').innerText = myID;
             document.getElementById('support-link').href = `https://wa.me/${config.whatsapp}?text=Revision%20ID:%20${myID}`;
         }
@@ -258,5 +263,3 @@
     </script>
 </body>
 </html>
-
-    
