@@ -1,23 +1,55 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Fran Cruz VIP</title><script src="https://cdn.tailwindcss.com"></script><style>body{background:#000;color:#fff;font-family:sans-serif;user-select:none}.gold{color:#d4af37}.btn-gold{background:#d4af37;color:#000;padding:18px;width:100%;border-radius:20px;font-weight:800;text-transform:uppercase}input{outline:none}#admin-panel{display:none;position:fixed;inset:0;background:#000;z-index:999;padding:20px;overflow-y:auto}</style></head><body>
-<header class="text-center pt-12"><h1 onclick="handleAdmin()" class="text-4xl font-black gold tracking-tighter">FRAN CRUZ</h1><p id="head-id" class="text-[9px] opacity-20 font-mono mt-2"></p></header>
-<div class="p-6 mt-8 max-w-sm mx-auto"><div id="main-ui" class="bg-[#0a0a0a] border border-white/5 p-8 rounded-[40px] shadow-2xl text-center"><p class="text-[10px] opacity-40 uppercase mb-2">Tu ID de Acceso:</p><p id="my-id" class="text-2xl font-bold gold mb-8 tracking-tight"></p><button onclick="document.getElementById('file-in').click()" class="btn-gold mb-6 shadow-lg shadow-yellow-600/10">Enviar Comprobante</button><input type="file" id="file-in" class="hidden" onchange="alert('Recibido. Envía tu ID por WhatsApp.')"><input type="text" id="key-in" placeholder="CLAVE ACTIVACIÓN" class="w-full bg-black p-4 rounded-2xl border border-white/10 text-center font-bold mb-4 uppercase"><button onclick="checkKey()" class="text-[10px] opacity-30 uppercase font-bold tracking-widest underline">Validar Clave</button></div>
-<div id="vip-ui" class="hidden"><div class="bg-green-900/10 border border-green-500/30 p-4 rounded-2xl text-green-500 text-[10px] font-bold text-center mb-8 uppercase">Membresía Activa</div><div id="gallery" class="space-y-6"></div><button onclick="logout()" class="w-full mt-12 text-[9px] opacity-20 uppercase font-bold">Cerrar Sesión VIP</button></div></div>
-<div id="admin-panel"><h2 class="text-xl gold font-bold mb-6">PANEL MAESTRO</h2><input type="file" id="up-v" multiple class="hidden" onchange="upV(this)"><button onclick="document.getElementById('up-v').click()" class="btn-gold mb-4">Subir Láminas</button><div id="adm-gal" class="grid grid-cols-4 gap-2 mb-8"></div><button onclick="closeAdmin()" class="w-full py-4 text-xs opacity-50 border border-white/10 rounded-xl">Cerrar Panel</button></div>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Fran Cruz VIP</title><script src="https://cdn.tailwindcss.com"></script><style>body{background:#000;color:#fff;font-family:sans-serif;user-select:none}.gold{color:#d4af37}.btn-gold{background:#d4af37;color:#000;padding:18px;width:100%;border-radius:20px;font-weight:800;text-transform:uppercase}input{outline:none}#admin-panel{display:none;position:fixed;inset:0;background:#000;z-index:999;padding:20px;overflow-y:auto}.plan-card{background:#0a0a0a;border:1px solid #1a1a1a;padding:15px;border-radius:20px;cursor:pointer}.plan-card.active{border-color:#d4af37;background:#120f05}</style></head><body>
+<header class="text-center pt-10"><h1 onclick="handleAdmin()" class="text-4xl font-black gold tracking-tighter">FRAN CRUZ</h1><p id="head-id" class="text-[9px] opacity-20 font-mono mt-1 uppercase"></p></header>
+<div id="app" class="p-4 max-w-sm mx-auto"><div id="main-ui">
+    <div class="flex justify-center gap-2 mb-6 opacity-50">
+        <span onclick="setLoc('CR')" id="f-CR" class="cursor-pointer">🇨🇷</span><span onclick="setLoc('PA')" class="cursor-pointer">🇵🇦</span><span onclick="setLoc('NI')" class="cursor-pointer">🇳🇮</span><span onclick="setLoc('GT')" class="cursor-pointer">🇬🇹</span>
+    </div>
+    <div class="space-y-3 mb-6">
+        <div onclick="setPlan(1)" id="p-1" class="plan-card active"><p class="text-[10px] opacity-50 uppercase">Acceso Hoy</p><p class="gold font-bold">$1.00 <span class="local-p"></span></p></div>
+        <div onclick="setPlan(7)" id="p-7" class="plan-card"><p class="text-[10px] opacity-50 uppercase">Acceso 7 Días</p><p class="gold font-bold">$5.00 <span class="local-p"></span></p></div>
+        <div onclick="setPlan(30)" id="p-30" class="plan-card"><p class="text-[10px] opacity-50 uppercase">Acceso 30 Días</p><p class="gold font-bold">$15.00 <span class="local-p"></span></p></div>
+    </div>
+    <div class="bg-[#0a0a0a] border border-white/5 p-6 rounded-[35px] text-center mb-6">
+        <div class="flex text-[10px] font-bold uppercase mb-4 opacity-40 border-b border-white/5 pb-2">
+            <span onclick="setMet('SINPE')" id="m-SINPE" class="flex-1 gold">SINPE</span><span onclick="setMet('IBAN')" id="m-IBAN" class="flex-1">IBAN</span><span onclick="setMet('PAYPAL')" id="m-PAYPAL" class="flex-1">PAYPAL</span>
+        </div>
+        <p id="pay-info" class="text-xs font-mono mb-4 uppercase">6453-5475</p>
+        <button onclick="window.open('https://wa.me/50664535475?text=Envío comprobante ID: '+uid)" class="btn-gold mb-4">Enviar Comprobante</button>
+        <input type="text" id="key-in" placeholder="CLAVE DE ACCESO" class="w-full bg-black p-4 rounded-2xl border border-white/10 text-center font-bold mb-3 uppercase">
+        <button onclick="checkKey()" class="text-[10px] opacity-30 uppercase font-bold underline">Activar Membresía</button>
+    </div>
+</div>
+<div id="vip-ui" class="hidden"><div id="status-bar" class="bg-green-900/20 border border-green-500/30 p-4 rounded-2xl text-green-500 text-[10px] font-bold text-center mb-6 uppercase">Acceso VIP Activo</div><div id="gallery" class="space-y-4"></div><button onclick="logout()" class="w-full mt-8 text-[9px] opacity-20 uppercase font-bold">Cerrar Sesión</button></div></div>
+<div id="admin-panel"><h2 class="gold font-bold mb-4">ADMINISTRACIÓN</h2><button onclick="document.getElementById('up-v').click()" class="btn-gold mb-4">Subir Láminas</button><input type="file" id="up-v" multiple class="hidden" onchange="upV(this)"><div id="adm-gal" class="grid grid-cols-4 gap-2 mb-6"></div><button onclick="closeAdmin()" class="w-full py-4 text-xs opacity-50 border border-white/10 rounded-xl">Salir</button></div>
 <script>
-let db;let adC=0;
+let db; let curPlan=1; let adC=0; const rates={CR:525,PA:1,NI:36,GT:7.8}; const syms={CR:'₡',PA:'$',NI:'C$',GT:'Q'}; let curR=525; let curS='₡';
 const uid=localStorage.getItem('fc_id')||"UID-"+Math.random().toString(36).substr(2,6).toUpperCase();
-localStorage.setItem('fc_id',uid);
-document.getElementById('head-id').innerText=uid;document.getElementById('my-id').innerText=uid;
-const req=indexedDB.open("FC_DB",1);
-req.onupgradeneeded=(e)=>{db=e.target.result;db.createObjectStore("gal",{keyPath:"id",autoIncrement:true});};
-req.onsuccess=(e)=>{db=e.target.result;if(localStorage.getItem('vip')==='true')showVIP();};
-function checkKey(){const val=document.getElementById('key-in').value.toUpperCase();const day=new Date().getDate().toString().padStart(2,'0');if(val===(uid.slice(-2)+day)){localStorage.setItem('vip','true');showVIP();}else{alert("Clave Inválida");}}
-function showVIP(){document.getElementById('main-ui').classList.add('hidden');document.getElementById('vip-ui').classList.remove('hidden');loadGal();}
-async function loadGal(){const t=db.transaction("gal").objectStore("gal").getAll();t.onsuccess=()=>{document.getElementById('gallery').innerHTML=t.result.map(i=>`<img src="${i.d}" class="w-full rounded-3xl border border-white/5">`).join('')||'<p class="opacity-20 text-center py-10">Sin láminas.</p>';};}
+localStorage.setItem('fc_id',uid); document.getElementById('head-id').innerText=uid;
+const req=indexedDB.open("FC_DB",2);
+req.onupgradeneeded=(e)=>{db=e.target.result;if(!db.objectStoreNames.contains("gal"))db.createObjectStore("gal",{keyPath:"id",autoIncrement:true});};
+req.onsuccess=(e)=>{db=e.target.result;checkExp();};
+function setLoc(c){curR=rates[c];curS=syms[c];updateUI();}
+function setPlan(d){curPlan=d;document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('active'));document.getElementById('p-'+d).classList.add('active');updateUI();}
+function updateUI(){document.querySelectorAll('.local-p').forEach((el,i)=>{const p=[1,7,30][i];el.innerText=`(${curS}${(p*curR).toLocaleString()})`;});}
+function setMet(m){document.getElementById('pay-info').innerText=(m==='SINPE')?'6453-5475':(m==='IBAN')?'CR800803...':'pagos@fran.com';}
+function checkKey(){
+    const val=document.getElementById('key-in').value.toUpperCase();
+    const day=new Date().getDate().toString().padStart(2,'0');
+    if(val===(uid.slice(-2)+day)){
+        let expDate = new Date();
+        expDate.setDate(expDate.getDate() + (curPlan - 1));
+        expDate.setHours(23,59,59,999);
+        localStorage.setItem('fc_exp', expDate.getTime()); location.reload();
+    }else{alert("Clave incorrecta");}
+}
+function checkExp(){const exp=localStorage.getItem('fc_exp');if(exp && new Date().getTime()<exp){document.getElementById('main-ui').classList.add('hidden');document.getElementById('vip-ui').classList.remove('hidden');loadGal();}}
+function loadGal(){db.transaction("gal").objectStore("gal").getAll().onsuccess=(e)=>{document.getElementById('gallery').innerHTML=e.target.result.map(i=>`<img src="${i.d}" class="w-full rounded-3xl mb-4">`).join('');};}
 function handleAdmin(){adC++;if(adC>=5){document.getElementById('admin-panel').style.display='block';loadAdmGal();adC=0;}setTimeout(()=>adC=0,3000);}
-function loadAdmGal(){const t=db.transaction("gal").objectStore("gal").getAll();t.onsuccess=()=>{document.getElementById('adm-gal').innerHTML=t.result.map(i=>`<div class="relative h-12"><img src="${i.d}" class="w-full h-full object-cover rounded"><button onclick="del(${i.id})" class="absolute top-0 right-0 bg-red-600 px-1 text-[8px]">×</button></div>`).join('');};}
-function upV(input){Array.from(input.files).forEach(f=>{const r=new FileReader();r.onload=(e)=>{db.transaction("gal","readwrite").objectStore("gal").add({d:e.target.result}).oncomplete=loadAdmGal;};r.readAsDataURL(f);});}
+function loadAdmGal(){db.transaction("gal").objectStore("gal").getAll().onsuccess=(e)=>{document.getElementById('adm-gal').innerHTML=e.target.result.map(i=>`<div class="h-12 relative"><img src="${i.d}" class="w-full h-full object-cover rounded"><button onclick="del(${i.id})" class="absolute top-0 right-0 bg-red-600 text-[8px] px-1">×</button></div>`).join('');};}
+function upV(i){Array.from(i.files).forEach(f=>{const r=new FileReader();r.onload=(e)=>{db.transaction("gal","readwrite").objectStore("gal").add({d:e.target.result}).oncomplete=loadAdmGal;};r.readAsDataURL(f);});}
 function del(id){db.transaction("gal","readwrite").objectStore("gal").delete(id).oncomplete=loadAdmGal;}
-function closeAdmin(){document.getElementById('admin-panel').style.display='none';if(localStorage.getItem('vip')==='true')loadGal();}
-function logout(){localStorage.removeItem('vip');location.reload();}
+function closeAdmin(){document.getElementById('admin-panel').style.display='none';}
+function logout(){localStorage.removeItem('fc_exp');location.reload();}
+updateUI();
 </script></body></html>
+  
