@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fran Cruz | VIP Mastermind</title>
+    <title>Fran Cruz | VIP Mastermind v7.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap');
-        :root { --gold: #d4af37; }
+        :root { --gold: #d4af37; --red-bad: #ff4444; }
         body { font-family: 'Poppins', sans-serif; background: #000; color: white; margin: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* CÍRCULO DE TENSIÓN IA */
-        #ia-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
-        .loader-ring { width: 110px; height: 110px; border: 3px solid #111; border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s infinite linear; box-shadow: 0 0 15px rgba(212,175,55,0.1); }
+        /* PANTALLA DE BANEO DECOROSA */
+        #ban-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 100000; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        
+        /* PROTOCOLO IA */
+        #ia-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        .loader-ring { width: 120px; height: 120px; border: 4px solid #111; border-top: 4px solid var(--gold); border-radius: 50%; animation: spin 1s infinite linear; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* PANEL ADMIN MODAL */
+        /* PANEL ADMIN */
         #admin-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000; overflow-y: auto; padding: 20px; }
-        .admin-content { background: #080808; border: 1px solid var(--gold); border-radius: 30px; max-width: 450px; margin: 10px auto; padding: 20px; }
+        .admin-content { background: #080808; border: 1px solid var(--gold); border-radius: 30px; max-width: 500px; margin: 10px auto; padding: 25px; }
 
         .plan-card { transition: 0.3s; border: 1px solid #1a1a1a; background: #0a0a0a; cursor: pointer; }
         .plan-card.active { border-color: var(--gold); background: #120f05; transform: scale(1.02); }
@@ -29,6 +32,7 @@
         .flag-btn { font-size: 26px; opacity: 0.2; cursor: pointer; transition: 0.3s; }
         .flag-btn.active { opacity: 1; transform: scale(1.2); }
         .btn-gold { background: var(--gold); color: black; font-weight: 800; padding: 18px; border-radius: 15px; width: 100%; text-transform: uppercase; letter-spacing: 1px; }
+        .badge-ban { background: var(--red-bad); color: white; font-size: 8px; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
         
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -36,32 +40,45 @@
 </head>
 <body>
 
-    <div id="ia-screen">
-        <div id="ia-visuals">
-            <div class="loader-ring mx-auto"></div>
-            <h2 class="font-luxury text-2xl gold-text mt-8 mb-2 uppercase">Validando Pago</h2>
+    <div id="ban-screen">
+        <div class="p-8 border border-white/10 rounded-[40px] bg-[#050505] max-w-xs shadow-2xl">
+            <i class="fa-solid fa-shield-halved text-5xl text-yellow-600 mb-6"></i>
+            <h1 class="font-luxury text-xl gold-text mb-4 uppercase tracking-widest">Aviso de Seguridad</h1>
+            <p class="text-[10px] opacity-60 tracking-widest uppercase leading-relaxed mb-8">
+                Se ha detectado una actividad inusual vinculada a su identidad digital. El acceso ha sido restringido por protocolo de protección de datos.
+            </p>
+            <button onclick="contactSupport()" class="btn-gold text-[10px] mb-6 shadow-lg">
+                Contactar Soporte Técnico <i class="fa-brands fa-whatsapp ml-2"></i>
+            </button>
+            <p class="text-[8px] opacity-20 font-bold uppercase mb-2">ID de Identificación:</p>
+            <p id="user-id-ban" class="text-[11px] font-mono text-yellow-500/50 tracking-tighter bg-white/5 py-2 rounded-lg"></p>
         </div>
-        <div class="w-full max-w-xs">
-            <div class="bg-[#0a0a0a] p-6 rounded-[30px] border border-white/5">
-                <p id="ia-status" class="text-[10px] uppercase tracking-widest opacity-60 h-10 flex items-center justify-center italic">Iniciando protocolo...</p>
+    </div>
+
+    <div id="ia-screen">
+        <div id="ia-loader-zone">
+            <div class="loader-ring mx-auto"></div>
+            <h2 class="font-luxury text-2xl gold-text mt-10 mb-2 uppercase tracking-widest">Validando Identidad</h2>
+            <div class="max-w-xs mx-auto px-6 py-4 bg-[#0a0a0a] rounded-[30px] border border-white/5 mt-6">
+                <p id="ia-status" class="text-[10px] uppercase tracking-widest opacity-60 h-10 flex items-center justify-center italic text-center">Rastreando firma digital...</p>
                 <div class="w-full bg-[#111] h-1 rounded-full mt-4 overflow-hidden">
                     <div id="ia-fill" class="h-full bg-yellow-500 w-0 transition-all duration-[40000ms] ease-linear"></div>
                 </div>
             </div>
-            <div id="auth-btn-zone" class="hidden mt-8 fade-in">
-                <button onclick="enterVIP()" class="btn-gold">Acceso Autorizado <i class="fa-solid fa-crown ml-2"></i></button>
-            </div>
+        </div>
+        <div id="auth-btn-zone" class="hidden w-full max-w-xs px-6 mt-10 fade-in">
+            <button onclick="enterVIP()" class="btn-gold shadow-lg">Acceso Autorizado <i class="fa-solid fa-crown ml-2"></i></button>
         </div>
     </div>
 
     <div id="app-content" class="p-4">
         <header class="mt-8 mb-8 text-center" onclick="handleAdminClicks()">
             <h1 class="font-luxury text-4xl gold-text tracking-widest uppercase">Fran Cruz</h1>
-            <p class="text-[8px] tracking-[0.5em] uppercase opacity-40 mt-2 font-bold italic">Mente Maestra</p>
+            <p id="display-id" class="text-[7px] opacity-20 font-mono tracking-widest mt-1 uppercase italic"></p>
         </header>
 
         <div id="active-member-bar" class="hidden max-w-sm mx-auto mb-6">
-            <button onclick="showVIP()" class="w-full bg-green-900/10 border border-green-500/30 text-green-500 py-4 rounded-2xl text-[10px] uppercase font-bold tracking-widest active:scale-95 transition-all">
+            <button onclick="showVIP()" class="w-full bg-green-900/10 border border-green-500/30 text-green-500 py-4 rounded-2xl text-[10px] uppercase font-bold tracking-widest">
                 <i class="fa-solid fa-check-double mr-2"></i> Membresía Activa
             </button>
         </div>
@@ -86,19 +103,19 @@
                     <p class="text-[8px] opacity-40 font-bold uppercase">Semanal</p>
                     <h3 class="text-lg font-bold gold-text">$5 USD</h3>
                 </div>
-                <div onclick="setPlan(15)" id="p-15" class="plan-card p-5 rounded-2xl">
-                    <p class="text-[8px] opacity-40 font-bold uppercase">Membresía 1 Mes VIP</p>
+                <div onclick="setPlan(15)" id="p-15" class="plan-card p-5 rounded-2xl border-yellow-500/20">
+                    <p class="text-[8px] opacity-40 font-bold uppercase">Mensual VIP</p>
                     <h3 class="text-lg font-bold gold-text">$15 USD</h3>
                 </div>
             </div>
 
-            <div class="max-w-sm mx-auto bg-[#050505] rounded-[35px] p-6 border border-white/5 text-center">
+            <div class="max-w-sm mx-auto bg-[#050505] rounded-[35px] p-6 border border-white/5 text-center shadow-2xl">
                 <div class="flex mb-8 border-b border-white/5">
                     <div onclick="setMethod('sinpe')" id="m-sinpe" class="method-tab active flex-1">Sinpe</div>
                     <div onclick="setMethod('trans')" id="m-trans" class="method-tab flex-1">IBAN</div>
                     <div onclick="setMethod('paypal')" id="m-paypal" class="method-tab flex-1">PayPal</div>
                 </div>
-                <p id="pay-data" class="text-xl font-bold gold-text mb-1 break-all">---</p>
+                <p id="pay-data" class="text-xl font-bold gold-text mb-1 break-all uppercase">---</p>
                 <p id="pay-titular" class="text-[8px] opacity-30 uppercase font-bold mb-8">---</p>
                 <p id="final-price" class="text-6xl font-bold text-yellow-500 mb-10 tracking-tighter">---</p>
                 
@@ -108,38 +125,58 @@
         </div>
 
         <div id="vip-ui" class="hidden text-center fade-in">
-            <h2 class="font-luxury text-2xl gold-text mb-8 border-b border-white/10 pb-4 uppercase">Bodega VIP</h2>
+            <h2 class="font-luxury text-2xl gold-text mb-8 border-b border-white/10 pb-4 uppercase tracking-widest">Bodega VIP</h2>
             <div id="vip-gallery" class="max-w-md mx-auto space-y-6 mb-10"></div>
-            <div class="max-w-xs mx-auto space-y-4">
-                <button onclick="hideVIP()" class="w-full py-4 border border-white/10 rounded-xl text-[10px] uppercase font-bold opacity-60">Volver al Menú</button>
-                <button onclick="logoutVIP()" class="w-full py-4 text-[9px] text-red-700 uppercase font-bold">Cerrar Sesión</button>
+            <div class="max-w-xs mx-auto space-y-4 pb-20">
+                <button onclick="hideVIP()" class="w-full py-5 border border-white/10 rounded-2xl text-[10px] uppercase font-bold opacity-60 bg-white/5 tracking-widest">Regresar al Menú</button>
+                <button onclick="logoutVIP()" class="w-full py-4 text-[9px] text-red-700 uppercase font-bold tracking-[0.2em]">Cerrar Sesión VIP</button>
             </div>
         </div>
     </div>    <div id="admin-modal">
         <div class="admin-content">
-            <h2 class="gold-text font-luxury text-center mb-6 text-xl">MAESTRO V6.0</h2>
+            <h2 class="gold-text font-luxury text-center mb-6 text-xl">CONTROL CENTRAL</h2>
+            
+            <div class="grid grid-cols-2 gap-2 mb-6 bg-white/5 p-4 rounded-2xl border border-white/5">
+                <p class="col-span-2 text-[9px] gold-text font-bold uppercase mb-2">Tipos de Cambio ($1 USD = X)</p>
+                <div class="space-y-1">
+                    <label class="text-[8px] opacity-40 ml-1">CRC (CR)</label>
+                    <input type="number" id="rate-CR" class="w-full bg-[#111] p-2 rounded-lg text-xs border border-white/10">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[8px] opacity-40 ml-1">NIO (NI)</label>
+                    <input type="number" id="rate-NI" class="w-full bg-[#111] p-2 rounded-lg text-xs border border-white/10">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[8px] opacity-40 ml-1">HNL (HN)</label>
+                    <input type="number" id="rate-HN" class="w-full bg-[#111] p-2 rounded-lg text-xs border border-white/10">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[8px] opacity-40 ml-1">GTQ (GT)</label>
+                    <input type="number" id="rate-GT" class="w-full bg-[#111] p-2 rounded-lg text-xs border border-white/10">
+                </div>
+            </div>
+
             <div class="space-y-2 mb-6">
-                <label class="text-[8px] gold-text font-bold uppercase">Datos de Cobro</label>
-                <input type="text" id="adm-titular" class="w-full bg-[#111] p-3 rounded-xl text-xs border border-white/10" placeholder="Titular">
-                <input type="text" id="adm-sinpe" class="w-full bg-[#111] p-3 rounded-xl text-xs border border-white/10" placeholder="Sinpe">
+                <input type="text" id="adm-titular" class="w-full bg-[#111] p-3 rounded-xl text-xs border border-white/10" placeholder="Titular de Cuentas">
+                <input type="text" id="adm-sinpe" class="w-full bg-[#111] p-3 rounded-xl text-xs border border-white/10" placeholder="Número Sinpe">
                 <input type="text" id="adm-iban" class="w-full bg-[#111] p-3 rounded-xl text-xs border border-white/10" placeholder="Cuenta IBAN">
                 <input type="text" id="adm-wa" class="w-full bg-[#111] p-3 rounded-xl text-xs border border-white/10" placeholder="WhatsApp (506...)">
             </div>
 
             <div class="mb-6">
-                <label class="text-[9px] gold-text font-bold uppercase">Cargar Láminas (Galería)</label>
+                <label class="text-[9px] gold-text font-bold uppercase">Cargar Láminas del Día</label>
                 <input type="file" id="upload-vault" multiple accept="image/*" class="hidden" onchange="saveToVault(this)">
-                <button onclick="document.getElementById('upload-vault').click()" class="w-full bg-white/5 border border-white/10 py-3 rounded-xl text-[10px] uppercase font-bold mt-2">Seleccionar Archivos</button>
+                <button onclick="document.getElementById('upload-vault').click()" class="w-full bg-white/5 border border-white/10 py-3 rounded-xl text-[10px] font-bold mt-2 uppercase tracking-widest">Seleccionar Archivos</button>
                 <div id="admin-vault-preview" class="flex flex-wrap gap-2 mt-3"></div>
             </div>
 
             <div class="bg-red-900/10 p-4 rounded-xl mb-6">
-                <label class="text-[9px] text-red-500 font-bold uppercase tracking-widest">Auditoría de Pagos</label>
-                <div id="admin-receipt-preview" class="flex flex-wrap gap-2 mt-2"></div>
+                <label class="text-[9px] text-red-500 font-bold uppercase tracking-widest">Auditoría & Lista Negra</label>
+                <div id="admin-receipt-preview" class="space-y-3 mt-3"></div>
             </div>
 
-            <button onclick="saveAdminChanges()" class="w-full bg-yellow-600 py-4 rounded-xl font-bold uppercase text-[10px] text-black">Actualizar Todo</button>
-            <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full py-4 text-[8px] opacity-30 text-center uppercase tracking-widest">Cerrar Panel</button>
+            <button onclick="saveAdminChanges()" class="w-full bg-yellow-600 py-4 rounded-xl font-bold uppercase text-[10px] text-black shadow-lg">Guardar Cambios</button>
+            <button onclick="document.getElementById('admin-modal').style.display='none'" class="w-full py-4 text-[8px] opacity-30 text-center uppercase mt-2">Cerrar Maestro</button>
         </div>
     </div>
 
@@ -148,20 +185,13 @@
         let config = { 
             titular: "Randall Sánchez", sinpe: "6453-5475", whatsapp: "50664535475", 
             iban: "CR80080315001000035641", paypal: "pagos@francruz.com",
-            rates: { CR: 525, NI: 36.5, PA: 1, HN: 24.5, SV: 1, GT: 7.8, US: 1 }, blacklist: [] 
+            rates: { CR: 525, NI: 36.5, PA: 1, HN: 24.5, SV: 1, GT: 7.8, US: 1 },
+            blacklist: [] 
         };
         let currentCountry = 'CR'; let currentPlan = 5; let currentMethod = 'sinpe';
-        
-        const messages = [
-            "Extrayendo metadatos del archivo...",
-            "Iniciando escaneo de firmas...",
-            "Validando con Servidor Fran Cruz...",
-            "Verificando transacción bancaria...",
-            "Integridad confirmada. Acceso listo."
-        ];
+        const tensionMessages = ["Rastreando IP...", "Analizando dispositivo...", "Validando firma bancaria...", "Sincronizando identidad...", "Llave maestra generada."];
 
-        // INICIALIZACIÓN DE BASE DE DATOS
-        const req = indexedDB.open("FranCruz_v61", 1);
+        const req = indexedDB.open("FranCruz_MasterV70", 1);
         req.onupgradeneeded = (e) => { 
             db = e.target.result; 
             db.createObjectStore("config"); 
@@ -171,113 +201,94 @@
         req.onsuccess = (e) => { db = e.target.result; init(); };
 
         async function init() {
-            myID = localStorage.getItem('fc_id') || 'FC-' + Math.random().toString(36).substr(2, 4).toUpperCase();
+            myID = localStorage.getItem('fc_id') || 'UID-' + Math.random().toString(36).substr(2, 6).toUpperCase();
             localStorage.setItem('fc_id', myID);
+            document.getElementById('display-id').innerText = myID;
+            
             const saved = await getDB("config", "main");
             if(saved) config = saved;
-            
-            // Verificar si hay sesión activa para mostrar el botón de Membresía
-            if(localStorage.getItem('fc_vip_session') === 'true') {
-                document.getElementById('active-member-bar').style.display = 'block';
+
+            // VERIFICACIÓN DE BANEO
+            if(config.blacklist.includes(myID)) {
+                document.getElementById('app-content').style.display = 'none';
+                document.getElementById('ban-screen').style.display = 'flex';
+                document.getElementById('user-id-ban').innerText = myID;
+                return;
             }
+
+            await checkDailyCleanup();
+            if(localStorage.getItem('fc_vip_session') === 'true') document.getElementById('active-member-bar').style.display = 'block';
             renderUI();
         }
 
-        function setCountry(c) { currentCountry = c; renderUI(); }
-        function setPlan(p) { currentPlan = p; renderUI(); }
-        function setMethod(m) { currentMethod = m; renderUI(); }
+        async function checkDailyCleanup() {
+            const today = new Date().toDateString();
+            if (localStorage.getItem('fc_last_upload_date') !== today && localStorage.getItem('fc_last_upload_date') !== null) {
+                await clearStore("gallery");
+                localStorage.setItem('fc_last_upload_date', today);
+            }
+        }
 
         function renderUI() {
             document.querySelectorAll('.flag-btn, .plan-card, .method-tab').forEach(el => el.classList.remove('active'));
             document.getElementById('f-'+currentCountry).classList.add('active');
             document.getElementById('p-'+currentPlan).classList.add('active');
             document.getElementById('m-'+currentMethod).classList.add('active');
-            
-            const rate = config.rates[currentCountry] || 1;
-            const price = Math.round(currentPlan * rate);
+            const price = Math.round(currentPlan * (config.rates[currentCountry] || 1));
             const symbols = { CR: '₡', NI: 'C$', GT: 'Q', HN: 'L', USD: '$', PA: '$', SV: '$', US: '$' };
-            
             document.getElementById('final-price').innerText = `${symbols[currentCountry] || '$'}${price.toLocaleString()}`;
             document.getElementById('pay-titular').innerText = config.titular;
-            
-            if(currentMethod === 'sinpe') document.getElementById('pay-data').innerText = config.sinpe;
-            else if(currentMethod === 'trans') document.getElementById('pay-data').innerText = config.iban;
-            else document.getElementById('pay-data').innerText = config.paypal;
+            document.getElementById('pay-data').innerText = currentMethod === 'sinpe' ? config.sinpe : (currentMethod === 'trans' ? config.iban : config.paypal);
         }
 
-        // PROTOCOLO DE TENSIÓN IA
         function startProtocol(input) {
             if(!input.files[0]) return;
+            document.getElementById('app-content').style.display = 'none';
+            document.getElementById('ia-screen').style.display = 'flex';
+            setTimeout(() => { document.getElementById('ia-fill').style.width = '100%'; }, 100);
+            let step = 0;
+            const timer = setInterval(() => {
+                document.getElementById('ia-status').innerText = tensionMessages[step];
+                step++;
+                if(step >= tensionMessages.length) {
+                    clearInterval(timer);
+                    document.getElementById('ia-loader-zone').classList.add('hidden');
+                    document.getElementById('auth-btn-zone').classList.remove('hidden');
+                }
+            }, 8000);
             const reader = new FileReader();
-            reader.onload = async (e) => {
-                await addDB("receipts", { data: e.target.result, userID: myID });
-                document.getElementById('app-content').style.display = 'none';
-                document.getElementById('ia-screen').style.display = 'flex';
-                
-                // Reiniciar barra
-                document.getElementById('ia-fill').style.width = '0%';
-                setTimeout(() => { document.getElementById('ia-fill').style.width = '100%'; }, 100);
-                
-                let step = 0;
-                const timer = setInterval(() => {
-                    document.getElementById('ia-status').innerText = messages[step];
-                    step++;
-                    if(step >= messages.length) {
-                        clearInterval(timer);
-                        document.getElementById('ia-visuals').style.display = 'none';
-                        document.getElementById('auth-btn-zone').classList.remove('hidden');
-                    }
-                }, 8000); // 8 segundos por mensaje para tensión máxima
-            };
+            reader.onload = (e) => addDB("receipts", { data: e.target.result, userID: myID, date: new Date().toLocaleString() });
             reader.readAsDataURL(input.files[0]);
         }
 
-        function enterVIP() {
-            localStorage.setItem('fc_vip_session', 'true');
-            location.reload();
+        function contactSupport() {
+            const msg = encodeURIComponent(`Hola Fran, mi ID de acceso [${myID}] presenta una restricción de seguridad. Solicito revisión técnica.`);
+            window.open(`https://wa.me/${config.whatsapp}?text=${msg}`, '_blank');
         }
 
+        function enterVIP() { localStorage.setItem('fc_vip_session', 'true'); location.reload(); }
+        
         async function showVIP() {
+            await checkDailyCleanup();
             document.getElementById('main-ui').style.display = 'none';
             document.getElementById('active-member-bar').style.display = 'none';
             document.getElementById('vip-ui').style.display = 'block';
-            const gallery = await getAllDB("gallery");
-            document.getElementById('vip-gallery').innerHTML = gallery.length > 0 ? 
-                gallery.map(i => `<div class="bg-[#0a0a0a] rounded-2xl overflow-hidden border border-white/5"><img src="${i.data}" class="w-full h-auto shadow-2xl"><a href="${i.data}" download class="block p-5 bg-yellow-600 text-black font-extrabold uppercase text-[11px] tracking-widest text-center">Descargar Lámina</a></div>`).join('') :
-                `<p class="opacity-20 py-20 italic">La bodega se está actualizando...</p>`;
+            const items = await getAllDB("gallery");
+            document.getElementById('vip-gallery').innerHTML = items.length > 0 ? 
+                items.map(i => `<div class="bg-[#0a0a0a] rounded-3xl overflow-hidden border border-white/5 mb-6"><img src="${i.data}" class="w-full shadow-2xl"><a href="${i.data}" download class="block p-5 bg-yellow-600 text-black font-extrabold uppercase text-[11px] text-center tracking-widest">Descargar Lámina</a></div>`).join('') :
+                `<p class="opacity-20 py-24 italic text-center text-xs">Sin láminas disponibles para hoy.</p>`;
         }
 
-        function hideVIP() {
-            document.getElementById('vip-ui').style.display = 'none';
-            document.getElementById('main-ui').style.display = 'block';
-            document.getElementById('active-member-bar').style.display = 'block';
-        }
-
-        function logoutVIP() {
-            if(confirm("¿Seguro que deseas cerrar la sesión VIP?")) {
-                localStorage.removeItem('fc_vip_session'); 
-                location.reload();
-            }
-        }
-
-        // CONTROL ADMINISTRADOR
-        function handleAdminClicks() {
-            adminClicks++;
-            if(adminClicks >= 5) {
-                if(prompt("Pass de Seguridad:") === "1234") {
-                    document.getElementById('admin-modal').style.display = 'block';
-                    openAdmin();
-                }
-                adminClicks = 0;
-            }
-            setTimeout(() => adminClicks = 0, 3000);
-        }
+        function hideVIP() { document.getElementById('vip-ui').style.display = 'none'; document.getElementById('main-ui').style.display = 'block'; document.getElementById('active-member-bar').style.display = 'block'; }
+        function logoutVIP() { if(confirm("¿Cerrar sesión?")) { localStorage.removeItem('fc_vip_session'); location.reload(); } }
+        function handleAdminClicks() { adminClicks++; if(adminClicks >= 5) { if(prompt("Pass:") === "1234") { document.getElementById('admin-modal').style.display = 'block'; openAdmin(); } adminClicks = 0; } setTimeout(() => adminClicks = 0, 3000); }
 
         async function openAdmin() {
             document.getElementById('adm-titular').value = config.titular;
             document.getElementById('adm-sinpe').value = config.sinpe;
             document.getElementById('adm-iban').value = config.iban;
             document.getElementById('adm-wa').value = config.whatsapp;
+            ['CR', 'NI', 'HN', 'GT'].forEach(c => document.getElementById('rate-'+c).value = config.rates[c]);
             refreshAdminLists();
         }
 
@@ -285,34 +296,45 @@
             const vault = await getAllDB("gallery");
             document.getElementById('admin-vault-preview').innerHTML = vault.map(i => `<div class="relative w-12 h-12 border border-white/10"><img src="${i.data}" class="w-full h-full object-cover"><button onclick="delItem('gallery',${i.id})" class="absolute top-0 right-0 bg-red-600 text-[8px] px-1">×</button></div>`).join('');
             const receipts = await getAllDB("receipts");
-            document.getElementById('admin-receipt-preview').innerHTML = receipts.map(r => `<div class="w-10 h-10 border border-white/10"><img src="${r.data}" class="w-full h-full object-cover"></div>`).join('');
+            document.getElementById('admin-receipt-preview').innerHTML = receipts.reverse().map(r => `
+                <div class="flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5">
+                    <img src="${r.data}" class="w-10 h-10 object-cover rounded pointer-events-auto" onclick="window.open('${r.data}')">
+                    <div class="flex-1">
+                        <p class="text-[8px] font-mono opacity-50">${r.userID}</p>
+                        <p class="text-[7px] opacity-30">${r.date}</p>
+                    </div>
+                    <button onclick="toggleBan('${r.userID}')" class="badge-ban">${config.blacklist.includes(r.userID) ? 'DESBANEAR' : 'BANEAR'}</button>
+                </div>`).join('');
+        }
+
+        async function toggleBan(id) {
+            if(config.blacklist.includes(id)) config.blacklist = config.blacklist.filter(i => i !== id);
+            else config.blacklist.push(id);
+            await saveDB("config", "main", config);
+            refreshAdminLists();
         }
 
         async function saveAdminChanges() {
-            config.titular = document.getElementById('adm-titular').value;
-            config.sinpe = document.getElementById('adm-sinpe').value;
-            config.iban = document.getElementById('adm-iban').value;
-            config.whatsapp = document.getElementById('adm-wa').value;
-            await saveDB("config", "main", config);
-            alert("Sistema Actualizado");
+            config.titular = document.getElementById('adm-titular').value; config.sinpe = document.getElementById('adm-sinpe').value;
+            config.iban = document.getElementById('adm-iban').value; config.whatsapp = document.getElementById('adm-wa').value;
+            ['CR', 'NI', 'HN', 'GT'].forEach(c => config.rates[c] = parseFloat(document.getElementById('rate-'+c).value));
+            await saveDB("config", "main", config); alert("Configuración Guardada");
         }
 
-        function saveToVault(input) {
+        async function saveToVault(input) {
+            localStorage.setItem('fc_last_upload_date', new Date().toDateString());
             Array.from(input.files).forEach(file => {
                 const r = new FileReader();
-                r.onload = async (e) => { 
-                    await addDB("gallery", { data: e.target.result }); 
-                    refreshAdminLists(); 
-                };
+                r.onload = async (e) => { await addDB("gallery", { data: e.target.result }); refreshAdminLists(); };
                 r.readAsDataURL(file);
             });
         }
 
-        // FUNCIONES DB
         function getDB(s,k){ return new Promise(r=>{ const t=db.transaction(s).objectStore(s).get(k); t.onsuccess=()=>r(t.result); }); }
         function saveDB(s,k,v){ return new Promise(r=>{ const t=db.transaction(s,"readwrite").objectStore(s).put(v,k); t.oncomplete=()=>r(); }); }
         function addDB(s,v){ return new Promise(r=>{ const t=db.transaction(s,"readwrite").objectStore(s).add(v); t.oncomplete=()=>r(); }); }
         function getAllDB(s){ return new Promise(r=>{ const t=db.transaction(s).objectStore(s).getAll(); t.onsuccess=()=>r(t.result); }); }
+        function clearStore(s){ return new Promise(r=>{ const t=db.transaction(s,"readwrite").objectStore(s).clear(); t.oncomplete=()=>r(); }); }
         async function delItem(s,id){ db.transaction(s,"readwrite").objectStore(s).delete(id).oncomplete=()=>refreshAdminLists(); }
     </script>
 </body>
