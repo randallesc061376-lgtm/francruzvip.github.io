@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fran Cruz | VIP Mastermind v7.2</title>
+    <title>Fran Cruz | VIP Mastermind v7.3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -13,16 +13,13 @@
         .font-luxury { font-family: 'Cinzel', serif; }
         .gold-text { background: linear-gradient(to bottom, #f9e2af 0%, #d4af37 50%, #a67c00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* PANTALLA DE RESTRICCIÓN - AJUSTADA PARA PERMITIR CLICS AL TÍTULO */
         #ban-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 90000; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding-bottom: 100px; }
         .ban-box { background: #050505; border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 40px; max-width: 300px; width: 90%; position: relative; z-index: 90001; }
         
-        /* PROTOCOLO IA */
         #ia-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
         .loader-ring { width: 100px; height: 100px; border: 4px solid #111; border-top: 4px solid var(--gold); border-radius: 50%; animation: spin 1s infinite linear; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* PANEL ADMIN - SIEMPRE POR ENCIMA DE TODO */
         #admin-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.99); z-index: 100000; overflow-y: auto; padding: 20px; }
         .admin-content { background: #080808; border: 1px solid var(--gold); border-radius: 30px; max-width: 500px; margin: 10px auto; padding: 25px; }
 
@@ -179,16 +176,23 @@
 
     <script>
         let db; let myID; let adminClicks = 0;
+        
+        // --- CONFIGURACIÓN DE FÁBRICA (RELLENA ESTO CON TUS DATOS REALES) ---
         let config = { 
-            titular: "Fran Cruz", sinpe: "---", whatsapp: "50600000000", 
-            iban: "---", paypal: "---",
-            rates: { CR: 525, NI: 36.5, PA: 1, HN: 24.5, SV: 1, GT: 7.8, US: 1 },
+            titular: "Randall Sánchez", 
+            sinpe: "70835833", 
+            whatsapp: "50664535475", 
+            iban: "CR80080315001000035641", 
+            paypal: "randallesc061376@gmail.com",
+            rates: { CR: 525, NI: 36.5, PA: 1, HN: 26.6, SV: 1, GT: 7.8, US: 1 },
             blacklist: [] 
         };
+        // -----------------------------------------------------------------
+
         let currentCountry = 'CR'; let currentPlan = 5; let currentMethod = 'sinpe';
         const tensionMessages = ["Rastreando IP...", "Analizando dispositivo...", "Validando firma...", "Sincronizando...", "Acceso concedido."];
 
-        const req = indexedDB.open("FranCruz_Master_v72", 1);
+        const req = indexedDB.open("FranCruz_Global_v73", 1);
         req.onupgradeneeded = (e) => { 
             db = e.target.result; 
             db.createObjectStore("config"); 
@@ -203,9 +207,13 @@
             document.getElementById('display-id').innerText = myID;
             
             const saved = await getDB("config", "main");
-            if(saved) config = saved;
+            if(saved) {
+                config = saved;
+            } else {
+                // Si no hay datos guardados, guardamos los de fábrica inmediatamente
+                await saveDB("config", "main", config);
+            }
 
-            // VERIFICACIÓN DE SEGURIDAD
             if(config.blacklist.includes(myID)) {
                 document.getElementById('app-content').style.display = 'none';
                 document.getElementById('ban-screen').style.display = 'flex';
@@ -342,7 +350,7 @@
             config.whatsapp = document.getElementById('adm-wa').value;
             ['CR', 'NI', 'HN', 'GT'].forEach(c => config.rates[c] = parseFloat(document.getElementById('rate-'+c).value));
             await saveDB("config", "main", config); 
-            alert("Base de datos actualizada.");
+            alert("Sistema Sincronizado");
             location.reload();
         }
 
@@ -363,6 +371,6 @@
         async function delItem(s,id){ db.transaction(s,"readwrite").objectStore(s).delete(id).oncomplete=()=>refreshAdminLists(); }
     </script>
 </body>
-</html>
+    </html>
 
     
