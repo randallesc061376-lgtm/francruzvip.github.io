@@ -1,11 +1,10 @@
 <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Fran Cruz VIP</title><script src="https://cdn.tailwindcss.com"></script>
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <style>body{background:#000;color:#fff;font-family:sans-serif;user-select:none}.gold{color:#d4af37}.btn-gold{background:#d4af37;color:#000;padding:18px;width:100%;border-radius:20px;font-weight:800;text-transform:uppercase}input{outline:none}#admin-panel{display:none;position:fixed;inset:0;background:#000;z-index:999;padding:20px;overflow-y:auto}.plan-card{background:#0a0a0a;border:1px solid #1a1a1a;padding:15px;border-radius:20px;cursor:pointer}.plan-card.active{border-color:#d4af37;background:#120f05}</style></head><body>
 <header class="text-center pt-8"><h1 onclick="handleAdmin()" class="text-4xl font-black gold tracking-tighter cursor-pointer">FRAN CRUZ</h1><p id="head-id" class="text-[9px] opacity-20 font-mono mt-1 uppercase"></p></header>
-<div id="app" class="p-4 max-sm mx-auto"><div id="main-ui">
+<div id="app" class="p-4 max-w-sm mx-auto"><div id="main-ui">
     <div class="flex justify-center flex-wrap gap-3 mb-6 opacity-60">
         <span onclick="setLoc('CR')" class="cursor-pointer text-xl">🇨🇷</span><span onclick="setLoc('PA')" class="cursor-pointer text-xl">🇵🇦</span><span onclick="setLoc('NI')" class="cursor-pointer text-xl">🇳🇮</span><span onclick="setLoc('GT')" class="cursor-pointer text-xl">🇬🇹</span><span onclick="setLoc('HN')" class="cursor-pointer text-xl">🇭🇳</span><span onclick="setLoc('SV')" class="cursor-pointer text-xl">🇸🇻</span><span onclick="setLoc('BZ')" class="cursor-pointer text-xl">🇧🇿</span>
     </div>
@@ -16,29 +15,31 @@
     </div>
     <div class="bg-[#0a0a0a] border border-white/5 p-6 rounded-[35px] text-center mb-6">
         <div class="flex text-[10px] font-bold uppercase mb-4 opacity-40 border-b border-white/5 pb-2"><span onclick="setMet('SINPE')" id="m-SINPE" class="flex-1 gold">SINPE</span><span onclick="setMet('IBAN')" id="m-IBAN" class="flex-1">IBAN</span><span onclick="setMet('PAYPAL')" id="m-PAYPAL" class="flex-1">PAYPAL</span></div>
-        <div id="pay-box" class="mb-4">
+        <div class="mb-4">
             <p class="text-[10px] gold font-bold uppercase mb-1">Titular: Randall Sánchez C.</p>
-            <p id="pay-info" class="text-xs font-mono uppercase text-white/80">7083-5833</p>
+            <p id="pay-info" class="text-xs font-mono uppercase text-white/80">SINPE: 7083-5833</p>
         </div>
         <button onclick="window.open('https://wa.me/50664535475?text=Hola Randall, envío comprobante ID: '+uid)" class="btn-gold mb-4">Enviar Comprobante</button>
         <input type="text" id="key-in" placeholder="CLAVE DE ACCESO" class="w-full bg-black p-4 rounded-2xl border border-white/10 text-center font-bold mb-3 uppercase gold">
         <button onclick="checkKey()" class="text-[10px] opacity-30 uppercase font-bold underline">Activar Membresía</button>
     </div>
 </div>
-<div id="vip-ui" class="hidden"><div class="bg-green-900/20 border border-green-500/30 p-4 rounded-2xl text-green-500 text-[10px] font-bold text-center mb-6 uppercase">Acceso VIP Activo</div><div id="gallery" class="space-y-4"></div><button onclick="logout()" class="w-full mt-8 text-[9px] opacity-20 uppercase font-bold">Cerrar Sesión</button></div></div>
-<div id="admin-panel"><h2 class="gold font-bold mb-4 uppercase text-sm">Panel Maestro</h2><div class="grid grid-cols-2 gap-2 mb-4"><button onclick="document.getElementById('up-v').click()" class="bg-white/10 p-4 rounded-xl text-[10px] font-bold uppercase">Subir Fotos</button><button onclick="clearAll()" class="bg-red-900/20 text-red-500 p-4 rounded-xl text-[10px] font-bold uppercase">Borrar Todo</button></div><button onclick="changePin()" class="w-full mb-6 py-3 text-[10px] border border-white/10 rounded-xl opacity-40 uppercase">Cambiar PIN Admin</button><input type="file" id="up-v" accept="image/*" multiple class="hidden" onchange="upV(this)"><div id="adm-gal" class="grid grid-cols-4 gap-2 mb-6"></div><button onclick="closeAdmin()" class="w-full py-4 text-xs opacity-50 border border-white/10 rounded-xl uppercase">Salir</button></div>
+<div id="vip-ui" class="hidden"><div id="status-bar" class="bg-green-900/20 border border-green-500/30 p-4 rounded-2xl text-green-500 text-[10px] font-bold text-center mb-6 uppercase">Acceso VIP Activo</div><div id="gallery" class="space-y-4"></div><button onclick="logout()" class="w-full mt-8 text-[9px] opacity-20 uppercase font-bold">Cerrar Sesión</button></div></div>
+<div id="admin-panel"><h2 class="gold font-bold mb-4 uppercase text-sm">Panel Maestro</h2><div class="grid grid-cols-2 gap-2 mb-4"><button onclick="document.getElementById('up-v').click()" class="bg-white/10 p-4 rounded-xl text-[10px] font-bold">SUBIR FOTOS</button><button onclick="clearAll()" class="bg-red-900/20 text-red-500 p-4 rounded-xl text-[10px] font-bold">BORRAR TODO</button></div>
+    <div class="bg-white/5 p-4 rounded-xl mb-4"><p class="text-[10px] opacity-50 uppercase mb-2">Protocolo de Baneo</p><input type="text" id="ban-id" placeholder="UID del cliente" class="w-full bg-black border border-white/10 p-3 rounded-lg text-xs mb-2 uppercase"><div class="flex gap-2"><button onclick="toggleBan(true)" class="flex-1 bg-red-600 text-[10px] font-bold py-2 rounded-lg">BANEAR</button><button onclick="toggleBan(false)" class="flex-1 bg-green-600 text-[10px] font-bold py-2 rounded-lg">DESBANEAR</button></div></div>
+    <button onclick="changePin()" class="w-full mb-6 py-3 text-[10px] border border-white/10 rounded-xl opacity-40 uppercase">Cambiar PIN Admin</button><input type="file" id="up-v" accept="image/*" multiple class="hidden" onchange="upV(this)"><div id="adm-gal" class="grid grid-cols-4 gap-2 mb-6"></div><button onclick="closeAdmin()" class="w-full py-4 text-xs opacity-50 border border-white/10 rounded-xl">SALIR</button></div>
 <script>
 let storage, db_fire; let curD=1; let adC=0; const rates={CR:525,PA:1,NI:36.5,GT:7.8,HN:24.7,SV:1,BZ:2}; const syms={CR:'₡',PA:'$',NI:'C$',GT:'Q',HN:'L',SV:'$',BZ:'BZ$'}; let curR=525; let curS='₡';
 const uid=localStorage.getItem('fc_id')||"UID-"+Math.random().toString(36).substr(2,6).toUpperCase();
 localStorage.setItem('fc_id',uid); document.getElementById('head-id').innerText=uid;
 
-const firebaseConfig = { apiKey: "TU_API_KEY", authDomain: "TU_DOMINIO", projectId: "TU_PROJECT_ID", storageBucket: "TU_BUCKET", messagingSenderId: "TU_ID", appId: "TU_APP_ID" };
+const firebaseConfig = { apiKey: "TU_API_KEY_AQUI", authDomain: "", projectId: "", storageBucket: "", messagingSenderId: "", appId: "" };
 
 function initFirebase(){
-    if(firebaseConfig.apiKey !== "TU_API_KEY"){
+    if(firebaseConfig.apiKey !== "TU_API_KEY_AQUI"){
         firebase.initializeApp(firebaseConfig);
         storage = firebase.storage(); db_fire = firebase.firestore();
-        checkExp();
+        checkExp(); checkBanStatus();
     }
 }
 function geo(){fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{if(rates[d.country_code])setLoc(d.country_code);}).catch(()=>setLoc('CR'));}
@@ -49,22 +50,25 @@ function setMet(m){
     const i=document.getElementById('pay-info');
     document.querySelectorAll('[id^="m-"]').forEach(el=>el.classList.remove('gold'));
     document.getElementById('m-'+m).classList.add('gold');
-    if(m==='SINPE'){i.innerText='7083-5833';}
-    else if(m==='IBAN'){i.innerText='CR80080315001000035641';}
-    else{i.innerText='randallesc061376@gmail.com';}
+    if(m==='SINPE'){i.innerText='SINPE: 7083-5833';}
+    else if(m==='IBAN'){i.innerText='IBAN: CR80080315001000035641';}
+    else{i.innerText='PayPal: randallesc061376@gmail.com';}
 }
 function checkKey(){
-    if(document.getElementById('key-in').value.toUpperCase()===(uid.slice(-2)+new Date().getDate().toString().padStart(2,'0'))){
+    const correctKey = uid.slice(-2) + new Date().getDate().toString().padStart(2,'0');
+    if(document.getElementById('key-in').value.toUpperCase() === correctKey){
         let ex=new Date(); ex.setDate(ex.getDate()+(curD-1)); ex.setHours(23,59,59,999);
         localStorage.setItem('fc_exp',ex.getTime()); location.reload();
-    }else alert("Clave incorrecta");
+    }else alert("Clave incorrecta para hoy");
 }
 function checkExp(){const ex=localStorage.getItem('fc_exp');if(ex && new Date().getTime()<ex){document.getElementById('main-ui').classList.add('hidden');document.getElementById('vip-ui').classList.remove('hidden');loadGal();}}
-function handleAdmin(){adC++;if(adC>=5){const p=prompt("PIN:");if(p===(localStorage.getItem('fc_pin')||'1234')){document.getElementById('admin-panel').style.display='block';}adC=0;}setTimeout(()=>adC=0,3000);}
-function changePin(){const np=prompt("Nuevo PIN:");if(np&&np.length>=4){localStorage.setItem('fc_pin',np);alert("PIN actualizado");}}
+function checkBanStatus(){db_fire.collection("banlist").doc(uid).get().then(doc=>{if(doc.exists && doc.data().active){document.body.innerHTML='<div style="background:#000;color:red;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:bold;padding:20px;">ACCESO RESTRINGIDO POR EL ADMINISTRADOR.</div>';}});}
+function toggleBan(status){const target=document.getElementById('ban-id').value.toUpperCase();if(!target.startsWith("UID-")){alert("ID Inválido");return;}db_fire.collection("banlist").doc(target).set({active:status}).then(()=>alert(status?"Baneado":"Desbaneado"));}
+function handleAdmin(){adC++;if(adC>=5){const p=prompt("PIN:");if(p===(localStorage.getItem('fc_pin')||'1234'))document.getElementById('admin-panel').style.display='block';adC=0;}setTimeout(()=>adC=0,3000);}
+function changePin(){const np=prompt("Nuevo PIN:");if(np&&np.length>=4)localStorage.setItem('fc_pin',np);}
 function loadGal(){ /* Sincronización Firebase */ }
-function upV(i){ /* Lógica Firebase */ }
-function clearAll(){ if(confirm("¿Borrar todo?")){ /* Lógica Firebase */ }}
+function upV(i){ /* Carga Firebase */ }
+function clearAll(){ if(confirm("¿Borrar todo?")){ /* Limpieza Firebase */ }}
 function closeAdmin(){document.getElementById('admin-panel').style.display='none';}
 function logout(){localStorage.removeItem('fc_exp');location.reload();}
 geo(); updateUI(); initFirebase();
