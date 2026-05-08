@@ -1,37 +1,23 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Fran Cruz | VIP</title><script src="https://cdn.tailwindcss.com"></script><style>body{background:#000;color:#fff;font-family:sans-serif}.gold{color:#d4af37}.btn-gold{background:#d4af37;color:#000;padding:15px;width:100%;border-radius:15px;font-weight:bold;text-transform:uppercase}</style></head><body><header class="text-center pt-10"><h1 class="text-3xl gold font-bold">FRAN CRUZ</h1><p id="disp-id" class="text-[10px] opacity-30 font-mono"></p></header><div id="app" class="p-5 mt-10"><div id="main-ui"><div class="bg-[#111] p-6 rounded-3xl text-center"><p class="text-xs opacity-50 mb-2">Tu ID de Acceso:</p><p id="my-id" class="text-2xl font-bold gold mb-6"></p><input type="file" id="f-in" class="hidden" onchange="startProt(this)"><button onclick="document.getElementById('f-in').click()" class="btn-gold mb-4">Enviar Comprobante</button><input type="text" id="k-in" placeholder="Clave Activación" class="w-full bg-black p-3 rounded-xl border border-white/10 text-center uppercase"><button onclick="checkKey()" class="w-full mt-2 text-[10px] opacity-50 uppercase underline">Validar Clave</button></div></div><div id="vip-ui" class="hidden text-center"><h2 class="text-2xl gold mb-5">BODEGA VIP</h2><div id="gallery" class="grid grid-cols-2 gap-4"></div><button onclick="logout()" class="mt-10 text-red-500 text-xs uppercase font-bold">Cerrar Sesión</button></div></div><script>
-const uid = "UID-" + Math.random().toString(36).substr(2, 6).toUpperCase();
-document.getElementById('disp-id').innerText = uid;
-document.getElementById('my-id').innerText = uid;
-
-function startProt(input) {
-    if(input.files && input.files[0]) {
-        alert("Comprobante recibido. Envíame este ID por WhatsApp para recibir tu clave: " + uid);
-    }
-}
-
-function checkKey() {
-    const inputKey = document.getElementById('k-in').value.toUpperCase();
-    const day = new Date().getDate().toString().padStart(2, '0');
-    const suffix = uid.slice(-2);
-    const validKey = suffix + day;
-
-    if(inputKey === validKey) {
-        localStorage.setItem('vip', 'true');
-        showVIP();
-    } else {
-        alert("Clave incorrecta o expirada.");
-    }
-}
-
-function showVIP() {
-    document.getElementById('main-ui').classList.add('hidden');
-    document.getElementById('vip-ui').classList.remove('hidden');
-}
-
-function logout() {
-    localStorage.removeItem('vip');
-    location.reload();
-}
-
-if(localStorage.getItem('vip') === 'true') showVIP();
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Fran Cruz VIP</title><script src="https://cdn.tailwindcss.com"></script><style>body{background:#000;color:#fff;font-family:sans-serif;user-select:none}.gold{color:#d4af37}.btn-gold{background:#d4af37;color:#000;padding:18px;width:100%;border-radius:20px;font-weight:800;text-transform:uppercase}input{outline:none}#admin-panel{display:none;position:fixed;inset:0;background:#000;z-index:999;padding:20px;overflow-y:auto}</style></head><body>
+<header class="text-center pt-12"><h1 onclick="handleAdmin()" class="text-4xl font-black gold tracking-tighter">FRAN CRUZ</h1><p id="head-id" class="text-[9px] opacity-20 font-mono mt-2"></p></header>
+<div class="p-6 mt-8 max-w-sm mx-auto"><div id="main-ui" class="bg-[#0a0a0a] border border-white/5 p-8 rounded-[40px] shadow-2xl text-center"><p class="text-[10px] opacity-40 uppercase mb-2">Tu ID de Acceso:</p><p id="my-id" class="text-2xl font-bold gold mb-8 tracking-tight"></p><button onclick="document.getElementById('file-in').click()" class="btn-gold mb-6 shadow-lg shadow-yellow-600/10">Enviar Comprobante</button><input type="file" id="file-in" class="hidden" onchange="alert('Recibido. Envía tu ID por WhatsApp.')"><input type="text" id="key-in" placeholder="CLAVE ACTIVACIÓN" class="w-full bg-black p-4 rounded-2xl border border-white/10 text-center font-bold mb-4 uppercase"><button onclick="checkKey()" class="text-[10px] opacity-30 uppercase font-bold tracking-widest underline">Validar Clave</button></div>
+<div id="vip-ui" class="hidden"><div class="bg-green-900/10 border border-green-500/30 p-4 rounded-2xl text-green-500 text-[10px] font-bold text-center mb-8 uppercase">Membresía Activa</div><div id="gallery" class="space-y-6"></div><button onclick="logout()" class="w-full mt-12 text-[9px] opacity-20 uppercase font-bold">Cerrar Sesión VIP</button></div></div>
+<div id="admin-panel"><h2 class="text-xl gold font-bold mb-6">PANEL MAESTRO</h2><input type="file" id="up-v" multiple class="hidden" onchange="upV(this)"><button onclick="document.getElementById('up-v').click()" class="btn-gold mb-4">Subir Láminas</button><div id="adm-gal" class="grid grid-cols-4 gap-2 mb-8"></div><button onclick="closeAdmin()" class="w-full py-4 text-xs opacity-50 border border-white/10 rounded-xl">Cerrar Panel</button></div>
+<script>
+let db;let adC=0;
+const uid=localStorage.getItem('fc_id')||"UID-"+Math.random().toString(36).substr(2,6).toUpperCase();
+localStorage.setItem('fc_id',uid);
+document.getElementById('head-id').innerText=uid;document.getElementById('my-id').innerText=uid;
+const req=indexedDB.open("FC_DB",1);
+req.onupgradeneeded=(e)=>{db=e.target.result;db.createObjectStore("gal",{keyPath:"id",autoIncrement:true});};
+req.onsuccess=(e)=>{db=e.target.result;if(localStorage.getItem('vip')==='true')showVIP();};
+function checkKey(){const val=document.getElementById('key-in').value.toUpperCase();const day=new Date().getDate().toString().padStart(2,'0');if(val===(uid.slice(-2)+day)){localStorage.setItem('vip','true');showVIP();}else{alert("Clave Inválida");}}
+function showVIP(){document.getElementById('main-ui').classList.add('hidden');document.getElementById('vip-ui').classList.remove('hidden');loadGal();}
+async function loadGal(){const t=db.transaction("gal").objectStore("gal").getAll();t.onsuccess=()=>{document.getElementById('gallery').innerHTML=t.result.map(i=>`<img src="${i.d}" class="w-full rounded-3xl border border-white/5">`).join('')||'<p class="opacity-20 text-center py-10">Sin láminas.</p>';};}
+function handleAdmin(){adC++;if(adC>=5){document.getElementById('admin-panel').style.display='block';loadAdmGal();adC=0;}setTimeout(()=>adC=0,3000);}
+function loadAdmGal(){const t=db.transaction("gal").objectStore("gal").getAll();t.onsuccess=()=>{document.getElementById('adm-gal').innerHTML=t.result.map(i=>`<div class="relative h-12"><img src="${i.d}" class="w-full h-full object-cover rounded"><button onclick="del(${i.id})" class="absolute top-0 right-0 bg-red-600 px-1 text-[8px]">×</button></div>`).join('');};}
+function upV(input){Array.from(input.files).forEach(f=>{const r=new FileReader();r.onload=(e)=>{db.transaction("gal","readwrite").objectStore("gal").add({d:e.target.result}).oncomplete=loadAdmGal;};r.readAsDataURL(f);});}
+function del(id){db.transaction("gal","readwrite").objectStore("gal").delete(id).oncomplete=loadAdmGal;}
+function closeAdmin(){document.getElementById('admin-panel').style.display='none';if(localStorage.getItem('vip')==='true')loadGal();}
+function logout(){localStorage.removeItem('vip');location.reload();}
 </script></body></html>
