@@ -32,9 +32,9 @@ function setPlan(d, p){curD=d; document.querySelectorAll('.plan-card').forEach(c
 function updateUI(){document.querySelectorAll('.local-p').forEach((el,i)=>{const p=[1,5,10][i];el.innerText=`(${curS}${Math.round(p*curR).toLocaleString()})`;});}
 function setMet(m){
     const info = document.getElementById('pay-info');
-    if(m==='SINPE'){info.innerText='6453-5475';}
-    else if(m==='IBAN'){info.innerText='TU_CUENTA_IBAN_AQUÍ';}
-    else{info.innerText='tu_correo@paypal.com';}
+    if(m==='SINPE'){info.innerText='70835833';}
+    else if(m==='IBAN'){info.innerText='80080315001000035641';}
+    else{info.innerText='randallesc061376@gmail.com';}
 }
 function checkKey(){
     const val=document.getElementById('key-in').value.toUpperCase();
