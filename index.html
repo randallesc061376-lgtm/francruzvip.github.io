@@ -19,33 +19,38 @@
             <p class="text-[10px] gold font-bold uppercase mb-1">Titular: Randall Sánchez C.</p>
             <p id="pay-info" class="text-xs font-mono uppercase text-white/80">SINPE: 7083-5833</p>
         </div>
-        <button onclick="window.open('https://wa.me/50664535475?text=Hola Randall, envío comprobante ID: '+uid)" class="btn-gold mb-4">Enviar Comprobante</button>
+        <button onclick="window.open('https://wa.me/50664535475?text=Hola Fran, envío comprobante ID: '+uid)" class="btn-gold mb-4">Enviar Comprobante</button>
         <input type="text" id="key-in" placeholder="CLAVE DE ACCESO" class="w-full bg-black p-4 rounded-2xl border border-white/10 text-center font-bold mb-3 uppercase gold">
         <button onclick="checkKey()" class="text-[10px] opacity-30 uppercase font-bold underline">Activar Membresía</button>
     </div>
 </div>
 <div id="vip-ui" class="hidden"><div id="status-bar" class="bg-green-900/20 border border-green-500/30 p-4 rounded-2xl text-green-500 text-[10px] font-bold text-center mb-6 uppercase">Acceso VIP Activo</div><div id="gallery" class="space-y-4"></div><button onclick="logout()" class="w-full mt-8 text-[9px] opacity-20 uppercase font-bold">Cerrar Sesión</button></div></div>
-<div id="admin-panel"><h2 class="gold font-bold mb-4 uppercase text-sm">Panel Maestro</h2><div class="grid grid-cols-2 gap-2 mb-4"><button onclick="document.getElementById('up-v').click()" class="bg-white/10 p-4 rounded-xl text-[10px] font-bold">SUBIR FOTOS</button><button onclick="clearAll()" class="bg-red-900/20 text-red-500 p-4 rounded-xl text-[10px] font-bold">BORRAR TODO</button></div>
-    <div class="bg-white/5 p-4 rounded-xl mb-4"><p class="text-[10px] opacity-50 uppercase mb-2">Protocolo de Baneo</p><input type="text" id="ban-id" placeholder="UID del cliente" class="w-full bg-black border border-white/10 p-3 rounded-lg text-xs mb-2 uppercase"><div class="flex gap-2"><button onclick="toggleBan(true)" class="flex-1 bg-red-600 text-[10px] font-bold py-2 rounded-lg">BANEAR</button><button onclick="toggleBan(false)" class="flex-1 bg-green-600 text-[10px] font-bold py-2 rounded-lg">DESBANEAR</button></div></div>
-    <button onclick="changePin()" class="w-full mb-6 py-3 text-[10px] border border-white/10 rounded-xl opacity-40 uppercase">Cambiar PIN Admin</button><input type="file" id="up-v" accept="image/*" multiple class="hidden" onchange="upV(this)"><div id="adm-gal" class="grid grid-cols-4 gap-2 mb-6"></div><button onclick="closeAdmin()" class="w-full py-4 text-xs opacity-50 border border-white/10 rounded-xl">SALIR</button></div>
+<div id="admin-panel"><h2 class="gold font-bold mb-4 uppercase text-sm">Panel Maestro</h2><div class="grid grid-cols-2 gap-2 mb-4"><button onclick="document.getElementById('up-v').click()" class="bg-white/10 p-4 rounded-xl text-[10px] font-bold uppercase">Subir Fotos</button><button onclick="clearAll()" class="bg-red-900/20 text-red-500 p-4 rounded-xl text-[10px] font-bold uppercase">Borrar Todo</button></div>
+    <div class="bg-white/5 p-4 rounded-xl mb-4"><p class="text-[10px] opacity-50 uppercase mb-2">Protocolo de Baneo</p><input type="text" id="ban-id" placeholder="UID del Cliente" class="w-full bg-black border border-white/10 p-3 rounded-lg text-xs mb-2 uppercase"><div class="flex gap-2"><button onclick="toggleBan(true)" class="flex-1 bg-red-600 text-[10px] font-bold py-2 rounded-lg uppercase">Banear</button><button onclick="toggleBan(false)" class="flex-1 bg-green-600 text-[10px] font-bold py-2 rounded-lg uppercase">Desbanear</button></div></div>
+    <button onclick="changePin()" class="w-full mb-6 py-3 text-[10px] border border-white/10 rounded-xl opacity-40 uppercase">Cambiar PIN Admin</button><input type="file" id="up-v" accept="image/*" multiple class="hidden" onchange="upV(this)"><div id="adm-gal" class="grid grid-cols-4 gap-2 mb-6"></div><button onclick="closeAdmin()" class="w-full py-4 text-xs opacity-50 border border-white/10 rounded-xl uppercase">Salir</button></div>
 <script>
 let storage, db_fire; let curD=1; let adC=0; const rates={CR:525,PA:1,NI:36.5,GT:7.8,HN:24.7,SV:1,BZ:2}; const syms={CR:'₡',PA:'$',NI:'C$',GT:'Q',HN:'L',SV:'$',BZ:'BZ$'}; let curR=525; let curS='₡';
 const uid=localStorage.getItem('fc_id')||"UID-"+Math.random().toString(36).substr(2,6).toUpperCase();
 localStorage.setItem('fc_id',uid); document.getElementById('head-id').innerText=uid;
 
-const firebaseConfig = { apiKey: "TU_API_KEY_AQUI", authDomain: "", projectId: "", storageBucket: "", messagingSenderId: "", appId: "" };
+const firebaseConfig = {
+  apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",
+  authDomain: "fran-cruz-sala-vip.firebaseapp.com",
+  projectId: "fran-cruz-sala-vip",
+  storageBucket: "fran-cruz-sala-vip.firebasestorage.app",
+  messagingSenderId: "1022733043010",
+  appId: "1:1022733043010:web:379db18e37bbfde2cf34db"
+};
 
 function initFirebase(){
-    if(firebaseConfig.apiKey !== "TU_API_KEY_AQUI"){
-        firebase.initializeApp(firebaseConfig);
-        storage = firebase.storage(); db_fire = firebase.firestore();
-        checkExp(); checkBanStatus();
-    }
+    firebase.initializeApp(firebaseConfig);
+    storage=firebase.storage(); db_fire=firebase.firestore();
+    checkExp(); checkBanStatus();
 }
 function geo(){fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{if(rates[d.country_code])setLoc(d.country_code);}).catch(()=>setLoc('CR'));}
 function setLoc(c){curR=rates[c];curS=syms[c];updateUI();}
 function setPlan(d,p){curD=d;document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('active'));document.getElementById('p-'+d).classList.add('active');}
-function updateUI(){document.querySelectorAll('.local-p').forEach((el,i)=>{const p=[1,5,15][i];el.innerText=`(${curS}${Math.round(p*curR).toLocaleString()})`;});}
+function updateUI(){document.querySelectorAll('.local-p').forEach((el,i)=>{const p=[1,5,15]; el.innerText=`(${curS}${Math.round(p[i]*curR).toLocaleString()})`;});}
 function setMet(m){
     const i=document.getElementById('pay-info');
     document.querySelectorAll('[id^="m-"]').forEach(el=>el.classList.remove('gold'));
@@ -62,13 +67,29 @@ function checkKey(){
     }else alert("Clave incorrecta para hoy");
 }
 function checkExp(){const ex=localStorage.getItem('fc_exp');if(ex && new Date().getTime()<ex){document.getElementById('main-ui').classList.add('hidden');document.getElementById('vip-ui').classList.remove('hidden');loadGal();}}
-function checkBanStatus(){db_fire.collection("banlist").doc(uid).get().then(doc=>{if(doc.exists && doc.data().active){document.body.innerHTML='<div style="background:#000;color:red;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:bold;padding:20px;">ACCESO RESTRINGIDO POR EL ADMINISTRADOR.</div>';}});}
-function toggleBan(status){const target=document.getElementById('ban-id').value.toUpperCase();if(!target.startsWith("UID-")){alert("ID Inválido");return;}db_fire.collection("banlist").doc(target).set({active:status}).then(()=>alert(status?"Baneado":"Desbaneado"));}
-function handleAdmin(){adC++;if(adC>=5){const p=prompt("PIN:");if(p===(localStorage.getItem('fc_pin')||'1234'))document.getElementById('admin-panel').style.display='block';adC=0;}setTimeout(()=>adC=0,3000);}
+function checkBanStatus(){db_fire.collection("banlist").doc(uid).get().then(doc=>{if(doc.exists && doc.data().active){document.body.innerHTML='<div style="background:#000;color:red;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:bold;padding:20px;text-transform:uppercase">Acceso restringido por el administrador.</div>';}});}
+function toggleBan(status){const target=document.getElementById('ban-id').value.toUpperCase();if(!target.startsWith("UID-")){alert("ID Inválido");return;}db_fire.collection("banlist").doc(target).set({active:status}).then(()=>alert(status?"Usuario Baneado":"Usuario Desbaneado"));}
+function handleAdmin(){adC++;if(adC>=5){const p=prompt("PIN Maestro:");if(p===(localStorage.getItem('fc_pin')||'1234'))document.getElementById('admin-panel').style.display='block';adC=0;}setTimeout(()=>adC=0,3000);}
 function changePin(){const np=prompt("Nuevo PIN:");if(np&&np.length>=4)localStorage.setItem('fc_pin',np);}
-function loadGal(){ /* Sincronización Firebase */ }
-function upV(i){ /* Carga Firebase */ }
-function clearAll(){ if(confirm("¿Borrar todo?")){ /* Limpieza Firebase */ }}
+function loadGal(){
+    db_fire.collection("laminas").orderBy("date","desc").onSnapshot(snap=>{
+        const gal=document.getElementById('gallery'); const adm=document.getElementById('adm-gal');
+        gal.innerHTML = snap.docs.map(d=>`<img src="${d.data().url}" class="w-full rounded-3xl mb-4 shadow-lg shadow-white/5">`).join('');
+        adm.innerHTML = snap.docs.map(d=>`<div class="h-12 relative"><img src="${d.data().url}" class="w-full h-full object-cover rounded"><button onclick="del('${d.id}','${d.data().name}')" class="absolute top-0 right-0 bg-red-600 text-[8px] px-1 font-bold">×</button></div>`).join('');
+    });
+}
+function upV(input){
+    Array.from(input.files).forEach(file=>{
+        const ref=storage.ref('fotos/'+file.name);
+        ref.put(file).then(()=>{
+            ref.getDownloadURL().then(url=>{
+                db_fire.collection("laminas").add({url:url, name:file.name, date:Date.now()});
+            });
+        });
+    });
+}
+function del(id,name){if(confirm("¿Eliminar imagen?")){db_fire.collection("laminas").doc(id).delete();storage.ref('fotos/'+name).delete();}}
+function clearAll(){if(confirm("¿BORRAR TODO EL CONTENIDO?")){db_fire.collection("laminas").get().then(s=>s.forEach(d=>del(d.id,d.data().name)));}}
 function closeAdmin(){document.getElementById('admin-panel').style.display='none';}
 function logout(){localStorage.removeItem('fc_exp');location.reload();}
 geo(); updateUI(); initFirebase();
