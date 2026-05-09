@@ -69,7 +69,28 @@ function checkKey(){
 }
 
 function checkExp(){const ex=localStorage.getItem('fc_exp');if(ex&&new Date().getTime()<ex){document.getElementById('main-ui').classList.add('hidden');document.getElementById('vip-ui').classList.remove('hidden');loadGal();}}
-function checkBanStatus(){db_fire.collection("banlist").doc(uid).get().then(doc=>{if(doc.exists&&doc.data().active)document.body.innerHTML='<div class="h-screen bg-black flex items-center justify-center p-10 text-red-600 font-bold text-center uppercase">Acceso restringido permanentemente.</div>';});}
+
+function checkBanStatus(){
+    db_fire.collection("banlist").doc(uid).get().then(doc=>{
+        if(doc.exists&&doc.data().active){
+            document.body.innerHTML=`
+                <div class="h-screen bg-black flex flex-col items-center justify-center p-10 text-center">
+                    <div class="w-16 h-16 border-2 border-yellow-600/30 rounded-full flex items-center justify-center mb-6">
+                        <span class="text-yellow-600 text-2xl">!</span>
+                    </div>
+                    <h2 class="gold-text text-xl mb-4 uppercase font-black">Aviso de Seguridad</h2>
+                    <p class="text-white/40 text-[10px] uppercase leading-relaxed mb-8 max-w-xs">
+                        Tu cuenta requiere una validación manual por parte de nuestro equipo técnico. 
+                        Esto puede deberse a una inconsistencia en el comprobante o una actualización de seguridad.
+                    </p>
+                    <a href="https://wa.me/50664535475?text=${encodeURIComponent('Hola Fran, mi cuenta (ID: '+uid+') requiere revisión técnica.')}" 
+                       class="btn-gold text-xs py-4 px-8 decoration-0">Contactar Soporte</a>
+                    <p class="mt-10 text-[8px] opacity-10 font-mono">${uid}</p>
+                </div>`;
+        }
+    });
+}
+
 function toggleBan(s){const t=document.getElementById('ban-id').value.toUpperCase();if(!t.startsWith("UID-")){alert("ID Inválido");return;}db_fire.collection("banlist").doc(t).set({active:s}).then(()=>alert(s?"Baneado":"Desbaneado"));}
 function handleAdmin(){adC++;if(adC>=5){const p=prompt("PIN:");if(p===(localStorage.getItem('fc_pin')||'1234'))document.getElementById('admin-panel').style.display='block';adC=0;}setTimeout(()=>adC=0,3000);}
 function changePin(){const np=prompt("Nuevo PIN:");if(np&&np.length>=4)localStorage.setItem('fc_pin',np);}
