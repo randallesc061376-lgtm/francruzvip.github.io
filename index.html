@@ -3,61 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fran Cruz VIP - Acceso Seguro</title>
+    <title>Fran Cruz VIP | Plataforma Exclusiva</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <style>
-        :root { --oro: #d4af37; --negro: #0a0a0a; --gris: #1a1a1a; }
-        body { background: var(--negro); color: white; font-family: sans-serif; margin: 0; text-align: center; }
-        .pantalla { display: none; padding: 20px; }
-        .activa { display: block; }
-        .header-vip { border-bottom: 2px solid var(--oro); padding: 20px; margin-bottom: 20px; }
-        .btn-vip { background: var(--oro); color: black; border: none; padding: 15px 30px; font-weight: bold; cursor: pointer; border-radius: 5px; width: 100%; max-width: 300px; font-size: 1.1rem; }
-        .card { background: var(--gris); border: 1px solid #333; padding: 20px; border-radius: 10px; margin: 10px auto; max-width: 400px; }
-        #timer { font-size: 2rem; color: var(--oro); margin: 20px 0; }
-        .galeria-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; padding: 15px; }
-        .foto-vip { width: 100%; border-radius: 8px; border: 1px solid var(--oro); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        :root { --oro: #d4af37; --oro-brillante: #ffdf00; --negro: #050505; --gris-vip: #121212; }
+        body { background: var(--negro); color: #e0e0e0; font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; overflow-x: hidden; }
+        .pantalla { display: none; min-height: 100vh; animation: fadeIn 0.5s ease; }
+        .activa { display: flex; flex-direction: column; align-items: center; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* HEADER */
+        header { width: 100%; background: linear-gradient(to bottom, #1a1a1a, #050505); border-bottom: 2px solid var(--oro); padding: 25px 0; text-align: center; box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2); }
+        .logo-text { color: var(--oro); font-size: 1.8rem; font-weight: bold; letter-spacing: 5px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+
+        /* TABLA DE PRECIOS */
+        .contenedor-precios { width: 90%; max-width: 500px; margin-top: 20px; }
+        .card-precio { background: var(--gris-vip); border: 1px solid #333; border-radius: 12px; margin-bottom: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        .card-precio:hover { border-color: var(--oro); transform: translateY(-3px); }
+        .plan-info h3 { margin: 0; color: var(--oro); font-size: 1.1rem; }
+        .plan-info p { margin: 5px 0 0; font-size: 0.85rem; color: #aaa; }
+        .monto-local { text-align: right; }
+        .monto-local div { font-weight: bold; color: white; font-size: 1.2rem; }
+        .monto-local span { font-size: 0.8rem; color: var(--oro); }
+
+        /* BOTONES */
+        .btn-accion { background: linear-gradient(135deg, var(--oro), #b8860b); color: black; border: none; padding: 16px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; }
+        .btn-validar { background: transparent; border: 1px solid var(--oro); color: var(--oro); margin-top: 10px; }
+
+        /* BANDERAS Y PAÍS */
+        .pais-banner { background: #1a1a1a; padding: 10px 20px; border-radius: 20px; font-size: 0.9rem; margin: 15px 0; border: 1px solid #222; }
+
+        /* CRONÓMETRO */
+        #timer { font-size: 4rem; font-weight: bold; color: var(--oro); text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+
+        /* SALA VIP GALERÍA */
+        .galeria-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 20px; width: 100%; box-sizing: border-box; }
+        .foto-container { border-radius: 10px; overflow: hidden; border: 1px solid #222; background: #000; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .foto-container img { width: 100%; height: auto; display: block; filter: brightness(0.9); transition: 0.5s; }
+        .foto-container img:hover { filter: brightness(1.1); transform: scale(1.03); }
     </style>
 </head>
 <body>
 
-    <div id="paso-inicio" class="pantalla activa">
-        <div class="header-vip"><h1>FRAN CRUZ VIP</h1></div>
-        <div class="card">
-            <p id="info-pais">Detectando ubicación...</p>
-            <h2 id="precio-vip">Membresía 30 días: $15 USD</h2>
-            <p>Acceso exclusivo a contenido diario.</p>
-            <button class="btn-vip" onclick="iniciarSeguridad()">ADQUIRIR ACCESO</button>
+    <header><div class="logo-text">Fran Cruz VIP</div></header>
+
+    <div id="pantalla-inicio" class="pantalla activa">
+        <div class="pais-banner" id="display-ubicacion">Detectando región segura...</div>
+        
+        <div class="contenedor-precios">
+            <div class="card-precio">
+                <div class="plan-info"><h3>Acceso 24 Horas</h3><p>Prueba el contenido VIP</p></div>
+                <div class="monto-local"><div id="p1-monto">$1.00</div><span id="p1-tag">USD</span></div>
+            </div>
+            <div class="card-precio">
+                <div class="plan-info"><h3>Semana Silver</h3><p>7 días de acceso total</p></div>
+                <div class="monto-local"><div id="p7-monto">$5.00</div><span id="p7-tag">USD</span></div>
+            </div>
+            <div class="card-precio" style="border: 1px solid var(--oro); background: rgba(212, 175, 55, 0.05);">
+                <div class="plan-info"><h3>Membresía Gold</h3><p>30 días (Ahorro máximo)</p></div>
+                <div class="monto-local"><div id="p30-monto">$15.00</div><span id="p30-tag">USD</span></div>
+            </div>
+
+            <button class="btn-accion" onclick="iniciarProtocolo()">Adquirir Acceso Ahora</button>
+            <button class="btn-accion btn-validar" onclick="irAPago()">Validar Comprobante Existente</button>
+        </div>
+        <p style="font-size: 0.7rem; color: #555; margin-top: 20px;">Seguridad Certificada Fran Cruz &copy; 2026</p>
+    </div>
+
+    <div id="pantalla-seguridad" class="pantalla">
+        <h2 style="color: var(--oro); margin-top: 50px;">EJECUTANDO FILTROS DE SEGURIDAD</h2>
+        <p>Cifrando túnel de acceso...</p>
+        <div id="timer">15</div>
+        <div style="width: 80%; max-width: 300px; height: 4px; background: #222; border-radius: 2px;">
+            <div id="bar" style="width: 0%; height: 100%; background: var(--oro); transition: 1s linear;"></div>
         </div>
     </div>
 
-    <div id="paso-seguridad" class="pantalla">
-        <div class="header-vip"><h2>SISTEMA DE SEGURIDAD</h2></div>
-        <div class="card">
-            <p>Validando conexión cifrada y filtros de seguridad...</p>
-            <div id="timer">15</div>
-            <p style="color: #888;">No cierre esta ventana</p>
+    <div id="pantalla-pago" class="pantalla">
+        <div class="contenedor-precios" style="text-align: center; margin-top: 30px;">
+            <h2 style="color: var(--oro);">VERIFICACIÓN MANUAL</h2>
+            <p>1. Realice el pago según su moneda local.<br>2. Envíe el comprobante al botón de abajo.</p>
+            <button class="btn-accion" onclick="abrirWA()">Enviar Comprobante (WhatsApp)</button>
+            <hr style="border: 0; border-top: 1px solid #333; margin: 30px 0;">
+            <p>Una vez reciba su clave por WhatsApp, ingrésela aquí:</p>
+            <input type="text" id="clave-input" placeholder="INGRESE CLAVE DINÁMICA" style="background: #1a1a1a; border: 1px solid var(--oro); padding: 15px; width: 100%; color: white; text-align: center; font-weight: bold; border-radius: 8px; box-sizing: border-box;">
+            <button class="btn-accion" style="margin-top: 15px;" onclick="validarEntrada()">Acceder a la Sala VIP</button>
         </div>
     </div>
 
-    <div id="paso-pago" class="pantalla">
-        <div class="header-vip"><h2>VALIDACIÓN DE PAGO</h2></div>
-        <div class="card">
-            <p>Para activar su acceso, envíe el comprobante de pago ($15 USD / Equiv. Local) a nuestro canal de verificación manual.</p>
-            <button class="btn-vip" onclick="abrirWhatsApp()">VALIDAR COMPROBANTE</button>
-            <p style="margin-top:20px; font-size:0.8rem;">Tras la validación, recibirá su CLAVE DINÁMICA.</p>
-            <input type="text" id="clave-input" placeholder="Ingrese Clave Dinámica" style="padding:10px; width:80%; margin-top:10px;">
-            <button class="btn-vip" style="margin-top:10px;" onclick="verificarClave()">INGRESAR A SALA VIP</button>
-        </div>
-    </div>
-
-    <div id="paso-sala" class="pantalla">
-        <div class="header-vip"><h1>SALA VIP FRAN CRUZ</h1></div>
+    <div id="pantalla-sala" class="pantalla">
+        <div class="logo-text" style="margin: 20px 0; font-size: 1.2rem;">SALA VIP FRAN CRUZ</div>
         <div id="galeria-fotos" class="galeria-grid">
             </div>
-        <button class="btn-vip" onclick="location.reload()" style="margin: 20px;">CERRAR SESIÓN</button>
+        <button class="btn-accion btn-validar" onclick="location.reload()" style="width: auto; padding: 10px 40px; margin: 30px;">Salir de la Sala</button>
     </div>    <script>
-        // 1. CONFIGURACIÓN DE TU PROYECTO FIREBASE
+        // 1. TU CONFIGURACIÓN DE FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",
             authDomain: "fran-cruz-sala-vip.firebaseapp.com",
@@ -70,85 +111,109 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 2. DETECCIÓN DE PAÍS Y PRECIOS AUTOMÁTICOS
-        async function detectarUbicacion() {
+        // 2. DETECTOR DE PAÍS Y RECALCULO DE TARIFAS
+        async function gestionarPrecios() {
             try {
-                const response = await fetch('https://ipapi.co/json/');
-                const data = await response.json();
-                const infoPais = document.getElementById('info-pais');
-                const precioVIP = document.getElementById('precio-vip');
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                const display = document.getElementById('display-ubicacion');
+                
+                // Tarifas base en USD
+                let p1 = 1, p7 = 5, p30 = 15;
+                let moneda = "USD", simbolo = "$";
 
+                // Lógica de conversión (Aproximada según mercado)
                 if (data.country_code === 'CR') {
-                    infoPais.innerText = `Ubicación detectada: Costa Rica 🇨🇷`;
-                    precioVIP.innerText = `Membresía 30 días: ₡8,250 CRC`; // Aprox $15
+                    moneda = "CRC"; simbolo = "₡";
+                    p1 = 550; p7 = 2750; p30 = 8250;
+                    display.innerHTML = `🇨🇷 Detectado en Costa Rica | Conexión Segura`;
+                } else if (data.country_code === 'MX') {
+                    moneda = "MXN"; simbolo = "$";
+                    p1 = 20; p7 = 100; p30 = 300;
+                    display.innerHTML = `🇲🇽 Detectado en México | Conexión Segura`;
+                } else if (data.country_code === 'ES') {
+                    moneda = "EUR"; simbolo = "€";
+                    display.innerHTML = `🇪🇸 Detectado en España | Conexión Segura`;
                 } else {
-                    infoPais.innerText = `Ubicación: ${data.country_name} ${data.country_emoji || ''}`;
-                    precioVIP.innerText = `Membresía 30 días: $15 USD`;
+                    display.innerHTML = `${data.country_emoji || '🌐'} Ubicación: ${data.country_name} | Conexión Segura`;
                 }
-            } catch (error) {
-                console.log("Error al detectar país, usando USD por defecto.");
+
+                // Actualizar interfaz
+                document.getElementById('p1-monto').innerText = `${simbolo}${p1.toLocaleString()}`;
+                document.getElementById('p7-monto').innerText = `${simbolo}${p7.toLocaleString()}`;
+                document.getElementById('p30-monto').innerText = `${simbolo}${p30.toLocaleString()}`;
+                document.getElementById('p1-tag').innerText = moneda;
+                document.getElementById('p7-tag').innerText = moneda;
+                document.getElementById('p30-tag').innerText = moneda;
+
+            } catch (e) {
+                console.log("Usando tarifas base USD");
             }
         }
-        detectarUbicacion();
+        gestionarPrecios();
 
-        // 3. PROTOCOLO DE SEGURIDAD (15 SEGUNDOS)
-        function iniciarSeguridad() {
-            document.getElementById('paso-inicio').classList.remove('activa');
-            document.getElementById('paso-seguridad').classList.add('activa');
+        // 3. LOGICA DE NAVEGACIÓN Y SEGURIDAD
+        function iniciarProtocolo() {
+            document.getElementById('pantalla-inicio').classList.remove('activa');
+            document.getElementById('pantalla-seguridad').classList.add('activa');
             
-            let tiempo = 15;
+            let seg = 15;
+            const bar = document.getElementById('bar');
+            const timer = document.getElementById('timer');
+
             const intervalo = setInterval(() => {
-                tiempo--;
-                document.getElementById('timer').innerText = tiempo;
-                if (tiempo <= 0) {
+                seg--;
+                timer.innerText = seg;
+                bar.style.width = `${((15-seg)/15)*100}%`;
+                
+                if (seg <= 0) {
                     clearInterval(intervalo);
-                    mostrarPago();
+                    irAPago();
                 }
             }, 1000);
         }
 
-        function mostrarPago() {
-            document.getElementById('paso-seguridad').classList.remove('activa');
-            document.getElementById('paso-pago').classList.add('activa');
+        function irAPago() {
+            document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+            document.getElementById('pantalla-pago').classList.add('activa');
         }
 
-        // 4. VALIDACIÓN MANUAL Y CLAVE DINÁMICA
-        function abrirWhatsApp() {
-            const msj = encodeURIComponent("Hola Fran, adjunto mi comprobante de pago para acceso VIP.");
-            window.open(`https://wa.me/506XXXXXXXX?text=${msj}`, '_blank');
+        function abrirWA() {
+            const tel = "506XXXXXXXX"; // Reemplaza con tu número real
+            const url = `https://wa.me/${tel}?text=Hola%20Fran,%20envío%20mi%20comprobante%20para%20acceso%20VIP.`;
+            window.open(url, '_blank');
         }
 
-        function verificarClave() {
-            const clave = document.getElementById('clave-input').value;
-            // Aquí puedes definir tu clave dinámica actual
-            if (clave.toUpperCase() === "FRANVIP2026") {
-                document.getElementById('paso-pago').classList.remove('activa');
-                document.getElementById('paso-sala').classList.add('activa');
-                conectarGaleria();
+        function validarEntrada() {
+            const clave = document.getElementById('clave-input').value.trim().toUpperCase();
+            // Clave de acceso pactada
+            if (clave === "FRANVIP2026") {
+                document.getElementById('pantalla-pago').classList.remove('activa');
+                document.getElementById('pantalla-sala').classList.add('activa');
+                cargarFotosReales();
             } else {
-                alert("Clave incorrecta o expirada. Por favor, solicite una clave válida.");
+                alert("Clave inválida. Verifique con el administrador.");
             }
         }
 
-        // 5. CARGA DE IMÁGENES DESDE FIRESTORE
-        function conectarGaleria() {
-            const contenedor = document.getElementById('galeria-fotos');
+        // 4. CARGA DE LA GALERÍA DESDE FIRESTORE
+        function cargarFotosReales() {
+            const grid = document.getElementById('galeria-fotos');
             
             db.collection("galeria").orderBy("fecha", "desc").onSnapshot((snapshot) => {
-                contenedor.innerHTML = '';
+                grid.innerHTML = '';
                 if (snapshot.empty) {
-                    contenedor.innerHTML = '<p>No hay contenido nuevo hoy. Vuelve pronto.</p>';
+                    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">Cargando contenido exclusivo del día...</p>';
                     return;
                 }
                 
                 snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    if (data.url) {
-                        const img = document.createElement('img');
-                        img.src = data.url;
-                        img.className = 'foto-vip';
-                        img.alt = "Contenido Exclusivo";
-                        contenedor.appendChild(img);
+                    const foto = doc.data();
+                    if (foto.url) {
+                        const div = document.createElement('div');
+                        div.className = 'foto-container';
+                        div.innerHTML = `<img src="${foto.url}" alt="VIP Content" onerror="this.style.display='none'">`;
+                        grid.appendChild(div);
                     }
                 });
             });
