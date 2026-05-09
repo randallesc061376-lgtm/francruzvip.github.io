@@ -1,13 +1,7 @@
 <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Sala VIP Fran Cruz</title><script src="https://cdn.tailwindcss.com"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script><style>
 body{background:#000;color:#fff;font-family:sans-serif;user-select:none}
-.gold-text{
-    background: linear-gradient(to bottom, #d4af37 0%, #f9f295 50%, #d4af37 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
-    font-weight: 900;
-}
-.btn-gold{background:linear-gradient(#e6be40, #8a6d1c);color:#000;padding:18px;width:100%;border-radius:20px;font-weight:800;text-transform:uppercase;box-shadow: 0 4px 15px rgba(212,175,55,0.3)}
+.gold-text{background:linear-gradient(to bottom, #d4af37 0%, #f9f295 50%, #d4af37 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.8));font-weight:900}
+.btn-gold{background:linear-gradient(#e6be40, #8a6d1c);color:#000;padding:18px;width:100%;border-radius:20px;font-weight:800;text-transform:uppercase;box-shadow:0 4px 15px rgba(212,175,55,0.3)}
 input{outline:none}#admin-panel{display:none;position:fixed;inset:0;background:#000;z-index:999;padding:20px;overflow-y:auto}
 .plan-card{background:#0a0a0a;border:1px solid #1a1a1a;padding:15px;border-radius:20px;cursor:pointer}
 .plan-card.active{border-color:#d4af37;background:#120f05}
@@ -16,7 +10,8 @@ input{outline:none}#admin-panel{display:none;position:fixed;inset:0;background:#
 @keyframes spin{to{transform:rotate(360deg)}}
 </style></head><body>
 <div id="loader-v"><div class="spinner mb-6"></div><p id="load-msg" class="gold-text font-bold text-[10px] uppercase tracking-widest text-center px-10"></p></div>
-<header class="text-center pt-8"><h1 onclick="handleAdmin()" class="text-4xl gold-text tracking-tighter cursor-pointer">SALA VIP FRAN CRUZ</h1><p id="head-id" class="text-[9px] opacity-20 font-mono mt-1 uppercase"></p></header><div id="app" class="p-4 max-w-sm mx-auto"><div id="main-ui">
+<header class="text-center pt-8"><h1 onclick="handleAdmin()" class="text-4xl gold-text tracking-tighter cursor-pointer uppercase">Sala VIP Fran Cruz</h1><p id="head-id" class="text-[9px] opacity-20 font-mono mt-1 uppercase"></p></header>
+<div id="app" class="p-4 max-w-sm mx-auto"><div id="main-ui">
     <div class="flex justify-center flex-wrap gap-3 mb-6 opacity-40">
         <span onclick="setLoc('CR')" class="cursor-pointer text-xl">🇨🇷</span><span onclick="setLoc('PA')" class="cursor-pointer text-xl">🇵🇦</span><span onclick="setLoc('NI')" class="cursor-pointer text-xl">🇳🇮</span><span onclick="setLoc('GT')" class="cursor-pointer text-xl">🇬🇹</span><span onclick="setLoc('HN')" class="cursor-pointer text-xl">🇭🇳</span><span onclick="setLoc('SV')" class="cursor-pointer text-xl">🇸🇻</span><span onclick="setLoc('BZ')" class="cursor-pointer text-xl">🇧🇿</span>
     </div>
@@ -32,25 +27,49 @@ input{outline:none}#admin-panel{display:none;position:fixed;inset:0;background:#
         <input type="text" id="key-in" placeholder="CLAVE DE ACCESO" class="w-full bg-black p-4 rounded-2xl border border-white/10 text-center font-bold mb-3 uppercase gold-text">
         <button onclick="checkKey()" class="text-[10px] opacity-30 uppercase underline">Activar Membresía</button>
     </div>
-</div>
-<div id="vip-ui" class="hidden"><div class="bg-green-900/20 border border-green-500/30 p-4 rounded-2xl text-green-500 text-[10px] font-bold text-center mb-6 uppercase">Acceso VIP Activo</div><div id="gallery" class="grid grid-cols-1 gap-4"></div><button onclick="logout()" class="w-full mt-8 text-[9px] opacity-20 uppercase font-bold">Cerrar Sesión</button></div></div>
+</div><div id="vip-ui" class="hidden"><div class="bg-green-900/20 border border-green-500/30 p-4 rounded-2xl text-green-500 text-[10px] font-bold text-center mb-6 uppercase tracking-widest">Acceso VIP Activo</div><div id="gallery" class="grid grid-cols-1 gap-4"></div><button onclick="logout()" class="w-full mt-8 text-[9px] opacity-20 uppercase font-bold">Cerrar Sesión</button></div></div>
 <div id="admin-panel"><h2 class="gold-text mb-4 uppercase text-sm">Panel Maestro</h2><div class="grid grid-cols-2 gap-2 mb-4"><button onclick="document.getElementById('up-v').click()" class="bg-white/10 p-4 rounded-xl text-[10px] font-bold uppercase">Subir Fotos</button><button onclick="clearAll()" class="bg-red-900/20 text-red-500 p-4 rounded-xl text-[10px] font-bold uppercase">Borrar Todo</button></div>
-<div class="bg-white/5 p-4 rounded-xl mb-4 border border-white/10"><p class="text-[10px] opacity-50 uppercase mb-2 text-center">Gestión de Usuarios</p><input type="text" id="ban-id" placeholder="UID DEL CLIENTE" class="w-full bg-black border border-white/10 p-3 rounded-lg text-xs mb-2 uppercase gold-text font-mono"><div class="flex gap-2"><button onclick="toggleBan(true)" class="flex-1 bg-red-600 font-bold py-2 rounded-lg text-[10px] uppercase text-white">Banear</button><button onclick="toggleBan(false)" class="flex-1 bg-green-600 font-bold py-2 rounded-lg text-[10px] uppercase text-white">Desbanear</button></div></div>
-<button onclick="changePin()" class="w-full py-3 text-[10px] border border-white/10 rounded-xl opacity-40 uppercase">Cambiar PIN</button><div id="adm-gal" class="grid grid-cols-4 gap-2 my-6"></div><button onclick="closeAdmin()" class="w-full py-4 text-xs opacity-50 border border-white/10 rounded-xl uppercase">Salir</button></div>
+<div class="bg-white/5 p-4 rounded-xl mb-4 border border-white/10"><p class="text-[10px] opacity-50 uppercase mb-2 text-center">Protocolo de Baneo</p><input type="text" id="ban-id" placeholder="UID DEL CLIENTE" class="w-full bg-black border border-white/10 p-3 rounded-lg text-xs mb-2 uppercase gold-text font-mono"><div class="flex gap-2"><button onclick="toggleBan(true)" class="flex-1 bg-red-600 font-bold py-2 rounded-lg text-[10px] uppercase text-white">Banear</button><button onclick="toggleBan(false)" class="flex-1 bg-green-600 font-bold py-2 rounded-lg text-[10px] uppercase text-white">Desbanear</button></div></div>
+<button onclick="changePin()" class="w-full py-3 text-[10px] border border-white/10 rounded-xl opacity-40 uppercase">Cambiar PIN</button><div id="adm-gal" class="grid grid-cols-4 gap-2 my-6"></div><button onclick="closeAdmin()" class="w-full py-4 text-xs opacity-50 border border-white/10 rounded-xl uppercase text-white">Salir</button></div>
 <script>
 let storage,db_fire,curD=1,adC=0,curR=525,curS='₡';const rates={CR:525,PA:1,NI:36.5,GT:7.8,HN:24.7,SV:1,BZ:2},syms={CR:'₡',PA:'$',NI:'C$',GT:'Q',HN:'L',SV:'$',BZ:'BZ$'};
 const uid=localStorage.getItem('fc_id')||"UID-"+Math.random().toString(36).substr(2,6).toUpperCase();localStorage.setItem('fc_id',uid);document.getElementById('head-id').innerText=uid;
-function startSecurityProtocol(){if(!document.getElementById('client-proof').files[0])return;const l=document.getElementById('loader-v'),t=document.getElementById('load-msg'),ms=["Extrayendo archivo...","Analizando metadatos...","Sincronizando seguridad...","Calculando clave acceso...","Finalizado. Enviando..."];l.style.display='flex';let i=0;const iv=setInterval(()=>{t.innerText=ms[i];i++;if(i>=ms.length){clearInterval(iv);sendToWA();}},2500);}
-function sendToWA(){const d=new Date(),k=uid.slice(-2)+d.getDate().toString().padStart(2,'0'),msg=`Hola Fran Cruz VIP. Comprobante ID: ${uid}. Plan: ${curD} días. Clave: ${k}`;window.location.href=`whatsapp://send?phone=50664535475&text=${encodeURIComponent(msg)}`;setTimeout(()=>document.getElementById('loader-v').style.display='none',2000);}
+
+function startSecurityProtocol(){
+    if(!document.getElementById('client-proof').files[0])return;
+    const l=document.getElementById('loader-v'),t=document.getElementById('load-msg'),
+    ms=["Extrayendo archivo...","Analizando metadatos...","Sincronizando seguridad...","Calculando clave acceso...","¡LISTO! ADJUNTA LA FOTO EN WHATSAPP"];
+    l.style.display='flex';let i=0;
+    const iv=setInterval(()=>{t.innerText=ms[i];i++;if(i>=ms.length){clearInterval(iv);sendToWA();}},3000);
+}
+
+function sendToWA(){
+    const d=new Date(),day=d.getDate().toString().padStart(2,'0'),idPart=uid.split('-')[1];
+    const p1=Math.floor(Math.random()*6);let p2=Math.floor(Math.random()*6);while(p2===p1)p2=Math.floor(Math.random()*6);
+    const key=idPart[p1]+idPart[p2]+day;
+    const msg=`Hola Fran Cruz VIP. Comprobante ID: ${uid}. Plan: ${curD} días. Clave: ${key.toUpperCase()}`;
+    window.location.href=`whatsapp://send?phone=50664535475&text=${encodeURIComponent(msg)}`;
+    setTimeout(()=>document.getElementById('loader-v').style.display='none',2000);
+}
+
 const firebaseConfig={apiKey:"AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",authDomain:"fran-cruz-sala-vip.firebaseapp.com",projectId:"fran-cruz-sala-vip",storageBucket:"fran-cruz-sala-vip.firebasestorage.app",messagingSenderId:"1022733043010",appId:"1:1022733043010:web:379db18e37bbfde2cf34db"};
 function initFirebase(){firebase.initializeApp(firebaseConfig);storage=firebase.storage();db_fire=firebase.firestore();checkExp();checkBanStatus();}
 function setLoc(c){curR=rates[c];curS=syms[c];updateUI();}
 function setPlan(d,p){curD=d;document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('active'));document.getElementById('p-'+d).classList.add('active');}
 function updateUI(){document.querySelectorAll('.local-p').forEach((el,i)=>{const p=[1,5,15];el.innerText=`(${curS}${Math.round(p[i]*curR).toLocaleString()})`;});}
 function setMet(m){const i=document.getElementById('pay-info');document.querySelectorAll('[id^="m-"]').forEach(el=>el.classList.remove('gold-text'));document.getElementById('m-'+m).classList.add('gold-text');if(m==='SINPE')i.innerText='SINPE: 7083-5833';else if(m==='IBAN')i.innerText='IBAN: CR80080315001000035641';else i.innerText='PayPal: randallesc061376@gmail.com';}
-function checkKey(){const k=uid.slice(-2)+new Date().getDate().toString().padStart(2,'0');if(document.getElementById('key-in').value.toUpperCase()===k){let ex=new Date();ex.setDate(ex.getDate()+(curD-1));ex.setHours(23,59,59,999);localStorage.setItem('fc_exp',ex.getTime());location.reload();}else alert("Clave inválida");}
+
+function checkKey(){
+    const inputKey=document.getElementById('key-in').value.toUpperCase();
+    const idPart=uid.split('-')[1],day=new Date().getDate().toString().padStart(2,'0');
+    if(inputKey.length>=4 && idPart.includes(inputKey[0]) && idPart.includes(inputKey[1]) && inputKey.endsWith(day)){
+        let ex=new Date();ex.setDate(ex.getDate()+(curD-1));ex.setHours(23,59,59,999);
+        localStorage.setItem('fc_exp',ex.getTime());location.reload();
+    }else alert("Clave inválida o vencida.");
+}
+
 function checkExp(){const ex=localStorage.getItem('fc_exp');if(ex&&new Date().getTime()<ex){document.getElementById('main-ui').classList.add('hidden');document.getElementById('vip-ui').classList.remove('hidden');loadGal();}}
-function checkBanStatus(){db_fire.collection("banlist").doc(uid).get().then(doc=>{if(doc.exists&&doc.data().active)document.body.innerHTML='<div style="background:#000;color:red;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:bold;padding:20px;text-transform:uppercase">Acceso restringido.</div>';});}
+function checkBanStatus(){db_fire.collection("banlist").doc(uid).get().then(doc=>{if(doc.exists&&doc.data().active)document.body.innerHTML='<div class="h-screen bg-black flex items-center justify-center p-10 text-red-600 font-bold text-center uppercase">Acceso restringido permanentemente.</div>';});}
 function toggleBan(s){const t=document.getElementById('ban-id').value.toUpperCase();if(!t.startsWith("UID-")){alert("ID Inválido");return;}db_fire.collection("banlist").doc(t).set({active:s}).then(()=>alert(s?"Baneado":"Desbaneado"));}
 function handleAdmin(){adC++;if(adC>=5){const p=prompt("PIN:");if(p===(localStorage.getItem('fc_pin')||'1234'))document.getElementById('admin-panel').style.display='block';adC=0;}setTimeout(()=>adC=0,3000);}
 function changePin(){const np=prompt("Nuevo PIN:");if(np&&np.length>=4)localStorage.setItem('fc_pin',np);}
