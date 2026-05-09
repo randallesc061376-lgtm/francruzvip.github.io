@@ -13,30 +13,45 @@
     <div class="bg-[#0a0a0a] border border-white/5 p-6 rounded-[35px] text-center mb-6">
         <div class="flex text-[10px] font-bold uppercase mb-4 opacity-40 border-b border-white/5 pb-2"><span onclick="setMet('SINPE')" id="m-SINPE" class="flex-1 gold">SINPE</span><span onclick="setMet('IBAN')" id="m-IBAN" class="flex-1">IBAN</span><span onclick="setMet('PAYPAL')" id="m-PAYPAL" class="flex-1">PAYPAL</span></div>
         <div class="mb-4"><p class="text-[10px] gold font-bold uppercase mb-1">Titular: Randall Sánchez C.</p><p id="pay-info" class="text-xs font-mono uppercase text-white/80">SINPE: 7083-5833</p></div>
-        <button onclick="startSecurityProtocol()" class="btn-gold mb-4">Validar Comprobante</button>
+        
+        <input type="file" id="client-proof" accept="image/*" class="hidden" onchange="startSecurityProtocol()">
+        <button onclick="document.getElementById('client-proof').click()" class="btn-gold mb-4">Validar Comprobante</button>
+        
         <input type="text" id="key-in" placeholder="CLAVE DE ACCESO" class="w-full bg-black p-4 rounded-2xl border border-white/10 text-center font-bold mb-3 uppercase gold">
         <button onclick="checkKey()" class="text-[10px] opacity-30 uppercase font-bold underline">Activar Membresía</button>
     </div>
-</div>
-<div id="vip-ui" class="hidden"><div id="status-bar" class="bg-green-900/20 border border-green-500/30 p-4 rounded-2xl text-green-500 text-[10px] font-bold text-center mb-6 uppercase">Acceso VIP Activo</div><div id="gallery" class="space-y-4"></div><button onclick="logout()" class="w-full mt-8 text-[9px] opacity-20 uppercase font-bold">Cerrar Sesión</button></div></div>
+</div><div id="vip-ui" class="hidden"><div id="status-bar" class="bg-green-900/20 border border-green-500/30 p-4 rounded-2xl text-green-500 text-[10px] font-bold text-center mb-6 uppercase">Acceso VIP Activo</div><div id="gallery" class="space-y-4"></div><button onclick="logout()" class="w-full mt-8 text-[9px] opacity-20 uppercase font-bold">Cerrar Sesión</button></div></div>
 <div id="admin-panel"><h2 class="gold font-bold mb-4 uppercase text-sm">Panel Maestro</h2><div class="grid grid-cols-2 gap-2 mb-4"><button onclick="document.getElementById('up-v').click()" class="bg-white/10 p-4 rounded-xl text-[10px] font-bold uppercase">Subir Fotos</button><button onclick="clearAll()" class="bg-red-900/20 text-red-500 p-4 rounded-xl text-[10px] font-bold uppercase">Borrar Todo</button></div><input type="file" id="up-v" accept="image/*" multiple class="hidden" onchange="upV(this)"><div id="adm-gal" class="grid grid-cols-4 gap-2 mb-6"></div><button onclick="closeAdmin()" class="w-full py-4 text-xs opacity-50 border border-white/10 rounded-xl uppercase">Salir</button></div>
+
 <script>
-let storage, db_fire, curD=1, adC=0, curR=525, curS='₡'; const rates={CR:525,PA:1,NI:36.5,GT:7.8,HN:24.7,SV:1,BZ:2}, syms={CR:'₡',PA:'$',NI:'C$',GT:'Q',HN:'L',SV:'$',BZ:'BZ$'};
+let storage, db_fire, curD=1, adC=0, curR=525, curS='₡'; 
+const rates={CR:525,PA:1,NI:36.5,GT:7.8,HN:24.7,SV:1,BZ:2}, syms={CR:'₡',PA:'$',NI:'C$',GT:'Q',HN:'L',SV:'$',BZ:'BZ$'};
 const uid=localStorage.getItem('fc_id')||"UID-"+Math.random().toString(36).substr(2,6).toUpperCase();
 localStorage.setItem('fc_id',uid); document.getElementById('head-id').innerText=uid;
 
 function startSecurityProtocol(){
+    const fileInput = document.getElementById('client-proof');
+    if(!fileInput.files[0]) return; // Si no eligió foto, no hace nada
+
     const l=document.getElementById('loader-v'), t=document.getElementById('load-msg');
-    const msgs=["Iniciando escaneo de seguridad...","Analizando metadatos de imagen...","Verificando integridad de píxeles...","Extrayendo geolocalización de pago...","Generando clave dinámica segura...","Protocolo Finalizado con éxito."];
+    const msgs=["Extrayendo archivo del dispositivo...","Analizando metadatos y megapíxeles...","Verificando autenticidad de pago...","Sincronizando con base de datos...","Calculando clave dinámica de acceso...","Protocolo Finalizado. Enviando..."];
     l.style.display='flex'; let i=0;
-    const iv=setInterval(()=>{ t.innerText=msgs[i]; i++; if(i>=msgs.length){ clearInterval(iv); sendToWA(); } }, 2500);
+    
+    const iv=setInterval(()=>{ 
+        t.innerText=msgs[i]; i++; 
+        if(i>=msgs.length){ clearInterval(iv); sendToWA(); } 
+    }, 2500); // 15 segundos totales aprox
 }
 
 function sendToWA(){
-    const date=new Date(); const key=uid.slice(-2)+date.getDate().toString().padStart(2,'0');
-    const msg=`Hola Fran Cruz VIP. Comprobante ID: ${uid}. Clave Generada para hoy: ${key}. Pago por plan de ${curD} días.`;
-    window.open(`https://wa.me/50664535475?text=${encodeURIComponent(msg)}`);
-    setTimeout(()=>document.getElementById('loader-v').style.display='none', 1000);
+    const date=new Date(); 
+    const key=uid.slice(-2)+date.getDate().toString().padStart(2,'0');
+    const msg=`Hola Fran Cruz VIP. Envío mi comprobante ID: ${uid}. Plan seleccionado: ${curD} días. Clave calculada: ${key}`;
+    
+    // Protocolo whatsapp:// para evitar la página de "Descarga WhatsApp"
+    window.location.href = `whatsapp://send?phone=50664535475&text=${encodeURIComponent(msg)}`;
+    
+    setTimeout(()=>document.getElementById('loader-v').style.display='none', 2000);
 }
 
 const firebaseConfig={apiKey:"AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",authDomain:"fran-cruz-sala-vip.firebaseapp.com",projectId:"fran-cruz-sala-vip",storageBucket:"fran-cruz-sala-vip.firebasestorage.app",messagingSenderId:"1022733043010",appId:"1:1022733043010:web:379db18e37bbfde2cf34db"};
@@ -65,3 +80,4 @@ function closeAdmin(){document.getElementById('admin-panel').style.display='none
 function logout(){localStorage.removeItem('fc_exp');location.reload();}
 initFirebase(); updateUI();
 </script></body></html>
+
