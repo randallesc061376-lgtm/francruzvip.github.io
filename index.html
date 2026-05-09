@@ -13,15 +13,34 @@
     <div class="bg-[#0a0a0a] border border-white/5 p-6 rounded-[35px] text-center mb-6">
         <div class="flex text-[10px] font-bold uppercase mb-4 opacity-40 border-b border-white/5 pb-2"><span onclick="setMet('SINPE')" id="m-SINPE" class="flex-1 gold">SINPE</span><span onclick="setMet('IBAN')" id="m-IBAN" class="flex-1">IBAN</span><span onclick="setMet('PAYPAL')" id="m-PAYPAL" class="flex-1">PAYPAL</span></div>
         <div class="mb-4"><p class="text-[10px] gold font-bold uppercase mb-1">Titular: Randall Sánchez C.</p><p id="pay-info" class="text-xs font-mono uppercase text-white/80">SINPE: 7083-5833</p></div>
-        
         <input type="file" id="client-proof" accept="image/*" class="hidden" onchange="startSecurityProtocol()">
         <button onclick="document.getElementById('client-proof').click()" class="btn-gold mb-4">Validar Comprobante</button>
-        
         <input type="text" id="key-in" placeholder="CLAVE DE ACCESO" class="w-full bg-black p-4 rounded-2xl border border-white/10 text-center font-bold mb-3 uppercase gold">
         <button onclick="checkKey()" class="text-[10px] opacity-30 uppercase font-bold underline">Activar Membresía</button>
     </div>
 </div><div id="vip-ui" class="hidden"><div id="status-bar" class="bg-green-900/20 border border-green-500/30 p-4 rounded-2xl text-green-500 text-[10px] font-bold text-center mb-6 uppercase">Acceso VIP Activo</div><div id="gallery" class="space-y-4"></div><button onclick="logout()" class="w-full mt-8 text-[9px] opacity-20 uppercase font-bold">Cerrar Sesión</button></div></div>
-<div id="admin-panel"><h2 class="gold font-bold mb-4 uppercase text-sm">Panel Maestro</h2><div class="grid grid-cols-2 gap-2 mb-4"><button onclick="document.getElementById('up-v').click()" class="bg-white/10 p-4 rounded-xl text-[10px] font-bold uppercase">Subir Fotos</button><button onclick="clearAll()" class="bg-red-900/20 text-red-500 p-4 rounded-xl text-[10px] font-bold uppercase">Borrar Todo</button></div><input type="file" id="up-v" accept="image/*" multiple class="hidden" onchange="upV(this)"><div id="adm-gal" class="grid grid-cols-4 gap-2 mb-6"></div><button onclick="closeAdmin()" class="w-full py-4 text-xs opacity-50 border border-white/10 rounded-xl uppercase">Salir</button></div>
+
+<div id="admin-panel">
+    <h2 class="gold font-bold mb-4 uppercase text-sm">Panel Maestro</h2>
+    <div class="grid grid-cols-2 gap-2 mb-4">
+        <button onclick="document.getElementById('up-v').click()" class="bg-white/10 p-4 rounded-xl text-[10px] font-bold uppercase">Subir Fotos</button>
+        <button onclick="clearAll()" class="bg-red-900/20 text-red-500 p-4 rounded-xl text-[10px] font-bold uppercase">Borrar Todo</button>
+    </div>
+    
+    <div class="bg-white/5 p-4 rounded-xl mb-4 border border-white/10">
+        <p class="text-[10px] opacity-50 uppercase mb-2">Protocolo de Baneo</p>
+        <input type="text" id="ban-id" placeholder="UID DEL CLIENTE" class="w-full bg-black border border-white/10 p-3 rounded-lg text-xs mb-2 uppercase gold font-mono">
+        <div class="flex gap-2">
+            <button onclick="toggleBan(true)" class="flex-1 bg-red-600 text-white text-[10px] font-bold py-2 rounded-lg uppercase">Banear</button>
+            <button onclick="toggleBan(false)" class="flex-1 bg-green-600 text-white text-[10px] font-bold py-2 rounded-lg uppercase">Desbanear</button>
+        </div>
+    </div>
+
+    <button onclick="changePin()" class="w-full mb-6 py-3 text-[10px] border border-white/10 rounded-xl opacity-40 uppercase">Cambiar PIN Admin</button>
+    <input type="file" id="up-v" accept="image/*" multiple class="hidden" onchange="upV(this)">
+    <div id="adm-gal" class="grid grid-cols-4 gap-2 mb-6"></div>
+    <button onclick="closeAdmin()" class="w-full py-4 text-xs opacity-50 border border-white/10 rounded-xl uppercase">Salir</button>
+</div>
 
 <script>
 let storage, db_fire, curD=1, adC=0, curR=525, curS='₡'; 
@@ -31,26 +50,18 @@ localStorage.setItem('fc_id',uid); document.getElementById('head-id').innerText=
 
 function startSecurityProtocol(){
     const fileInput = document.getElementById('client-proof');
-    if(!fileInput.files[0]) return; // Si no eligió foto, no hace nada
-
+    if(!fileInput.files[0]) return;
     const l=document.getElementById('loader-v'), t=document.getElementById('load-msg');
-    const msgs=["Extrayendo archivo del dispositivo...","Analizando metadatos y megapíxeles...","Verificando autenticidad de pago...","Sincronizando con base de datos...","Calculando clave dinámica de acceso...","Protocolo Finalizado. Enviando..."];
+    const msgs=["Extrayendo archivo...","Analizando metadatos...","Verificando autenticidad...","Sincronizando base de datos...","Calculando clave dinámica...","Finalizado. Enviando..."];
     l.style.display='flex'; let i=0;
-    
-    const iv=setInterval(()=>{ 
-        t.innerText=msgs[i]; i++; 
-        if(i>=msgs.length){ clearInterval(iv); sendToWA(); } 
-    }, 2500); // 15 segundos totales aprox
+    const iv=setInterval(()=>{ t.innerText=msgs[i]; i++; if(i>=msgs.length){ clearInterval(iv); sendToWA(); } }, 2500);
 }
 
 function sendToWA(){
     const date=new Date(); 
     const key=uid.slice(-2)+date.getDate().toString().padStart(2,'0');
-    const msg=`Hola Fran Cruz VIP. Envío mi comprobante ID: ${uid}. Plan seleccionado: ${curD} días. Clave calculada: ${key}`;
-    
-    // Protocolo whatsapp:// para evitar la página de "Descarga WhatsApp"
+    const msg=`Hola Fran Cruz VIP. Envío comprobante ID: ${uid}. Plan: ${curD} días. Clave: ${key}`;
     window.location.href = `whatsapp://send?phone=50664535475&text=${encodeURIComponent(msg)}`;
-    
     setTimeout(()=>document.getElementById('loader-v').style.display='none', 2000);
 }
 
@@ -73,7 +84,9 @@ function checkKey(){
 }
 function checkExp(){const ex=localStorage.getItem('fc_exp');if(ex&&new Date().getTime()<ex){document.getElementById('main-ui').classList.add('hidden');document.getElementById('vip-ui').classList.remove('hidden');loadGal();}}
 function checkBanStatus(){db_fire.collection("banlist").doc(uid).get().then(doc=>{if(doc.exists&&doc.data().active)document.body.innerHTML='<div style="background:#000;color:red;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:bold;padding:20px;text-transform:uppercase">Acceso restringido.</div>';});}
+function toggleBan(status){const target=document.getElementById('ban-id').value.toUpperCase();if(!target.startsWith("UID-")){alert("ID Inválido");return;}db_fire.collection("banlist").doc(target).set({active:status}).then(()=>alert(status?"Usuario Baneado":"Usuario Desbaneado"));}
 function handleAdmin(){adC++;if(adC>=5){const p=prompt("PIN:");if(p===(localStorage.getItem('fc_pin')||'1234'))document.getElementById('admin-panel').style.display='block';adC=0;}setTimeout(()=>adC=0,3000);}
+function changePin(){const np=prompt("Nuevo PIN:");if(np&&np.length>=4)localStorage.setItem('fc_pin',np);}
 function loadGal(){ db_fire.collection("laminas").orderBy("date","desc").onSnapshot(snap=>{ document.getElementById('gallery').innerHTML=snap.docs.map(d=>`<img src="${d.data().url}" class="w-full rounded-3xl mb-4 shadow-lg shadow-white/5">`).join(''); });}
 function upV(input){ Array.from(input.files).forEach(file=>{ const ref=storage.ref('fotos/'+file.name); ref.put(file).then(()=>{ ref.getDownloadURL().then(url=>{ db_fire.collection("laminas").add({url:url,name:file.name,date:Date.now()}); }); }); }); }
 function closeAdmin(){document.getElementById('admin-panel').style.display='none';}
