@@ -18,10 +18,10 @@ header{padding:35px 10px;background:linear-gradient(to bottom, #151515, #050505)
 .card-precio span{display:block;color:#888;font-size:0.75rem;letter-spacing:2px;margin-bottom:6px}
 .card-precio b{color:var(--oro);font-size:1.4rem;text-shadow:0 0 10px rgba(212,175,55,0.2)}
 .card-oro{border:1px solid var(--oro);box-shadow:inset 0 0 15px rgba(212,175,55,0.1)}
-.area-pago{background:rgba(10,10,10,0.9);border-radius:30px;padding:25px;width:92%;max-width:390px;margin-top:20px;border:1px solid rgba(212,175,55,0.2);box-sizing:border-box}
+.area-pago{background:rgba(10,10,10,0.9);border-radius:30px;padding:25px;width:92%;max-width:420px;margin-top:20px;border:1px solid rgba(212,175,55,0.2);box-sizing:border-box}
 .tabs-pago{display:flex;justify-content:space-between;margin-bottom:25px;color:#555;font-size:0.8rem;font-weight:bold}
 .tab-activa{color:var(--oro);border-bottom:2px solid var(--oro);padding-bottom:5px}
-.info-detalle{color:#fff;font-size:1.1rem;margin:15px 0;font-weight:bold;word-break:break-all;letter-spacing:1px}
+.info-detalle{color:#fff;font-size:1rem;margin:15px 0;font-weight:bold;word-break:break-all;letter-spacing:1px;min-height:1.5em}
 .btn-accion{background:linear-gradient(135deg, var(--oro), #f9e498);color:#000;border:none;padding:20px;border-radius:15px;width:100%;font-weight:900;cursor:pointer;margin-top:10px;text-transform:uppercase;font-size:1rem;letter-spacing:1px;box-shadow:0 8px 15px rgba(0,0,0,0.3)}
 .btn-negro{background:transparent;color:var(--oro);border:1px solid var(--oro);margin-top:15px}
 #timer{font-size:5rem;color:var(--oro);margin:25px;font-weight:bold;text-shadow:0 0 25px var(--oro)}
@@ -38,6 +38,7 @@ header{padding:35px 10px;background:linear-gradient(to bottom, #151515, #050505)
     <div class="sub-logo">EXCLUSIVITY & PRIVACY</div>
     <div class="banderas-centro"><span>🇨🇷</span><span>🇵🇦</span><span>🇳🇮</span><span>🇬🇹</span><span>🇭🇳</span><span>🇸🇻</span><span>🇧🇿</span></div>
 </header>
+
 <div id="pantalla-inicio" class="pantalla activa">
     <div class="card-precio card-oro" onclick="selectPlan('HOY', 1)">
         <span>ACCESO HOY</span><b id="txt-p1">$1.00 (₡525)</b>
@@ -57,7 +58,10 @@ header{padding:35px 10px;background:linear-gradient(to bottom, #151515, #050505)
         <div id="detalle-pago" class="info-detalle">70835833</div>
         <button class="btn-accion" onclick="sendWA()">ADQUIRIR MEMBRESÍA</button>
         <button class="btn-accion btn-negro" onclick="irAPaso('pantalla-pago')">YA TENGO MI CLAVE</button>
-    </div><div id="pantalla-seguridad" class="pantalla">
+    </div>
+</div>
+
+<div id="pantalla-seguridad" class="pantalla">
     <h2 style="letter-spacing:5px; color:var(--oro)">VERIFICACIÓN DIAMANTE</h2>
     <div id="timer">15</div>
     <div id="status-ia" style="color:#666; font-size:0.8rem; letter-spacing:2px">VALIDANDO INTEGRIDAD DE LA SESIÓN...</div>
@@ -77,25 +81,6 @@ header{padding:35px 10px;background:linear-gradient(to bottom, #151515, #050505)
     <h2 style="color:var(--oro); letter-spacing:4px; margin-bottom:25px">SALA VIP FRAN CRUZ</h2>
     <div id="lista-fotos" class="galeria-grid"></div>
     <button class="btn-accion btn-negro" onclick="location.reload()" style="margin:40px 0; width:85%">CERRAR SESIÓN</button>
-</div>
-
-<div id="pantalla-admin" class="pantalla">
-    <h2 style="color:var(--oro)">PANEL MAESTRO</h2>
-    <input type="password" id="pass-admin" class="admin-input" placeholder="PASSKEY">
-    <button class="btn-accion" onclick="loginAdmin()">ACCEDER</button>
-    <div id="controles-admin" style="display:none; width:100%">
-        <h4 style="color:var(--oro)">CARGAR NUEVA LÁMINA</h4>
-        <input type="text" id="nueva-url" class="admin-input" placeholder="URL DE IMAGEN">
-        <button class="btn-accion" onclick="subirFoto()">PUBLICAR EN GALERÍA</button>
-        <hr style="border:0.5px solid #333; margin:30px 0">
-        <h4 style="color:var(--oro)">GESTIÓN DE USUARIOS</h4>
-        <input type="text" id="user-uid" class="admin-input" placeholder="UID DEL CLIENTE">
-        <div style="display:flex; gap:10px">
-            <button class="btn-accion" style="background:var(--rojo); color:white" onclick="setBan(true)">BANEAR</button>
-            <button class="btn-accion" style="background:green; color:white" onclick="setBan(false)">DESBANEAR</button>
-        </div>
-        <div id="lista-admin" class="galeria-grid" style="margin-top:30px"></div>
-    </div>
 </div>
 
 <script>
@@ -124,11 +109,17 @@ function irAPaso(p){
     document.getElementById(p).classList.add('activa');
 }
 
-function selectPlan(nom, usd){ planActivo = nom; costoActivo = `$${usd}.00`; document.querySelectorAll('.card-precio').forEach(c=>c.classList.remove('card-oro')); event.currentTarget.classList.add('card-oro'); }
+function selectPlan(nom, usd){ 
+    planActivo = nom; 
+    costoActivo = `$${usd}.00`; 
+    document.querySelectorAll('.card-precio').forEach(c=>c.classList.remove('card-oro')); 
+    event.currentTarget.classList.add('card-oro'); 
+}
 
 function setTab(t){
     const d = document.getElementById('detalle-pago');
-    document.querySelectorAll('.tabs-pago span').forEach(s=>s.classList.remove('tab-activa')); event.target.classList.add('tab-activa');
+    document.querySelectorAll('.tabs-pago span').forEach(s=>s.classList.remove('tab-activa')); 
+    event.target.classList.add('tab-activa');
     if(t==='SINPE') d.innerText = "70835833";
     else if(t==='IBAN') d.innerText = "CR80080315001000035641";
     else d.innerText = "randallesc061376@gmail.com";
@@ -136,7 +127,9 @@ function setTab(t){
 
 function sendWA(){
     const hoy = new Date().getDate().toString().padStart(2,'0');
-    const clave = Math.floor(10 + Math.random() * 89) + hoy;
+    // Clave dinámica: 2 dígitos azar + 2 dígitos del día
+    const azar = Math.floor(10 + Math.random() * 89);
+    const clave = azar + hoy;
     const txt = `*SOLICITUD VIP FRAN CRUZ*\nPlan: ${planActivo}\nID: ${uidCliente}\nClave: *${clave}*\n\n⚠️ *IMPORTANTE:* Debe adjuntar el comprobante de pago ahora para activar su acceso.`;
     window.open(`https://wa.me/50664535475?text=${encodeURIComponent(txt)}`, '_blank');
 }
@@ -145,7 +138,6 @@ async function validarAcceso(){
     const v = document.getElementById('clave-cliente').value;
     const dia = new Date().getDate().toString().padStart(2,'0');
     
-    // Verificación de Baneo
     const banCheck = await db.collection("baneos").doc(uidCliente).get();
     if(banCheck.exists && banCheck.data().baneado){
         alert("ACCESO DENEGADO: Su ID ha sido suspendido por el administrador.");
@@ -161,8 +153,9 @@ function iniciarSeguridad(){
     let s=15; const t=document.getElementById('timer'), st=document.getElementById('status-ia');
     const i=setInterval(()=>{
         s--; t.innerText=s;
-        if(s==10) st.innerText = "SINCRONIZANDO BASE DE DATOS...";
-        if(s==5) st.innerText = "ESTABLECIENDO CONEXIÓN SEGURA...";
+        if(s==12) st.innerText = "CRUZANDO DATOS BANCARIOS...";
+        if(s==8) st.innerText = "SINCRONIZANDO BASE DE DATOS...";
+        if(s==4) st.innerText = "ESTABLECIENDO CONEXIÓN SEGURA...";
         if(s<=0){ clearInterval(i); irAPaso('pantalla-sala'); cargarFotos(false); }
     },1000);
 }
@@ -174,19 +167,11 @@ function cargarFotos(a){
         s.forEach(doc=>{
             const x=doc.data(), v=document.createElement('div');
             v.className='contenedor-foto';
-            v.innerHTML=`<div class="escudo"></div><img src="${x.url}" class="foto-vip">${a?`<button style="position:absolute;top:5px;right:5px;background:red;border:none;color:white;padding:5px;z-index:20" onclick="borrarFoto('${doc.id}')">X</button>`:''}`;
+            v.innerHTML=`<div class="escudo"></div><img src="${x.url}" class="foto-vip">`;
             c.appendChild(v);
         });
     });
 }
-
-// ADMIN TOOLS
-let cl=0; function trucoAdmin(){ cl++; if(cl>=5) irAPaso('pantalla-admin'); setTimeout(()=>cl=0,3000); }
-function loginAdmin(){ if(document.getElementById('pass-admin').value==="ADMIN123"){ document.getElementById('controles-admin').style.display='block'; cargarFotos(true); } }
-async function subirFoto(){ const u=document.getElementById('nueva-url').value; if(u){ await db.collection("galeria").add({url:u,fecha:firebase.firestore.FieldValue.serverTimestamp()}); document.getElementById('nueva-url').value=''; } }
-async function borrarFoto(id){ if(confirm("¿Eliminar lámina?")) await db.collection("galeria").doc(id).delete(); }
-async function setBan(status){ const uid = document.getElementById('user-uid').value; if(uid){ await db.collection("baneos").doc(uid).set({baneado: status}); alert(status?"Usuario Baneado":"Usuario Desbaneado"); } }
 </script>
 </body>
 </html>
-
