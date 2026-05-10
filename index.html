@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Fran Cruz VIP | Luxury Access</title>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <style>
-:root{--oro:#d4af37;--oro-brillo:#f9e498;--negro:#050505;--cristal:rgba(255,255,255,0.04)}
-body{background:var(--negro);color:#fff;font-family:'Segoe UI',Roboto,sans-serif;margin:0;text-align:center;user-select:text!important;-webkit-user-select:text!important;overflow-x:hidden}
-header{padding:40px 0 20px 0;background:linear-gradient(to bottom, #111, #050505)}
-.logo{color:var(--oro);font-size:2.4rem;font-weight:900;letter-spacing:8px;text-transform:uppercase;text-shadow:0 0 15px rgba(212,175,55,0.3)}
-.sub-logo{color:#666;font-size:0.65rem;letter-spacing:5px;margin-top:8px;font-weight:300}
-.banderas-centro{display:flex;justify-content:center;gap:15px;margin:25px 0;font-size:1.3rem;filter:grayscale(30%)}
-.pantalla{display:none;min-height:100vh;flex-direction:column;align-items:center;padding:15px;box-sizing:border-box}
+:root{--oro:#d4af37;--negro:#050505;--cristal:rgba(255,255,255,0.04);--rojo:#ff4444}
+body{background:var(--negro);color:#fff;font-family:'Segoe UI',sans-serif;margin:0;padding:0;text-align:center;user-select:none;overflow-x:hidden;width:100vw}
+header{padding:35px 10px;background:linear-gradient(to bottom, #151515, #050505);border-bottom:1px solid #1a1a1a}
+.logo{color:var(--oro);font-size:2.2rem;font-weight:900;letter-spacing:7px;text-transform:uppercase;text-shadow:0 0 15px rgba(212,175,55,0.3)}
+.sub-logo{color:#666;font-size:0.6rem;letter-spacing:5px;margin-top:8px}
+.banderas-centro{display:flex;justify-content:center;gap:12px;margin:20px 0;font-size:1.3rem}
+.pantalla{display:none;min-height:100vh;width:100%;flex-direction:column;align-items:center;padding:15px;box-sizing:border-box}
 .activa{display:flex}
-/* Estilo Cristal Diamante */
-.card-precio{background:var(--cristal);border:1px solid rgba(255,255,255,0.1);border-radius:20px;margin:10px;padding:25px;width:92%;max-width:400px;text-align:left;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);transition:0.4s;cursor:pointer}
-.card-precio span{display:block;color:#aaa;font-size:0.75rem;letter-spacing:2px;margin-bottom:8px}
-.card-precio b{color:var(--oro);font-size:1.6rem;text-shadow:0 0 10px rgba(212,175,55,0.2)}
-.card-oro{border:1px solid var(--oro);box-shadow:inset 0 0 20px rgba(212,175,55,0.05)}
-.area-pago{background:rgba(10,10,10,0.8);border-radius:30px;padding:30px;width:92%;max-width:400px;margin-top:20px;border:1px solid rgba(212,175,55,0.15);backdrop-filter:blur(20px)}
-.tabs-pago{display:flex;justify-content:space-around;margin-bottom:25px;color:#555;font-size:0.85rem;font-weight:bold;letter-spacing:1px}
-.tab-activa{color:var(--oro);text-shadow:0 0 10px var(--oro);border-bottom:2px solid var(--oro);padding-bottom:5px}
-.info-detalle{color:#fff;font-size:1.4rem;margin:20px 0;font-weight:bold;letter-spacing:2px;min-height:40px}
-.btn-accion{background:linear-gradient(135deg, var(--oro), var(--oro-brillo));color:#000;border:none;padding:20px;border-radius:15px;width:100%;font-weight:900;cursor:pointer;margin-top:12px;text-transform:uppercase;font-size:1rem;letter-spacing:1px;box-shadow:0 10px 20px rgba(0,0,0,0.4)}
+.card-precio{background:var(--cristal);border:1px solid rgba(255,255,255,0.1);border-radius:20px;margin:10px auto;padding:22px;width:92%;max-width:390px;text-align:left;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:0.4s;box-sizing:border-box}
+.card-precio span{display:block;color:#888;font-size:0.75rem;letter-spacing:2px;margin-bottom:6px}
+.card-precio b{color:var(--oro);font-size:1.4rem;text-shadow:0 0 10px rgba(212,175,55,0.2)}
+.card-oro{border:1px solid var(--oro);box-shadow:inset 0 0 15px rgba(212,175,55,0.1)}
+.area-pago{background:rgba(10,10,10,0.9);border-radius:30px;padding:25px;width:92%;max-width:390px;margin-top:20px;border:1px solid rgba(212,175,55,0.2);box-sizing:border-box}
+.tabs-pago{display:flex;justify-content:space-between;margin-bottom:25px;color:#555;font-size:0.8rem;font-weight:bold}
+.tab-activa{color:var(--oro);border-bottom:2px solid var(--oro);padding-bottom:5px}
+.info-detalle{color:#fff;font-size:1.1rem;margin:15px 0;font-weight:bold;word-break:break-all;letter-spacing:1px}
+.btn-accion{background:linear-gradient(135deg, var(--oro), #f9e498);color:#000;border:none;padding:20px;border-radius:15px;width:100%;font-weight:900;cursor:pointer;margin-top:10px;text-transform:uppercase;font-size:1rem;letter-spacing:1px;box-shadow:0 8px 15px rgba(0,0,0,0.3)}
 .btn-negro{background:transparent;color:var(--oro);border:1px solid var(--oro);margin-top:15px}
-#timer{font-size:5rem;color:var(--oro);margin:30px;font-weight:bold;text-shadow:0 0 30px var(--oro)}
-.galeria-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;width:100%}
-.contenedor-foto{position:relative;border-radius:15px;overflow:hidden;border:1px solid #222}
-.foto-vip{width:100%;display:block;transition:0.5s}
+#timer{font-size:5rem;color:var(--oro);margin:25px;font-weight:bold;text-shadow:0 0 25px var(--oro)}
+.galeria-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;width:100%;padding:10px;box-sizing:border-box}
+.contenedor-foto{position:relative;border-radius:12px;overflow:hidden;background:#111;aspect-ratio:1/1;border:1px solid #222}
+.foto-vip{width:100%;height:100%;object-fit:cover}
 .escudo{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10}
+.admin-input{width:100%;padding:18px;margin:10px 0;background:#1a1a1a;border:1px solid var(--oro);color:#fff;border-radius:12px;box-sizing:border-box;font-size:1rem}
 </style>
 </head>
 <body oncontextmenu="return false">
@@ -39,123 +39,130 @@ header{padding:40px 0 20px 0;background:linear-gradient(to bottom, #111, #050505
     <div class="banderas-centro"><span>🇨🇷</span><span>🇵🇦</span><span>🇳🇮</span><span>🇬🇹</span><span>🇭🇳</span><span>🇸🇻</span><span>🇧🇿</span></div>
 </header>
 <div id="pantalla-inicio" class="pantalla activa">
-    <div class="card-precio card-oro" onclick="seleccionarPlan('HOY')">
-        <span>ACCESO HOY</span><b>$1.00 (₡525)</b>
+    <div class="card-precio card-oro" onclick="selectPlan('HOY', 1)">
+        <span>ACCESO HOY</span><b id="txt-p1">$1.00 (₡525)</b>
     </div>
-    <div class="card-precio" onclick="seleccionarPlan('7 DÍAS')">
-        <span>ACCESO 7 DÍAS</span><b>$5.00 (₡3,675)</b>
+    <div class="card-precio" onclick="selectPlan('7 DÍAS', 5)">
+        <span>ACCESO 7 DÍAS</span><b id="txt-p7">$5.00 (₡2,625)</b>
     </div>
-    <div class="card-precio" onclick="seleccionarPlan('30 DÍAS')">
-        <span>ACCESO 30 DÍAS</span><b>$15.00 (₡15,750)</b>
+    <div class="card-precio" onclick="selectPlan('30 DÍAS', 15)">
+        <span>ACCESO 30 DÍAS</span><b id="txt-p30">$15.00 (₡7,875)</b>
     </div>
     <div class="area-pago">
         <div class="tabs-pago">
-            <span id="t-sinpe" class="tab-activa" onclick="cambiarTab('SINPE')">SINPE</span>
-            <span id="t-iban" onclick="cambiarTab('IBAN')">IBAN</span>
-            <span id="t-paypal" onclick="cambiarTab('PAYPAL')">PAYPAL</span>
+            <span id="t-sinpe" class="tab-activa" onclick="setTab('SINPE')">SINPE</span>
+            <span id="t-iban" onclick="setTab('IBAN')">IBAN</span>
+            <span id="t-paypal" onclick="setTab('PAYPAL')">PAYPAL</span>
         </div>
         <div id="detalle-pago" class="info-detalle">70835833</div>
-        <button class="btn-accion" onclick="abrirWhatsapp()">ENVIAR COMPROBANTE</button>
-        <button class="btn-accion btn-negro" onclick="irAPaso('pantalla-pago')">CLAVE DE ACCESO</button>
+        <button class="btn-accion" onclick="sendWA()">ADQUIRIR MEMBRESÍA</button>
+        <button class="btn-accion btn-negro" onclick="irAPaso('pantalla-pago')">YA TENGO MI CLAVE</button>
     </div><div id="pantalla-seguridad" class="pantalla">
-    <h2 style="letter-spacing:5px; color:var(--oro)">PROTECCIÓN VIP</h2>
+    <h2 style="letter-spacing:5px; color:var(--oro)">VERIFICACIÓN DIAMANTE</h2>
     <div id="timer">15</div>
-    <p style="color:#666; font-size:0.8rem; letter-spacing:2px">ENCRIPTANDO CONEXIÓN DIAMANTE...</p>
+    <div id="status-ia" style="color:#666; font-size:0.8rem; letter-spacing:2px">VALIDANDO INTEGRIDAD DE LA SESIÓN...</div>
 </div>
 
 <div id="pantalla-pago" class="pantalla">
-    <h3 style="letter-spacing:3px">VERIFICACIÓN DE IDENTIDAD</h3>
+    <h3 style="letter-spacing:3px">ACCESO RESTRINGIDO</h3>
     <div class="area-pago" style="border-color:var(--oro)">
-        <p style="font-size:0.8rem; color:#888">INGRESE LA CLAVE DE 4 DÍGITOS</p>
-        <input type="text" id="clave-cliente" class="admin-input" style="text-align:center; font-size:1.5rem; letter-spacing:10px" placeholder="0000" maxlength="4">
-        <button class="btn-accion" onclick="validarAcceso()">ENTRAR A LA SALA</button>
+        <p style="font-size:0.75rem; color:#888; margin-bottom:15px">INGRESE SU CLAVE DINÁMICA</p>
+        <input type="text" id="clave-cliente" class="admin-input" style="text-align:center; font-size:1.8rem; letter-spacing:10px; color:var(--oro)" placeholder="0000" maxlength="4">
+        <button class="btn-accion" onclick="validarAcceso()">INGRESAR A LA SALA</button>
     </div>
-    <button class="btn-accion btn-negro" onclick="irAPaso('pantalla-inicio')">VOLVER</button>
+    <button class="btn-accion btn-negro" onclick="irAPaso('pantalla-inicio')">CANCELAR</button>
 </div>
 
 <div id="pantalla-sala" class="pantalla">
-    <h2 style="color:var(--oro); letter-spacing:4px; margin-bottom:30px">SALA VIP FRAN CRUZ</h2>
+    <h2 style="color:var(--oro); letter-spacing:4px; margin-bottom:25px">SALA VIP FRAN CRUZ</h2>
     <div id="lista-fotos" class="galeria-grid"></div>
-    <button class="btn-accion btn-negro" onclick="location.reload()" style="margin:40px 0">FINALIZAR SESIÓN</button>
+    <button class="btn-accion btn-negro" onclick="location.reload()" style="margin:40px 0; width:85%">CERRAR SESIÓN</button>
 </div>
 
 <div id="pantalla-admin" class="pantalla">
-    <h2 style="color:var(--oro)">SISTEMA DE GESTIÓN</h2>
-    <input type="password" id="pass-admin" class="admin-input" placeholder="ACCESS KEY">
-    <button class="btn-accion" onclick="loginAdmin()">LOG IN</button>
+    <h2 style="color:var(--oro)">PANEL MAESTRO</h2>
+    <input type="password" id="pass-admin" class="admin-input" placeholder="PASSKEY">
+    <button class="btn-accion" onclick="loginAdmin()">ACCEDER</button>
     <div id="controles-admin" style="display:none; width:100%">
-        <input type="text" id="nueva-url" class="admin-input" placeholder="DIRECT LINK IMG">
-        <button class="btn-accion" onclick="subirFoto()">PUBLICAR</button>
+        <h4 style="color:var(--oro)">CARGAR NUEVA LÁMINA</h4>
+        <input type="text" id="nueva-url" class="admin-input" placeholder="URL DE IMAGEN">
+        <button class="btn-accion" onclick="subirFoto()">PUBLICAR EN GALERÍA</button>
+        <hr style="border:0.5px solid #333; margin:30px 0">
+        <h4 style="color:var(--oro)">GESTIÓN DE USUARIOS</h4>
+        <input type="text" id="user-uid" class="admin-input" placeholder="UID DEL CLIENTE">
+        <div style="display:flex; gap:10px">
+            <button class="btn-accion" style="background:var(--rojo); color:white" onclick="setBan(true)">BANEAR</button>
+            <button class="btn-accion" style="background:green; color:white" onclick="setBan(false)">DESBANEAR</button>
+        </div>
         <div id="lista-admin" class="galeria-grid" style="margin-top:30px"></div>
     </div>
 </div>
 
 <script>
-// CONFIGURACIÓN FIREBASE
 const firebaseConfig={apiKey:"AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",authDomain:"fran-cruz-sala-vip.firebaseapp.com",projectId:"fran-cruz-sala-vip",storageBucket:"fran-cruz-sala-vip.firebasestorage.app",messagingSenderId:"1022733043010",appId:"1:1022733043010:web:379db18e37bbfde2cf34db"};
 firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
 
-let planSeleccionado = "HOY";
-let idSesion = Math.floor(1000 + Math.random() * 9000);
+let planActivo = "HOY"; let costoActivo = "$1.00";
+let uidCliente = "UID-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+
+async function setupDivisas(){
+    try {
+        const res = await fetch('https://ipapi.co/json/'); const data = await res.json(); const c = data.country_code;
+        const rates = {'CR':{n:'₡',v:525},'GT':{n:'Q',v:7.62},'HN':{n:'L',v:26.50},'NI':{n:'C$',v:36.70},'BZ':{n:'BZ$',v:2.01}};
+        if(rates[c]){
+            const r = rates[c];
+            document.getElementById('txt-p1').innerText = `$1.00 (${r.n}${(1*r.v).toFixed(0)})`;
+            document.getElementById('txt-p7').innerText = `$5.00 (${r.n}${(5*r.v).toFixed(0)})`;
+            document.getElementById('txt-p30').innerText = `$15.00 (${r.n}${(15*r.v).toFixed(0)})`;
+        }
+    } catch(e) {}
+}
+setupDivisas();
 
 function irAPaso(p){
     document.querySelectorAll('.pantalla').forEach(d=>d.classList.remove('activa'));
     document.getElementById(p).classList.add('activa');
-    window.scrollTo(0,0);
 }
 
-function seleccionarPlan(p){
-    planSeleccionado = p;
-    // Efecto visual sutil al seleccionar
-    console.log("Plan: " + p);
+function selectPlan(nom, usd){ planActivo = nom; costoActivo = `$${usd}.00`; document.querySelectorAll('.card-precio').forEach(c=>c.classList.remove('card-oro')); event.currentTarget.classList.add('card-oro'); }
+
+function setTab(t){
+    const d = document.getElementById('detalle-pago');
+    document.querySelectorAll('.tabs-pago span').forEach(s=>s.classList.remove('tab-activa')); event.target.classList.add('tab-activa');
+    if(t==='SINPE') d.innerText = "70835833";
+    else if(t==='IBAN') d.innerText = "CR80080315001000035641";
+    else d.innerText = "randallesc061376@gmail.com";
 }
 
-function cambiarTab(tipo){
-    const detalle = document.getElementById('detalle-pago');
-    document.querySelectorAll('.tabs-pago span').forEach(s=>s.classList.remove('tab-activa'));
-    
-    if(tipo==='SINPE'){
-        document.getElementById('t-sinpe').classList.add('tab-activa');
-        detalle.innerText = "70835833";
-    } else if(tipo==='IBAN'){
-        document.getElementById('t-iban').classList.add('tab-activa');
-        detalle.innerText = "CR000000000000000000"; // Reemplaza con tu IBAN real
-    } else {
-        document.getElementById('t-paypal').classList.add('tab-activa');
-        detalle.innerText = "randallesc061376@gmail.com";
-    }
-}
-
-function abrirWhatsapp(){
-    const rando = Math.floor(10 + Math.random() * 89);
-    const dia = new Date().getDate().toString().padStart(2,'0');
-    const claveDinamica = `${rando}${dia}`;
-    
-    const mensaje = `Hola Fran Cruz. Solicito el acceso VIP para el plan: ${planSeleccionado}.\n\nID Cliente: ${idSesion}\nClave Dinámica: ${claveDinamica}\n\nAdjunto mi comprobante de pago:`;
-    
-    // Enlace corregido con 506 y codificación segura
-    const url = `https://wa.me/50664535475?text=${encodeURIComponent(mensaje)}`;
-    window.open(url, '_blank');
-}
-
-function validarAcceso(){
-    const v = document.getElementById('clave-cliente').value;
+function sendWA(){
     const hoy = new Date().getDate().toString().padStart(2,'0');
+    const clave = Math.floor(10 + Math.random() * 89) + hoy;
+    const txt = `*SOLICITUD VIP FRAN CRUZ*\nPlan: ${planActivo}\nID: ${uidCliente}\nClave: *${clave}*\n\n⚠️ *IMPORTANTE:* Debe adjuntar el comprobante de pago ahora para activar su acceso.`;
+    window.open(`https://wa.me/50664535475?text=${encodeURIComponent(txt)}`, '_blank');
+}
+
+async function validarAcceso(){
+    const v = document.getElementById('clave-cliente').value;
+    const dia = new Date().getDate().toString().padStart(2,'0');
     
-    // La clave es válida si termina en el día actual
-    if(v.endsWith(hoy) && v.length === 4){
-        iniciarSeguridad();
-    } else {
-        alert("CLAVE INVÁLIDA O EXPIRADA.\nLas claves de acceso hoy vencen a la medianoche.");
+    // Verificación de Baneo
+    const banCheck = await db.collection("baneos").doc(uidCliente).get();
+    if(banCheck.exists && banCheck.data().baneado){
+        alert("ACCESO DENEGADO: Su ID ha sido suspendido por el administrador.");
+        return;
     }
+
+    if(v.endsWith(dia) && v.length === 4){ iniciarSeguridad(); }
+    else { alert("CLAVE INCORRECTA O EXPIRADA."); }
 }
 
 function iniciarSeguridad(){
     irAPaso('pantalla-seguridad');
-    let s=15;
-    const t=document.getElementById('timer');
+    let s=15; const t=document.getElementById('timer'), st=document.getElementById('status-ia');
     const i=setInterval(()=>{
         s--; t.innerText=s;
+        if(s==10) st.innerText = "SINCRONIZANDO BASE DE DATOS...";
+        if(s==5) st.innerText = "ESTABLECIENDO CONEXIÓN SEGURA...";
         if(s<=0){ clearInterval(i); irAPaso('pantalla-sala'); cargarFotos(false); }
     },1000);
 }
@@ -164,21 +171,22 @@ function cargarFotos(a){
     const c=a?document.getElementById('lista-admin'):document.getElementById('lista-fotos');
     db.collection("galeria").orderBy("fecha","desc").onSnapshot(s=>{
         c.innerHTML='';
-        s.forEach(d=>{
-            const x=d.data(),v=document.createElement('div');
+        s.forEach(doc=>{
+            const x=doc.data(), v=document.createElement('div');
             v.className='contenedor-foto';
-            v.innerHTML=`<div class="escudo"></div><img src="${x.url}" class="foto-vip">${a?`<button style="position:absolute; top:10; right:10; background:red; color:white; border:none; padding:10px; z-index:30" onclick="borrarFoto('${d.id}')">BORRAR</button>`:''}`;
+            v.innerHTML=`<div class="escudo"></div><img src="${x.url}" class="foto-vip">${a?`<button style="position:absolute;top:5px;right:5px;background:red;border:none;color:white;padding:5px;z-index:20" onclick="borrarFoto('${doc.id}')">X</button>`:''}`;
             c.appendChild(v);
         });
     });
 }
 
-// ADMIN LOGIC
+// ADMIN TOOLS
 let cl=0; function trucoAdmin(){ cl++; if(cl>=5) irAPaso('pantalla-admin'); setTimeout(()=>cl=0,3000); }
 function loginAdmin(){ if(document.getElementById('pass-admin').value==="ADMIN123"){ document.getElementById('controles-admin').style.display='block'; cargarFotos(true); } }
 async function subirFoto(){ const u=document.getElementById('nueva-url').value; if(u){ await db.collection("galeria").add({url:u,fecha:firebase.firestore.FieldValue.serverTimestamp()}); document.getElementById('nueva-url').value=''; } }
-async function borrarFoto(id){ if(confirm("¿ELIMINAR?")) await db.collection("galeria").doc(id).delete(); }
+async function borrarFoto(id){ if(confirm("¿Eliminar lámina?")) await db.collection("galeria").doc(id).delete(); }
+async function setBan(status){ const uid = document.getElementById('user-uid').value; if(uid){ await db.collection("baneos").doc(uid).set({baneado: status}); alert(status?"Usuario Baneado":"Usuario Desbaneado"); } }
 </script>
 </body>
-  </html>
+</html>
 
