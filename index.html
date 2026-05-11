@@ -14,28 +14,22 @@ header{padding:35px 10px;background:linear-gradient(to bottom,#151515,#050505);b
 .sub-logo{color:#666;font-size:.6rem;letter-spacing:5px;margin-top:8px}
 .banderas-centro{display:flex;justify-content:center;gap:12px;margin:20px 0;font-size:1.3rem}
 .banderas-centro span{cursor:pointer;padding:5px;border-radius:5px;transition:.3s}
-.banderas-centro span:active{background:var(--cristal);transform:scale(1.2)}
 .pantalla{display:none;min-height:100vh;width:100%;flex-direction:column;align-items:center;padding:15px;box-sizing:border-box}
 .activa{display:flex}
-.card-precio{background:var(--cristal);border:1px solid rgba(255,255,255,.1);border-radius:20px;margin:10px auto;padding:22px;width:92%;max-width:390px;text-align:left;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:.4s;box-sizing:border-box}
-.card-precio span{display:block;color:#888;font-size:.75rem;letter-spacing:2px;margin-bottom:6px}
-.card-precio b{color:var(--oro);font-size:1.4rem;text-shadow:0 0 10px rgba(212,175,55,.2)}
-.card-oro{border:1px solid var(--oro);box-shadow:inset 0 0 15px rgba(212,175,55,.1)}
+.card-precio{background:var(--cristal);border:1px solid rgba(255,255,255,.1);border-radius:20px;margin:10px auto;padding:22px;width:92%;max-width:390px;text-align:left;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-sizing:border-box}
+.card-precio b{color:var(--oro);font-size:1.4rem}
+.card-oro{border:1px solid var(--oro)}
 .area-pago{background:rgba(10,10,10,.9);border-radius:30px;padding:25px;width:92%;max-width:390px;margin-top:20px;border:1px solid rgba(212,175,55,.2);box-sizing:border-box}
 .tabs-pago{display:flex;justify-content:space-between;margin-bottom:25px;color:#555;font-size:.8rem;font-weight:700}
-.tab-activa{color:var(--oro);border-bottom:2px solid var(--oro);padding-bottom:5px}
-.info-detalle{color:#fff;font-size:1.1rem;margin:15px 0;font-weight:700;word-break:break-all;letter-spacing:1px}
-.btn-accion{background:linear-gradient(135deg,var(--oro),#f9e498);color:#000;border:none;padding:20px;border-radius:15px;width:100%;font-weight:900;cursor:pointer;margin-top:10px;text-transform:uppercase;font-size:1rem;letter-spacing:1px;box-shadow:0 8px 15px rgba(0,0,0,.3)}
+.tab-activa{color:var(--oro);border-bottom:2px solid var(--oro)}
+.btn-accion{background:linear-gradient(135deg,var(--oro),#f9e498);color:#000;border:none;padding:20px;border-radius:15px;width:100%;font-weight:900;cursor:pointer;margin-top:10px;text-transform:uppercase}
 .btn-negro{background:transparent;color:var(--oro);border:1px solid var(--oro);margin-top:15px}
-#timer{font-size:5rem;color:var(--oro);margin:25px;font-weight:700;text-shadow:0 0 25px var(--oro)}
 .galeria-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;width:100%;padding:10px;box-sizing:border-box}
 .contenedor-foto{position:relative;border-radius:12px;overflow:hidden;background:#111;aspect-ratio:1/1;border:1px solid #222}
 .foto-vip{width:100%;height:100%;object-fit:cover}
-.escudo{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10}
-.admin-input{width:100%;padding:18px;margin:10px 0;background:#1a1a1a;border:1px solid var(--oro);color:#fff;border-radius:12px;box-sizing:border-box;font-size:1rem}
-#file-input-label{display:block;background:#222;border:1px dashed var(--oro);padding:20px;border-radius:12px;cursor:pointer;margin-bottom:10px;color:var(--oro);font-weight:700}
-#progress-bar{width:0;height:5px;background:var(--oro);transition:.3s;border-radius:5px}
-#previa-carga{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.admin-input{width:100%;padding:18px;margin:10px 0;background:#1a1a1a;border:1px solid var(--oro);color:#fff;border-radius:12px;box-sizing:border-box}
+#previa-carga{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;margin-top:15px}
+#progress-bar{width:0;height:5px;background:var(--oro);transition:.3s}
 </style>
 </head>
 <body oncontextmenu="return false">
@@ -54,17 +48,14 @@ header{padding:35px 10px;background:linear-gradient(to bottom,#151515,#050505);b
     <div class="card-precio" onclick="selectPlan('7 DÍAS',5)"><span>ACCESO 7 DÍAS</span><b id="txt-p7">$5.00 (₡2,625)</b></div>
     <div class="card-precio" onclick="selectPlan('30 DÍAS',15)"><span>ACCESO 30 DÍAS</span><b id="txt-p30">$15.00 (₡7,875)</b></div>
     <div class="area-pago">
-        <div class="tabs-pago">
-            <span id="t-sinpe" class="tab-activa" onclick="setTab('SINPE')">SINPE</span>
-            <span id="t-iban" onclick="setTab('IBAN')">IBAN</span>
-            <span id="t-paypal" onclick="setTab('PAYPAL')">PAYPAL</span>
-        </div>
-        <div id="detalle-pago" class="info-detalle">70835833</div>
+        <div class="tabs-pago"><span id="t-sinpe" class="tab-activa" onclick="setTab('SINPE')">SINPE</span><span id="t-iban" onclick="setTab('IBAN')">IBAN</span><span id="t-paypal" onclick="setTab('PAYPAL')">PAYPAL</span></div>
+        <div id="detalle-pago" style="font-weight:700;margin:15px 0">70835833</div>
         <button class="btn-accion" onclick="sendWA()">ADQUIRIR MEMBRESÍA</button>
         <button class="btn-accion btn-negro" onclick="irAPaso('pantalla-pago')">YA TENGO MI CLAVE</button>
-    </div><div id="pantalla-seguridad" class="pantalla">
+    </div>
+</div><div id="pantalla-seguridad" class="pantalla">
     <h2 style="letter-spacing:5px;color:var(--oro)">VERIFICACIÓN DIAMANTE</h2>
-    <div id="timer">15</div>
+    <div id="timer" style="font-size:5rem;color:var(--oro);font-weight:700">15</div>
     <div id="status-ia" style="color:#666;font-size:.8rem;letter-spacing:2px">VALIDANDO INTEGRIDAD...</div>
 </div>
 <div id="pantalla-pago" class="pantalla">
@@ -106,7 +97,7 @@ let planActivo="HOY",uidCliente="UID-"+Math.random().toString(36).substr(2,6).to
 const rates={'CR':{n:'₡',v:525},'PA':{n:'$',v:1},'GT':{n:'Q',v:7.62},'HN':{n:'L',v:26.5},'NI':{n:'C$',v:36.7},'SV':{n:'$',v:1},'BZ':{n:'BZ$',v:2.01}};
 function cambiarDivisa(c){const r=rates[c];if(r){document.getElementById('txt-p1').innerText=`$1.00 (${r.n}${(1*r.v).toFixed(0)})`;document.getElementById('txt-p7').innerText=`$5.00 (${r.n}${(5*r.v).toFixed(0)})`;document.getElementById('txt-p30').innerText=`$15.00 (${r.n}${(15*r.v).toFixed(0)})`}}
 async function geolocalizar(){try{const res=await fetch('https://ipapi.co/json/'),data=await res.json();cambiarDivisa(data.country_code)}catch(e){cambiarDivisa('CR')}}geolocalizar();
-function irAPaso(p){document.querySelectorAll('.pantalla').forEach(d=>d.classList.remove('activa'));document.getElementById(p).classList.add('activa')}
+function irAPaso(p){document.querySelectorAll('.pantalla').forEach(d=>d.classList.remove('activa'));const target=document.getElementById(p);if(target)target.classList.add('activa')}
 function selectPlan(n,u){planActivo=n;document.querySelectorAll('.card-precio').forEach(c=>c.classList.remove('card-oro'));event.currentTarget.classList.add('card-oro')}
 function setTab(t){const d=document.getElementById('detalle-pago');document.querySelectorAll('.tabs-pago span').forEach(s=>s.classList.remove('tab-activa'));event.target.classList.add('tab-activa');if(t==='SINPE')d.innerText="70835833";else if(t==='IBAN')d.innerText="CR80080315001000035641";else d.innerText="randallesc061376@gmail.com"}
 function sendWA(){const h=new Date().getDate().toString().padStart(2,'0'),a=Math.floor(10+Math.random()*89),c=a+h,t=`*SOLICITUD VIP FRAN CRUZ*\nPlan: ${planActivo}\nID: ${uidCliente}\nClave: *${c}*\n\n⚠️ Adjunte el comprobante ahora.`;window.open(`https://wa.me/50664535475?text=${encodeURIComponent(t)}`,'_blank')}
@@ -115,13 +106,13 @@ function iniciarSeguridad(){irAPaso('pantalla-seguridad');let s=15;const t=docum
 function previsualizarFotos(){const i=document.getElementById('foto-file');archivosSeleccionados=[...archivosSeleccionados,...Array.from(i.files)].slice(0,15);renderPrevia()}
 function renderPrevia(){const c=document.getElementById('previa-carga');c.innerHTML='';archivosSeleccionados.forEach((f,i)=>{const r=new FileReader();r.onload=(e)=>{const d=document.createElement('div');d.style="position:relative;aspect-ratio:1/1;border:1px solid var(--oro);border-radius:8px;overflow:hidden";d.innerHTML=`<div style="position:absolute;top:2px;left:2px;background:var(--oro);color:#000;font-weight:700;font-size:10px;padding:2px 5px;border-radius:3px">${i+1}</div><img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover"><button onclick="quitarFoto(${i})" style="position:absolute;top:2px;right:2px;background:var(--rojo);border:none;color:#fff;border-radius:50%;width:20px;height:20px;cursor:pointer">X</button>`;c.appendChild(d)};r.readAsDataURL(f)})}
 function quitarFoto(i){archivosSeleccionados.splice(i,1);renderPrevia()}
-async function subirLoteFotos(){if(!archivosSeleccionados.length)return;const btn=document.getElementById('btn-subir'),bar=document.getElementById('progress-bar'),base=Date.now();btn.disabled=true;btn.innerText="SUBIENDO...";for(let i=0;i<archivosSeleccionados.length;i++){const f=archivosSeleccionados[i],n=`${base}_${i}_${f.name}`,ref=storage.ref('galeria/'+n),task=ref.put(f);await new Promise((res,rej)=>{task.on('state_changed',s=>{bar.style.width=(((i/archivosSeleccionados.length)*100)+((s.bytesTransferred/s.totalBytes)*(100/archivosSeleccionados.length)))+"%"},rej,async()=>{const u=await task.snapshot.ref.getDownloadURL();await db.collection("galeria").add({url:u,orden:base-i,fecha:firebase.firestore.FieldValue.serverTimestamp()});res()})})}alert("¡LISTO!");archivosSeleccionados=[];renderPrevia();bar.style.width="0%";btn.disabled=false;btn.innerText="PUBLICAR LOTE"}
-function cargarFotos(a){const c=a?document.getElementById('lista-admin'):document.getElementById('lista-fotos');db.collection("galeria").orderBy("orden","desc").onSnapshot(s=>{c.innerHTML='';s.forEach(doc=>{const x=doc.data(),v=document.createElement('div');v.className='contenedor-foto';v.innerHTML=`<div class="escudo"></div><img src="${x.url}" class="foto-vip">${a?`<button style="position:absolute;top:5px;right:5px;background:red;border:none;color:#fff;padding:5px;z-index:20" onclick="borrarFoto('${doc.id}')">X</button>`:''}`;c.appendChild(v)})})}
+async function subirLoteFotos(){if(!archivosSeleccionados.length)return;const btn=document.getElementById('btn-subir'),bar=document.getElementById('progress-bar'),base=Date.now();btn.disabled=true;btn.innerText="SUBIENDO...";for(let i=0;i<archivosSeleccionados.length;i++){const f=archivosSeleccionados[i],n=`${base}_${i}_${f.name}`,ref=storage.ref('galeria/'+n),task=ref.put(f);await new Promise((res,rej)=>{task.on('state_changed',s=>{bar.style.width=(((i/archivosSeleccionados.length)*100)+((s.bytesTransferred/s.totalBytes)*(100/archivosSeleccionados.length)))+"%"},rej,async()=>{const u=await task.snapshot.ref.getDownloadURL();await db.collection("galeria").add({url:u,orden:base-i,fecha:firebase.firestore.FieldValue.serverTimestamp()});res()})})}alert("¡LISTO!");archivosSeleccionados=[];renderPrevia();bar.style.width="0%";btn.disabled=false;btn.innerText="PUBLIAR LOTE"}
+function cargarFotos(a){const c=a?document.getElementById('lista-admin'):document.getElementById('lista-fotos');db.collection("galeria").orderBy("orden","desc").onSnapshot(s=>{c.innerHTML='';s.forEach(doc=>{const x=doc.data(),v=document.createElement('div');v.className='contenedor-foto';v.innerHTML=`<div style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:10"></div><img src="${x.url}" class="foto-vip">${a?`<button style="position:absolute;top:5px;right:5px;background:red;border:none;color:#fff;padding:5px;z-index:20" onclick="borrarFoto('${doc.id}')">X</button>`:''}`;c.appendChild(v)})})}
 let cl=0;function trucoAdmin(){cl++;if(cl>=5){irAPaso('pantalla-admin');cl=0}setTimeout(()=>cl=0,3000)}
 function loginAdmin(){if(document.getElementById('pass-admin').value==="ADMIN123"){document.getElementById('controles-admin').style.display='block';cargarFotos(true)}else alert("ERROR")}
 async function borrarFoto(id){if(confirm("¿Eliminar?"))await db.collection("galeria").doc(id).delete()}
 async function setBan(s){const u=document.getElementById('user-uid').value;if(u){await db.collection("baneos").doc(u).set({baneado:s});alert("OK")}}
 </script>
 </body>
-            </html>
+</html>
 
