@@ -3,139 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP - CONTROL</title>
+    <title>FRAN CRUZ VIP</title>
     <style>
-        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #8b0000; --v: #006400; }
+        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #c0392b; }
         body { background: var(--n); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; user-select: none; }
         
-        /* HEADER COMÚN */
-        header { padding: 40px 20px 10px; text-align: center; width: 100%; cursor: pointer; }
+        header { padding: 45px 20px 10px; text-align: center; width: 100%; cursor: pointer; }
         .logo { color: var(--o); font-size: 2rem; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; }
-        
-        .p { display: none; width: 100%; max-width: 400px; flex-direction: column; padding: 0 20px 40px; box-sizing: border-box; }
-        .a { display: flex; }
+        .sub { color: #555; font-size: .65rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; }
 
-        /* ESTILOS PANEL ADMIN */
-        .admin-title { color: var(--o); text-align: center; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; margin: 20px 0; font-weight: 900; }
-        .section-box { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; margin-bottom: 15px; width: 100%; box-sizing: border-box; }
-        
-        .inp-admin { width: 100%; padding: 12px; background: #000; border: 1px solid #333; border-radius: 8px; color: #fff; margin-bottom: 10px; box-sizing: border-box; text-align: center; }
-        .btn-g { width: 100%; background: var(--g); color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 5px; }
-        
-        /* GESTIÓN DE LÁMINAS */
-        .grid-laminas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .item-lamina { position: relative; border: 1px solid #222; border-radius: 8px; overflow: hidden; aspect-ratio: 1/1; background: #111; }
-        .btn-del { position: absolute; top: 5px; right: 5px; background: var(--r); color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-weight: bold; }
+        /* VISTAS */
+        .v { display: none; width: 100%; max-width: 400px; flex-direction: column; padding: 0 25px 40px; box-sizing: border-box; }
+        .active { display: flex; }
 
-        /* MODAL PASSKEY */
-        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); display:none; align-items:center; justify-content:center; flex-direction:column; z-index:100; }
+        /* ESTILOS DE BOTONES Y CAJAS */
+        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 15px; }
+        .box { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .box b { color: var(--o); font-size: 1.15rem; }
+
+        /* PANEL ADMIN */
+        .admin-sec { background: #0a0a0a; border: 1px solid #151515; border-radius: 15px; padding: 20px; margin-top: 20px; width: 100%; }
+        .admin-label { color: var(--o); font-size: 0.7rem; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; display: block; letter-spacing: 2px; }
+        .inp { width: 100%; background: #000; border: 1px solid #222; padding: 15px; color: #fff; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-<header id="trigger">
+<header onclick="hdlTaps()">
     <div class="logo">FRAN CRUZ VIP</div>
+    <div id="reg-tag" class="sub">SALA PRIVADA • COSTA RICA</div>
 </header>
 
-<div id="view-client" class="p a">
-    <button class="btn-g" onclick="alert('Redirigiendo a Pago...')">ENVIAR COMPROBANTE</button>
-    <p style="text-align:center; color:#444; font-size:0.7rem; margin-top:20px;">Toca el logo 5 veces para gestión</p>
+<div id="view-main" class="v active">
+    <div class="box"><span>Acceso Hoy</span><b>₡550</b></div>
+    <div class="box"><span>7 Días Silver</span><b>₡3,850</b></div>
+    <div class="box" style="border-color:var(--o)"><span>30 Días Gold</span><b>₡8,250</b></div>
+    
+    <div style="text-align:center; margin:30px 0 10px; color:var(--o); font-size:0.8rem; font-weight:900;">SINPE MÓVIL</div>
+    <div style="background:#0c0c0c; padding:20px; border-radius:12px; text-align:center; font-size:1.5rem; font-weight:900;">50664535475</div>
+    
+    <button class="btn-gold" onclick="sendWA()">ENVIAR COMPROBANTE DE PAGO</button>
 </div>
 
-<div id="view-admin" class="p">
-    <div class="admin-title">SISTEMA DE GESTIÓN</div>
+<div id="view-admin" class="v">
+    <div style="text-align:center; color:var(--o); font-weight:900; letter-spacing:3px; margin:20px 0;">SISTEMA DE CONTROL</div>
 
-    <div class="section-box">
-        <small style="color:var(--o); display:block; margin-bottom:10px;">CONTROL DE TIPO DE CAMBIO</small>
-        <select id="select-pais" class="inp-admin">
+    <div class="admin-sec">
+        <span class="admin-label">Cambio de Divisa</span>
+        <select class="inp" id="pais-sel">
             <option value="CR">Costa Rica (₡)</option>
             <option value="NI">Nicaragua (C$)</option>
-            <option value="HN">Honduras (L)</option>
-            <option value="GT">Guatemala (Q)</option>
+            <option value="PA">Panamá ($)</option>
         </select>
-        <input type="number" id="rate-val" class="inp-admin" placeholder="Nuevo valor">
-        <button class="btn-g" style="padding:10px; font-size:0.7rem;" onclick="actualizarCambio()">ACTUALIZAR MONEDA</button>
+        <input type="number" class="inp" id="new-rate" placeholder="Nuevo valor">
+        <button class="btn-gold" style="padding:12px;" onclick="alert('Cambio actualizado')">APLICAR CAMBIO</button>
     </div>
 
-    <div class="section-box">
-        <small style="color:var(--o); display:block; margin-bottom:10px;">PUBLICAR NUEVA LÁMINA</small>
-        <button class="btn-g" onclick="document.getElementById('file-up').click()">ELEGIR LÁMINA</button>
-        <input type="file" id="file-up" style="display:none" onchange="previewLamina()">
-        <button class="btn-g" style="background:none; border:1px solid var(--o); color:var(--o); margin-top:10px;" onclick="subirLamina()">PUBLICAR AHORA</button>
-        
-        <div class="grid-laminas" id="laminas-box">
-            </div>
+    <div class="admin-sec">
+        <span class="admin-label">Contenido VIP</span>
+        <button class="btn-gold" onclick="alert('Abriendo galería...')">ELEGIR LÁMINA</button>
+        <button class="btn-gold" style="background:none; border:1px solid var(--o); color:var(--o);" onclick="alert('Lámina publicada')">PUBLICAR LÁMINA</button>
     </div>
 
-    <div class="section-box">
-        <small style="color:var(--o); display:block; margin-bottom:10px;">CONTROL DE USUARIOS</small>
-        <input type="text" id="uid-user" class="inp-admin" placeholder="ID DEL CLIENTE (UID)">
+    <div class="admin-sec">
+        <span class="admin-label">Seguridad de Usuarios</span>
+        <input type="text" class="inp" id="user-id" placeholder="ID del Usuario">
         <div style="display:flex; gap:10px;">
-            <button class="btn-g" style="background:var(--r); color:#fff;" onclick="gestionarUser('BAN')">BANEAR</button>
-            <button class="btn-g" style="background:var(--v); color:#fff;" onclick="gestionarUser('ALTA')">DAR ALTA</button>
+            <button class="btn-gold" style="background:var(--r); color:#fff;" onclick="alert('Usuario Baneado')">BANEAR</button>
+            <button class="btn-gold" style="background:#27ae60; color:#fff;" onclick="alert('Alta concedida')">DAR ALTA</button>
         </div>
     </div>
 
-    <button class="btn-g" style="background:none; color:#444; border:none;" onclick="location.reload()">CERRAR SESIÓN</button>
+    <button class="btn-gold" style="background:none; color:#444;" onclick="location.reload()">CERRAR SESIÓN</button>
 </div>
 
-<div id="modal-pass" class="modal">
-    <h3 style="color:var(--o)">PASSKEY ADMIN</h3>
-    <input type="password" id="passkey" class="inp-admin" style="width:200px; font-size:1.5rem;">
-    <button class="btn-g" style="width:200px;" onclick="validar()">ENTRAR</button>
+<div id="modal-pass" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:100;">
+    <span class="admin-label">ADMIN PASSKEY</span>
+    <input type="password" id="psk" class="inp" style="width:200px; text-align:center; font-size:1.5rem; letter-spacing:8px;">
+    <button class="btn-gold" style="width:200px" onclick="validar()">ENTRAR AL PANEL</button>
 </div>
 
 <script>
-    let clicks = 0;
-
-    // Trigger de 5 toques
-    document.getElementById('trigger').onclick = () => {
-        clicks++;
-        if(clicks >= 5) {
-            document.getElementById('modal-pass').style.display = 'flex';
-            clicks = 0;
-        }
-        setTimeout(() => clicks = 0, 3000);
-    };
+    let taps = 0;
+    function hdlTaps() {
+        taps++;
+        if(taps >= 5) { document.getElementById('modal-pass').style.display = 'flex'; taps = 0; }
+        setTimeout(() => taps = 0, 3000);
+    }
 
     function validar() {
-        const p = document.getElementById('passkey').value;
-        if(p === "2026") {
+        if(document.getElementById('psk').value === "2026") {
+            alert("ADMINISTRADOR IDENTIFICADO");
             document.getElementById('modal-pass').style.display = 'none';
-            document.getElementById('view-client').classList.remove('a');
-            document.getElementById('view-admin').classList.add('a');
+            document.getElementById('view-main').classList.remove('active');
+            document.getElementById('view-admin').classList.add('active');
         } else {
-            alert("CLAVE INCORRECTA");
+            alert("ERROR");
             document.getElementById('modal-pass').style.display = 'none';
         }
     }
 
-    function actualizarCambio() {
-        const pais = document.getElementById('select-pais').value;
-        const val = document.getElementById('rate-val').value;
-        alert(`Tipo de cambio para ${pais} actualizado a: ${val}`);
-        // Aquí conectas con Firebase: db.collection('config').doc('monedas').update(...)
-    }
-
-    function previewLamina() {
-        alert("Lámina seleccionada desde el dispositivo móvil.");
-    }
-
-    function subirLamina() {
-        // Simulación de carga
-        const box = document.getElementById('laminas-box');
-        const div = document.createElement('div');
-        div.className = 'item-lamina';
-        div.innerHTML = `<button class="btn-del" onclick="this.parentElement.remove()">X</button>
-                         <div style="padding:40%; color:#333; font-size:0.5rem;">IMG</div>`;
-        box.appendChild(div);
-        alert("Lámina publicada con éxito en el feed VIP.");
-    }
-
-    function gestionarUser(accion) {
-        const id = document.getElementById('uid-user').value;
-        if(!id) return alert("Ingrese un ID de usuario");
-        alert(`Usuario ${id}: ACCIÓN ${accion} ejecutada correctamente.`);
+    function sendWA() {
+        const msg = encodeURIComponent("Buen día. Envío mi comprobante para la activación de mi acceso.");
+        window.location.href = `https://wa.me/50664535475?text=${msg}`;
     }
 </script>
 </body>
