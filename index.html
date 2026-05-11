@@ -6,15 +6,17 @@
     <title>FRAN CRUZ VIP • PLATINUM</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
     <style>
-        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); }
+        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #ff4444; --v: #00c851; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background: var(--n); color: #fff; margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         
-        header { padding: 15px; text-align: center; cursor: pointer; flex-shrink: 0; }
-        .logo { color: var(--o); font-size: 1.8rem; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+        header { padding: 15px; text-align: center; cursor: pointer; flex-shrink: 0; z-index: 100; }
+        .logo { color: var(--o); font-size: 1.8rem; font-weight: 900; letter-spacing: 3px; }
         
-        .view { display: flex; width: 100%; max-width: 450px; margin: auto; height: 100%; flex-direction: column; padding: 10px 20px; animation: fadeIn 0.3s; overflow-y: auto; }
+        .view { display: none; width: 100%; max-width: 450px; margin: auto; height: 100%; flex-direction: column; padding: 10px 20px; animation: fadeIn 0.3s; overflow-y: auto; }
+        .view.active { display: flex; }
 
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; padding: 10px; background: #0f0f0f; border-radius: 12px; }
         .flag { width: 100%; height: 30px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; border: 1px solid #333; }
@@ -24,8 +26,18 @@
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.1); }
         .card b { color: var(--o); font-size: 1.2rem; }
 
-        .btn-gold { position: relative; z-index: 99; width: 100%; background: var(--g); color: #000 !important; border: none; padding: 20px; border-radius: 15px; font-weight: 900; margin: 15px 0; cursor: pointer; text-transform: uppercase; font-size: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .btn-gold { position: relative; z-index: 99; width: 100%; background: var(--g); color: #000 !important; border: none; padding: 20px; border-radius: 15px; font-weight: 900; margin: 15px 0; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
         .btn-sec { width: 100%; background: #111; color: #555; border: 1px solid #222; padding: 15px; border-radius: 12px; font-weight: 800; margin-bottom: 15px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+
+        /* ADMIN STYLES */
+        .adm-card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 15px; padding: 15px; margin-bottom: 12px; }
+        .adm-label { color: var(--o); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block; border-left: 4px solid var(--o); padding-left: 10px; }
+        .user-row { background: #000; border: 1px solid #222; padding: 12px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .adm-input { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 14px; border-radius: 10px; margin-bottom: 10px; font-size: 1rem; }
+        
+        .prog-bar { width: 100%; height: 6px; background: #111; border-radius: 10px; margin: 10px 0; display: none; overflow: hidden; }
+        .prog-fill { height: 100%; background: var(--v); width: 0%; transition: 0.3s; }
+        .preview-img { width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px; margin-bottom: 10px; display: none; border: 1px solid #333; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
@@ -34,53 +46,68 @@
 
 <header onclick="adminAccess()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div id="tagline" style="font-size: 0.7rem; color: #555; letter-spacing: 2px; margin-top: 5px;">SALA PRIVADA • COSTA RICA</div>
+    <div id="tagline" style="font-size: 0.7rem; color: #555; letter-spacing: 2px;">SALA PRIVADA • COSTA RICA</div>
 </header>
 
-<div class="view">
+<div id="v-client" class="view active">
     <div class="geo-grid">
         <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setLoc('COSTA RICA', '₡', 540)">
         <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setLoc('NICARAGUA', 'C$', 37)">
         <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setLoc('PANAMÁ', '$', 1)">
-        <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('RESTO DEL MUNDO', '$', 1)">
+        <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('MUNDO', '$', 1)">
     </div>
-    
-    <div class="card" onclick="selP(this, 'HOY')">
-        <span>ACCESO HOY</span>
-        <b id="p1">₡540</b>
-    </div>
-    
-    <div class="card sel" onclick="selP(this, '30 DÍAS')">
-        <span>30 DÍAS GOLD</span>
-        <b id="p2">₡10,800</b>
-    </div>
-    
+    <div class="card" onclick="selP(this, 'HOY')"><span>ACCESO HOY</span><b id="p1">₡540</b></div>
+    <div class="card sel" onclick="selP(this, '30 DÍAS')"><span>30 DÍAS GOLD</span><b id="p2">₡10,800</b></div>
     <button type="button" class="btn-gold" onclick="requestAccess()">ENVIAR COMPROBANTE</button>
-    
     <button type="button" class="btn-sec" onclick="enterWithKey()">YA TENGO MI CLAVE</button>
+</div>
+
+<div id="v-admin" class="view">
+    <div class="adm-card">
+        <span class="adm-label">Control de Usuarios</span>
+        <div id="admin-user-list" style="max-height: 200px; overflow-y: auto;"></div>
+    </div>
+    <div class="adm-card">
+        <span class="adm-label">Publicar Lámina</span>
+        <img id="img-prev" class="preview-img">
+        <input type="file" id="f-upload" class="adm-input" accept="image/*" onchange="preview(this)">
+        <div class="prog-bar" id="p-bar"><div class="prog-fill" id="p-fill"></div></div>
+        <button class="btn-gold" style="margin:0" id="btn-up" onclick="uploadImg()">SUBIR AHORA</button>
+    </div>
+    <div class="adm-card">
+        <span class="adm-label">Tasas ($1 USD)</span>
+        <div style="display:flex; gap:10px">
+            <input type="number" id="t-cr" class="adm-input" placeholder="₡ CR">
+            <input type="number" id="t-ni" class="adm-input" placeholder="C$ NI">
+        </div>
+        <button class="btn-gold" style="background:#222; color:#fff" onclick="saveRates()">GUARDAR TASAS</button>
+    </div>
+    <button class="btn-sec" onclick="location.reload()">CERRAR PANEL</button>
+</div>
+
+<div id="v-gallery" class="view">
+    <div id="vip-grid" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; padding-bottom:30px;"></div>
+    <button class="btn-sec" onclick="location.reload()">SALIR</button>
 </div>
 
 <script>
     const firebaseConfig = { 
         apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
         projectId: "fran-cruz-sala-vip",
-        databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com"
+        databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com",
+        storageBucket: "fran-cruz-sala-vip.firebasestorage.app" 
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+    const st = firebase.storage();
 
     let myID = localStorage.getItem('fc_id') || 'VIP' + Math.floor(Math.random()*9000+1000);
     localStorage.setItem('fc_id', myID);
-    
     let rates = { CR: 540, NI: 37 };
     let curSim = "₡", curTasa = 540, curP = "30 DÍAS", clicks = 0;
 
-    // Sincronización de Tasas desde el Panel Admin
     db.ref('settings/rates').on('value', ss => {
-        if(ss.exists()){
-            rates = ss.val();
-            updatePrices();
-        }
+        if(ss.exists()){ rates = ss.val(); updatePrices(); }
     });
 
     function updatePrices() {
@@ -89,49 +116,95 @@
     }
 
     function setLoc(n, s, t) {
-        curSim = s; 
-        curTasa = (n === 'NICARAGUA') ? rates.NI : (n === 'COSTA RICA') ? rates.CR : t;
+        curSim = s; curTasa = (n==='NICARAGUA')?rates.NI:(n==='COSTA RICA')?rates.CR:t;
         document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         event.target.classList.add('active');
         updatePrices();
     }
 
-    function requestAccess() {
-        db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP, time: Date.now() }).then(() => {
-            window.location.href = `https://wa.me/50664535475?text=Pago VIP. ID: ${myID} - Plan: ${curP}`;
-        });
+    function preview(input) {
+        const file = input.files[0];
+        if(file) {
+            const reader = new FileReader();
+            reader.onload = e => { const p = document.getElementById('img-prev'); p.src = e.target.result; p.style.display = 'block'; };
+            reader.readAsDataURL(file);
+        }
     }
 
-    function enterWithKey() {
-        const k = prompt("INGRESA TU ID O CLAVE:");
-        if(!k) return;
-        db.ref('users/'+k).once('value', ss => {
-            if(ss.exists() && ss.val().status === 'active') {
-                alert("Acceso concedido. Redirigiendo a la sala...");
-                // Aquí iría la función para mostrar la galería
-            } else {
-                alert("ID no activo o inexistente.");
-            }
+    function uploadImg() {
+        const file = document.getElementById('f-upload').files[0];
+        if(!file) return;
+        const btn = document.getElementById('btn-up');
+        const bar = document.getElementById('p-bar');
+        const fill = document.getElementById('p-fill');
+        btn.disabled = true; bar.style.display = 'block';
+        const ref = st.ref('laminas/' + Date.now());
+        const task = ref.put(file);
+        task.on('state_changed', s => { fill.style.width = (s.bytesTransferred / s.totalBytes * 100) + '%'; }, null, () => {
+            task.snapshot.ref.getDownloadURL().then(url => {
+                db.ref('gallery').push({ url, time: -Date.now() });
+                alert("Lámina publicada"); location.reload();
+            });
         });
     }
 
     function adminAccess() {
         clicks++;
         if(clicks >= 5) {
-            // Esta función te permite volver al panel administrador con la clave 1376
-            const p = prompt("ACCESO ADMINISTRADOR:");
-            if(p === "1376") { alert("Entrando al Panel..."); /* Aquí llamarías a la vista admin */ }
+            if(prompt("PASS:") === "1376") {
+                switchView('v-admin');
+                loadAdminUsers();
+            }
             clicks = 0;
         }
         setTimeout(() => clicks = 0, 2000);
     }
 
-    function selP(el, p) { 
-        curP = p; 
-        document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); 
-        el.classList.add('sel'); 
+    function loadAdminUsers() {
+        db.ref('users').on('value', ss => {
+            const list = document.getElementById('admin-user-list'); list.innerHTML = "";
+            ss.forEach(u => {
+                const user = u.val();
+                list.innerHTML += `<div class="user-row">
+                    <span><b>${user.id}</b></span>
+                    <button onclick="db.ref('users/${user.id}').update({status:'active'})" style="color:var(--v); background:none; border:none; font-weight:800">ACTIVAR</button>
+                </div>`;
+            });
+        });
     }
+
+    function switchView(id) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function enterWithKey() {
+        const k = prompt("ID:");
+        db.ref('users/'+k).once('value', ss => {
+            if(ss.exists() && ss.val().status === 'active') {
+                switchView('v-gallery');
+                db.ref('gallery').orderByChild('time').on('value', gs => {
+                    const grid = document.getElementById('vip-grid'); grid.innerHTML = "";
+                    gs.forEach(img => { grid.innerHTML += `<img src="${img.val().url}" style="width:100%; border-radius:10px; border:1px solid #222">`; });
+                });
+            } else { alert("No activo"); }
+        });
+    }
+
+    function requestAccess() {
+        db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP, time: Date.now() }).then(() => {
+            window.location.href = `https://wa.me/50664535475?text=Pago VIP. ID: ${myID}`;
+        });
+    }
+
+    function saveRates() {
+        const CR = document.getElementById('t-cr').value;
+        const NI = document.getElementById('t-ni').value;
+        db.ref('settings/rates').set({ CR, NI }).then(() => alert("Tasas guardadas"));
+    }
+
+    function selP(el, p) { curP = p; document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); el.classList.add('sel'); }
 </script>
 </body>
 </html>
