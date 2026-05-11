@@ -10,47 +10,45 @@
     <style>
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #e74c3c; --v: #2ecc71; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
-        body { background: var(--n); color: #fff; margin: 0; height: 100vh; overflow: hidden; }
+        body { background: var(--n); color: #fff; margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         
-        header { padding: 15px 10px 5px; text-align: center; cursor: pointer; }
-        .logo { color: var(--o); font-size: 1.8rem; font-weight: 900; letter-spacing: 3px; }
+        header { padding: 10px 10px 2px; text-align: center; cursor: pointer; flex-shrink: 0; }
+        .logo { color: var(--o); font-size: 1.7rem; font-weight: 900; letter-spacing: 3px; }
         
-        .view { display: none; width: 100%; max-width: 450px; margin: auto; height: 100vh; flex-direction: column; padding: 10px; animation: fadeIn 0.3s; }
+        .view { display: none; width: 100%; max-width: 450px; margin: auto; height: 100%; flex-direction: column; padding: 5px 15px; animation: fadeIn 0.3s; overflow-y: auto; }
         .view.active { display: flex; }
 
-        /* Ajuste de Banderas (Más arriba y compactas) */
-        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 5px 10px; padding: 8px; background: #0f0f0f; border-radius: 12px; }
-        .flag { width: 100%; height: 22px; opacity: 0.4; border-radius: 3px; cursor: pointer; object-fit: cover; }
+        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 5px 0; padding: 6px; background: #0f0f0f; border-radius: 12px; flex-shrink: 0; }
+        .flag { width: 100%; height: 22px; opacity: 0.3; border-radius: 3px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 8px var(--o); }
         
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 10px; padding: 12px 15px; margin: 0 10px 6px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.06); }
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 10px; padding: 10px 15px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; flex-shrink: 0; }
+        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.1rem; }
 
-        .acc-item { border: 1px solid #1a1a1a; border-radius: 10px; margin: 0 10px 6px; overflow: hidden; flex-shrink: 0; }
-        .acc-head { background: #111; padding: 12px; font-size: 0.75rem; font-weight: bold; color: #888; cursor: pointer; display: flex; justify-content: space-between; }
-        .acc-body { display: none; background: #080808; padding: 10px; border-top: 1px solid #1a1a1a; text-align: center; max-height: 180px; overflow-y: auto; }
+        .acc-item { border: 1px solid #1a1a1a; border-radius: 10px; margin-bottom: 5px; overflow: hidden; flex-shrink: 0; }
+        .acc-head { background: #111; padding: 10px; font-size: 0.75rem; font-weight: bold; color: #888; cursor: pointer; display: flex; justify-content: space-between; }
+        .acc-body { display: none; background: #080808; padding: 10px; border-top: 1px solid #1a1a1a; text-align: center; }
         .acc-body.active { display: block; }
-        .copy-box { background: #111; padding: 10px; border-radius: 8px; margin: 5px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; font-size: 0.8rem; }
+        .copy-box { background: #111; padding: 10px; border-radius: 8px; margin: 5px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; font-size: 0.8rem; word-break: break-all; }
 
-        .btn-gold { width: calc(100% - 20px); background: var(--g); color: #000 !important; border: none; padding: 16px; border-radius: 12px; font-weight: 900; margin: 8px 10px; cursor: pointer; text-transform: uppercase; }
-        .btn-access { width: calc(100% - 20px); background: #111; color: var(--o); border: 2px solid var(--o); padding: 16px; border-radius: 12px; font-weight: 900; margin: 0 10px; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        .btn-gold { width: 100%; background: var(--g); color: #000 !important; border: none; padding: 16px; border-radius: 12px; font-weight: 900; margin: 8px 0; cursor: pointer; text-transform: uppercase; position: relative; z-index: 20; }
+        .btn-access { width: 100%; background: #111; color: var(--o); border: 2px solid var(--o); padding: 15px; border-radius: 12px; font-weight: 900; margin-bottom: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; position: relative; z-index: 20; }
 
-        /* --- ADMIN COMPLETO --- */
+        /* --- ADMIN PANEL --- */
         .adm-card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; margin-bottom: 10px; }
-        .adm-label { color: var(--o); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block; border-left: 3px solid var(--o); padding-left: 8px; }
-        .user-row { background: #000; border: 1px solid #222; padding: 12px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .adm-label { color: var(--o); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: block; border-left: 3px solid var(--o); padding-left: 8px; }
+        .user-row { background: #000; border: 1px solid #222; padding: 10px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .adm-input { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 0.9rem; }
-        .grid-tasa { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <header onclick="adminAccess()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div id="tagline" style="font-size: 0.65rem; color: #555; letter-spacing: 2px; margin-top: 2px;">SALA PRIVADA • COSTA RICA</div>
+    <div id="tagline" style="font-size: 0.6rem; color: #555; letter-spacing: 2px;">SALA PRIVADA • COSTA RICA</div>
 </header>
 
 <div id="v-client" class="view active">
@@ -73,42 +71,35 @@
         <div class="acc-head" onclick="toggleAcc(this)">MÉTODOS DE PAGO <span>▼</span></div>
         <div class="acc-body active">
             <small style="color:var(--o)">GRUPO MUTUAL (IBAN)</small>
-            <div class="copy-box" onclick="copy('CR800803150001000035641')">CR800803150001000035641</div>
+            <div class="copy-box" onclick="copy('CR80080315001000035641')">CR80080315001000035641</div>
             <small style="color:var(--o)">SINPE MÓVIL</small>
             <div class="copy-box" onclick="copy('70835833')">70835833</div>
             <small style="color:var(--o)">PAYPAL</small>
-            <div class="copy-box" onclick="copy('randallesc061376@gmail.com')">randallesc061376@gmail.com</div>
+            <div class="copy-box" onclick="copy('Randallesc061376@gmail.com')">Randallesc061376@gmail.com</div>
         </div>
     </div>
     
-    <button class="btn-gold" onclick="requestAccess()">ENVIAR COMPROBANTE</button>
-    <button class="btn-access" onclick="enterWithKey()">YA TENGO MI CLAVE</button>
+    <button type="button" class="btn-gold" onclick="requestAccess()">ENVIAR COMPROBANTE</button>
+    <button type="button" class="btn-access" onclick="enterWithKey()">YA TENGO MI CLAVE</button>
 </div>
 
-<div id="v-admin" class="view" style="overflow-y: auto;">
+<div id="v-admin" class="view">
     <div class="adm-card">
         <span class="adm-label">Control de Usuarios</span>
         <div id="admin-user-list"></div>
     </div>
     <div class="adm-card">
-        <span class="adm-label">Publicar Nueva Lámina</span>
+        <span class="adm-label">Publicar Lámina</span>
         <input type="file" id="f-upload" class="adm-input" accept="image/*">
-        <button class="btn-gold" style="margin:0; width:100%" onclick="uploadImg()">SUBIR A GALERÍA</button>
+        <button class="btn-gold" style="margin:0" onclick="uploadImg()">SUBIR AHORA</button>
     </div>
     <div class="adm-card">
-        <span class="adm-label">Ajustar Tasas ($1 USD)</span>
-        <div class="grid-tasa">
-            <input type="number" id="t-cr" class="adm-input" placeholder="₡ CR">
-            <input type="number" id="t-ni" class="adm-input" placeholder="C$ NI">
-        </div>
-        <button class="btn-gold" style="margin:5px 0 0; width:100%; background:#222; color:#fff !important" onclick="saveRates()">ACTUALIZAR TASAS</button>
+        <span class="adm-label">Tasas ($1 USD)</span>
+        <input type="number" id="t-cr" class="adm-input" placeholder="₡ CR">
+        <input type="number" id="t-ni" class="adm-input" placeholder="C$ NI">
+        <button class="btn-gold" style="background:#222; color:#fff !important" onclick="saveRates()">GUARDAR TASAS</button>
     </div>
-    <button class="btn-gold" style="background:#111; color:#fff !important" onclick="location.reload()">SALIR DEL PANEL</button>
-</div>
-
-<div id="v-gallery" class="view">
-    <div id="vip-grid" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; padding:15px; overflow-y:auto"></div>
-    <button class="btn-gold" style="background:#111; color:#fff !important" onclick="location.reload()">CERRAR SESIÓN</button>
+    <button class="btn-gold" style="background:#111; color:#fff !important" onclick="location.reload()">CERRAR PANEL</button>
 </div>
 
 <script>
@@ -124,13 +115,11 @@
 
     let myID = localStorage.getItem('fc_id') || 'VIP' + Math.floor(Math.random()*9000+1000);
     localStorage.setItem('fc_id', myID);
-    
     let curTasa = 540, curSim = "₡", curP = "30 DÍAS", clicks = 0;
     let rates = { CR: 540, NI: 37 };
 
-    // Cargar Tasas desde DB
     db.ref('settings/rates').on('value', ss => {
-        if(ss.exists()) {
+        if(ss.exists()){
             rates = ss.val();
             document.getElementById('t-cr').value = rates.CR;
             document.getElementById('t-ni').value = rates.NI;
@@ -138,10 +127,10 @@
         }
     });
 
-    function saveRates() {
+    function saveRates(){
         const CR = document.getElementById('t-cr').value;
         const NI = document.getElementById('t-ni').value;
-        db.ref('settings/rates').set({ CR, NI }).then(() => alert("Tasas actualizadas"));
+        db.ref('settings/rates').set({ CR, NI }).then(() => alert("Tasas guardadas"));
     }
 
     function setLoc(n, s, t) {
@@ -160,7 +149,7 @@
 
     function requestAccess() {
         db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP, time: Date.now() }).then(() => {
-            window.location.href = `https://wa.me/50664535475?text=Comprobante VIP enviado. Plan: ${curP}. ID: ${myID}`;
+            window.location.href = `https://wa.me/50664535475?text=Comprobante VIP. ID: ${myID} - Plan: ${curP}`;
         });
     }
 
@@ -168,17 +157,8 @@
         const k = prompt("INGRESA TU CLAVE:");
         if(!k) return;
         db.ref('users/'+k).once('value', ss => {
-            if(ss.exists() && ss.val().status === 'active') { enterGallery(); }
-            else { alert("Clave no activa"); }
-        });
-    }
-
-    function enterGallery() {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById('v-gallery').classList.add('active');
-        db.ref('gallery').on('value', ss => {
-            const grid = document.getElementById('vip-grid'); grid.innerHTML = "";
-            ss.forEach(img => { grid.innerHTML += `<div style="border-radius:10px; overflow:hidden; aspect-ratio:9/16"><img src="${img.val().url}" style="width:100%; height:100%; object-fit:cover"></div>`; });
+            if(ss.exists() && ss.val().status === 'active') { alert("Bienvenido a la Sala VIP"); }
+            else { alert("Clave no activa o inválida"); }
         });
     }
 
@@ -186,7 +166,7 @@
         clicks++;
         if(clicks >= 5) {
             if(prompt("PASS:") === "1376") {
-                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.getElementById('v-client').classList.remove('active');
                 document.getElementById('v-admin').classList.add('active');
                 loadAdminUsers();
             }
@@ -201,11 +181,8 @@
             ss.forEach(u => {
                 const user = u.val();
                 list.innerHTML += `<div class="user-row">
-                    <span><b>${user.id}</b> (${user.status})</span>
-                    <div>
-                        <button onclick="db.ref('users/${user.id}').update({status:'active'})" style="color:var(--v); background:none; border:none; font-weight:900; font-size:1.2rem">✓</button>
-                        <button onclick="db.ref('users/${user.id}').update({status:'ban'})" style="color:var(--r); background:none; border:none; font-weight:900; font-size:1.2rem; margin-left:10px">X</button>
-                    </div>
+                    <span><b>${user.id}</b></span>
+                    <button onclick="db.ref('users/${user.id}').update({status:'active'})" style="color:var(--v); background:none; border:none; font-weight:900">ACTIVAR</button>
                 </div>`;
             });
         });
@@ -218,7 +195,6 @@
         ref.put(file).then(s => s.ref.getDownloadURL().then(url => {
             db.ref('gallery').push({url});
             alert("Lámina publicada");
-            document.getElementById('f-upload').value = "";
         }));
     }
 
