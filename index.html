@@ -5,138 +5,180 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FRAN CRUZ VIP</title>
     <style>
-        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(135deg, #d4af37, #f9e498); }
+        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); }
         body { background: var(--n); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; user-select: none; }
         
-        /* CABECERA SEGÚN IMAGEN */
-        header { padding: 45px 20px 10px; text-align: center; width: 100%; box-sizing: border-box; }
-        .logo { color: var(--o); font-size: 2.1rem; font-weight: 900; letter-spacing: 7px; text-transform: uppercase; margin-bottom: 5px; }
-        .sub { color: #444; font-size: .6rem; letter-spacing: 4px; text-transform: uppercase; font-weight: bold; }
+        header { padding: 45px 20px 10px; text-align: center; width: 100%; box-sizing: border-box; cursor: pointer; }
+        .logo { color: var(--o); font-size: 2rem; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; }
+        .sub { color: #555; font-size: .65rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; }
         
-        /* BANDERAS Y REGIÓN */
-        .geo { display: flex; justify-content: center; gap: 8px; margin: 15px 0; }
-        .geo img { width: 20px; height: 12px; border-radius: 1px; opacity: 0.7; }
-        .reg-txt { color: #222; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 900; margin-bottom: 25px; }
+        /* SELECTOR DE BANDERA MANUAL */
+        .geo-bar { display: flex; justify-content: center; gap: 12px; margin: 20px 0; background: #0a0a0a; padding: 12px 20px; border-radius: 50px; border: 1px solid #111; }
+        .flag-btn { width: 26px; height: 18px; border-radius: 2px; cursor: pointer; opacity: 0.3; transition: 0.3s; border: 1px solid transparent; }
+        .flag-btn.active { opacity: 1; border-color: var(--o); transform: scale(1.2); }
 
-        .p { display: none; width: 100%; max-width: 400px; flex-direction: column; align-items: center; padding: 0 25px 40px; box-sizing: border-box; }
+        .p { display: none; width: 100%; max-width: 400px; flex-direction: column; padding: 0 25px 40px; box-sizing: border-box; }
         .a { display: flex; }
 
-        /* DISTRIBUCIÓN DE PLANES */
-        .box { width: 100%; background: rgba(255,255,255,0.02); border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; box-sizing: border-box; }
-        .box span { font-size: 0.9rem; letter-spacing: 0.5px; color: #eee; }
-        .box b { color: var(--o); font-size: 1.1rem; }
-        .s { border-color: var(--o); background: rgba(212,175,55,0.04); }
+        /* PLANES CON CONVERSIÓN VISIBLE */
+        .box { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px 22px; display: flex; flex-direction: column; margin-bottom: 12px; cursor: pointer; box-sizing: border-box; transition: 0.2s; }
+        .box-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .box span { font-size: 0.95rem; color: #eee; font-weight: 500; }
+        .box b { color: var(--o); font-size: 1.15rem; }
+        .box .usd-conv { font-size: 0.65rem; color: #444; margin-top: 4px; text-align: right; font-weight: 900; letter-spacing: 1px; }
+        .box.s { border-color: var(--o); background: rgba(212,175,55,0.03); }
 
-        /* MÉTODOS DE PAGO (ACORDEÓN) */
-        .pay-label { color: var(--o); font-size: .7rem; font-weight: 900; letter-spacing: 3px; margin: 30px 0 15px; text-transform: uppercase; }
-        .method { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
-        .method-h { padding: 15px; text-align: center; font-size: 0.75rem; font-weight: 900; color: #666; cursor: pointer; text-transform: uppercase; }
-        .method-c { display: none; padding: 20px; text-align: center; border-top: 1px solid #1a1a1a; }
+        .label-pago { color: var(--o); font-size: .75rem; font-weight: 900; letter-spacing: 2px; margin: 35px 0 15px; text-align: center; text-transform: uppercase; }
+
+        /* MÉTODOS DE PAGO DESPLEGABLES */
+        .method { width: 100%; background: #080808; border: 1px solid #151515; border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+        .method-h { padding: 18px; text-align: center; font-size: 0.8rem; font-weight: 900; color: #444; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .method-c { display: none; padding: 22px; text-align: center; border-top: 1px solid #151515; background: #050505; }
         .method.open .method-c { display: block; }
-        .method.open .method-h { color: var(--o); }
+        .method.open .method-h { color: var(--o); background: #0c0c0c; }
 
-        /* BOTONES DE ACCIÓN */
-        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-top: 15px; font-size: 0.9rem; }
-        .btn-access { width: 100%; background: none; color: var(--o); border: 1px solid var(--o); padding: 18px; border-radius: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-top: 12px; font-size: 0.85rem; }
+        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 15px; font-size: 0.9rem; }
+        .btn-outline { width: 100%; background: none; color: var(--o); border: 1px solid var(--o); padding: 18px; border-radius: 12px; font-weight: 900; text-transform: uppercase; margin-top: 12px; font-size: 0.85rem; }
 
-        /* INPUT ACCESO */
-        .inp-vip { width: 100%; padding: 20px; background: #000; border: 1px solid #333; border-radius: 12px; color: #fff; text-align: center; font-size: 1.4rem; letter-spacing: 8px; font-weight: bold; margin-bottom: 15px; box-sizing: border-box; }
+        /* MODAL PANEL ADMIN OCULTO */
+        .modal-admin { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: none; z-index: 1000; align-items: center; justify-content: center; flex-direction: column; }
+        .inp-pass { background: #111; border: 1px solid var(--o); padding: 20px; color: #fff; text-align: center; font-size: 1.8rem; letter-spacing: 10px; width: 220px; border-radius: 12px; margin-bottom: 25px; outline: none; }
     </style>
 </head>
 <body>
 
-<header>
+<header id="adminSecret">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div class="sub">SALA PRIVADA • COSTA RICA</div>
-    <div class="geo">
-        <img src="https://flagcdn.com/cr.svg"> <img src="https://flagcdn.com/ni.svg">
-        <img src="https://flagcdn.com/pa.svg"> <img src="https://flagcdn.com/hn.svg">
-        <img src="https://flagcdn.com/sv.svg"> <img src="https://flagcdn.com/gt.svg">
-        <img src="https://flagcdn.com/bz.svg">
-    </div>
-    <div class="reg-txt">Sistema Regional Protegido</div>
+    <div id="region-display" class="sub">SALA PRIVADA • COSTA RICA</div>
 </header>
 
-<div id="view-main" class="p a">
-    <div class="box" onclick="sel('HOY', 550, this)"><span>Acceso Hoy</span><b>₡550</b></div>
-    <div class="box" onclick="sel('7 DÍAS SILVER', 3850, this)"><span>7 Días Silver</span><b>₡3,850</b></div>
-    <div class="box s" onclick="sel('30 DÍAS GOLD', 8250, this)"><span>30 Días Gold</span><b>₡8,250</b></div>
-
-    <div class="pay-label">Métodos de Pago</div>
-    
-    <div class="method" onclick="tgl(this)">
-        <div class="method-h">1. SINPE MÓVIL</div>
-        <div class="method-c" onclick="copy('70835833')">
-            <small style="color:var(--o); font-weight:bold;">TOCA PARA COPIAR</small>
-            <div style="font-size:1.2rem; font-weight:bold; margin:5px 0;">70835833</div>
-            <small style="color:#444">Randall Sánchez C.</small>
-        </div>
-    </div>
-
-    <div class="method" onclick="tgl(this)">
-        <div class="method-h">2. TRANSFERENCIA IBAN</div>
-        <div class="method-c" onclick="copy('CR80080315001000035641')">
-            <div style="font-size:0.85rem; font-weight:bold;">CR80080315001000035641</div>
-        </div>
-    </div>
-
-    <button class="btn-gold" onclick="wa()">ENVIAR COMPROBANTE DE PAGO</button>
-    <button class="btn-access" onclick="nav('view-main','view-vip')">YA TENGO MI CLAVE</button>
+<div class="geo-bar">
+    <img src="https://flagcdn.com/cr.svg" class="flag-btn active" onclick="updateRegion('COSTA RICA', '₡', 540, this)">
+    <img src="https://flagcdn.com/ni.svg" class="flag-btn" onclick="updateRegion('NICARAGUA', 'C$', 36.5, this)">
+    <img src="https://flagcdn.com/pa.svg" class="flag-btn" onclick="updateRegion('PANAMÁ', '$', 1, this)">
+    <img src="https://flagcdn.com/hn.svg" class="flag-btn" onclick="updateRegion('HONDURAS', 'L', 24.7, this)">
+    <img src="https://flagcdn.com/sv.svg" class="flag-btn" onclick="updateRegion('EL SALVADOR', '$', 1, this)">
+    <img src="https://flagcdn.com/gt.svg" class="flag-btn" onclick="updateRegion('GUATEMALA', 'Q', 7.8, this)">
 </div>
 
-<div id="view-vip" class="p">
-    <h4 style="color:var(--o); letter-spacing: 2px; margin-bottom: 25px;">SALA VIP</h4>
-    <input type="text" id="cKey" class="inp-vip" placeholder="XXXXX" maxlength="5">
-    <button class="btn-gold" onclick="access()">ENTRAR A SALA</button>
-    <button class="btn-access" style="border-color:#222; color:#444" onclick="nav('view-vip','view-main')">VOLVER</button>
+<div id="view-main" class="p a">
+    <div id="plans-render"></div>
+
+    <div class="label-pago">Métodos de Pago</div>
+    
+    <div class="method" onclick="togglePay(this)">
+        <div class="method-h">1. SINPE MÓVIL</div>
+        <div class="method-c" onclick="copyText('50664535475')">
+            <small style="color:var(--o); font-weight:bold;">TOCA PARA COPIAR NÚMERO</small>
+            <div style="font-size:1.4rem; font-weight:bold; margin:8px 0; color:#fff;">6453 5475</div>
+            <small style="color:#555">Randall Sánchez C.</small>
+        </div>
+    </div>
+
+    <div class="method" onclick="togglePay(this)">
+        <div class="method-h">2. TRANSFERENCIA IBAN</div>
+        <div class="method-c" onclick="copyText('CR80080315001000035641')">
+            <small style="color:var(--o); font-weight:bold;">TOCA PARA COPIAR IBAN</small>
+            <div style="font-size:0.85rem; font-weight:bold; margin-top:10px; color:#fff;">CR80080315001000035641</div>
+        </div>
+    </div>
+
+    <div class="method" onclick="togglePay(this)">
+        <div class="method-h">3. PAYPAL / INTERNACIONAL</div>
+        <div class="method-c" onclick="copyText('randallesc061376@gmail.com')">
+            <small style="color:var(--o); font-weight:bold;">TOCA PARA COPIAR CORREO</small>
+            <div style="font-size:1rem; font-weight:bold; margin-top:10px; color:#fff;">randallesc061376@gmail.com</div>
+        </div>
+    </div>
+
+    <button class="btn-gold" onclick="sendToWA()">ENVIAR COMPROBANTE DE PAGO</button>
+    <button class="btn-outline" onclick="alert('Redirigiendo a Validación...')">YA TENGO MI CLAVE</button>
+</div>
+
+<div id="adminModal" class="modal-admin">
+    <h3 style="color:var(--o); letter-spacing:3px;">SISTEMA DE CONTROL</h3>
+    <input type="password" id="adminPass" class="inp-pass" placeholder="••••">
+    <button class="btn-gold" style="width:220px" onclick="validateAdmin()">ACCEDER</button>
+    <button class="btn-outline" style="width:220px; border:none; color:#444;" onclick="closeAdmin()">CERRAR</button>
 </div>
 
 <script>
-    let pSel = "30 DÍAS GOLD";
-    let mSel = "8250";
+    let clicksCount = 0;
+    let symbol = "₡";
+    let rate = 540;
+    let selectedPlanName = "30 DÍAS GOLD";
+    let selectedUSD = 15;
 
-    function sel(p, m, el) {
-        pSel = p; mSel = m;
+    const planesData = [
+        { name: "Acceso Hoy", usd: 1 },
+        { name: "7 Días Silver", usd: 5 },
+        { name: "30 Días Gold", usd: 15 }
+    ];
+
+    function updateRegion(name, sym, rt, el) {
+        symbol = sym; rate = rt;
+        document.getElementById('region-display').innerText = `SALA PRIVADA • ${name}`;
+        document.querySelectorAll('.flag-btn').forEach(f => f.classList.remove('active'));
+        el.classList.add('active');
+        renderPlanes();
+    }
+
+    function renderPlanes() {
+        const cont = document.getElementById('plans-render');
+        cont.innerHTML = '';
+        planesData.forEach(p => {
+            const local = (p.usd * rate).toLocaleString();
+            const active = p.name === selectedPlanName ? 's' : '';
+            cont.innerHTML += `
+                <div class="box ${active}" onclick="selectThisPlan('${p.name}', ${p.usd}, this)">
+                    <div class="box-top"><span>${p.name}</span><b>${symbol}${local}</b></div>
+                    <div class="usd-conv">${p.usd} USD</div>
+                </div>`;
+        });
+    }
+
+    function selectThisPlan(n, u, el) {
+        selectedPlanName = n; selectedUSD = u;
         document.querySelectorAll('.box').forEach(b => b.classList.remove('s'));
         el.classList.add('s');
     }
 
-    function tgl(el) {
-        const isO = el.classList.contains('open');
+    function togglePay(el) {
+        const open = el.classList.contains('open');
         document.querySelectorAll('.method').forEach(m => m.classList.remove('open'));
-        if(!isO) el.classList.add('open');
+        if(!open) el.classList.add('open');
     }
 
-    function nav(o, n) {
-        document.getElementById(o).classList.remove('a');
-        document.getElementById(n).classList.add('a');
+    function sendToWA() {
+        const localVal = (selectedUSD * rate).toLocaleString();
+        const msg = `Buen día. He seleccionado el *${selectedPlanName}* por un valor de *${symbol}${localVal}*.\n\nAdjunto envío mi comprobante de pago oficial para la activación de mi acceso.\n\nGestión ID: ${Math.random().toString(36).substring(7).toUpperCase()}11`;
+        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
     }
 
-    function copy(t) {
-        navigator.clipboard.writeText(t);
-        alert("Copiado");
+    // LÓGICA OCULTA ADMIN
+    document.getElementById('adminSecret').onclick = () => {
+        clicksCount++;
+        if(clicksCount >= 5) {
+            document.getElementById('adminModal').style.display = 'flex';
+            clicksCount = 0;
+        }
+        setTimeout(() => clicksCount = 0, 3000);
+    };
+
+    function validateAdmin() {
+        if(document.getElementById('adminPass').value === "2026") {
+            alert("ADMINISTRADOR IDENTIFICADO");
+            location.reload(); 
+        } else {
+            alert("ACCESO DENEGADO");
+            closeAdmin();
+        }
     }
 
-    function wa() {
-        const d = new Date().getDate().toString().padStart(2, '0');
-        const uid = "UID-" + Math.random().toString(36).substring(2,8).toUpperCase();
-        const clv = Math.random().toString(36).substring(2,4).toUpperCase() + d;
-        
-        const msg = `*SOLICITUD VIP FRAN CRUZ*\n` +
-                    `Plan: ${pSel}\n` +
-                    `ID: ${uid}\n` +
-                    `Clave: *${clv}*\n\n` +
-                    `⚠️ *IMPORTANTE:* Debe adjuntar el comprobante de pago ahora para activar su acceso.`;
-        
-        window.location.href = `https://wa.me/50670835833?text=${encodeURIComponent(msg)}`;
-    }
+    function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
+    function copyText(t) { navigator.clipboard.writeText(t); alert("Copiado al portapapeles"); }
 
-    function access() {
-        const val = document.getElementById('cKey').value.toUpperCase();
-        const d = new Date().getDate().toString().padStart(2, '0');
-        if(val.endsWith(d)) alert("ACCESO AUTORIZADO DESDE EL PANEL");
-        else alert("CLAVE INVÁLIDA");
-    }
+    renderPlanes();
 </script>
 </body>
     </html>
