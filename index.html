@@ -8,24 +8,27 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
     <style>
         :root{--o:#d4af37;--n:#050505;--g:linear-gradient(135deg,#d4af37,#f9e498)}
-        body{background:var(--n);color:#fff;font-family:'Segoe UI',sans-serif;margin:0;text-align:center;user-select:none;overflow-x:hidden}
-        header{padding:25px 10px;cursor:pointer}
-        .l{color:var(--o);font-size:1.9rem;font-weight:900;letter-spacing:5px;text-transform:uppercase}
-        .b{display:flex;justify-content:center;gap:10px;margin:15px 0}
+        body{background:var(--n);color:#fff;font-family:'Segoe UI',sans-serif;margin:0;display:flex;flex-direction:column;align-items:center;user-select:none;overflow-x:hidden}
+        header{padding:25px 10px;width:100%;max-width:380px;box-sizing:border-box;cursor:pointer}
+        .l{color:var(--o);font-size:1.9rem;font-weight:900;letter-spacing:5px;text-transform:uppercase;margin-bottom:10px}
+        .b{display:flex;justify-content:center;gap:10px;margin-bottom:15px}
         .b img{width:24px;border-radius:2px;cursor:pointer}
-        .p{display:none;min-height:90vh;flex-direction:column;align-items:center;padding:10px 20px;box-sizing:border-box}
+        .p{display:none;width:100%;max-width:380px;flex-direction:column;align-items:center;padding:0 20px 20px;box-sizing:border-box}
         .a{display:flex}
-        .box{width:100%;max-width:380px;background:rgba(255,255,255,0.03);border:1px solid #222;border-radius:12px;padding:18px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;cursor:pointer}
+        .box{width:100%;background:rgba(255,255,255,0.03);border:1px solid #222;border-radius:12px;padding:18px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;cursor:pointer;box-sizing:border-box}
         .s{border-color:var(--o);background:rgba(212,175,55,0.05)}
-        .bg{width:100%;max-width:380px;background:var(--g);color:#000;border:none;padding:18px;border-radius:12px;font-weight:900;text-transform:uppercase;cursor:pointer;margin-top:10px}
+        .bg{width:100%;background:var(--g);color:#000;border:none;padding:18px;border-radius:12px;font-weight:900;text-transform:uppercase;cursor:pointer;margin-top:10px}
         
-        /* Contenedor de Pagos Centrado y con Copiado */
-        .info-pago{width:100%;max-width:380px;background:rgba(255,255,255,0.02);border:1px solid rgba(212,175,55,0.25);border-radius:15px;padding:20px;margin:15px 0;box-sizing:border-box}
-        .info-pago h4{color:var(--o);margin:0 0 15px 0;letter-spacing:2px;font-size:0.85rem}
-        .item-pago{margin-bottom:12px;cursor:pointer;transition:0.2s}
-        .item-pago:active{transform:scale(0.98);opacity:0.7}
-        .item-pago b{color:var(--o);font-size:0.75rem;display:block;text-transform:uppercase;margin-bottom:2px}
+        /* Centrado Absoluto de Pagos */
+        .info-pago{width:100%;background:rgba(255,255,255,0.02);border:1px solid rgba(212,175,55,0.25);border-radius:15px;padding:20px;margin:15px 0;box-sizing:border-box;text-align:center}
+        .info-pago h4{color:var(--o);margin:0 0 15px 0;letter-spacing:2px;font-size:0.85rem;text-transform:uppercase}
+        .item-pago{margin-bottom:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center}
+        .item-pago b{color:var(--o);font-size:0.75rem;text-transform:uppercase;margin-bottom:2px}
         .item-pago span{font-size:0.95rem;word-break:break-all}
+        
+        /* Panel Admin - Protocolo Baneo */
+        .admin-section{width:100%;background:rgba(255,255,255,0.02);border:1px solid #333;border-radius:15px;padding:20px;margin-bottom:15px;box-sizing:border-box}
+        .inp-admin{width:100%;padding:15px;background:#111;border:1px solid #444;border-radius:10px;color:#fff;text-align:center;margin-bottom:10px;box-sizing:border-box}
         
         .m{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--n);z-index:99;flex-direction:column;justify-content:center;align-items:center}
         .toast{position:fixed;bottom:20px;background:var(--o);color:#000;padding:10px 20px;border-radius:20px;font-size:0.8rem;font-weight:bold;display:none;z-index:100}
@@ -38,14 +41,13 @@
 <header onclick="tAdmin()">
     <div class="l">FRAN CRUZ VIP</div>
     <div class="b" id="bc"></div>
+    <p style="color:#444;font-size:.6rem;letter-spacing:2px;margin:0">SISTEMA REGIONAL PROTEGIDO</p>
 </header>
 
 <div id="pantalla-u" class="p a">
-    <div id="pc" style="width:100%;max-width:380px">
-        <div class="box" onclick="sel(1,this)"><span>Acceso 24 Horas</span><b id="v1">--</b></div>
-        <div class="box" onclick="sel(5,this)"><span>7 Días Silver</span><b id="v7">--</b></div>
-        <div class="box s" onclick="sel(15,this)"><span>30 Días Gold</span><b id="v15">--</b></div>
-    </div>
+    <div class="box" onclick="sel(1,this)"><span>Acceso 24 Horas</span><b id="v1">--</b></div>
+    <div class="box" onclick="sel(5,this)"><span>7 Días Silver</span><b id="v7">--</b></div>
+    <div class="box s" onclick="sel(15,this)"><span>30 Días Gold</span><b id="v15">--</b></div>
 
     <div class="info-pago">
         <h4>MÉTODOS DE PAGO (TOCA PARA COPIAR)</h4>
@@ -60,18 +62,28 @@
 
 <div id="pantalla-l" class="p">
     <h3 style="color:var(--o)">PASSKEY</h3>
-    <input type="password" id="pk" style="padding:15px;background:#111;color:#fff;border:1px solid var(--o);border-radius:10px;text-align:center" placeholder="****">
-    <button class="bg" onclick="vPk()">ENTRAR</button>
+    <input type="password" id="pk" class="inp-admin" placeholder="****">
+    <button class="bg" onclick="vPk()">ENTRAR AL PANEL</button>
 </div>
 
 <div id="pantalla-ad" class="p">
-    <div style="width:100%;max-width:380px">
-        <input type="file" id="fi" accept="image/*" style="display:none" onchange="document.getElementById('fn').innerText='Imagen seleccionada'">
+    <div class="admin-section">
+        <input type="file" id="fi" accept="image/*" style="display:none" onchange="document.getElementById('fn').innerText='Imagen lista'">
         <button class="bg" style="background:#222;color:var(--o);border:1px solid var(--o)" onclick="document.getElementById('fi').click()">ELEGIR FOTO</button>
         <p id="fn" style="font-size:.7rem;color:var(--o);margin:10px 0"></p>
-        <button class="bg" onclick="sub()">PUBLICAR</button>
-        <button class="bg" style="background:none;color:#444" onclick="location.reload()">SALIR</button>
+        <button class="bg" onclick="sub()">PUBLICAR LÁMINA</button>
     </div>
+
+    <div class="admin-section">
+        <p style="color:var(--o);font-size:.7rem;margin-bottom:10px">GESTIÓN DE ACCESOS (BANEO)</p>
+        <input type="text" id="ub" class="inp-admin" placeholder="UID DEL CLIENTE">
+        <div style="display:flex;gap:10px">
+            <button class="bg" style="background:#800;color:#fff" onclick="bn(1)">BANEAR</button>
+            <button class="bg" style="background:#060;color:#fff" onclick="bn(0)">ALTA</button>
+        </div>
+    </div>
+
+    <button class="bg" style="background:none;color:#555;border:1px solid #222" onclick="location.reload()">SALIR DEL PANEL</button>
 </div>
 
 <div id="mo" class="m"><div class="l">VERIFICANDO</div><p id="ts" style="color:var(--o);font-size:3rem;margin-top:20px">15s</p></div>
@@ -99,32 +111,17 @@ function tAdmin(){cl++;if(cl>=5){vP('pantalla-u','pantalla-l');cl=0}setTimeout((
 function vP(o,n){document.getElementById(o).classList.remove('a');document.getElementById(n).classList.add('a')}
 function vPk(){if(document.getElementById('pk').value==="ADMIN123")vP('pantalla-l','pantalla-ad');else location.reload()}
 
-function prot(){
-    document.getElementById('mo').style.display='flex';let t=15;
-    const i=setInterval(()=>{t--;document.getElementById('ts').innerText=t+"s";if(t<=0){clearInterval(i);wa()}},1000);
-}
-
-// Función Copiar al Portapapeles
-function copy(txt) {
-    navigator.clipboard.writeText(txt).then(() => {
-        const t = document.getElementById('toast');
-        t.style.display = 'block';
-        setTimeout(() => t.style.display = 'none', 2000);
-    });
-}
-
-function wa(){
-    const t=T[ps],m=(pS*t.f).toLocaleString(),h=new Date().getDate().toString().padStart(2,'0');
-    const msg = `Plan:${pS}dias-Monto:${t.m}${m}-ID:93${h}`;
-    window.location.href = `https://api.whatsapp.com/send?phone=50670835833&text=${encodeURIComponent(msg)}`;
-}
+function prot(){document.getElementById('mo').style.display='flex';let t=15;const i=setInterval(()=>{t--;document.getElementById('ts').innerText=t+"s";if(t<=0){clearInterval(i);wa()}},1000)}
+function copy(txt){navigator.clipboard.writeText(txt).then(()=>{const t=document.getElementById('toast');t.style.display='block';setTimeout(()=>t.style.display='none',2000);});}
+function wa(){const t=T[ps],m=(pS*t.f).toLocaleString(),h=new Date().getDate().toString().padStart(2,'0');location.href=`https://api.whatsapp.com/send?phone=50670835833&text=${encodeURIComponent('Plan:'+pS+'dias-Monto:'+t.m+m+'-ID:93'+h)}`;}
 
 async function sub(){
     const f=document.getElementById('fi').files[0];if(!f)return;
     const r=st.ref('galeria/'+Date.now()+'_'+f.name);await r.put(f);
     const u=await r.getDownloadURL();await db.collection("galeria").add({url:u,fecha:firebase.firestore.FieldValue.serverTimestamp()});
-    alert("¡LISTO!");location.reload();
+    alert("PUBLICADO");location.reload();
 }
+async function bn(s){const i=document.getElementById('ub').value;if(i){await db.collection("baneos").doc(i).set({baneado:!!s});alert("PROTOCOLO EJECUTADO");}}
 init();
 </script>
 </body>
