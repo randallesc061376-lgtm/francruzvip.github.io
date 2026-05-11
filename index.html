@@ -1,156 +1,112 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP | Membresías</title>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FRAN CRUZ VIP</title>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
     <style>
-        :root { --oro: #d4af37; --negro: #050505; --oro-grad: linear-gradient(135deg, #d4af37, #f9e498); }
-        body { background: var(--negro); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; text-align: center; user-select: none; }
-        
-        /* Estética idéntica a captura 1001647734.jpg */
-        header { padding: 20px 0; }
-        .logo { color: var(--oro); font-size: 1.8rem; font-weight: 900; letter-spacing: 5px; margin: 0; }
-        .banderas { display: flex; justify-content: center; gap: 8px; margin: 15px 0; }
-        .banderas img { width: 25px; height: auto; border-radius: 3px; }
-        
-        .sub-titulo { color: #666; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 25px; }
-
-        .contenedor-planes { display: flex; flex-direction: column; gap: 15px; align-items: center; }
-        .plan-box { 
-            width: 100%; max-width: 380px; background: rgba(255,255,255,0.03); 
-            border: 1px solid #222; border-radius: 15px; padding: 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; transition: 0.2s;
-        }
-        .plan-box.selected { border-color: var(--oro); background: rgba(212,175,55,0.05); }
-        .plan-txt { text-align: left; font-size: 1.1rem; color: #ddd; }
-        .plan-precio { color: var(--oro); font-weight: 900; font-size: 1.3rem; }
-
-        .selector-pais { 
-            background: #111; border: 1px solid #333; color: #fff; 
-            padding: 12px; border-radius: 10px; width: 100%; max-width: 380px; 
-            margin-bottom: 25px; font-size: 0.9rem; text-align: center;
-        }
-
-        .btn-gold { 
-            width: 100%; max-width: 380px; background: var(--oro-grad); color: #000; border: none; 
-            padding: 20px; border-radius: 15px; font-weight: 900; font-size: 1rem; 
-            cursor: pointer; text-transform: uppercase; letter-spacing: 2px; margin-top: 25px;
-        }
-        .btn-outline {
-            width: 100%; max-width: 380px; background: transparent; color: var(--oro); 
-            border: 1px solid var(--oro); padding: 15px; border-radius: 12px; 
-            font-weight: 700; margin-top: 15px; cursor: pointer; text-transform: uppercase;
-        }
-
-        /* Modal Protocolo 15s */
-        .modal { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: var(--negro); z-index: 1000; flex-direction: column; justify-content: center; align-items: center;
-        }
-        .scanner { width: 70%; height: 2px; background: var(--oro); box-shadow: 0 0 15px var(--oro); position: relative; animation: scan 2s infinite; }
-        @keyframes scan { 0%, 100% { transform: translateY(-30px); } 50% { transform: translateY(30px); } }
+        :root{--o:#d4af37;--n:#050505;--g:linear-gradient(135deg,#d4af37,#f9e498)}
+        body{background:var(--n);color:#fff;font-family:sans-serif;margin:0;text-align:center;user-select:none;overflow-x:hidden}
+        header{padding:25px 10px;cursor:pointer}
+        .l{color:var(--o);font-size:1.8rem;font-weight:900;letter-spacing:5px}
+        .b{display:flex;justify-content:center;gap:6px;margin:12px 0}
+        .b img{width:22px;border-radius:2px;cursor:pointer;transition:.2s}
+        .b img:active{transform:scale(1.2)}
+        .p{display:none;min-height:100vh;flex-direction:column;align-items:center;padding:15px;box-sizing:border-box}
+        .a{display:flex}
+        .box{width:100%;max-width:370px;background:rgba(255,255,255,0.03);border:1px solid #222;border-radius:12px;padding:18px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;cursor:pointer}
+        .s{border-color:var(--o);background:rgba(212,175,55,0.05)}
+        .bg{width:100%;max-width:370px;background:var(--g);color:#000;border:none;padding:18px;border-radius:12px;font-weight:900;text-transform:uppercase;cursor:pointer;margin-top:10px}
+        .in{width:100%;max-width:370px;padding:15px;margin:8px 0;background:#111;border:1px solid var(--o);color:#fff;border-radius:10px;text-align:center;font-size:1rem}
+        .bar{width:0%;height:6px;background:var(--o);border-radius:3px;transition:.3s;margin:8px 0}
+        .m{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--n);z-index:9;flex-direction:column;justify-content:center;align-items:center}
     </style>
 </head>
-<body>
+<body oncontextmenu="return false">
 
-<header>
-    <h1 class="logo">FRAN CRUZ VIP</h1>
-    <div class="banderas">
-        <img src="https://flagcdn.com/cr.svg" alt="CR">
-        <img src="https://flagcdn.com/pa.svg" alt="PA">
-        <img src="https://flagcdn.com/ni.svg" alt="NI">
-        <img src="https://flagcdn.com/hn.svg" alt="HN">
-        <img src="https://flagcdn.com/sv.svg" alt="SV">
-        <img src="https://flagcdn.com/gt.svg" alt="GT">
-        <img src="https://flagcdn.com/bz.svg" alt="BZ">
-    </div>
-    <p class="sub-titulo">SISTEMA DE VERIFICACIÓN REGIONAL</p>
+<header onclick="tAdmin()">
+    <div class="l">FRAN CRUZ VIP</div>
+    <div class="b" id="bc"></div>
+    <p style="color:#555;font-size:.6rem;letter-spacing:2px">SISTEMA REGIONAL PROTEGIDO</p>
 </header>
 
-<select id="pais-master" class="selector-pais" onchange="actualizarPrecios()">
-    <option value="CR">Costa Rica (CRC)</option>
-    <option value="NI">Nicaragua (NIO)</option>
-    <option value="PA">Panamá / USA (USD)</option>
-    <option value="HN">Honduras (HNL)</option>
-    <option value="GT">Guatemala (GTQ)</option>
-</select>
+<div id="u" class="p a">
+    <div id="pc">
+        <div class="box" onclick="sel(1,this)"><span>Acceso Hoy</span><b id="v1">--</b></div>
+        <div class="box" onclick="sel(5,this)"><span>7 Días Silver</span><b id="v7">--</b></div>
+        <div class="box s" onclick="sel(15,this)"><span>30 Días Gold</span><b id="v15">--</b></div>
+    </div>
+    <button class="bg" onclick="prot()">ADQUIRIR ACCESO</button>
+</div>
 
-<div class="contenedor-planes">
-    <div class="plan-box" onclick="seleccionar(1, this)">
-        <span class="plan-txt">Acceso Hoy</span>
-        <span class="plan-precio" id="p1">--</span>
-    </div>
-    <div class="plan-box" onclick="seleccionar(5, this)">
-        <span class="plan-txt">7 Días Silver</span>
-        <span class="plan-precio" id="p7">--</span>
-    </div>
-    <div class="plan-box selected" onclick="seleccionar(15, this)">
-        <span class="plan-txt">30 Días Gold</span>
-        <span class="plan-precio" id="p30">--</span>
+<div id="l" class="p">
+    <h3 style="color:var(--o)">ACCESO MAESTRO</h3>
+    <input type="password" id="pk" class="in" placeholder="PASSKEY">
+    <button class="bg" onclick="vPk()">ENTRAR</button>
+</div>
+
+<div id="ad" class="p">
+    <div style="width:100%;max-width:380px">
+        <div style="border:1px solid var(--o);padding:15px;border-radius:12px;margin-bottom:15px">
+            <input type="file" id="fi" style="display:none" onchange="document.getElementById('fn').innerText=this.files[0].name">
+            <button class="bg" style="background:#222;color:var(--o);border:1px solid var(--o)" onclick="document.getElementById('fi').click()">ELEGIR LÁMINA</button>
+            <p id="fn" style="font-size:.6rem;color:var(--o)"></p>
+            <div class="bar" id="br"></div>
+            <button class="bg" id="up" onclick="sub()">PUBLICAR</button>
+        </div>
+        <div style="background:rgba(255,255,255,0.02);padding:15px;border-radius:12px">
+            <input type="text" id="ub" class="in" placeholder="UID-CLIENTE">
+            <div style="display:flex;gap:8px"><button class="bg" style="background:red;color:#fff" onclick="bn(1)">BAN</button><button class="bg" style="background:green;color:#fff" onclick="bn(0)">ALTA</button></div>
+        </div>
+        <button class="bg" style="background:none;color:#444" onclick="location.reload()">SALIR</button>
     </div>
 </div>
 
-<button class="btn-gold" onclick="iniciarProtocolo()">ADQUIRIR MEMBRESÍA</button>
-<button class="btn-outline">YA TENGO MI CLAVE</button>
-
-<div id="modal-espera" class="modal">
-    <div class="logo" style="margin-bottom: 40px;">VALIDANDO</div>
-    <div class="scanner"></div>
-    <p style="margin-top: 40px; color: var(--oro);" id="timer-text">VERIFICANDO DISPONIBILIDAD (15s)...</p>
-</div>
+<div id="mo" class="m"><div class="l">VALIDANDO</div><p id="ts" style="color:var(--o);font-size:2rem;margin-top:20px">15s</p></div>
 
 <script>
-let planSeleccionado = 15;
-const TASAS = {
-    "CR": { m: "₡", f: 550 }, // Según captura 1001647734.jpg
-    "NI": { m: "C$", f: 36.8 },
-    "PA": { m: "$", f: 1 },
-    "HN": { m: "L", f: 24.7 },
-    "GT": { m: "Q", f: 7.8 }
-};
+const cfg={apiKey:"AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",authDomain:"fran-cruz-sala-vip.firebaseapp.com",projectId:"fran-cruz-sala-vip",storageBucket:"fran-cruz-sala-vip.firebasestorage.app",messagingSenderId:"1022733043010",appId:"1:1022733043010:web:379db18e37bbfde2cf34db"};
+firebase.initializeApp(cfg);const db=firebase.firestore(),st=firebase.storage();
+let pS=15,ps="CR",cl=0;
+const T={"CR":{m:"₡",f:550,c:"cr"},"NI":{m:"C$",f:36.8,c:"ni"},"PA":{m:"$",f:1,c:"pa"},"HN":{m:"L",f:24.7,c:"hn"},"SV":{m:"$",f:1,c:"sv"},"GT":{m:"Q",f:7.8,c:"gt"},"BZ":{m:"BZ$",f:2,c:"bz"}};
 
-function actualizarPrecios() {
-    const t = TASAS[document.getElementById('pais-master').value];
-    document.getElementById('p1').innerText = t.m + (1 * t.f).toLocaleString();
-    document.getElementById('p7').innerText = t.m + (5 * t.f).toLocaleString();
-    document.getElementById('p30').innerText = t.m + (15 * t.f).toLocaleString();
+function init(){
+    const h=document.getElementById('bc');
+    Object.keys(T).forEach(k=>{
+        const i=document.createElement('img');i.src=`https://flagcdn.com/${T[k].c}.svg`;
+        i.onclick=()=>{ps=k;updP();};h.appendChild(i);
+    });updP();
 }
-
-function seleccionar(valor, elemento) {
-    planSeleccionado = valor;
-    document.querySelectorAll('.plan-box').forEach(b => b.classList.remove('selected'));
-    elemento.classList.add('selected');
+function updP(){
+    const t=T[ps];document.getElementById('v1').innerText=t.m+(1*t.f).toLocaleString();
+    document.getElementById('v7').innerText=t.m+(5*t.f).toLocaleString();
+    document.getElementById('v15').innerText=t.m+(15*t.f).toLocaleString();
 }
-
-function iniciarProtocolo() {
-    document.getElementById('modal-espera').style.display = 'flex';
-    let t = 15; // Protocolo reducido por instrucción
-    const timer = setInterval(() => {
-        t--;
-        document.getElementById('timer-text').innerText = `VERIFICANDO DISPONIBILIDAD (${t}s)...`;
-        if(t <= 0) {
-            clearInterval(timer);
-            enviarWhatsApp();
-        }
-    }, 1000);
+function sel(v,e){pS=v;document.querySelectorAll('.box').forEach(x=>x.classList.remove('s'));e.classList.add('s')}
+function tAdmin(){cl++;if(cl>=5){vP('u','l');cl=0}setTimeout(()=>cl=0,3000)}
+function vP(o,n){document.getElementById(o).classList.remove('a');document.getElementById(n).classList.add('a')}
+function vPk(){if(document.getElementById('pk').value==="ADMIN123")vP('l','ad');else location.reload()}
+async function sub(){
+    const f=document.getElementById('fi').files[0],b=document.getElementById('up');if(!f)return;
+    b.disabled=true;const r=st.ref('galeria/'+Date.now()+'_'+f.name),t=r.put(f);
+    t.on('state_changed',s=>{document.getElementById('br').style.width=(s.bytesTransferred/s.totalBytes)*100+"%"},null,async()=>{
+        const u=await t.snapshot.ref.getDownloadURL();await db.collection("galeria").add({url:u,fecha:firebase.firestore.FieldValue.serverTimestamp()});
+        alert("OK");location.reload();
+    });
 }
-
-function enviarWhatsApp() {
-    const t = TASAS[document.getElementById('pais-master').value];
-    const monto = (planSeleccionado * t.f).toLocaleString();
-    const hoy = new Date().getDate().toString().padStart(2, '0');
-    const id = "93"; // Simulación de últimos 2 del ID
-    
-    const msg = `Hola Fran Cruz VIP. Deseo activar el plan de ${planSeleccionado} días.%0A` +
-                `Monto: ${t.m}${monto}%0A` +
-                `ID Validación: ${id}${hoy}`;
-    
-    window.location.href = `https://wa.me/50688888888?text=${msg}`;
+async function bn(s){const i=document.getElementById('ub').value;if(i){await db.collection("baneos").doc(i).set({baneado:!!s});alert("OK");}}
+function prot(){
+    document.getElementById('mo').style.display='flex';let t=15;
+    const i=setInterval(()=>{t--;document.getElementById('ts').innerText=t+"s";if(t<=0){clearInterval(i);wa()}},1000);
 }
-
-actualizarPrecios();
+function wa(){
+    const t=T[ps],m=(pS*t.f).toLocaleString(),h=new Date().getDate().toString().padStart(2,'0');
+    location.href=`https://wa.me/50664535475?text=Plan:${pS}d-Monto:${t.m}${m}-ID:93${h}`;
+}
+init();
 </script>
 </body>
-</html>
+    </html>
+    
