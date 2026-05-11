@@ -2,167 +2,164 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Fran Cruz VIP | Panel Maestro</title>
+<title>FRAN CRUZ | Control Maestro</title>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
 <style>
-:root{--oro:#d4af37;--negro:#050505;--cristal:rgba(255,255,255,0.04);--rojo:#ff4444}
-body{background:var(--negro);color:#fff;font-family:'Segoe UI',sans-serif;margin:0;padding:0;text-align:center;user-select:none;overflow-x:hidden;width:100vw}
-header{padding:35px 10px;background:linear-gradient(to bottom, #151515, #050505);border-bottom:1px solid #1a1a1a; cursor:pointer}
-.logo{color:var(--oro);font-size:2.2rem;font-weight:900;letter-spacing:7px;text-transform:uppercase;text-shadow:0 0 15px rgba(212,175,55,0.3)}
-.sub-logo{color:#666;font-size:0.6rem;letter-spacing:5px;margin-top:8px}
-.pantalla{display:none;min-height:100vh;width:100%;flex-direction:column;align-items:center;padding:15px;box-sizing:border-box}
+:root{--oro:#d4af37;--negro:#050505;--oro-grad:linear-gradient(135deg, #d4af37, #f9e498);--cristal:rgba(255,255,255,0.05)}
+body{background:var(--negro);color:#fff;font-family:'Segoe UI',sans-serif;margin:0;text-align:center;user-select:none;overflow-x:hidden}
+
+/* Estilo exacto de tu captura del Menú Principal */
+header{padding:40px 20px; background:var(--negro)}
+.logo-principal{color:var(--oro); font-size:2.5rem; font-weight:900; letter-spacing:8px; text-transform:uppercase; margin-bottom:5px}
+.sub-titulo{color:#666; font-size:0.7rem; letter-spacing:4px; text-transform:uppercase}
+
+.pantalla{display:none; min-height:100vh; flex-direction:column; align-items:center; padding:20px; box-sizing:border-box}
 .activa{display:flex}
-.area-pago{background:rgba(10,10,10,0.9);border-radius:30px;padding:25px;width:92%;max-width:390px;margin-top:20px;border:1px solid rgba(212,175,55,0.2);box-sizing:border-box}
-.btn-accion{background:linear-gradient(135deg, var(--oro), #f9e498);color:#000;border:none;padding:20px;border-radius:15px;width:100%;font-weight:900;cursor:pointer;margin-top:10px;text-transform:uppercase;font-size:1rem;letter-spacing:1px;box-shadow:0 8px 15px rgba(0,0,0,0.3)}
-.btn-negro{background:transparent;color:var(--oro);border:1px solid var(--oro);margin-top:15px}
-.galeria-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;width:100%;padding:10px;box-sizing:border-box}
-.contenedor-foto{position:relative;border-radius:12px;overflow:hidden;background:#111;aspect-ratio:1/1;border:1px solid #222}
-.foto-vip{width:100%;height:100%;object-fit:cover}
-.admin-input{width:100%;padding:18px;margin:10px 0;background:#1a1a1a;border:1px solid var(--oro);color:#fff;border-radius:12px;box-sizing:border-box;font-size:1rem}
-.upload-box{border:2px dashed var(--oro); padding:20px; border-radius:15px; margin:10px 0; width:100%; box-sizing:border-box}
-.progress-bar{width:0%; height:10px; background:var(--oro); border-radius:5px; transition:0.3s; margin-top:10px}
+
+/* Inputs y Botones Luxury */
+.input-luxury{width:90%; max-width:380px; padding:22px; margin:15px 0; background:#111; border:1px solid var(--oro); color:var(--oro); border-radius:15px; font-size:1.2rem; text-align:center; letter-spacing:2px; box-sizing:border-box}
+.btn-gold{width:90%; max-width:380px; background:var(--oro-grad); color:#000; border:none; padding:22px; border-radius:15px; font-weight:900; font-size:1.1rem; cursor:pointer; text-transform:uppercase; letter-spacing:2px; box-shadow:0 10px 20px rgba(212,175,55,0.2)}
+
+/* Contenedores de Gestión */
+.modulo-gestion{width:90%; max-width:400px; background:var(--cristal); border:1px solid rgba(212,175,55,0.1); border-radius:25px; padding:25px; margin-top:25px; box-sizing:border-box}
+.titulo-modulo{color:var(--oro); font-size:0.9rem; letter-spacing:3px; margin-bottom:20px; text-transform:uppercase}
+
+/* Barra de carga */
+.upload-zone{border:2px dashed var(--oro); border-radius:15px; padding:30px; margin-bottom:15px; cursor:pointer}
+.progress-container{width:100%; background:#222; height:8px; border-radius:10px; margin-top:15px; display:none}
+.progress-bar{width:0%; height:100%; background:var(--oro); border-radius:10px; transition:0.3s}
+
+.galeria-preview{display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; width:100%; margin-top:30px}
+.thumb{position:relative; aspect-ratio:1/1; border-radius:10px; overflow:hidden; border:1px solid #333}
+.thumb img{width:100%; height:100%; object-fit:cover}
+.btn-del{position:absolute; top:5px; right:5px; background:red; color:white; border:none; padding:5px 10px; border-radius:5px; font-weight:bold}
 </style>
 </head>
 <body>
 
-<header onclick="trucoAdmin()">
-    <div class="logo">FRAN CRUZ</div>
-    <div class="sub-logo">PANEL DE CONTROL MAESTRO</div>
+<header>
+    <div class="logo-principal">FRAN CRUZ</div>
+    <div class="sub-titulo">PANEL DE CONTROL MAESTRO</div>
 </header>
 
-<div id="pantalla-admin" class="pantalla activa">
-    <input type="password" id="pass-admin" class="admin-input" style="max-width:390px" placeholder="PASSKEY">
-    <button class="btn-accion" style="max-width:390px" onclick="loginAdmin()">ACCEDER AL PANEL</button>
+<div id="pantalla-login" class="pantalla activa">
+    <input type="password" id="passkey" class="input-luxury" placeholder="PASSKEY">
+    <button class="btn-gold" onclick="acceder()">ACCEDER AL PANEL</button>
+</div>
 
-    <div id="controles-admin" style="display:none; width:100%; max-width:450px">
-        
-        <div class="area-pago">
-            <h4 style="color:var(--oro); margin-top:0">CARGAR NUEVAS LÁMINAS</h4>
-            <div class="upload-box" onclick="document.getElementById('file-input').click()">
-                <span id="file-status">📸 SELECCIONAR IMAGEN</span>
-                <input type="file" id="file-input" style="display:none" accept="image/*" onchange="actualizarNombre()">
-                <div id="barrita" class="progress-bar"></div>
-            </div>
-            <button class="btn-accion" id="btn-subir" onclick="subirArchivoStorage()">PUBLICAR EN SALA VIP</button>
+<div id="pantalla-dashboard" class="pantalla">
+    
+    <div class="modulo-gestion">
+        <div class="titulo-modulo">CARGAR NUEVAS LÁMINAS</div>
+        <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+            <span id="file-label">📸 SELECCIONAR IMÁGENES</span>
+            <input type="file" id="file-input" style="display:none" accept="image/*" onchange="validarSeleccion()">
+            <div id="p-container" class="progress-container"><div id="p-bar" class="progress-bar"></div></div>
         </div>
-
-        <hr style="border:0.5px solid #333; margin:30px 0">
-
-        <div class="area-pago">
-            <h4 style="color:var(--oro); margin-top:0">GESTIÓN DE ACCESOS (BAN)</h4>
-            <input type="text" id="user-uid" class="admin-input" placeholder="ID DEL CLIENTE (UID-XXXXXX)">
-            <div style="display:flex; gap:10px">
-                <button class="btn-accion" style="background:var(--rojo); color:white" onclick="setBan(true)">BANEAR</button>
-                <button class="btn-accion" style="background:green; color:white" onclick="setBan(false)">DESBANEAR</button>
-            </div>
-        </div>
-
-        <h4 style="color:var(--oro); margin-top:40px">GALERÍA ACTUAL</h4>
-        <div id="lista-admin" class="galeria-grid"></div>
+        <button class="btn-gold" id="btn-upload" onclick="subirImagen()">PUBLICAR EN SALA VIP</button>
     </div>
+
+    <div class="modulo-gestion">
+        <div class="titulo-modulo">GESTIÓN DE ACCESOS (BAN)</div>
+        <input type="text" id="uid-ban" class="input-luxury" style="font-size:0.9rem; padding:15px" placeholder="ID DEL CLIENTE (UID-XXXXXX)">
+        <div style="display:flex; gap:10px; width:100%">
+            <button class="btn-gold" style="background:#ff4444; color:white" onclick="protocoloBan(true)">BANEAR</button>
+            <button class="btn-gold" style="background:#222; border:1px solid var(--oro); color:var(--oro)" onclick="protocoloBan(false)">ALTA</button>
+        </div>
+    </div>
+
+    <div id="galeria-admin" class="galeria-preview"></div>
+    
+    <button class="btn-gold" style="background:transparent; color:#666; margin:40px 0; border:none" onclick="location.reload()">CERRAR SESIÓN MAESTRA</button>
 </div>
 
 <script>
-// Tu configuración de Firebase
-const firebaseConfig={
-    apiKey:"AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",
-    authDomain:"fran-cruz-sala-vip.firebaseapp.com",
-    projectId:"fran-cruz-sala-vip",
-    storageBucket:"fran-cruz-sala-vip.firebasestorage.app", // Bucket vinculado hoy
-    messagingSenderId:"1022733043010",
-    appId:"1:1022733043010:web:379db18e37bbfde2cf34db"
+// Configuración de Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",
+    authDomain: "fran-cruz-sala-vip.firebaseapp.com",
+    projectId: "fran-cruz-sala-vip",
+    storageBucket: "fran-cruz-sala-vip.firebasestorage.app",
+    messagingSenderId: "1022733043010",
+    appId: "1:1022733043010:web:379db18e37bbfde2cf34db"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storage = firebase.storage();
 
-function loginAdmin(){ 
-    if(document.getElementById('pass-admin').value==="ADMIN123"){ 
-        document.getElementById('controles-admin').style.display='block'; 
-        document.getElementById('pass-admin').style.display='none';
-        document.querySelector('button[onclick="loginAdmin()"]').style.display='none';
-        cargarFotos(true); 
+function acceder() {
+    // La passkey que definiste previamente
+    if(document.getElementById('passkey').value === "ADMIN123") {
+        document.getElementById('pantalla-login').classList.remove('activa');
+        document.getElementById('pantalla-dashboard').classList.add('activa');
+        cargarGaleria();
     } else {
-        alert("PASSKEY INVÁLIDA");
+        alert("ACCESO DENEGADO: PASSKEY INCORRECTA");
     }
 }
 
-function actualizarNombre(){
-    const file = document.getElementById('file-input').files[0];
-    if(file) document.getElementById('file-status').innerText = "✅ " + file.name;
+function validarSeleccion() {
+    const f = document.getElementById('file-input').files[0];
+    if(f) document.getElementById('file-label').innerText = "✅ " + f.name.substring(0,15) + "...";
 }
 
-// LOGICA DE CARGA A STORAGE
-async function subirArchivoStorage(){
+async function subirImagen() {
     const file = document.getElementById('file-input').files[0];
-    const btn = document.getElementById('btn-subir');
-    if(!file) return alert("Selecciona una imagen primero");
+    const btn = document.getElementById('btn-upload');
+    if(!file) return alert("Selecciona una imagen");
 
     btn.disabled = true;
-    btn.innerText = "SUBIENDO...";
+    btn.innerText = "PROCESANDO...";
+    document.getElementById('p-container').style.display = 'block';
 
-    const storageRef = storage.ref('galeria/' + Date.now() + "_" + file.name);
-    const task = storageRef.put(file);
+    const ref = storage.ref('galeria/' + Date.now() + "_" + file.name);
+    const uploadTask = ref.put(file);
 
-    task.on('state_changed', 
-        (snapshot) => {
-            let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            document.getElementById('barrita').style.width = percentage + "%";
-        }, 
-        (error) => { 
-            alert("Error al subir: " + error.message); 
-            btn.disabled = false;
-        }, 
+    uploadTask.on('state_changed', 
+        (snap) => {
+            let p = (snap.bytesTransferred / snap.totalBytes) * 100;
+            document.getElementById('p-bar').style.width = p + "%";
+        },
+        (err) => { alert("Error: " + err.message); btn.disabled = false; },
         async () => {
-            const url = await task.snapshot.ref.getDownloadURL();
-            await db.collection("galeria").add({
-                url: url,
-                fecha: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            alert("¡LÁMINA PUBLICADA EXITOSAMENTE!");
-            document.getElementById('barrita').style.width = "0%";
-            document.getElementById('file-status').innerText = "📸 SELECCIONAR IMAGEN";
-            btn.disabled = false;
-            btn.innerText = "PUBLICAR EN SALA VIP";
+            const url = await uploadTask.snapshot.ref.getDownloadURL();
+            await db.collection("galeria").add({ url: url, fecha: firebase.firestore.FieldValue.serverTimestamp() });
+            alert("LÁMINA PUBLICADA EN SALA VIP");
+            location.reload(); // Refresca para limpiar todo
         }
     );
 }
 
-// PROTOCOLO DE BANEO RECUPERADO
-async function setBan(status){ 
-    const uid = document.getElementById('user-uid').value.trim(); 
+async function protocoloBan(estado) {
+    const uid = document.getElementById('uid-ban').value.trim();
     if(!uid) return alert("Ingresa el ID del cliente");
     
-    try {
-        await db.collection("baneos").doc(uid).set({baneado: status}); 
-        alert(status ? "⛔ USUARIO BANEADO" : "✅ USUARIO DESBANEADO");
-        document.getElementById('user-uid').value = "";
-    } catch(e) {
-        alert("Error: " + e.message);
-    }
+    await db.collection("baneos").doc(uid).set({ baneado: estado });
+    alert(estado ? "⛔ CLIENTE BANEADO" : "✅ CLIENTE DESBANEADO");
+    document.getElementById('uid-ban').value = "";
 }
 
-function cargarFotos(a){
-    const c = document.getElementById('lista-admin');
-    db.collection("galeria").orderBy("fecha","desc").onSnapshot(s=>{
-        c.innerHTML='';
-        s.forEach(doc=>{
-            const x=doc.data(), v=document.createElement('div');
-            v.className='contenedor-foto';
-            v.innerHTML=`<img src="${x.url}" class="foto-vip"><button style="position:absolute;top:5px;right:5px;background:red;border:none;color:white;padding:5px;border-radius:5px;z-index:20" onclick="borrarFoto('${doc.id}')">X</button>`;
-            c.appendChild(v);
+function cargarGaleria() {
+    const contenedor = document.getElementById('galeria-admin');
+    db.collection("galeria").orderBy("fecha", "desc").onSnapshot(snap => {
+        contenedor.innerHTML = '';
+        snap.forEach(doc => {
+            const data = doc.data();
+            const div = document.createElement('div');
+            div.className = 'thumb';
+            div.innerHTML = `<img src="${data.url}"><button class="btn-del" onclick="borrar('${doc.id}')">X</button>`;
+            contenedor.appendChild(div);
         });
     });
 }
 
-async function borrarFoto(id){ 
-    if(confirm("¿Eliminar lámina permanentemente?")) await db.collection("galeria").doc(id).delete(); 
+async function borrar(id) {
+    if(confirm("¿Eliminar lámina permanentemente?")) await db.collection("galeria").doc(id).delete();
 }
 </script>
 </body>
-    </html>
-    
+</html>
