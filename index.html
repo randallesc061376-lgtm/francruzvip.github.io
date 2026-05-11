@@ -10,48 +10,51 @@
     <style>
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
-        body { background: var(--n); color: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
         
-        header { padding: 30px 20px; text-align: center; width: 100%; cursor: pointer; }
+        header { padding: 30px 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
         .logo { color: var(--o); font-size: 2rem; font-weight: 900; letter-spacing: 4px; }
         
-        .view { display: none; width: 100%; max-width: 420px; flex-direction: column; padding-bottom: 40px; animation: fadeIn 0.3s; }
+        .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.4s; }
         .view.active { display: flex; }
 
-        /* Banderas (8 opciones) */
+        /* Banderas */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 10px; background: #0f0f0f; border-radius: 15px; }
-        .flag { width: 100%; height: 25px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
-        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 10px var(--o); }
+        .flag { width: 100%; height: 25px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
+        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 10px var(--o); transform: scale(1.1); }
 
-        /* Membresías */
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin: 0 20px 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.05); }
+        /* Planes */
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin: 0 20px 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.2rem; }
 
-        /* Acordeón de Pagos */
+        /* Acordeón y Copiado */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 10px; margin: 0 20px 8px; overflow: hidden; }
         .acc-head { background: #111; padding: 15px; font-size: 0.8rem; font-weight: bold; color: #888; cursor: pointer; display: flex; justify-content: space-between; }
-        .acc-body { display: none; background: #080808; padding: 15px; border-top: 1px solid #1a1a1a; font-size: 0.9rem; }
+        .acc-body { display: none; background: #080808; padding: 15px; border-top: 1px solid #1a1a1a; text-align: center; }
         .acc-body.active { display: block; }
+        .copy-box { background: #111; padding: 12px; border-radius: 8px; margin: 8px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; }
 
-        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; margin: 15px 20px; cursor: pointer; }
+        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; margin: 15px 20px; cursor: pointer; text-transform: uppercase; }
+
+        /* Pantallas de Estado */
+        .status-box { text-align: center; padding: 60px 20px; }
+        .loader { border: 4px solid #111; border-top: 4px solid var(--o); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 30px auto; }
+        .success-icon { font-size: 60px; color: #4caf50; margin-bottom: 20px; }
+
+        /* Galería Blindada VIP */
+        #vip-gallery img { width: 100%; height: auto; display: block; pointer-events: none; border-bottom: 2px solid #000; }
+        .glass-shield { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; background: transparent; }
 
         /* Admin UI */
         .adm-section { margin: 15px 20px; padding: 15px; background: #0a0a0a; border: 1px solid #111; border-radius: 12px; }
-        .adm-label { font-size: 0.7rem; color: var(--o); font-weight: bold; margin-bottom: 8px; display: block; text-transform: uppercase; }
-        .adm-input { width: 100%; background: #000; border: 1px solid #222; padding: 10px; color: #fff; border-radius: 6px; margin-bottom: 10px; }
-        
-        /* Barra de Progreso Carga */
-        .prog-cont { width: 100%; background: #222; height: 10px; border-radius: 5px; margin: 10px 0; display: none; overflow: hidden; }
-        .prog-bar { width: 0%; height: 100%; background: var(--g); transition: 0.3s; }
-
-        /* Galería Admin */
-        .thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px; }
         .thumb-wrap { position: relative; aspect-ratio: 1; border: 1px solid #222; border-radius: 4px; overflow: hidden; }
         .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; }
-        .btn-del { position: absolute; top: 2px; right: 2px; background: rgba(255,0,0,0.8); color: #fff; border: none; border-radius: 3px; padding: 2px 6px; font-size: 10px; cursor: pointer; }
+        .btn-del { position: absolute; top: 0; right: 0; background: rgba(255,0,0,0.9); color: #fff; border: none; padding: 2px 6px; font-size: 10px; cursor: pointer; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -78,55 +81,53 @@
     <div class="card sel" onclick="selP(this, '30 DÍAS', 20)"><span>30 DÍAS GOLD</span><b class="p-val">₡10,800</b></div>
 
     <div class="acc-item">
-        <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL (CR) <span>▼</span></div>
-        <div class="acc-body">Número: 70835833<br>Titular: Randall Sánchez C.</div>
+        <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL / GRUPO MUTUAL <span>▼</span></div>
+        <div class="acc-body active">
+            <div class="copy-box" onclick="copyText('70835833')">70835833</div>
+            <div class="copy-box" onclick="copyText('CR80080315001000035641')">CR80...641</div>
+            <div style="font-size:11px; color:#666">Titular: Randall Sánchez C.</div>
+        </div>
     </div>
     <div class="acc-item">
-        <div class="acc-head" onclick="toggleAcc(this)">2. TRANSFERENCIAS (GRUPO MUTUAL) <span>▼</span></div>
-        <div class="acc-body">Entidad: Grupo Mutual Alajuela<br>Cuenta IBAN: CR80080315001000035641<br>Titular: Randall Sánchez C.</div>
-    </div>
-    <div class="acc-item">
-        <div class="acc-head" onclick="toggleAcc(this)">3. PAYPAL / INTERNACIONAL <span>▼</span></div>
-        <div class="acc-body">Correo: randallesc061376@gmail.com</div>
+        <div class="acc-head" onclick="toggleAcc(this)">2. PAYPAL <span>▼</span></div>
+        <div class="acc-body">
+            <div class="copy-box" onclick="copyText('randallesc061376@gmail.com')">randallesc061376@gmail.com</div>
+        </div>
     </div>
 
-    <button class="btn-gold" onclick="sendWa()">SOLICITAR ACCESO VIP</button>
+    <button class="btn-gold" onclick="sendToValidation()">SOLICITAR ACCESO VIP</button>
+</div>
+
+<div id="v-status" class="view">
+    <div id="status-content" class="status-box">
+        <h2 id="st-title" style="color:var(--o)">VALIDANDO PAGO</h2>
+        <div id="st-media"><div class="loader"></div></div>
+        <p id="st-msg">Estamos procesando tu solicitud. Mantente en esta pantalla.</p>
+        <div id="st-btn-place"></div>
+    </div>
+</div>
+
+<div id="v-vip" class="view">
+    <div class="glass-shield"></div>
+    <div style="background:#000; padding:15px; text-align:center; position:sticky; top:0; z-index:110; border-bottom:1px solid var(--o);">
+        <div style="color:var(--o); font-size:0.7rem; font-weight:bold;">SALA VIP ACTIVA</div>
+        <div id="vip-timer" style="font-size:1.5rem; font-weight:900;">00:00:00</div>
+    </div>
+    <div id="vip-gallery"></div>
 </div>
 
 <div id="v-admin" class="view">
     <div class="adm-section">
-        <span class="adm-label">Seguridad de Acceso</span>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div>
-                <small style="font-size:10px; color:#666">TOQUES REQUERIDOS</small>
-                <input type="number" id="cfg-clicks" class="adm-input" value="5">
-            </div>
-            <div>
-                <small style="font-size:10px; color:#666">CLAVE KEYPASS</small>
-                <input type="text" id="cfg-pass" class="adm-input" value="1376">
-            </div>
-        </div>
-        <button class="btn-gold" style="margin:0; width:100%; height:40px; padding:0" onclick="saveSecurity()">ACTUALIZAR SEGURIDAD</button>
+        <span style="color:var(--o); font-weight:bold">APROBACIÓN DE CLIENTES</span>
+        <div id="admin-users" style="margin-top:10px"></div>
     </div>
-
     <div class="adm-section">
-        <span class="adm-label">Galería de Láminas VIP</span>
-        <input type="file" id="f-upload" class="adm-input" accept="image/*">
-        <div class="prog-cont" id="p-cont"><div class="prog-bar" id="p-bar"></div></div>
-        <button class="btn-gold" style="margin:0; width:100%" onclick="upImg()">SUBIR NUEVA LÁMINA</button>
-        <div id="adm-gal" class="thumb-grid"></div>
+        <span style="color:var(--o); font-weight:bold">CARGAR PROBABILIDADES</span>
+        <input type="file" id="f-up" class="adm-input" style="width:100%; margin:10px 0" accept="image/*">
+        <button class="btn-gold" style="margin:0; width:100%" onclick="uploadVip()">PUBLICAR LÁMINA</button>
+        <div id="admin-gal" class="thumb-grid"></div>
     </div>
-
-    <div class="adm-section">
-        <span class="adm-label">Tipos de Cambio</span>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <input type="number" id="rate-cr" class="adm-input" value="540" onchange="updateRate('CR', this.value)">
-            <input type="number" id="rate-ni" class="adm-input" value="37" onchange="updateRate('NI', this.value)">
-        </div>
-        <div id="rate-msg" style="font-size:10px; color:var(--o); text-align:center"></div>
-    </div>
-
-    <button class="btn-gold" onclick="location.reload()">CERRAR PANEL</button>
+    <button class="btn-gold" onclick="location.reload()">SALIR</button>
 </div>
 
 <script>
@@ -141,85 +142,110 @@
     const st = firebase.storage();
 
     let curTasa = 540, curSim = "₡", curP = "30 DÍAS", curU = 20, clicks = 0;
-    let requiredClicks = 5, masterPass = "1376";
+    let myID = localStorage.getItem('fc_id') || 'VIP' + Math.floor(Math.random()*9000+1000);
+    localStorage.setItem('fc_id', myID);
 
-    // Cargar Configuración Inicial
-    db.ref('config').on('value', ss => {
-        const val = ss.val();
-        if(val) {
-            requiredClicks = parseInt(val.clicks || 5);
-            masterPass = val.pass || "1376";
-            document.getElementById('cfg-clicks').value = requiredClicks;
-            document.getElementById('cfg-pass').value = masterPass;
+    // ESCUCHA DE ESTADO DEL CLIENTE
+    db.ref('users/' + myID).on('value', ss => {
+        const user = ss.val();
+        if(user && user.status === 'activo') {
+            showSuccessScreen();
         }
     });
 
+    function sendToValidation() {
+        const key = `${myID}-${new Date().getDate()}${Math.floor(Math.random()*99)}`;
+        const text = `*FC VIP: SOLICITUD*%0AID: ${myID}%0APlan: ${curP}%0AClave: ${key}`;
+        
+        db.ref('users/' + myID).set({ id: myID, status: 'espera', plan: curP, key: key, time: Date.now() });
+        
+        window.location.href = `https://wa.me/50664535475?text=${text}`;
+        setTimeout(() => {
+            document.getElementById('v-client').classList.remove('active');
+            document.getElementById('v-status').classList.add('active');
+        }, 1500);
+    }
+
+    function showSuccessScreen() {
+        document.getElementById('st-title').innerText = "¡FELICIDADES!";
+        document.getElementById('st-title').style.color = "#4caf50";
+        document.getElementById('st-media').innerHTML = '<div class="success-icon">✔</div>';
+        document.getElementById('st-msg').innerHTML = "<b>¡Bienvenido a la Familia Fran Cruz VIP!</b><br>Tu pago ha sido validado con éxito. Prepárate para ganar.";
+        document.getElementById('st-btn-place').innerHTML = '<button class="btn-gold" onclick="enterVip()">ENTRAR A LA SALA VIP</button>';
+    }
+
+    function enterVip() {
+        document.getElementById('v-status').classList.remove('active');
+        document.getElementById('v-vip').classList.add('active');
+        loadVipGallery();
+    }
+
+    // FUNCIONES ADMIN
     function handleAdminEntry() {
         clicks++;
-        if(clicks >= requiredClicks) {
-            const p = prompt("INGRESE CLAVE MAESTRA:");
-            if(p === masterPass) {
-                document.getElementById('v-client').classList.remove('active');
+        if(clicks >= 5) {
+            if(prompt("PASS:") === "1376") {
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
                 document.getElementById('v-admin').classList.add('active');
-                loadAdmGal();
+                loadAdminTools();
             }
             clicks = 0;
         }
-        setTimeout(() => clicks = 0, 2000);
     }
 
-    function saveSecurity() {
-        const c = document.getElementById('cfg-clicks').value;
-        const p = document.getElementById('cfg-pass').value;
-        db.ref('config').set({clicks: c, pass: p});
-        alert("SEGURIDAD ACTUALIZADA");
+    function loadAdminTools() {
+        // Cargar Usuarios en Espera
+        db.ref('users').on('value', ss => {
+            const container = document.getElementById('admin-users');
+            container.innerHTML = "";
+            ss.forEach(u => {
+                const user = u.val();
+                if(user.status === 'espera') {
+                    container.innerHTML += `<div style="background:#111; padding:10px; margin-bottom:5px; border-radius:8px; display:flex; justify-content:space-between">
+                        <span>${user.id}</span>
+                        <button onclick="approve('${user.id}')" style="background:green; color:white; border:none; border-radius:4px; padding:2px 10px">APROBAR</button>
+                    </div>`;
+                }
+            });
+        });
+        loadAdminGallery();
     }
 
-    function upImg() {
-        const file = document.getElementById('f-upload').files[0];
+    function approve(id) { db.ref('users/' + id).update({status: 'activo'}); }
+
+    function uploadVip() {
+        const file = document.getElementById('f-up').files[0];
         if(!file) return;
-        const pCont = document.getElementById('p-cont');
-        const pBar = document.getElementById('p-bar');
-        pCont.style.display = 'block';
-
-        const task = st.ref('vip/' + Date.now()).put(file);
-        task.on('state_changed', 
-            s => { pBar.style.width = (s.bytesTransferred / s.totalBytes * 100) + '%'; },
-            e => { alert("Error"); },
-            () => {
-                task.snapshot.ref.getDownloadURL().then(url => {
-                    db.ref('galeria').push({url, time: Date.now()});
-                    pCont.style.display = 'none';
-                    pBar.style.width = '0%';
-                    alert("LÁMINA CARGADA");
-                });
-            }
-        );
+        const ref = st.ref('laminas/' + Date.now());
+        ref.put(file).then(() => ref.getDownloadURL().then(url => {
+            db.ref('gallery').push({url, time: Date.now()});
+            alert("LÁMINA PUBLICADA");
+        }));
     }
 
-    function loadAdmGal() {
-        db.ref('galeria').orderByChild('time').on('value', ss => {
-            const div = document.getElementById('adm-gal');
-            div.innerHTML = "";
-            let items = [];
-            ss.forEach(ch => items.unshift({key: ch.key, url: ch.val().url}));
-            items.forEach(i => {
-                div.innerHTML += `<div class="thumb-wrap">
-                    <img src="${i.url}">
-                    <button class="btn-del" onclick="delImg('${i.key}')">X</button>
-                </div>`;
+    function loadAdminGallery() {
+        db.ref('gallery').on('value', ss => {
+            const gal = document.getElementById('admin-gal');
+            gal.innerHTML = "";
+            ss.forEach(img => {
+                gal.innerHTML += `<div class="thumb-wrap"><img src="${img.val().url}"><button class="btn-del" onclick="delImg('${img.key}')">X</button></div>`;
             });
         });
     }
 
-    function delImg(k) { if(confirm("¿Eliminar imagen?")) db.ref('galeria/'+k).remove(); }
-
-    function updateRate(p, v) {
-        document.getElementById('rate-msg').innerText = `ACTUALIZANDO CAMBIO ${p}...`;
-        setTimeout(() => { document.getElementById('rate-msg').innerText = `CAMBIO ${p} GUARDADO ✓`; }, 1000);
+    function loadVipGallery() {
+        db.ref('gallery').orderByChild('time').on('value', ss => {
+            const gal = document.getElementById('vip-gallery');
+            gal.innerHTML = "";
+            let items = [];
+            ss.forEach(img => items.unshift(img.val()));
+            items.forEach(item => { gal.innerHTML += `<img src="${item.url}">`; });
+        });
     }
 
-    // Funciones de Usuario
+    function delImg(k) { if(confirm("¿Borrar?")) db.ref('gallery/' + k).remove(); }
+    function copyText(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
+    function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
     function setLoc(n, s, t) {
         curTasa = t; curSim = s;
         document.getElementById('loc-name').innerText = n;
@@ -228,21 +254,16 @@
         updatePrices();
     }
     function updatePrices() {
-        const val = [1, 5, 20];
+        const base = [1, 5, 20];
         document.querySelectorAll('.p-val').forEach((el, i) => {
-            el.innerText = curSim + Math.round(val[i] * curTasa).toLocaleString();
+            el.innerText = curSim + Math.round(base[i] * curTasa).toLocaleString();
         });
     }
-    function selP(el, n, u) {
-        curP = n; curU = u;
+    function selP(el, p, u) {
+        curP = p; curU = u;
         document.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
         el.classList.add('sel');
     }
-    function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
-    function sendWa() {
-        window.location.href = `https://wa.me/50664535475?text=Solicito el plan ${curP}`;
-    }
 </script>
 </body>
-    </html>
-        
+</html>
