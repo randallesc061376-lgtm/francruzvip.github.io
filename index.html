@@ -7,31 +7,46 @@
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
+    
     <style>
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #8b0000; --v: #006400; }
         body { background: var(--n); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; user-select: none; }
-        header { padding: 40px 20px 10px; text-align: center; width: 100%; cursor: pointer; }
+        
+        header { padding: 40px 20px 10px; text-align: center; width: 100%; box-sizing: border-box; cursor: pointer; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; }
         .tagline { color: #555; font-size: .7rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; font-weight: bold; }
-        
-        /* Geolocalización */
+
+        /* Barra de Países */
         .geo-bar { display: flex; justify-content: center; gap: 10px; margin: 20px 0; background: #0a0a0a; padding: 12px 18px; border-radius: 50px; border: 1px solid #111; }
         .flag { width: 28px; height: 19px; opacity: 0.3; transition: 0.3s; cursor: pointer; border: 1px solid transparent; }
         .flag.active { opacity: 1; border-color: var(--o); transform: scale(1.15); }
 
-        /* Contenedores */
+        /* Contenedores de Vista */
         .p { display: none; width: 100%; max-width: 400px; flex-direction: column; padding: 0 20px 40px; box-sizing: border-box; }
         .a { display: flex; }
 
-        /* Membresías */
-        .plan-box { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; }
-        .plan-box.sel { border-color: var(--o); background: rgba(212,175,55,0.03); }
-        .plan-box b { color: var(--o); font-size: 1.2rem; }
+        /* MENÚ DE MEMBRESÍAS (Diseño exacto solicitado) */
+        .plan-box { 
+            width: 100%; 
+            background: #0c0c0c; 
+            border: 1px solid #1a1a1a; 
+            border-radius: 12px; 
+            padding: 22px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 12px; 
+            cursor: pointer; 
+            box-sizing: border-box;
+        }
+        .plan-box.sel { border-color: var(--o); background: rgba(212,175,55,0.05); }
+        .plan-box span { color: #fff; font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .plan-box b { color: var(--o); font-size: 1.2rem; font-weight: 900; }
 
-        /* Métodos de Pago */
+        /* Acordeones de Pago */
         .method { width: 100%; background: #080808; border: 1px solid #151515; border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
         .method-h { padding: 18px; text-align: center; font-size: 0.85rem; font-weight: 900; color: #444; cursor: pointer; text-transform: uppercase; }
-        .method-c { display: none; padding: 20px; text-align: center; background: #050505; }
+        .method-c { display: none; padding: 20px; text-align: center; border-top: 1px solid #151515; background: #050505; }
         .method.open .method-c { display: block; }
         .method.open .method-h { color: var(--o); background: #0c0c0c; }
 
@@ -40,7 +55,7 @@
         .btn-outline { width: 100%; background: transparent; color: var(--o); border: 1px solid var(--o); padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 10px; cursor: pointer; }
 
         /* Panel Admin */
-        .admin-sec { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 20px; margin-top: 20px; width: 100%; }
+        .admin-sec { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 20px; margin-top: 20px; width: 100%; box-sizing: border-box; }
         .inp-admin { width: 100%; background: #000; border: 1px solid #222; padding: 12px; color: #fff; border-radius: 8px; margin-bottom: 8px; text-align: center; box-sizing: border-box; }
         .user-card { background: #111; padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; font-size: 0.8rem; }
         
@@ -61,11 +76,11 @@
 <div class="geo-bar">
     <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setRegion('COSTA RICA', '₡', 'cr', this)">
     <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setRegion('NICARAGUA', 'C$', 'ni', this)">
-    <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setRegion('PANAMÁ', '$', 'usd', this)">
+    <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setRegion('PANAMÁ', '$', 'pa', this)">
     <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setRegion('HONDURAS', 'L', 'hn', this)">
-    <img src="https://flagcdn.com/sv.svg" class="flag" onclick="setRegion('EL SALVADOR', '$', 'usd', this)">
+    <img src="https://flagcdn.com/sv.svg" class="flag" onclick="setRegion('EL SALVADOR', '$', 'sv', this)">
     <img src="https://flagcdn.com/gt.svg" class="flag" onclick="setRegion('GUATEMALA', 'Q', 'gt', this)">
-    <img src="https://flagcdn.com/bz.svg" class="flag" onclick="setRegion('BELICE', '$', 'usd', this)">
+    <img src="https://flagcdn.com/bz.svg" class="flag" onclick="setRegion('BELICE', '$', 'bz', this)">
 </div>
 
 <div id="view-client" class="p a">
@@ -100,18 +115,18 @@
     </div>
 
     <div class="admin-sec">
-        <span style="color:var(--o); font-size:0.7rem; font-weight:bold;">CARGAR LÁMINAS (GALERÍA)</span>
+        <span style="color:var(--o); font-size:0.7rem; font-weight:bold;">GESTIÓN DE LÁMINAS (GALERÍA)</span>
         <input type="file" id="file" accept="image/*" onchange="subirImg(this)" style="margin-top:10px; width:100%; color:#555;">
         <div class="gallery-grid" id="admin-gallery"></div>
     </div>
 
     <div class="admin-sec">
-        <span style="color:var(--o); font-size:0.7rem; font-weight:bold;">DATOS DE PAGO Y TIPOS DE CAMBIO</span>
-        <input type="text" id="inp-wa" class="inp-admin" placeholder="WhatsApp (506...)">
-        <input type="text" id="inp-titular" class="inp-admin" placeholder="Nombre Titular">
-        <input type="text" id="inp-sinpe" class="inp-admin" placeholder="Número SINPE">
-        <input type="text" id="inp-iban" class="inp-admin" placeholder="Cuenta IBAN">
-        <input type="text" id="inp-mail" class="inp-admin" placeholder="Correo PayPal">
+        <span style="color:var(--o); font-size:0.7rem; font-weight:bold;">AJUSTES GENERALES</span>
+        <input type="text" id="inp-wa" class="inp-admin" placeholder="WhatsApp (Ej: 506...)">
+        <input type="text" id="inp-titular" class="inp-admin" placeholder="Titular">
+        <input type="text" id="inp-sinpe" class="inp-admin" placeholder="SINPE">
+        <input type="text" id="inp-iban" class="inp-admin" placeholder="IBAN">
+        <input type="text" id="inp-mail" class="inp-admin" placeholder="PayPal">
         
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:10px;">
             <input type="number" id="inp-cr" class="inp-admin" placeholder="CR ₡">
@@ -119,12 +134,12 @@
             <input type="number" id="inp-hn" class="inp-admin" placeholder="HN L">
             <input type="number" id="inp-gt" class="inp-admin" placeholder="GT Q">
         </div>
-        <button class="btn-gold" onclick="saveSettings()">GUARDAR CAMBIOS</button>
+        <button class="btn-gold" onclick="saveAdmin()">GUARDAR CAMBIOS PERMANENTES</button>
     </div>
-    <button class="btn-outline" onclick="location.reload()">CERRAR PANEL</button>
+    <button class="btn-outline" onclick="location.reload()">SALIR DEL PANEL</button>
 </div>
-
 <script>
+    // 1. CONFIGURACIÓN DE FIREBASE (Datos extraídos de tus capturas)
     const firebaseConfig = {
       apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",
       authDomain: "fran-cruz-sala-vip.firebaseapp.com",
@@ -133,34 +148,39 @@
       databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com",
       appId: "1:1022733043010:web:379db18e37bbfde2cf34db"
     };
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const st = firebase.storage();
 
+    // Variables de estado inicial
     let symbol = "₡", rate = 540, curPlan = "30 DÍAS GOLD", curUSD = 15;
-    let liveRates = { cr: 540, ni: 37, hn: 24.5, gt: 7.8, usd: 1 };
+    let liveRates = { cr: 540, ni: 37.1, pa: 1, hn: 26.6, sv: 1, gt: 7.7, bz: 1 };
     let liveSettings = { wa: "50664535475", titular: "Randall Sánchez C.", sinpe: "70835833", iban: "CR80080315001000035641", mail: "randallesc061376@gmail.com" };
+    
+    const fechaHoy = new Date().toISOString().split('T')[0];
 
-    const hoy = new Date().toISOString().split('T')[0];
-
-    // Escuchar cambios en tiempo real
+    // 2. SINCRONIZACIÓN EN TIEMPO REAL (Refleja cambios del Admin al Instante)
     db.ref('config').on('value', snap => {
-        const d = snap.val();
-        if(d) {
-            if(d.rates) liveRates = {...liveRates, ...d.rates};
-            if(d.settings) {
-                liveSettings = d.settings;
+        const data = snap.val();
+        if(data) {
+            if(data.rates) liveRates = {...liveRates, ...data.rates};
+            if(data.settings) {
+                liveSettings = data.settings;
+                // Actualiza UI de métodos de pago
                 document.getElementById('disp-sinpe').innerText = liveSettings.sinpe;
                 document.getElementById('disp-titular').innerText = liveSettings.titular;
                 document.getElementById('disp-iban').innerText = liveSettings.iban;
                 document.getElementById('disp-mail').innerText = liveSettings.mail;
             }
         }
-        renderPlanes();
+        renderPlanes(); // Recalcula precios cuando cambian las tasas
     });
 
+    // 3. GEOLOCALIZACIÓN Y CÁLCULO
     function setRegion(name, sym, key, el) {
-        symbol = sym; rate = liveRates[key] || 1;
+        symbol = sym; 
+        rate = liveRates[key] || 1;
         document.getElementById('region-tag').innerText = `SALA PRIVADA • ${name}`;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         el.classList.add('active');
@@ -170,62 +190,113 @@
     function renderPlanes() {
         const cont = document.getElementById('planes-container');
         cont.innerHTML = '';
-        const items = [{n:"ACCESO HOY", u:1.5}, {n:"7 DÍAS SILVER", u:5}, {n:"30 DÍAS GOLD", u:15}];
-        items.forEach(p => {
-            const price = Math.round(p.u * rate).toLocaleString();
-            cont.innerHTML += `<div class="plan-box ${p.n===curPlan?'sel':''}" onclick="curPlan='${p.n}';curUSD=${p.u};renderPlanes()"><span>${p.n}</span><b>${symbol}${price}</b></div>`;
+        const planes = [
+            {n: "ACCESO HOY", u: 1.5},
+            {n: "7 DÍAS SILVER", u: 5},
+            {n: "30 DÍAS GOLD", u: 15}
+        ];
+
+        planes.forEach(p => {
+            const precioFinal = Math.round(p.u * rate).toLocaleString();
+            const div = document.createElement('div');
+            div.className = `plan-box ${p.n === curPlan ? 'sel' : ''}`;
+            div.onclick = () => { curPlan = p.n; curUSD = p.u; renderPlanes(); };
+            div.innerHTML = `<span>${p.n}</span><b>${symbol}${precioFinal}</b>`;
+            cont.appendChild(div);
         });
     }
 
-    function saveSettings() {
-        const rates = { cr: document.getElementById('inp-cr').value || liveRates.cr, ni: document.getElementById('inp-ni').value || liveRates.ni, hn: document.getElementById('inp-hn').value || liveRates.hn, gt: document.getElementById('inp-gt').value || liveRates.gt };
-        const settings = { wa: document.getElementById('inp-wa').value || liveSettings.wa, titular: document.getElementById('inp-titular').value || liveSettings.titular, sinpe: document.getElementById('inp-sinpe').value || liveSettings.sinpe, iban: document.getElementById('inp-iban').value || liveSettings.iban, mail: document.getElementById('inp-mail').value || liveSettings.mail };
-        db.ref('config').update({ rates, settings }).then(() => alert("✅ Cambios aplicados instantáneamente."));
+    // 4. PANEL ADMINISTRADOR (Guardado Permanente)
+    function saveAdmin() {
+        const rates = {
+            cr: document.getElementById('inp-cr').value || liveRates.cr,
+            ni: document.getElementById('inp-ni').value || liveRates.ni,
+            hn: document.getElementById('inp-hn').value || liveRates.hn,
+            gt: document.getElementById('inp-gt').value || liveRates.gt
+        };
+        const settings = {
+            wa: document.getElementById('inp-wa').value || liveSettings.wa,
+            titular: document.getElementById('inp-titular').value || liveSettings.titular,
+            sinpe: document.getElementById('inp-sinpe').value || liveSettings.sinpe,
+            iban: document.getElementById('inp-iban').value || liveSettings.iban,
+            mail: document.getElementById('inp-mail').value || liveSettings.mail
+        };
+        db.ref('config').update({ rates, settings }).then(() => alert("✅ Datos actualizados en todos los países."));
     }
 
+    // 5. GESTIÓN DE LÁMINAS (Galería y Borrado Automático)
     function subirImg(e) {
         const file = e.files[0]; if(!file) return;
         const ref = st.ref('laminas/' + Date.now());
         ref.put(file).then(s => s.ref.getDownloadURL().then(url => {
-            db.ref('gallery').push({url, fecha: hoy});
+            db.ref('gallery').push({ url, fecha: fechaHoy });
         }));
     }
 
     db.ref('gallery').on('value', snap => {
-        const grid = document.getElementById('admin-gallery'); grid.innerHTML = '';
+        const grid = document.getElementById('admin-gallery');
+        grid.innerHTML = '';
         snap.forEach(c => {
             const item = c.val();
-            if(item.fecha !== hoy) { db.ref('gallery/'+c.key).remove(); return; }
-            grid.innerHTML += `<div class="gallery-item"><img src="${item.url}"><button class="del-btn" onclick="db.ref('gallery/${c.key}').remove()">✕</button></div>`;
+            // Borrado automático: Si la lámina no es de hoy, se elimina sola
+            if(item.fecha !== fechaHoy) {
+                db.ref('gallery/' + c.key).remove();
+                return;
+            }
+            grid.innerHTML += `
+                <div class="gallery-item">
+                    <img src="${item.url}">
+                    <button class="del-btn" onclick="db.ref('gallery/${c.key}').remove()">✕</button>
+                </div>`;
         });
     });
 
+    // 6. PROTOCOLO DE BANEO Y LISTA DE ESPERA
     db.ref('users').on('value', snap => {
-        const list = document.getElementById('user-list'); list.innerHTML = '';
+        const list = document.getElementById('user-list');
+        list.innerHTML = '';
         snap.forEach(c => {
             const u = c.val();
-            list.innerHTML += `<div class="user-card"><span>${c.key} (${u.status})</span><div><button onclick="db.ref('users/${c.key}').update({status:'active'})" style="color:var(--v);border:none;background:none;font-weight:bold;">ALTA</button><button onclick="db.ref('users/${c.key}').update({status:'banned'})" style="color:var(--r);border:none;background:none;font-weight:bold;margin-left:10px;">BAN</button></div></div>`;
+            const color = u.status === 'banned' ? 'var(--r)' : 'var(--v)';
+            list.innerHTML += `
+                <div class="user-card">
+                    <span style="color:${color}">${c.key} (${u.status})</span>
+                    <div>
+                        <button onclick="updateUser('${c.key}','active')" style="color:var(--v);background:none;border:none;font-weight:bold;cursor:pointer;">ALTA</button>
+                        <button onclick="updateUser('${c.key}','banned')" style="color:var(--r);background:none;border:none;font-weight:bold;margin-left:10px;cursor:pointer;">BAN</button>
+                    </div>
+                </div>`;
         });
     });
 
+    function updateUser(id, stat) { db.ref('users/' + id).update({ status: stat }); }
+
+    // 7. UTILIDADES (WhatsApp y Acceso Admin)
     function sendWA() {
         const total = Math.round(curUSD * rate).toLocaleString();
-        const msg = `Hola! Seleccioné: *${curPlan}* (${symbol}${total}). Adjunto mi comprobante de pago.`;
+        const msg = `Hola! He seleccionado el plan: *${curPlan}* por un total de *${symbol}${total}*. Adjunto mi comprobante de pago para activar mi acceso VIP.`;
         window.location.href = `https://wa.me/${liveSettings.wa}?text=${encodeURIComponent(msg)}`;
     }
 
-    function checkKey() { const k = prompt("INGRESE SU CLAVE:"); if(k) alert("Validando..."); }
+    function checkKey() { const k = prompt("INGRESE SU CLAVE DE ACCESO:"); if(k) alert("Validando clave..."); }
     function tglM(e) { e.classList.toggle('open'); }
 
+    // Acceso Oculto al Panel (5 toques rápidos al logo)
     let clicks = 0;
     document.getElementById('adminTrigger').onclick = () => {
-        clicks++; if(clicks >= 5) {
-            if(prompt("PASSKEY:") === "2026") {
+        clicks++;
+        if(clicks >= 5) {
+            if(prompt("PASSWORD DE ACCESO:") === "2026") {
                 document.getElementById('view-client').classList.remove('a');
                 document.getElementById('view-admin').classList.add('a');
-            } clicks = 0;
-        } setTimeout(() => clicks = 0, 3000);
+            }
+            clicks = 0;
+        }
+        setTimeout(() => clicks = 0, 3000);
     };
+
+    // Inicialización
+    renderPlanes();
 </script>
 </body>
 </html>
