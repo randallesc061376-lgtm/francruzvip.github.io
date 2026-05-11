@@ -3,109 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • ADMIN V9</title>
+    <title>FRAN CRUZ VIP • V12 PACTADA</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
     <style>
-        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #ff4444; }
+        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
-        body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
-        header { padding: 12px 10px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
-        .logo { color: var(--o); font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; }
-        .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding: 5px; animation: fadeIn 0.3s; }
-        .view.active { display: flex; }
-
-        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 5px 8px; padding: 6px; background: #0f0f0f; border-radius: 8px; }
-        .flag { width: 100%; height: 18px; opacity: 0.35; border-radius: 2px; cursor: pointer; object-fit: cover; }
+        body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; }
+        header { padding: 15px; text-align: center; border-bottom: 1px solid #111; cursor: pointer; }
+        .logo { color: var(--o); font-size: 1.6rem; font-weight: 900; letter-spacing: 2px; }
+        .view { display: none; width: 100%; max-width: 420px; margin: auto; padding: 10px; }
+        .view.active { display: flex; flex-direction: column; animation: fadeIn 0.3s; }
+        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; background: #0f0f0f; padding: 8px; border-radius: 8px; }
+        .flag { width: 100%; height: 20px; opacity: 0.3; cursor: pointer; object-fit: cover; border-radius: 2px; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 5px var(--o); }
-        
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 6px; padding: 8px 12px; margin: 0 8px 4px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; height: 38px; }
-        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.1); }
-        .card b { color: var(--o); font-size: 0.85rem; }
-
-        .acc-item { border: 1px solid #1a1a1a; border-radius: 6px; margin: 0 8px 3px; overflow: hidden; }
-        .acc-head { background: #111; padding: 6px 10px; font-size: 0.65rem; font-weight: bold; color: #555; cursor: pointer; display: flex; justify-content: space-between; }
-        .acc-body { display: none; background: #080808; padding: 8px; border-top: 1px solid #1a1a1a; text-align: center; }
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 8px; padding: 12px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.05); }
+        .card b { color: var(--o); }
+        .acc-item { border: 1px solid #1a1a1a; border-radius: 8px; margin-bottom: 6px; overflow: hidden; }
+        .acc-head { background: #111; padding: 10px; font-size: 0.7rem; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; color: #666; }
+        .acc-body { display: none; background: #080808; padding: 12px; text-align: center; border-top: 1px solid #111; }
         .acc-body.active { display: block; }
+        .titular { font-size: 0.7rem; color: var(--o); font-weight: 800; margin-bottom: 10px; border-bottom: 1px solid #1a1a1a; padding-bottom: 5px; text-transform: uppercase; }
+        .copy-box { background: #111; padding: 10px; border-radius: 5px; margin: 4px 0; color: #fff; cursor: pointer; border: 1px dashed var(--o); font-size: 0.8rem; font-weight: bold; }
+        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; margin-top: 10px; cursor: pointer; text-transform: uppercase; }
         
-        .titular { font-size: 0.7rem; color: var(--o); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; border-bottom: 1px solid #1a1a1a; padding-bottom: 5px; }
-        .copy-box { background: #111; padding: 8px; border-radius: 4px; margin: 2px 0; font-family: monospace; color: #fff; cursor: pointer; border: 1px dashed var(--o); font-size: 0.75rem; font-weight: bold; }
+        .adm-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; margin-bottom: 10px; }
+        .adm-label { color: var(--o); font-weight: 800; font-size: 0.65rem; text-transform: uppercase; margin-bottom: 10px; display: block; letter-spacing: 1px; }
+        .tasa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .tasa-input { background: #000; border: 1px solid #222; color: #fff; padding: 10px; border-radius: 6px; text-align: center; font-size: 0.8rem; }
+        .user-row { background: #000; border-bottom: 1px solid #111; padding: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; }
         
-        .btn-gold { width: calc(100% - 16px); background: var(--g); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: 900; margin: 6px 8px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
-        .btn-outline { width: calc(100% - 16px); background: transparent; color: #444; border: 1px solid #1a1a1a; padding: 8px; border-radius: 6px; font-weight: 700; margin: 0 8px 8px; cursor: pointer; font-size: 0.6rem; }
-
-        /* ESTILOS ADMIN RECUPERADOS */
-        .adm-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
-        .adm-label { font-size: 0.65rem; color: var(--o); font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: block; }
-        .user-row { background: #000; border: 1px solid #111; padding: 10px; border-radius: 6px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; }
-        .btn-close { background: #222; color: #fff; border: none; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; margin-top: 10px; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<body oncontextmenu="return false;">
-
+<body>
 <header onclick="adminAccess()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div id="tagline" style="font-size: 0.55rem; color: #333;">SALA PRIVADA • COSTA RICA</div>
+    <div id="tagline" style="font-size: 0.55rem; color: #444;">SALA PRIVADA • COSTA RICA</div>
 </header>
 
 <div id="v-client" class="view active">
     <div class="geo-grid">
-        <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setLoc('COSTA RICA', '₡', 540)">
-        <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setLoc('NICARAGUA', 'C$', 37)">
-        <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setLoc('PANAMÁ', '$', 1)">
-        <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('WORLDWIDE', '$', 1)">
+        <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setLoc('COSTA RICA', '₡', 'cr')">
+        <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setLoc('NICARAGUA', 'C$', 'ni')">
+        <img src="https://flagcdn.com/gt.svg" class="flag" onclick="setLoc('GUATEMALA', 'Q', 'gt')">
+        <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setLoc('HONDURAS', 'L', 'hn')">
+        <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setLoc('PANAMÁ', '$', 'usd')">
+        <img src="https://flagcdn.com/sv.svg" class="flag" onclick="setLoc('EL SALVADOR', '$', 'usd')">
+        <img src="https://flagcdn.com/bz.svg" class="flag" onclick="setLoc('BELICE', '$', 'usd')">
+        <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('WORLDWIDE', '$', 'usd')">
     </div>
     <div class="card" onclick="selP(this, 'HOY', 1)"><span>ACCESO HOY</span><b class="p-val">₡540</b></div>
     <div class="card sel" onclick="selP(this, '30 DÍAS GOLD', 20)"><span>30 DÍAS GOLD</span><b class="p-val">₡10,800</b></div>
     <div class="acc-item">
-        <div class="acc-head" onclick="toggleAcc(this)">MÉTODO RECOMENDADO: SINPE <span>▼</span></div>
+        <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL / GRUPO MUTUAL <span>▼</span></div>
         <div class="acc-body active">
-            <div class="titular">Randall Sánchez C.</div>
-            <div class="copy-box" onclick="copy('70835833')">SINPE: 70835833</div>
+            <div class="titular">A NOMBRE DE: RANDALL SÁNCHEZ C.</div>
+            <div class="copy-box" onclick="copy('70835833')">70835833</div>
+            <div class="copy-box" onclick="copy('CR80080315001000035641')">CR80...641</div>
         </div>
     </div>
-    <button class="btn-gold" onclick="requestAccess()">ENVIAR COMPROBANTE</button>
-    <button class="btn-outline">YA TENGO MI CLAVE</button>
+    <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc(this)">2. PAYPAL <span>▼</span></div>
+        <div class="acc-body">
+            <div class="titular">A NOMBRE DE: RANDALL SÁNCHEZ C.</div>
+            <div class="copy-box" onclick="copy('randallesc061376@gmail.com')">randallesc061376@gmail.com</div>
+        </div>
+    </div>
+    <button class="btn-gold" onclick="requestAccess()">SOLICITAR ACCESO VIP</button>
+    <button class="btn-outline" style="width:100%; background:transparent; border:1px solid #111; color:#333; padding:10px; border-radius:8px; margin-top:8px; font-size:0.6rem">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-admin" class="view">
     <div class="adm-card">
         <span class="adm-label">VALIDACIÓN DE PAGOS</span>
-        <div id="admin-user-list" style="color:#444; font-size:0.6rem; text-align:center">Sin solicitudes pendientes...</div>
+        <div id="admin-user-list">Cargando solicitudes...</div>
     </div>
-    <button class="btn-close" onclick="location.reload()">CERRAR PANEL</button>
+    <div class="adm-card">
+        <span class="adm-label">TIPOS DE CAMBIO</span>
+        <div class="tasa-grid">
+            <input type="number" id="tasa_cr" class="tasa-input" placeholder="₡ CR">
+            <input type="number" id="tasa_ni" class="tasa-input" placeholder="C$ NI">
+            <input type="number" id="tasa_gt" class="tasa-input" placeholder="Q GT">
+            <input type="number" id="tasa_hn" class="tasa-input" placeholder="L HN">
+        </div>
+        <button class="btn-gold" onclick="saveTasas()">ACTUALIZAR PANEL</button>
+    </div>
+    <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">CERRAR PANEL</button>
 </div>
 
 <script>
-    const firebaseConfig = { 
-        apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
-        projectId: "fran-cruz-sala-vip",
-        databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com"
-    };
+    const firebaseConfig = { apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", projectId: "fran-cruz-sala-vip", databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
-    let curTasa = 540, curSim = "₡", curP = "30 DÍAS GOLD", clicks = 0;
+    
+    let rates = { cr: 540, ni: 37, gt: 7.7, hn: 24.6, usd: 1 };
+    let curKey = 'cr', curSim = "₡", curP = "30 DÍAS GOLD", clicks = 0;
     let myID = localStorage.getItem('fc_id') || 'UID-' + Math.random().toString(36).substr(2, 6).toUpperCase();
     localStorage.setItem('fc_id', myID);
 
-    function adminAccess() {
-        clicks++;
-        if(clicks >= 5) {
-            if(prompt("PASS:") === "1376") {
-                document.getElementById('v-client').classList.remove('active');
-                document.getElementById('v-admin').classList.add('active');
-            }
-            clicks = 0;
-        }
-        setTimeout(() => clicks = 0, 2000);
-    }
+    db.ref('tasas').on('value', ss => { if(ss.val()) { rates = {...rates, ...ss.val()}; updatePrices(); } });
 
-    function setLoc(n, s, t) {
-        curTasa = t; curSim = s;
+    function setLoc(n, s, k) {
+        curKey = k; curSim = s;
         document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         event.target.classList.add('active');
@@ -115,23 +116,57 @@
     function updatePrices() {
         const base = [1, 20];
         document.querySelectorAll('.p-val').forEach((el, i) => {
-            el.innerText = curSim + Math.round(base[i] * curTasa).toLocaleString();
+            el.innerText = curSim + Math.round(base[i] * rates[curKey]).toLocaleString();
         });
     }
 
-    function selP(el, p) {
-        curP = p;
-        document.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
-        el.classList.add('sel');
-    }
-
-    function copy(t) { navigator.clipboard.writeText(t); alert("¡Copiado!"); }
+    function selP(el, p) { curP = p; document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); el.classList.add('sel'); }
+    function copy(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
     function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
 
     function requestAccess() {
-        const msg = `Solicito ${curP}. ID: ${myID}`;
-        window.open(`https://wa.me/50664535475?text=${encodeURIComponent(msg)}`);
+        window.open(`https://wa.me/50664535475?text=${encodeURIComponent('Solicito ' + curP + '. ID: ' + myID)}`);
         db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP });
+    }
+
+    function adminAccess() {
+        clicks++;
+        if(clicks >= 5) {
+            if(prompt("PASS:") === "1376") {
+                document.getElementById('v-client').classList.remove('active');
+                document.getElementById('v-admin').classList.add('active');
+                loadAdmin();
+            }
+            clicks = 0;
+        }
+        setTimeout(() => clicks = 0, 2000);
+    }
+
+    function loadAdmin() {
+        document.getElementById('tasa_cr').value = rates.cr;
+        document.getElementById('tasa_ni').value = rates.ni;
+        document.getElementById('tasa_gt').value = rates.gt;
+        document.getElementById('tasa_hn').value = rates.hn;
+        db.ref('users').on('value', ss => {
+            const list = document.getElementById('admin-user-list');
+            list.innerHTML = "";
+            ss.forEach(u => {
+                const user = u.val();
+                if(user.status === 'wait') {
+                    list.innerHTML += `<div class="user-row"><span>${user.id}</span><button onclick="db.ref('users/${user.id}').update({status:'active'})" style="background:green; border:none; color:white; padding:5px 10px; border-radius:4px">OK</button></div>`;
+                }
+            });
+        });
+    }
+
+    function saveTasas() {
+        const t = {
+            cr: document.getElementById('tasa_cr').value,
+            ni: document.getElementById('tasa_ni').value,
+            gt: document.getElementById('tasa_gt').value,
+            hn: document.getElementById('tasa_hn').value
+        };
+        db.ref('tasas').update(t).then(() => alert("Panel Actualizado"));
     }
 </script>
 </body>
