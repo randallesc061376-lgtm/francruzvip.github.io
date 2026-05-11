@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • PLATINUM FINAL V2</title>
+    <title>FRAN CRUZ VIP • PLATINUM FINAL V3</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
@@ -11,72 +11,48 @@
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #ff4444; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
-        
-        header { padding: 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
-        .logo { color: var(--o); font-size: 1.8rem; font-weight: 900; letter-spacing: 3px; }
-        
-        .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding: 10px; animation: fadeIn 0.3s; }
+        header { padding: 15px 10px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
+        .logo { color: var(--o); font-size: 1.6rem; font-weight: 900; letter-spacing: 2px; }
+        .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding: 5px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
 
-        /* Frontend Compacto */
-        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px; padding: 10px; background: #0f0f0f; border-radius: 12px; }
-        .flag { width: 100%; height: 22px; opacity: 0.4; border-radius: 3px; cursor: pointer; object-fit: cover; }
-        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 8px var(--o); }
+        /* Frontend Compacto V3 */
+        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 8px; padding: 8px; background: #0f0f0f; border-radius: 10px; }
+        .flag { width: 100%; height: 20px; opacity: 0.4; border-radius: 2px; cursor: pointer; object-fit: cover; }
+        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 5px var(--o); }
         
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 10px; padding: 15px; margin: 0 10px 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.06); }
-        .card b { color: var(--o); font-size: 1.1rem; }
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 8px; padding: 10px 15px; margin: 0 8px 5px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; height: 42px; }
+        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
+        .card span { font-size: 0.8rem; font-weight: 600; }
+        .card b { color: var(--o); font-size: 0.95rem; }
 
-        .acc-item { border: 1px solid #1a1a1a; border-radius: 8px; margin: 0 10px 6px; overflow: hidden; }
-        .acc-head { background: #111; padding: 12px; font-size: 0.75rem; font-weight: bold; color: #777; cursor: pointer; display: flex; justify-content: space-between; }
-        .acc-body { display: none; background: #080808; padding: 12px; border-top: 1px solid #1a1a1a; text-align: center; }
+        .acc-item { border: 1px solid #1a1a1a; border-radius: 8px; margin: 0 8px 4px; overflow: hidden; }
+        .acc-head { background: #111; padding: 8px 12px; font-size: 0.7rem; font-weight: bold; color: #666; cursor: pointer; display: flex; justify-content: space-between; }
+        .acc-body { display: none; background: #080808; padding: 10px; border-top: 1px solid #1a1a1a; text-align: center; }
         .acc-body.active { display: block; }
         
-        .copy-box { background: #111; padding: 10px; border-radius: 6px; margin: 6px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; font-size: 0.8rem; }
+        .copy-box { background: #111; padding: 8px; border-radius: 5px; margin: 4px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; font-size: 0.75rem; }
         
-        .btn-gold { width: calc(100% - 20px); background: var(--g); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; margin: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; }
-        
-        /* AJUSTE: Botón "Ya tengo mi clave" visible y con contraste */
-        .btn-outline { width: calc(100% - 20px); background: transparent; color: var(--o); border: 1px solid #333; padding: 14px; border-radius: 10px; font-weight: 700; margin: 5px 10px; cursor: pointer; font-size: 0.7rem; letter-spacing: 1px; opacity: 0.8; transition: 0.3s; }
-        .btn-outline:hover { opacity: 1; border-color: var(--o); }
+        .btn-gold { width: calc(100% - 16px); background: var(--g); color: #000; border: none; padding: 14px; border-radius: 10px; font-weight: 900; margin: 8px; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; }
+        .btn-outline { width: calc(100% - 16px); background: transparent; color: var(--o); border: 1px solid #222; padding: 10px; border-radius: 8px; font-weight: 700; margin: 0 8px 10px; cursor: pointer; font-size: 0.65rem; letter-spacing: 1px; }
 
-        /* Panel Admin Robusto */
-        .adm-container { padding: 10px; }
-        .adm-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; margin-bottom: 15px; position: relative; }
-        .adm-label { font-size: 0.7rem; color: var(--o); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 1px; }
-        .adm-input { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 0.85rem; }
-
-        /* Vista Previa Galería */
-        .prev-cont { position: relative; display: none; margin-bottom: 10px; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
-        .preview-img { width: 100%; max-height: 150px; object-fit: contain; background: #000; display: block; margin: auto; }
-        .btn-x { position: absolute; top: 5px; right: 5px; background: var(--r); color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: 900; cursor: pointer; z-index: 10; font-size: 0.7rem; }
-
-        .user-row { background: #000; border: 1px solid #222; padding: 10px; border-radius: 8px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .badge { font-size: 0.55rem; padding: 2px 5px; border-radius: 3px; font-weight: bold; text-transform: uppercase; }
-        .badge.wait { background: var(--o); color: #000; }
-        .badge.active { background: #2ecc71; color: #fff; }
-        .badge.ban { background: var(--r); color: #fff; }
-
-        .btn-action { border: none; padding: 6px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.65rem; }
+        /* Estilos Admin */
+        .adm-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+        .adm-label { font-size: 0.65rem; color: var(--o); font-weight: 800; text-transform: uppercase; margin-bottom: 6px; display: block; }
+        .adm-input { width: 100%; background: #000; border: 1px solid #222; color: #fff; padding: 8px; border-radius: 5px; margin-bottom: 6px; font-size: 0.8rem; }
+        .user-row { background: #000; border: 1px solid #1a1a1a; padding: 8px; border-radius: 6px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; }
+        .btn-action { border: none; padding: 5px 8px; border-radius: 4px; font-weight: bold; cursor: pointer; }
         .btn-approve { background: #2ecc71; color: #fff; }
-        .btn-ban { background: var(--r); color: #fff; margin-left: 4px; }
+        .btn-ban { background: var(--r); color: #fff; margin-left: 3px; }
 
-        .prog-bar { width: 100%; height: 5px; background: #111; border-radius: 3px; margin: 8px 0; display: none; overflow: hidden; }
-        .prog-fill { height: 100%; background: var(--g); width: 0%; transition: 0.3s; }
-        
-        .grid-gal { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
-        .img-wrap { position: relative; aspect-ratio: 1; border-radius: 5px; overflow: hidden; border: 1px solid #222; }
-        .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
-        .btn-del { position: absolute; top: 0; right: 0; background: rgba(231,76,60,0.9); color: #fff; border: none; padding: 2px 5px; font-size: 8px; cursor: pointer; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
 <header onclick="adminAccess()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div id="tagline" style="font-size: 0.65rem; color: #555; letter-spacing: 2px;">SALA PRIVADA • COSTA RICA</div>
+    <div id="tagline" style="font-size: 0.6rem; color: #444; letter-spacing: 1.5px;">SALA PRIVADA • COSTA RICA</div>
 </header>
 
 <div id="v-client" class="view active">
@@ -92,6 +68,7 @@
     </div>
     
     <div class="card" onclick="selP(this, 'HOY', 1)"><span>ACCESO HOY</span><b class="p-val">₡540</b></div>
+    <div class="card" onclick="selP(this, '7 DÍAS SILVER', 5)"><span>7 DÍAS SILVER</span><b class="p-val">₡2,700</b></div>
     <div class="card sel" onclick="selP(this, '30 DÍAS GOLD', 20)"><span>30 DÍAS GOLD</span><b class="p-val">₡10,800</b></div>
     
     <div class="acc-item">
@@ -114,37 +91,17 @@
 </div>
 
 <div id="v-admin" class="view">
-    <div class="adm-container">
-        
+    <div class="adm-container" style="padding:10px">
         <div class="adm-card">
-            <span class="adm-label">Publicar Lámina (Con Vista Previa)</span>
-            <div id="p-cont" class="prev-cont">
-                <button class="btn-x" onclick="cancelPreview()">X</button>
-                <img id="img-prev" class="preview-img">
-            </div>
-            <input type="file" id="f-upload" class="adm-input" accept="image/*" onchange="previewFile(this)">
-            <div class="prog-bar" id="p-bar-cont"><div class="prog-fill" id="p-fill"></div></div>
-            <button class="btn-gold" id="btn-up" onclick="uploadImg()" style="margin:0; width:100%">PUBLICAR AHORA</button>
-            <div id="admin-gallery" class="grid-gal"></div>
+            <span class="adm-label">Panel de Validación</span>
+            <div id="admin-user-list"></div>
         </div>
-
         <div class="adm-card">
-            <span class="adm-label">Control de Usuarios (IDs de Móviles)</span>
-            <div id="admin-user-list"><p style="font-size:0.6rem; color:#444">Esperando solicitudes...</p></div>
+            <span class="adm-label">Cargar Nueva Imagen</span>
+            <input type="file" id="f-upload" class="adm-input" accept="image/*">
+            <button class="btn-gold" style="margin:0; width:100%" onclick="uploadImg()">SUBIR A GALERÍA</button>
         </div>
-
-        <div class="adm-card">
-            <span class="adm-label">Tasas de Cambio ($1 USD)</span>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px">
-                <div><small style="font-size:8px">₡ CR</small><input type="number" id="rate-cr" class="adm-input" value="540"></div>
-                <div><small style="font-size:8px">C$ NI</small><input type="number" id="rate-ni" class="adm-input" value="37"></div>
-                <div><small style="font-size:8px">Q GT</small><input type="number" id="rate-gt" class="adm-input" value="7.7"></div>
-                <div><small style="font-size:8px">L HN</small><input type="number" id="rate-hn" class="adm-input" value="24.6"></div>
-            </div>
-            <button class="btn-gold" style="margin:5px 0 0; width:100%; height:40px; padding:0" onclick="saveRates()">GUARDAR CAMBIOS</button>
-        </div>
-
-        <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">CERRAR SESIÓN</button>
+        <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">SALIR</button>
     </div>
 </div>
 
@@ -163,101 +120,19 @@
     let myID = localStorage.getItem('fc_id') || 'UID-' + Math.random().toString(36).substr(2, 6).toUpperCase();
     localStorage.setItem('fc_id', myID);
 
-    // ADMIN: Vista Previa
-    function previewFile(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                document.getElementById('img-prev').src = e.target.result;
-                document.getElementById('p-cont').style.display = 'block';
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function cancelPreview() {
-        document.getElementById('f-upload').value = "";
-        document.getElementById('p-cont').style.display = 'none';
-    }
-
-    // ADMIN: Subir Imagen
-    function uploadImg() {
-        const file = document.getElementById('f-upload').files[0];
-        if(!file) return;
-        const barCont = document.getElementById('p-bar-cont');
-        const fill = document.getElementById('p-fill');
-        const btn = document.getElementById('btn-up');
-        
-        btn.disabled = true;
-        barCont.style.display = 'block';
-        
-        const task = st.ref('laminas/' + Date.now()).put(file);
-        task.on('state_changed', s => {
-            fill.style.width = (s.bytesTransferred / s.totalBytes * 100) + '%';
-        }, null, () => {
-            task.snapshot.ref.getDownloadURL().then(url => {
-                db.ref('gallery').push({url, time: Date.now()});
-                barCont.style.display = 'none';
-                cancelPreview();
-                btn.disabled = false;
-                alert("LÁMINA PUBLICADA");
-            });
-        });
-    }
-
-    // ADMIN: Cargar Datos
-    function loadAdminData() {
-        // Usuarios
-        db.ref('users').on('value', ss => {
-            const list = document.getElementById('admin-user-list');
-            list.innerHTML = "";
-            ss.forEach(u => {
-                const user = u.val();
-                list.innerHTML += `<div class="user-row">
-                    <div><b>${user.id}</b> <span class="badge ${user.status}">${user.status}</span></div>
-                    <div>
-                        <button class="btn-action btn-approve" onclick="updateStatus('${user.id}', 'active')">✓</button>
-                        <button class="btn-action btn-ban" onclick="updateStatus('${user.id}', 'ban')">X</button>
-                    </div>
-                </div>`;
-            });
-        });
-        // Galería
-        db.ref('gallery').orderByChild('time').on('value', ss => {
-            const gal = document.getElementById('admin-gallery');
-            gal.innerHTML = "";
-            ss.forEach(img => {
-                gal.innerHTML += `<div class="img-wrap"><img src="${img.val().url}"><button class="btn-del" onclick="deleteImg('${img.key}')">X</button></div>`;
-            });
-        });
-    }
-
-    function updateStatus(id, stat) { db.ref('users/' + id).update({status: stat}); }
-    function deleteImg(key) { if(confirm("¿Eliminar?")) db.ref('gallery/' + key).remove(); }
-
-    function saveRates() {
-        db.ref('rates').set({
-            cr: document.getElementById('rate-cr').value,
-            ni: document.getElementById('rate-ni').value,
-            gt: document.getElementById('rate-gt').value,
-            hn: document.getElementById('rate-hn').value
-        });
-        alert("CAMBIOS ACTUALIZADOS");
-    }
-
-    // Funciones Base
     function adminAccess() {
         clicks++;
         if(clicks >= 5) {
             if(prompt("PASS:") === "1376") {
                 document.getElementById('v-client').classList.remove('active');
                 document.getElementById('v-admin').classList.add('active');
-                loadAdminData();
+                loadUsers();
             }
             clicks = 0;
         }
         setTimeout(() => clicks = 0, 2000);
     }
+
     function setLoc(n, s, t) {
         curTasa = t; curSim = s;
         document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`;
@@ -265,21 +140,59 @@
         event.target.classList.add('active');
         updatePrices();
     }
+
     function updatePrices() {
-        const base = [1, 20]; // HOY, 30 DÍAS
+        const base = [1, 5, 20]; // HOY, 7 DÍAS, 30 DÍAS
         document.querySelectorAll('.p-val').forEach((el, i) => {
             el.innerText = curSim + Math.round(base[i] * curTasa).toLocaleString();
         });
     }
+
     function selP(el, p) {
         curP = p;
         document.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
         el.classList.add('sel');
     }
+
     function copy(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
     function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
-    function checkKey() { alert("Validando clave..."); }
-    function requestAccess() { alert("Solicitando acceso..."); }
+
+    function requestAccess() {
+        const day = new Date().getDate().toString().padStart(2, '0');
+        const key = myID.substring(4, 6) + day;
+        const msg = `Solicito ${curP}. ID: ${myID}`;
+        window.open(`https://wa.me/50670835833?text=${encodeURIComponent(msg)}`);
+        db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP });
+        alert("Solicitud enviada. Validando pago...");
+    }
+
+    function loadUsers() {
+        db.ref('users').on('value', ss => {
+            const list = document.getElementById('admin-user-list');
+            list.innerHTML = "";
+            ss.forEach(u => {
+                const user = u.val();
+                list.innerHTML += `<div class="user-row">
+                    <span>${user.id} (${user.plan})</span>
+                    <div>
+                        <button class="btn-action btn-approve" onclick="db.ref('users/${user.id}').update({status:'active'})">✓</button>
+                        <button class="btn-action btn-ban" onclick="db.ref('users/${user.id}').update({status:'ban'})">X</button>
+                    </div>
+                </div>`;
+            });
+        });
+    }
+
+    function uploadImg() {
+        const file = document.getElementById('f-upload').files[0];
+        if(!file) return;
+        st.ref('laminas/' + Date.now()).put(file).then(s => {
+            s.ref.getDownloadURL().then(url => {
+                db.ref('gallery').push({url, time: Date.now()});
+                alert("IMAGEN CARGADA");
+            });
+        });
+    }
 </script>
 </body>
 </html>
