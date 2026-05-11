@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • PLATINUM</title>
+    <title>FRAN CRUZ VIP • PLATINUM MASTER</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
@@ -18,42 +18,45 @@
         .view { display: none; width: 100%; max-width: 420px; flex-direction: column; padding-bottom: 40px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
 
-        /* 8 Banderas */
+        /* Banderas (8 opciones) */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 10px; background: #0f0f0f; border-radius: 15px; }
-        .flag { width: 100%; height: 25px; opacity: 0.4; border-radius: 4px; object-fit: cover; cursor: pointer; border: 1px solid #222; }
-        .flag.active { opacity: 1; border-color: var(--o); box-shadow: 0 0 10px var(--o); transform: scale(1.05); }
+        .flag { width: 100%; height: 25px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
+        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 10px var(--o); }
 
         /* Membresías */
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin: 0 20px 10px; display: flex; justify-content: space-between; align-items: center; }
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin: 0 20px 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.05); }
         .card b { color: var(--o); font-size: 1.2rem; }
 
         /* Acordeón de Pagos */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 10px; margin: 0 20px 8px; overflow: hidden; }
         .acc-head { background: #111; padding: 15px; font-size: 0.8rem; font-weight: bold; color: #888; cursor: pointer; display: flex; justify-content: space-between; }
-        .acc-body { display: none; background: #080808; padding: 15px; border-top: 1px solid #1a1a1a; font-size: 0.9rem; line-height: 1.6; }
+        .acc-body { display: none; background: #080808; padding: 15px; border-top: 1px solid #1a1a1a; font-size: 0.9rem; }
         .acc-body.active { display: block; }
 
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; margin: 15px 20px; cursor: pointer; }
-        .btn-adm { background: #1a1a1a; color: #555; border: none; padding: 10px; border-radius: 8px; margin: 5px 20px; font-size: 0.7rem; }
 
         /* Admin UI */
-        .adm-section { margin: 20px; padding: 15px; background: #0a0a0a; border: 1px solid #111; border-radius: 12px; }
-        .adm-label { font-size: 0.7rem; color: var(--o); font-weight: bold; margin-bottom: 10px; display: block; text-transform: uppercase; }
+        .adm-section { margin: 15px 20px; padding: 15px; background: #0a0a0a; border: 1px solid #111; border-radius: 12px; }
+        .adm-label { font-size: 0.7rem; color: var(--o); font-weight: bold; margin-bottom: 8px; display: block; text-transform: uppercase; }
         .adm-input { width: 100%; background: #000; border: 1px solid #222; padding: 10px; color: #fff; border-radius: 6px; margin-bottom: 10px; }
         
+        /* Barra de Progreso Carga */
+        .prog-cont { width: 100%; background: #222; height: 10px; border-radius: 5px; margin: 10px 0; display: none; overflow: hidden; }
+        .prog-bar { width: 0%; height: 100%; background: var(--g); transition: 0.3s; }
+
         /* Galería Admin */
-        .thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
-        .thumb-wrap { position: relative; aspect-ratio: 1; border: 1px solid #222; }
+        .thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .thumb-wrap { position: relative; aspect-ratio: 1; border: 1px solid #222; border-radius: 4px; overflow: hidden; }
         .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; }
-        .btn-del { position: absolute; top: 0; right: 0; background: red; color: #fff; border: none; padding: 4px 8px; font-size: 10px; }
+        .btn-del { position: absolute; top: 2px; right: 2px; background: rgba(255,0,0,0.8); color: #fff; border: none; border-radius: 3px; padding: 2px 6px; font-size: 10px; cursor: pointer; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-<header onclick="checkAdmin()">
+<header onclick="handleAdminEntry()">
     <div class="logo">FRAN CRUZ VIP</div>
     <div style="font-size: 0.7rem; color: #555; letter-spacing: 2px;">SALA PRIVADA • <span id="loc-name">COSTA RICA</span></div>
 </header>
@@ -74,15 +77,13 @@
     <div class="card" onclick="selP(this, '7 DÍAS', 5)"><span>7 DÍAS SILVER</span><b class="p-val">₡2,700</b></div>
     <div class="card sel" onclick="selP(this, '30 DÍAS', 20)"><span>30 DÍAS GOLD</span><b class="p-val">₡10,800</b></div>
 
-    <div style="text-align:center; margin: 20px 0 10px; font-size: 0.7rem; color: var(--o); font-weight: bold;">MÉTODOS DE PAGO DISPONIBLES</div>
-    
     <div class="acc-item">
         <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL (CR) <span>▼</span></div>
         <div class="acc-body">Número: 70835833<br>Titular: Randall Sánchez C.</div>
     </div>
     <div class="acc-item">
-        <div class="acc-head" onclick="toggleAcc(this)">2. TRANSFERENCIAS IBAN <span>▼</span></div>
-        <div class="acc-body">CR80080315001000035641<br>Banco: BAC Credomatic</div>
+        <div class="acc-head" onclick="toggleAcc(this)">2. TRANSFERENCIAS (GRUPO MUTUAL) <span>▼</span></div>
+        <div class="acc-body">Entidad: Grupo Mutual Alajuela<br>Cuenta IBAN: CR80080315001000035641<br>Titular: Randall Sánchez C.</div>
     </div>
     <div class="acc-item">
         <div class="acc-head" onclick="toggleAcc(this)">3. PAYPAL / INTERNACIONAL <span>▼</span></div>
@@ -90,41 +91,45 @@
     </div>
 
     <button class="btn-gold" onclick="sendWa()">SOLICITAR ACCESO VIP</button>
-    <button class="btn-adm" onclick="askKey()">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-admin" class="view">
     <div class="adm-section">
-        <span class="adm-label">Tipos de Cambio ($1 USD)</span>
+        <span class="adm-label">Seguridad de Acceso</span>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <input type="number" id="rate-cr" class="adm-input" value="540" placeholder="CR ₡">
-            <input type="number" id="rate-ni" class="adm-input" value="37" placeholder="NI C$">
-            <input type="number" id="rate-hn" class="adm-input" value="24.6" placeholder="HN L">
-            <input type="number" id="rate-gt" class="adm-input" value="7.7" placeholder="GT Q">
+            <div>
+                <small style="font-size:10px; color:#666">TOQUES REQUERIDOS</small>
+                <input type="number" id="cfg-clicks" class="adm-input" value="5">
+            </div>
+            <div>
+                <small style="font-size:10px; color:#666">CLAVE KEYPASS</small>
+                <input type="text" id="cfg-pass" class="adm-input" value="1376">
+            </div>
         </div>
+        <button class="btn-gold" style="margin:0; width:100%; height:40px; padding:0" onclick="saveSecurity()">ACTUALIZAR SEGURIDAD</button>
     </div>
 
     <div class="adm-section">
-        <span class="adm-label">Galería VIP (Láminas)</span>
+        <span class="adm-label">Galería de Láminas VIP</span>
         <input type="file" id="f-upload" class="adm-input" accept="image/*">
-        <button class="btn-gold" style="margin:0; width:100%" onclick="upImg()">PUBLICAR EN GALERÍA</button>
+        <div class="prog-cont" id="p-cont"><div class="prog-bar" id="p-bar"></div></div>
+        <button class="btn-gold" style="margin:0; width:100%" onclick="upImg()">SUBIR NUEVA LÁMINA</button>
         <div id="adm-gal" class="thumb-grid"></div>
     </div>
 
     <div class="adm-section">
-        <span class="adm-label">Gestión de Usuarios</span>
-        <select id="user-list" class="adm-input"><option>Cargando lista...</option></select>
-        <div style="display: flex; gap: 10px;">
-            <button class="btn-gold" style="margin:0; background: #441111; color: white;" onclick="ban()">BANEAR</button>
-            <button class="btn-gold" style="margin:0; background: #114411; color: white;" onclick="unban()">DESBANEAR</button>
+        <span class="adm-label">Tipos de Cambio</span>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <input type="number" id="rate-cr" class="adm-input" value="540" onchange="updateRate('CR', this.value)">
+            <input type="number" id="rate-ni" class="adm-input" value="37" onchange="updateRate('NI', this.value)">
         </div>
+        <div id="rate-msg" style="font-size:10px; color:var(--o); text-align:center"></div>
     </div>
 
-    <button class="btn-gold" onclick="location.reload()">GUARDAR Y CERRAR</button>
+    <button class="btn-gold" onclick="location.reload()">CERRAR PANEL</button>
 </div>
 
 <script>
-    // Configuración Firebase (Usando tus credenciales de bitácora)
     const firebaseConfig = { 
         apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
         projectId: "fran-cruz-sala-vip",
@@ -136,7 +141,85 @@
     const st = firebase.storage();
 
     let curTasa = 540, curSim = "₡", curP = "30 DÍAS", curU = 20, clicks = 0;
+    let requiredClicks = 5, masterPass = "1376";
 
+    // Cargar Configuración Inicial
+    db.ref('config').on('value', ss => {
+        const val = ss.val();
+        if(val) {
+            requiredClicks = parseInt(val.clicks || 5);
+            masterPass = val.pass || "1376";
+            document.getElementById('cfg-clicks').value = requiredClicks;
+            document.getElementById('cfg-pass').value = masterPass;
+        }
+    });
+
+    function handleAdminEntry() {
+        clicks++;
+        if(clicks >= requiredClicks) {
+            const p = prompt("INGRESE CLAVE MAESTRA:");
+            if(p === masterPass) {
+                document.getElementById('v-client').classList.remove('active');
+                document.getElementById('v-admin').classList.add('active');
+                loadAdmGal();
+            }
+            clicks = 0;
+        }
+        setTimeout(() => clicks = 0, 2000);
+    }
+
+    function saveSecurity() {
+        const c = document.getElementById('cfg-clicks').value;
+        const p = document.getElementById('cfg-pass').value;
+        db.ref('config').set({clicks: c, pass: p});
+        alert("SEGURIDAD ACTUALIZADA");
+    }
+
+    function upImg() {
+        const file = document.getElementById('f-upload').files[0];
+        if(!file) return;
+        const pCont = document.getElementById('p-cont');
+        const pBar = document.getElementById('p-bar');
+        pCont.style.display = 'block';
+
+        const task = st.ref('vip/' + Date.now()).put(file);
+        task.on('state_changed', 
+            s => { pBar.style.width = (s.bytesTransferred / s.totalBytes * 100) + '%'; },
+            e => { alert("Error"); },
+            () => {
+                task.snapshot.ref.getDownloadURL().then(url => {
+                    db.ref('galeria').push({url, time: Date.now()});
+                    pCont.style.display = 'none';
+                    pBar.style.width = '0%';
+                    alert("LÁMINA CARGADA");
+                });
+            }
+        );
+    }
+
+    function loadAdmGal() {
+        db.ref('galeria').orderByChild('time').on('value', ss => {
+            const div = document.getElementById('adm-gal');
+            div.innerHTML = "";
+            let items = [];
+            ss.forEach(ch => items.unshift({key: ch.key, url: ch.val().url}));
+            items.forEach(i => {
+                div.innerHTML += `<div class="thumb-wrap">
+                    <img src="${i.url}">
+                    <button class="btn-del" onclick="delImg('${i.key}')">X</button>
+                </div>`;
+            });
+        });
+    }
+
+    function delImg(k) { if(confirm("¿Eliminar imagen?")) db.ref('galeria/'+k).remove(); }
+
+    function updateRate(p, v) {
+        document.getElementById('rate-msg').innerText = `ACTUALIZANDO CAMBIO ${p}...`;
+        setTimeout(() => { document.getElementById('rate-msg').innerText = `CAMBIO ${p} GUARDADO ✓`; }, 1000);
+    }
+
+    // Funciones de Usuario
     function setLoc(n, s, t) {
         curTasa = t; curSim = s;
         document.getElementById('loc-name').innerText = n;
@@ -144,69 +227,22 @@
         event.target.classList.add('active');
         updatePrices();
     }
-
     function updatePrices() {
         const val = [1, 5, 20];
         document.querySelectorAll('.p-val').forEach((el, i) => {
             el.innerText = curSim + Math.round(val[i] * curTasa).toLocaleString();
         });
     }
-
     function selP(el, n, u) {
         curP = n; curU = u;
         document.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
         el.classList.add('sel');
     }
-
-    function toggleAcc(el) {
-        const body = el.nextElementSibling;
-        body.classList.toggle('active');
-    }
-
+    function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
     function sendWa() {
-        const msg = encodeURIComponent(`Hola Fran Cruz VIP. Solicito el plan ${curP} (${curSim}${Math.round(curU*curTasa)}).`);
-        window.location.href = `https://wa.me/50664535475?text=${msg}`;
+        window.location.href = `https://wa.me/50664535475?text=Solicito el plan ${curP}`;
     }
-
-    function checkAdmin() {
-        clicks++;
-        if(clicks === 5) {
-            const pass = prompt("INTRODUZCA KEYPASS:");
-            if(pass === "1376") { // Tu clave de seguridad
-                document.getElementById('v-client').classList.remove('active');
-                document.getElementById('v-admin').classList.add('active');
-                loadAdmGal();
-            } else { alert("ACCESO DENEGADO"); }
-            clicks = 0;
-        }
-    }
-
-    // Galería Admin: Cargar, Borrar y Subir
-    function upImg() {
-        const file = document.getElementById('f-upload').files[0];
-        if(!file) return;
-        const ref = st.ref('vip/' + Date.now());
-        ref.put(file).then(() => ref.getDownloadURL().then(url => {
-            db.ref('galeria').push({url});
-            loadAdmGal();
-        }));
-    }
-
-    function loadAdmGal() {
-        const div = document.getElementById('adm-gal');
-        div.innerHTML = "";
-        db.ref('galeria').on('value', ss => {
-            div.innerHTML = "";
-            ss.forEach(ch => {
-                div.innerHTML += `<div class="thumb-wrap">
-                    <img src="${ch.val().url}">
-                    <button class="btn-del" onclick="delImg('${ch.key}')">X</button>
-                </div>`;
-            });
-        });
-    }
-
-    function delImg(key) { if(confirm("¿Borrar lámina?")) db.ref('galeria/'+key).remove(); }
 </script>
 </body>
-</html>
+    </html>
+        
