@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • PLATINUM FINAL V3</title>
+    <title>FRAN CRUZ VIP • OFICIAL V5</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
@@ -11,30 +11,30 @@
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #ff4444; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
-        header { padding: 15px 10px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
-        .logo { color: var(--o); font-size: 1.6rem; font-weight: 900; letter-spacing: 2px; }
+        header { padding: 12px 10px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
+        .logo { color: var(--o); font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; }
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding: 5px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
 
-        /* Frontend Compacto V3 */
-        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 8px; padding: 8px; background: #0f0f0f; border-radius: 10px; }
-        .flag { width: 100%; height: 20px; opacity: 0.4; border-radius: 2px; cursor: pointer; object-fit: cover; }
+        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 5px 8px; padding: 6px; background: #0f0f0f; border-radius: 8px; }
+        .flag { width: 100%; height: 18px; opacity: 0.35; border-radius: 2px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 5px var(--o); }
         
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 8px; padding: 10px 15px; margin: 0 8px 5px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; height: 42px; }
-        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
-        .card span { font-size: 0.8rem; font-weight: 600; }
-        .card b { color: var(--o); font-size: 0.95rem; }
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 6px; padding: 8px 12px; margin: 0 8px 4px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; height: 38px; }
+        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.1); }
+        .card span { font-size: 0.75rem; font-weight: 600; }
+        .card b { color: var(--o); font-size: 0.85rem; }
 
-        .acc-item { border: 1px solid #1a1a1a; border-radius: 8px; margin: 0 8px 4px; overflow: hidden; }
-        .acc-head { background: #111; padding: 8px 12px; font-size: 0.7rem; font-weight: bold; color: #666; cursor: pointer; display: flex; justify-content: space-between; }
-        .acc-body { display: none; background: #080808; padding: 10px; border-top: 1px solid #1a1a1a; text-align: center; }
+        .acc-item { border: 1px solid #1a1a1a; border-radius: 6px; margin: 0 8px 3px; overflow: hidden; }
+        .acc-head { background: #111; padding: 6px 10px; font-size: 0.65rem; font-weight: bold; color: #555; cursor: pointer; display: flex; justify-content: space-between; }
+        .acc-body { display: none; background: #080808; padding: 8px; border-top: 1px solid #1a1a1a; text-align: center; }
         .acc-body.active { display: block; }
         
-        .copy-box { background: #111; padding: 8px; border-radius: 5px; margin: 4px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; font-size: 0.75rem; }
+        .titular { font-size: 0.65rem; color: var(--o); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 0.5px; }
+        .copy-box { background: #111; padding: 6px; border-radius: 4px; margin: 2px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; font-size: 0.7rem; }
         
-        .btn-gold { width: calc(100% - 16px); background: var(--g); color: #000; border: none; padding: 14px; border-radius: 10px; font-weight: 900; margin: 8px; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; }
-        .btn-outline { width: calc(100% - 16px); background: transparent; color: var(--o); border: 1px solid #222; padding: 10px; border-radius: 8px; font-weight: 700; margin: 0 8px 10px; cursor: pointer; font-size: 0.65rem; letter-spacing: 1px; }
+        .btn-gold { width: calc(100% - 16px); background: var(--g); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: 900; margin: 6px 8px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+        .btn-outline { width: calc(100% - 16px); background: transparent; color: var(--o); border: 1px solid #222; padding: 8px; border-radius: 6px; font-weight: 700; margin: 0 8px 8px; cursor: pointer; font-size: 0.6rem; letter-spacing: 1px; }
 
         /* Estilos Admin */
         .adm-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
@@ -45,14 +45,14 @@
         .btn-approve { background: #2ecc71; color: #fff; }
         .btn-ban { background: var(--r); color: #fff; margin-left: 3px; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
 <header onclick="adminAccess()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div id="tagline" style="font-size: 0.6rem; color: #444; letter-spacing: 1.5px;">SALA PRIVADA • COSTA RICA</div>
+    <div id="tagline" style="font-size: 0.55rem; color: #333; letter-spacing: 1px;">SALA PRIVADA • COSTA RICA</div>
 </header>
 
 <div id="v-client" class="view active">
@@ -74,6 +74,7 @@
     <div class="acc-item">
         <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL / GRUPO MUTUAL <span>▼</span></div>
         <div class="acc-body active">
+            <div class="titular">A nombre de: Randall Sánchez C.</div>
             <div class="copy-box" onclick="copy('70835833')">70835833</div>
             <div class="copy-box" onclick="copy('CR80080315001000035641')">CR80...641</div>
         </div>
@@ -82,6 +83,7 @@
     <div class="acc-item">
         <div class="acc-head" onclick="toggleAcc(this)">2. PAYPAL <span>▼</span></div>
         <div class="acc-body">
+            <div class="titular">A nombre de: Randall Sánchez C.</div>
             <div class="copy-box" onclick="copy('randallesc061376@gmail.com')">randallesc061376@gmail.com</div>
         </div>
     </div>
@@ -142,7 +144,7 @@
     }
 
     function updatePrices() {
-        const base = [1, 5, 20]; // HOY, 7 DÍAS, 30 DÍAS
+        const base = [1, 5, 20];
         document.querySelectorAll('.p-val').forEach((el, i) => {
             el.innerText = curSim + Math.round(base[i] * curTasa).toLocaleString();
         });
@@ -158,12 +160,9 @@
     function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
 
     function requestAccess() {
-        const day = new Date().getDate().toString().padStart(2, '0');
-        const key = myID.substring(4, 6) + day;
         const msg = `Solicito ${curP}. ID: ${myID}`;
         window.open(`https://wa.me/50670835833?text=${encodeURIComponent(msg)}`);
         db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP });
-        alert("Solicitud enviada. Validando pago...");
     }
 
     function loadUsers() {
@@ -195,4 +194,5 @@
     }
 </script>
 </body>
-</html>
+    </html>
+    
