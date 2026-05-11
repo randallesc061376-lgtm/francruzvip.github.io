@@ -4,77 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FRAN CRUZ VIP</title>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
     <style>
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(135deg, #d4af37, #f9e498); }
         body { background: var(--n); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; user-select: none; }
         
-        /* DISTRIBUCIÓN DE CABECERA */
-        header { padding: 45px 20px 20px; text-align: center; width: 100%; box-sizing: border-box; }
+        /* CABECERA SEGÚN IMAGEN */
+        header { padding: 45px 20px 10px; text-align: center; width: 100%; box-sizing: border-box; }
         .logo { color: var(--o); font-size: 2.1rem; font-weight: 900; letter-spacing: 7px; text-transform: uppercase; margin-bottom: 5px; }
         .sub { color: #444; font-size: .6rem; letter-spacing: 4px; text-transform: uppercase; font-weight: bold; }
         
-        .p { display: none; width: 100%; max-width: 400px; flex-direction: column; align-items: center; padding: 20px 25px; box-sizing: border-box; }
+        /* BANDERAS Y REGIÓN */
+        .geo { display: flex; justify-content: center; gap: 8px; margin: 15px 0; }
+        .geo img { width: 20px; height: 12px; border-radius: 1px; opacity: 0.7; }
+        .reg-txt { color: #222; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 900; margin-bottom: 25px; }
+
+        .p { display: none; width: 100%; max-width: 400px; flex-direction: column; align-items: center; padding: 0 25px 40px; box-sizing: border-box; }
         .a { display: flex; }
 
-        /* CAJAS DE PLANES (DISTRIBUCIÓN EXACTA) */
-        .box { width: 100%; background: rgba(255,255,255,0.02); border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; box-sizing: border-box; }
-        .box span { font-size: 0.95rem; letter-spacing: 0.5px; color: #eee; }
-        .box b { color: var(--o); font-size: 1.1rem; font-weight: bold; }
+        /* DISTRIBUCIÓN DE PLANES */
+        .box { width: 100%; background: rgba(255,255,255,0.02); border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; box-sizing: border-box; }
+        .box span { font-size: 0.9rem; letter-spacing: 0.5px; color: #eee; }
+        .box b { color: var(--o); font-size: 1.1rem; }
         .s { border-color: var(--o); background: rgba(212,175,55,0.04); }
 
-        /* SECCIÓN DE PAGOS */
-        .pay-label { color: var(--o); font-size: .7rem; font-weight: 900; letter-spacing: 3px; margin: 30px 0 15px; text-transform: uppercase; width: 100%; text-align: center; }
-        .pay-box { width: 100%; background: rgba(255,255,255,0.02); border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; text-align: center; margin-bottom: 20px; cursor: pointer; }
-        .pay-box b { color: var(--o); font-size: 1.2rem; letter-spacing: 1px; }
+        /* MÉTODOS DE PAGO (ACORDEÓN) */
+        .pay-label { color: var(--o); font-size: .7rem; font-weight: 900; letter-spacing: 3px; margin: 30px 0 15px; text-transform: uppercase; }
+        .method { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
+        .method-h { padding: 15px; text-align: center; font-size: 0.75rem; font-weight: 900; color: #666; cursor: pointer; text-transform: uppercase; }
+        .method-c { display: none; padding: 20px; text-align: center; border-top: 1px solid #1a1a1a; }
+        .method.open .method-c { display: block; }
+        .method.open .method-h { color: var(--o); }
 
-        /* BOTONES DE ACCIÓN FINAL */
-        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-top: 10px; font-size: 0.9rem; }
+        /* BOTONES DE ACCIÓN */
+        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-top: 15px; font-size: 0.9rem; }
         .btn-access { width: 100%; background: none; color: var(--o); border: 1px solid var(--o); padding: 18px; border-radius: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-top: 12px; font-size: 0.85rem; }
 
-        /* INPUTS SALA VIP */
-        .inp-vip { width: 100%; padding: 20px; background: #0a0a0a; border: 1px solid #333; border-radius: 12px; color: #fff; text-align: center; font-size: 1.4rem; letter-spacing: 8px; font-weight: bold; margin-bottom: 15px; box-sizing: border-box; }
+        /* INPUT ACCESO */
+        .inp-vip { width: 100%; padding: 20px; background: #000; border: 1px solid #333; border-radius: 12px; color: #fff; text-align: center; font-size: 1.4rem; letter-spacing: 8px; font-weight: bold; margin-bottom: 15px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-<header onclick="adminCheck()">
+<header>
     <div class="logo">FRAN CRUZ VIP</div>
     <div class="sub">SALA PRIVADA • COSTA RICA</div>
+    <div class="geo">
+        <img src="https://flagcdn.com/cr.svg"> <img src="https://flagcdn.com/ni.svg">
+        <img src="https://flagcdn.com/pa.svg"> <img src="https://flagcdn.com/hn.svg">
+        <img src="https://flagcdn.com/sv.svg"> <img src="https://flagcdn.com/gt.svg">
+        <img src="https://flagcdn.com/bz.svg">
+    </div>
+    <div class="reg-txt">Sistema Regional Protegido</div>
 </header>
 
 <div id="view-main" class="p a">
-    <div class="box" onclick="setPlan('HOY', 550, this)"><span>Acceso Hoy</span><b>₡550</b></div>
-    <div class="box" onclick="setPlan('7 DÍAS SILVER', 3850, this)"><span>7 Días Silver</span><b>₡3,850</b></div>
-    <div class="box s" onclick="setPlan('30 DÍAS GOLD', 8250, this)"><span>30 Días Gold</span><b>₡8,250</b></div>
+    <div class="box" onclick="sel('HOY', 550, this)"><span>Acceso Hoy</span><b>₡550</b></div>
+    <div class="box" onclick="sel('7 DÍAS SILVER', 3850, this)"><span>7 Días Silver</span><b>₡3,850</b></div>
+    <div class="box s" onclick="sel('30 DÍAS GOLD', 8250, this)"><span>30 Días Gold</span><b>₡8,250</b></div>
 
-    <div class="pay-label">Depósitos Directos</div>
-    <div class="pay-box" onclick="copy('70835833')">
-        <small style="color:#555; display:block; margin-bottom:5px; font-weight:bold; letter-spacing:1px;">SINPE MÓVIL</small>
-        <b>70835833</b>
-    </div>
+    <div class="pay-label">Métodos de Pago</div>
     
-    <button class="btn-gold" onclick="openWa()">ENVIAR COMPROBANTE DE PAGO</button>
+    <div class="method" onclick="tgl(this)">
+        <div class="method-h">1. SINPE MÓVIL</div>
+        <div class="method-c" onclick="copy('70835833')">
+            <small style="color:var(--o); font-weight:bold;">TOCA PARA COPIAR</small>
+            <div style="font-size:1.2rem; font-weight:bold; margin:5px 0;">70835833</div>
+            <small style="color:#444">Randall Sánchez C.</small>
+        </div>
+    </div>
+
+    <div class="method" onclick="tgl(this)">
+        <div class="method-h">2. TRANSFERENCIA IBAN</div>
+        <div class="method-c" onclick="copy('CR80080315001000035641')">
+            <div style="font-size:0.85rem; font-weight:bold;">CR80080315001000035641</div>
+        </div>
+    </div>
+
+    <button class="btn-gold" onclick="wa()">ENVIAR COMPROBANTE DE PAGO</button>
     <button class="btn-access" onclick="nav('view-main','view-vip')">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="view-vip" class="p">
-    <h4 style="color:var(--o); letter-spacing: 2px; margin-bottom: 25px; text-align:center;">INGRESE SU CLAVE DINÁMICA</h4>
-    <input type="text" id="claveInput" class="inp-vip" placeholder="XXXXX" maxlength="5">
-    <button class="btn-gold" onclick="checkAccess()">ENTRAR A SALA</button>
-    <button class="btn-access" style="border-color:#222; color:#444" onclick="nav('view-vip','view-main')">VOLVER AL MENÚ</button>
+    <h4 style="color:var(--o); letter-spacing: 2px; margin-bottom: 25px;">SALA VIP</h4>
+    <input type="text" id="cKey" class="inp-vip" placeholder="XXXXX" maxlength="5">
+    <button class="btn-gold" onclick="access()">ENTRAR A SALA</button>
+    <button class="btn-access" style="border-color:#222; color:#444" onclick="nav('view-vip','view-main')">VOLVER</button>
 </div>
 
 <script>
-    let planSel = "30 DÍAS GOLD";
-    let count = 0;
+    let pSel = "30 DÍAS GOLD";
+    let mSel = "8250";
 
-    function setPlan(p, precio, el) {
-        planSel = p;
+    function sel(p, m, el) {
+        pSel = p; mSel = m;
         document.querySelectorAll('.box').forEach(b => b.classList.remove('s'));
         el.classList.add('s');
+    }
+
+    function tgl(el) {
+        const isO = el.classList.contains('open');
+        document.querySelectorAll('.method').forEach(m => m.classList.remove('open'));
+        if(!isO) el.classList.add('open');
     }
 
     function nav(o, n) {
@@ -84,39 +114,30 @@
 
     function copy(t) {
         navigator.clipboard.writeText(t);
-        alert("Copiado al portapapeles");
+        alert("Copiado");
     }
 
-    function openWa() {
+    function wa() {
         const d = new Date().getDate().toString().padStart(2, '0');
-        const uid = Math.random().toString(36).substring(2,8).toUpperCase();
-        const cDin = Math.random().toString(36).substring(2,4).toUpperCase() + d;
+        const uid = "UID-" + Math.random().toString(36).substring(2,8).toUpperCase();
+        const clv = Math.random().toString(36).substring(2,4).toUpperCase() + d;
         
         const msg = `*SOLICITUD VIP FRAN CRUZ*\n` +
-                    `Plan: ${planSel}\n` +
-                    `ID: UID-${uid}\n` +
-                    `Clave: *${cDin}*\n\n` +
+                    `Plan: ${pSel}\n` +
+                    `ID: ${uid}\n` +
+                    `Clave: *${clv}*\n\n` +
                     `⚠️ *IMPORTANTE:* Debe adjuntar el comprobante de pago ahora para activar su acceso.`;
         
         window.location.href = `https://wa.me/50670835833?text=${encodeURIComponent(msg)}`;
     }
 
-    function checkAccess() {
-        const val = document.getElementById('claveInput').value.toUpperCase();
+    function access() {
+        const val = document.getElementById('cKey').value.toUpperCase();
         const d = new Date().getDate().toString().padStart(2, '0');
-        if(val.endsWith(d) && val.length >= 4) {
-            alert("ACCESO AUTORIZADO");
-            // Redirección a la galería de Firebase
-        } else {
-            alert("CLAVE INCORRECTA");
-        }
-    }
-
-    function adminCheck() {
-        count++;
-        if(count >= 5) alert("MODO ADMIN"); // Aquí va el salto al login admin
-        setTimeout(() => count = 0, 3000);
+        if(val.endsWith(d)) alert("ACCESO AUTORIZADO DESDE EL PANEL");
+        else alert("CLAVE INVÁLIDA");
     }
 </script>
 </body>
-</html>
+    </html>
+    
