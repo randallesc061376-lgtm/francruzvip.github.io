@@ -10,53 +10,29 @@
     <style>
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #8b0000; --v: #006400; }
         body { background: var(--n); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; user-select: none; }
-        
-        /* HEADER */
         header { padding: 40px 20px 10px; text-align: center; width: 100%; box-sizing: border-box; cursor: pointer; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; }
         .tagline { color: #555; font-size: .7rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; font-weight: bold; }
-        
-        /* BARRA DE BANDERAS CENTRADA */
-        .geo-bar { display: flex; justify-content: center; gap: 10px; margin: 20px 0; background: #0a0a0a; padding: 12px 18px; border-radius: 50px; border: 1px solid #111; max-width: fit-content; }
-        .flag { width: 28px; height: 19px; border-radius: 2px; cursor: pointer; opacity: 0.3; transition: 0.3s; border: 1px solid transparent; }
+        .geo-bar { display: flex; justify-content: center; gap: 10px; margin: 20px 0; background: #0a0a0a; padding: 12px 18px; border-radius: 50px; border: 1px solid #111; }
+        .flag { width: 28px; height: 19px; opacity: 0.3; transition: 0.3s; cursor: pointer; border: 1px solid transparent; }
         .flag.active { opacity: 1; border-color: var(--o); transform: scale(1.15); }
-
-        /* VISTAS */
-        .p { display: none; width: 100%; max-width: 400px; flex-direction: column; padding: 0 20px 40px; box-sizing: border-box; align-items: center;}
+        .p { display: none; width: 100%; max-width: 400px; flex-direction: column; padding: 0 20px 40px; box-sizing: border-box; }
         .a { display: flex; }
-
-        /* CAJAS DE PLANES CENTRADAS */
-        .plan-box { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; box-sizing: border-box; }
+        .plan-box { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; }
         .plan-box.sel { border-color: var(--o); background: rgba(212,175,55,0.03); }
-        .plan-box span { font-size: 1rem; color: #eee; font-weight: 500; }
         .plan-box b { color: var(--o); font-size: 1.2rem; }
-
-        /* ACORDEONES DE PAGO CENTRADOS */
-        .method { width: 100%; background: #080808; border: 1px solid #151515; border-radius: 10px; margin-bottom: 10px; overflow: hidden; box-sizing: border-box;}
-        .method-h { padding: 18px; text-align: center; font-size: 0.85rem; font-weight: 900; color: #444; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;}
-        .method-c { display: none; padding: 25px; text-align: center; border-top: 1px solid #151515; background: #050505; color: #eee; font-size: 0.95rem;}
+        .method { width: 100%; background: #080808; border: 1px solid #151515; border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+        .method-h { padding: 18px; text-align: center; font-size: 0.85rem; font-weight: 900; color: #444; cursor: pointer; text-transform: uppercase; }
+        .method-c { display: none; padding: 20px; text-align: center; border-top: 1px solid #151515; background: #050505; }
         .method.open .method-c { display: block; }
         .method.open .method-h { color: var(--o); background: #0c0c0c; }
-        .method-c small { color: var(--o); font-weight: bold; display: block; margin-bottom: 5px; cursor: pointer;}
-
-        /* BOTONES CENTRADOS */
-        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; margin-top: 15px; font-size: 0.9rem; box-sizing: border-box;}
-        .btn-outline { width: 100%; background: none; color: var(--o); border: 1px solid var(--o); padding: 18px; border-radius: 12px; font-weight: 900; text-transform: uppercase; margin-top: 10px; font-size: 0.85rem; cursor: pointer; box-sizing: border-box;}
-
-        /* ESTILOS PANEL ADMIN CENTRADO */
-        .admin-sec { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 20px; margin-top: 20px; width: 100%; box-sizing: border-box;}
-        .admin-sec-title { color: var(--o); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; text-align: center; display: block; margin-bottom: 15px;}
-        .inp-admin { width: 100%; background: #000; border: 1px solid #222; padding: 15px; color: #fff; border-radius: 8px; margin-bottom: 10px; text-align: center; box-sizing: border-box; font-size: 1rem;}
-        
-        .user-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #111; border: 1px solid #222; border-radius: 8px; margin-bottom: 8px; font-size: 0.9rem;}
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 15px; width: 100%;}
-        .gallery-item { position: relative; width: 100%; height: 100px; border-radius: 8px; overflow: hidden; border: 1px solid #222;}
+        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 15px; }
+        .admin-sec { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 20px; margin-top: 20px; width: 100%; box-sizing: border-box; }
+        .inp-admin { width: 100%; background: #000; border: 1px solid #222; padding: 12px; color: #fff; border-radius: 8px; margin-bottom: 8px; text-align: center; box-sizing: border-box; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .gallery-item { position: relative; aspect-ratio: 1; border-radius: 5px; overflow: hidden; border: 1px solid #222; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
-        .delete-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.75); color: var(--r); border: none; border-radius: 50%; padding: 6px; cursor: pointer; font-size: 0.8rem; line-height: 1;}
-        
-        /* ESTILOS INPUT FILE ADMIN */
-        input[type="file"] { width: 100%; color: #888; font-size: 0.8rem; margin-top: 10px; text-align: center;}
-        input[type="file"]::-webkit-file-upload-button { background: #1a1a1a; color: var(--o); border: 1px solid #222; padding: 10px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-right: 10px;}
+        .del-btn { position: absolute; top: 2px; right: 2px; background: var(--r); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -77,74 +53,61 @@
 </div>
 
 <div id="view-client" class="p a">
-    <div id="planes-container" style="width:100%"></div>
-
-    <div style="color:var(--o); font-size:0.75rem; font-weight:900; margin:40px 0 20px; text-align:center; text-transform:uppercase; letter-spacing:2px;">Métodos de Pago</div>
+    <div id="planes-container"></div>
+    <div style="color:var(--o); font-size:0.7rem; font-weight:900; margin:30px 0 15px; text-align:center; letter-spacing:2px;">MÉTODOS DE PAGO</div>
     
     <div class="method" onclick="tglM(this)">
         <div class="method-h">1. SINPE MÓVIL</div>
         <div class="method-c">
-            <small onclick="copy('64535475')">TOCA PARA COPIAR</small>
-            <div style="font-size:1.5rem; font-weight:bold;">6453 5475</div>
-            Randall Sánchez C.
+            <div id="txt-sinpe" style="font-size:1.3rem; font-weight:bold; margin-bottom:5px; color:var(--o);">Cargando...</div>
+            <span id="txt-titular">Cargando...</span>
         </div>
     </div>
     <div class="method" onclick="tglM(this)">
         <div class="method-h">2. TRANSFERENCIA IBAN</div>
-        <div class="method-c">
-            <small onclick="copy('CR80080315001000035641')">TOCA PARA COPIAR</small>
-            CR80080315001000035641
-        </div>
+        <div class="method-c"><span id="txt-iban" style="font-size:0.8rem; word-break:break-all;">Cargando...</span></div>
     </div>
     <div class="method" onclick="tglM(this)">
         <div class="method-h">3. PAYPAL / CORREO</div>
-        <div class="method-c">
-            <small onclick="copy('randallesc061376@gmail.com')">TOCA PARA COPIAR</small>
-            randallesc061376@gmail.com
-        </div>
+        <div class="method-c"><span id="txt-paypal">Cargando...</span></div>
     </div>
 
     <button class="btn-gold" onclick="sendWA()">ENVIAR COMPROBANTE DE PAGO</button>
 </div>
 
 <div id="view-admin" class="p">
-    <div style="color:var(--o); text-align:center; font-weight:900; letter-spacing:3.5px; margin:20px 0; font-size:1.1rem">SISTEMA DE GESTIÓN</div>
+    <div style="color:var(--o); text-align:center; font-weight:900; letter-spacing:3px; margin-bottom:20px;">SISTEMA DE GESTIÓN</div>
 
     <div class="admin-sec">
-        <span class="admin-sec-title">USUARIOS EN ESPERA</span>
-        <div id="users-waiting"></div>
-    </div>
-
-    <div class="admin-sec">
-        <span class="admin-sec-title">GALERÍA DE LÁMINAS</span>
-        <input type="file" id="file" onchange="uploadImage(this)">
+        <span style="color:var(--o); font-size:0.7rem; font-weight:bold; letter-spacing:1px;">SUBIR LÁMINAS DEL DÍA</span>
+        <input type="file" id="file" onchange="subirLamina(this)" style="margin-top:10px; width:100%; color:#555;">
         <div class="gallery-grid" id="admin-gallery"></div>
     </div>
 
     <div class="admin-sec">
-        <span class="admin-sec-title">ACTUALIZAR DIVISAS</span>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <span style="color:var(--o); font-size:0.7rem; font-weight:bold; letter-spacing:1px;">MIS DATOS DE ACTIVACIÓN</span>
+        <input type="text" id="inp-wa" class="inp-admin" placeholder="WhatsApp (Ej: 50664535475)">
+        <input type="text" id="inp-titular" class="inp-admin" placeholder="Nombre de Titular">
+        <input type="text" id="inp-sinpe" class="inp-admin" placeholder="Número SINPE">
+        <input type="text" id="inp-iban" class="inp-admin" placeholder="Cuenta IBAN">
+        <input type="text" id="inp-mail" class="inp-admin" placeholder="Correo PayPal">
+    </div>
+
+    <div class="admin-sec">
+        <span style="color:var(--o); font-size:0.7rem; font-weight:bold; letter-spacing:1px;">TIPOS DE CAMBIO</span>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
             <input type="number" id="inp-cr" class="inp-admin" placeholder="CR ₡">
             <input type="number" id="inp-ni" class="inp-admin" placeholder="NI C$">
             <input type="number" id="inp-hn" class="inp-admin" placeholder="HN L">
             <input type="number" id="inp-gt" class="inp-admin" placeholder="GT Q">
         </div>
-        <button class="btn-gold" onclick="guardarTasas()">APLICAR CAMBIOS PERMANENTES</button>
+        <button class="btn-gold" onclick="guardarTodo()">APLICAR CAMBIOS PERMANENTES</button>
     </div>
 
-    <button class="btn-outline" onclick="goToClient()">VOLVER AL MENÚ</button>
-    <button class="btn-outline" style="border-color:#444; color:#444;" onclick="closeSession()">CERRAR SESIÓN</button>
-</div>
-
-<div id="adminModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.97); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:100;">
-    <div style="color:var(--o); font-weight:900; letter-spacing:3px; margin-bottom:20px;">SISTEMA DE CONTROL</div>
-    <input type="password" id="pKey" class="inp-admin" style="width:200px; text-align:center; font-size:1.8rem; letter-spacing:8px;">
-    <button class="btn-gold" style="width:200px" onclick="validate()">ENTRAR</button>
-    <button style="background:none; border:none; color:#333; margin-top:20px; font-weight:bold;" onclick="closeModal()">CANCELAR</button>
+    <button class="btn-gold" style="background:#222; color:#fff;" onclick="location.reload()">VOLVER AL INICIO</button>
 </div>
 
 <script>
-    // Configuración de Firebase (Úsala con cuidado)
     const firebaseConfig = {
       apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",
       authDomain: "fran-cruz-sala-vip.firebaseapp.com",
@@ -153,22 +116,47 @@
       messagingSenderId: "1022733043010",
       appId: "1:1022733043010:web:379db18e37bbfde2cf34db"
     };
-    
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const storage = firebase.storage();
 
-    let taps = 0;
-    let symbol = "₡", rate = 540, pSel = "30 DÍAS GOLD", uSel = 15, currentRates = {};
+    let symbol = "₡", rate = 540, pSel = "30 DÍAS GOLD", uSel = 15;
+    let currentRates = { cr: 540, ni: 36.5, pa: 1, hn: 24.7, sv: 1, gt: 7.8, bz: 1, usd: 1 };
+    let settings = { wa: "50664535475", titular: "Randall Sánchez C.", sinpe: "6453 5475", iban: "CR80080315001000035641", mail: "randallesc061376@gmail.com" };
 
-    // Cargar tasas desde Firebase al iniciar
-    db.ref('config/rates').on('value', (snap) => {
-        currentRates = snap.val() || { cr: 540, ni: 36.5, hn: 24.7, gt: 7.8, usd: 1 };
+    // Fecha de hoy para el borrado automático (Formato: YYYY-MM-DD)
+    const hoy = new Date().toISOString().split('T')[0];
+
+    // Cargar y limpiar datos al iniciar
+    db.ref('config').on('value', (snap) => {
+        const data = snap.val();
+        if(data) {
+            if(data.rates) currentRates = {...currentRates, ...data.rates};
+            if(data.settings) {
+                settings = data.settings;
+                document.getElementById('txt-sinpe').innerText = settings.sinpe;
+                document.getElementById('txt-titular').innerText = settings.titular;
+                document.getElementById('txt-iban').innerText = settings.iban;
+                document.getElementById('txt-paypal').innerText = settings.mail;
+            }
+        }
         renderPlanes();
     });
 
+    // SISTEMA DE BORRADO AUTOMÁTICO A MEDIANOCHE
+    db.ref('gallery').on('value', snap => {
+        snap.forEach(child => {
+            const item = child.val();
+            // Si la fecha de la lámina es distinta a la de hoy, se borra automáticamente
+            if(item.fecha !== hoy) {
+                db.ref('gallery/' + child.key).remove();
+            }
+        });
+        loadGalleryUI(); // Recargar la vista del admin
+    });
+
     function setRegion(name, sym, key, el) {
-        symbol = sym; rate = currentRates[key];
+        symbol = sym; rate = currentRates[key] || 1;
         document.getElementById('region-tag').innerText = `SALA PRIVADA • ${name}`;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         el.classList.add('active');
@@ -177,135 +165,78 @@
 
     function renderPlanes() {
         const cont = document.getElementById('planes-container'); cont.innerHTML = '';
-        const planes = [
-            {n:"Acceso Hoy",u:1},
-            {n:"7 Días Silver",u:5},
-            {n:"30 Días Gold",u:15}
-        ];
-        planes.forEach(p => {
-            const val = (p.u * rate).toLocaleString();
+        [{n:"HOY",u:1.5},{n:"7 DÍAS SILVER",u:5},{n:"30 DÍAS GOLD",u:15}].forEach(p => {
+            const val = Math.round(p.u * rate).toLocaleString();
             cont.innerHTML += `<div class="plan-box ${p.n===pSel?'sel':''}" onclick="pSel='${p.n}';uSel=${p.u};renderPlanes()"><span>${p.n}</span><b>${symbol}${val}</b></div>`;
         });
     }
 
-    function sendWA() {
-        const val = (uSel * rate).toLocaleString();
-        const msg = `Hola! He seleccionado el Plan de *${pSel}* por un valor de *${symbol}${val}*.\n\nAdjunto envío mi comprobante para la activación.`;
-        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
-    }
-
-    function tglM(e) { 
-        const open = e.classList.contains('open');
-        document.querySelectorAll('.method').forEach(m => m.classList.remove('open'));
-        if(!open) e.classList.add('open');
-    }
-    function copy(t) { navigator.clipboard.writeText(t); alert("Copiado al portapapeles"); }
-
-    // Admin Access
-    document.getElementById('adminTrigger').onclick = () => {
-        taps++;
-        if(taps >= 5) {
-            document.getElementById('adminModal').style.display = 'flex';
-            taps = 0;
-        }
-        setTimeout(() => taps = 0, 3000);
-    };
-
-    function closeModal() { document.getElementById('adminModal').style.display = 'none'; document.getElementById('pKey').value = '';}
-    function validate() {
-        if(document.getElementById('pKey').value === "2026") {
-            closeModal();
-            goToAdmin();
-        } else { alert("PASSKEY INCORRECTO"); closeModal(); }
-    }
-
-    function goToAdmin() {
-        document.getElementById('view-client').classList.remove('a');
-        document.getElementById('view-admin').classList.add('a');
-        document.querySelectorAll('.flag').forEach(f => f.style.pointerEvents = 'none'); // Deshabilitar banderas en admin
-        loadGallery();
-        loadWaitingUsers();
-    }
-
-    function goToClient() {
-        document.getElementById('view-admin').classList.remove('a');
-        document.getElementById('view-client').classList.add('a');
-        document.querySelectorAll('.flag').forEach(f => f.style.pointerEvents = 'auto'); // Habilitar banderas en cliente
-    }
-
-    function closeSession() { location.reload(); }
-
-    function guardarTasas() {
-        const rates = {
+    function guardarTodo() {
+        const newRates = {
             cr: document.getElementById('inp-cr').value || currentRates.cr,
             ni: document.getElementById('inp-ni').value || currentRates.ni,
             hn: document.getElementById('inp-hn').value || currentRates.hn,
-            gt: document.getElementById('inp-gt').value || currentRates.gt,
-            usd: 1
+            gt: document.getElementById('inp-gt').value || currentRates.gt
         };
-        db.ref('config/rates').set(rates).then(() => {
-            alert("Tasas actualizadas permanentemente.");
-            document.querySelectorAll('.inp-admin').forEach(i => i.value = '');
-        });
+        const newSettings = {
+            wa: document.getElementById('inp-wa').value || settings.wa,
+            titular: document.getElementById('inp-titular').value || settings.titular,
+            sinpe: document.getElementById('inp-sinpe').value || settings.sinpe,
+            iban: document.getElementById('inp-iban').value || settings.iban,
+            mail: document.getElementById('inp-mail').value || settings.mail
+        };
+        db.ref('config').update({ rates: newRates, settings: newSettings }).then(() => alert("¡Datos actualizados!"));
     }
 
-    // GESTIÓN DE GALERÍA
-    function uploadImage(e) {
+    function subirLamina(e) {
         const file = e.files[0];
         if(!file) return;
-        const ref = storage.ref('laminas/' + file.name);
+        const ref = storage.ref('laminas/' + Date.now() + "_" + file.name);
         ref.put(file).then(snap => snap.ref.getDownloadURL().then(url => {
-            db.ref('gallery').push({url: url, date: Date.now()});
+            // Guardamos la lámina con la fecha de hoy
+            db.ref('gallery').push({url: url, fecha: hoy});
             alert("Lámina cargada con éxito.");
-            e.value = ''; // Limpiar input file
-            loadGallery();
         }));
     }
 
-    function loadGallery() {
+    function loadGalleryUI() {
         const grid = document.getElementById('admin-gallery');
-        grid.innerHTML = '<p style="text-align:center; color:#555; grid-column: 1/-1;">Cargando galería...</p>';
-        db.ref('gallery').once('value', (snap) => {
+        if(!grid) return;
+        db.ref('gallery').once('value', snap => {
             grid.innerHTML = '';
-            snap.forEach((child) => {
-                const data = child.val();
-                const key = child.key;
-                const item = `<div class="gallery-item"><img src="${data.url}"><button class="delete-btn" onclick="deleteLamina('${key}', '${data.url}')">✕</button></div>`;
-                grid.innerHTML += item;
+            snap.forEach(child => {
+                grid.innerHTML += `<div class="gallery-item"><img src="${child.val().url}"><button class="del-btn" onclick="borrarLamina('${child.key}')">✕</button></div>`;
             });
-            if(grid.innerHTML === '') grid.innerHTML = '<p style="text-align:center; color:#555; grid-column: 1/-1;">No hay láminas en la galería.</p>';
         });
     }
 
-    function deleteLamina(key, url) {
-        if(confirm("¿Estás seguro de que quieres borrar esta lámina permanentemente?")) {
-            db.ref('gallery/' + key).remove();
-            storage.refFromURL(url).delete();
-            loadGallery();
+    function borrarLamina(key) {
+        if(confirm("¿Eliminar lámina manualmente?")) db.ref('gallery/' + key).remove().then(() => loadGalleryUI());
+    }
+
+    function sendWA() {
+        const val = Math.round(uSel * rate).toLocaleString();
+        const msg = `Hola! He seleccionado el Plan de *${pSel}* por un valor de *${symbol}${val}*.\n\nAdjunto envío mi comprobante para la activación.`;
+        window.location.href = `https://wa.me/${settings.wa}?text=${encodeURIComponent(msg)}`;
+    }
+
+    function tglM(e) { e.classList.toggle('open'); }
+
+    // Acceso Admin (5 toques logo)
+    let clicks = 0;
+    document.getElementById('adminTrigger').onclick = () => {
+        clicks++;
+        if(clicks >= 5) {
+            const p = prompt("PASSKEY:");
+            if(p === "2026") {
+                document.getElementById('view-client').classList.remove('a');
+                document.getElementById('view-admin').classList.add('a');
+                loadGalleryUI();
+            }
+            clicks = 0;
         }
-    }
-
-    // GESTIÓN DE USUARIOS
-    function loadWaitingUsers() {
-        const list = document.getElementById('users-waiting');
-        list.innerHTML = '<p style="text-align:center; color:#555;">Cargando usuarios...</p>';
-        db.ref('users').orderByChild('status').equalTo('waiting').on('value', (snap) => {
-            list.innerHTML = '';
-            snap.forEach((child) => {
-                const uid = child.key;
-                const item = `<div class="user-item"><span>${uid}</span><button class="btn-gold" style="background:var(--v); color:#fff; padding: 10px 15px; font-size:0.7rem; width: auto; margin: 0;" onclick="approveUser('${uid}')">DAR ALTA</button></div>`;
-                list.innerHTML += item;
-            });
-            if(list.innerHTML === '') list.innerHTML = '<p style="text-align:center; color:#555;">No hay usuarios esperando aprobación.</p>';
-        });
-    }
-
-    function approveUser(uid) {
-        db.ref('users/' + uid).update({status: 'active'}).then(() => {
-            alert("Usuario aprobado con éxito.");
-            loadWaitingUsers();
-        });
-    }
+        setTimeout(() => clicks = 0, 3000);
+    };
 </script>
 </body>
 </html>
