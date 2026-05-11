@@ -11,16 +11,16 @@
         body{background:var(--n);color:#fff;font-family:sans-serif;margin:0;text-align:center;user-select:none;overflow-x:hidden}
         header{padding:25px 10px;cursor:pointer}
         .l{color:var(--o);font-size:1.8rem;font-weight:900;letter-spacing:5px}
-        .b{display:flex;justify-content:center;gap:6px;margin:12px 0}
-        .b img{width:22px;border-radius:2px;cursor:pointer;transition:.2s}
-        .b img:active{transform:scale(1.2)}
+        .b{display:flex;justify-content:center;gap:8px;margin:15px 0}
+        .b img{width:22px;border-radius:2px;cursor:pointer}
         .p{display:none;min-height:100vh;flex-direction:column;align-items:center;padding:15px;box-sizing:border-box}
         .a{display:flex}
         .box{width:100%;max-width:370px;background:rgba(255,255,255,0.03);border:1px solid #222;border-radius:12px;padding:18px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;cursor:pointer}
         .s{border-color:var(--o);background:rgba(212,175,55,0.05)}
         .bg{width:100%;max-width:370px;background:var(--g);color:#000;border:none;padding:18px;border-radius:12px;font-weight:900;text-transform:uppercase;cursor:pointer;margin-top:10px}
-        .in{width:100%;max-width:370px;padding:15px;margin:8px 0;background:#111;border:1px solid var(--o);color:#fff;border-radius:10px;text-align:center;font-size:1rem}
-        .bar{width:0%;height:6px;background:var(--o);border-radius:3px;transition:.3s;margin:8px 0}
+        /* Bloque de Pago Fijo en Menú Principal */
+        .info-pago{width:100%;max-width:370px;background:rgba(255,255,255,0.02);border:1px solid rgba(212,175,55,0.2);border-radius:12px;padding:15px;margin:15px 0;text-align:left;font-size:0.8rem;line-height:1.5}
+        .info-pago b{color:var(--o);display:block;margin-top:5px;letter-spacing:1px}
         .m{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--n);z-index:9;flex-direction:column;justify-content:center;align-items:center}
     </style>
 </head>
@@ -33,18 +33,27 @@
 </header>
 
 <div id="u" class="p a">
-    <div id="pc">
-        <div class="box" onclick="sel(1,this)"><span>Acceso Hoy</span><b id="v1">--</b></div>
-        <div class="box" onclick="sel(5,this)"><span>7 Días Silver</span><b id="v7">--</b></div>
-        <div class="box s" onclick="sel(15,this)"><span>30 Días Gold</span><b id="v15">--</b></div>
+    <div id="pc" style="width:100%;max-width:370px">
+        <div class="box" onclick="sel(1,this)"><span>Acceso Hoy (1$)</span><b id="v1">--</b></div>
+        <div class="box" onclick="sel(5,this)"><span>7 Días Silver (5$)</span><b id="v7">--</b></div>
+        <div class="box s" onclick="sel(15,this)"><span>30 Días Gold (15$)</span><b id="v15">--</b></div>
     </div>
-    <button class="bg" onclick="prot()">ADQUIRIR ACCESO</button>
+
+    <div class="info-pago">
+        <div style="text-align:center;color:var(--o);font-weight:bold;border-bottom:1px solid #333;margin-bottom:10px;padding-bottom:5px">MÉTODOS DE PAGO ACERPTADOS</div>
+        <b>TITULAR:</b> RANDALL SÁNCHEZ C.<br>
+        <b>🇨🇷 SINPE MÓVIL:</b> 6453-5475<br>
+        <b>🏦 CUENTA IBAN:</b> CR05015114720021020615<br>
+        <b>🌐 PAYPAL / CORREO:</b> rsanchez@live.com
+    </div>
+
+    <button class="bg" onclick="prot()">ADQUIRIR Y VALIDAR</button>
 </div>
 
 <div id="l" class="p">
-    <h3 style="color:var(--o)">ACCESO MAESTRO</h3>
-    <input type="password" id="pk" class="in" placeholder="PASSKEY">
-    <button class="bg" onclick="vPk()">ENTRAR</button>
+    <h3 style="color:var(--o)">PASSKEY REQUERIDA</h3>
+    <input type="password" id="pk" style="padding:15px;background:#111;color:#fff;border:1px solid var(--o);border-radius:10px;text-align:center" placeholder="****">
+    <button class="bg" onclick="vPk()">ENTRAR AL PANEL</button>
 </div>
 
 <div id="ad" class="p">
@@ -53,14 +62,13 @@
             <input type="file" id="fi" style="display:none" onchange="document.getElementById('fn').innerText=this.files[0].name">
             <button class="bg" style="background:#222;color:var(--o);border:1px solid var(--o)" onclick="document.getElementById('fi').click()">ELEGIR LÁMINA</button>
             <p id="fn" style="font-size:.6rem;color:var(--o)"></p>
-            <div class="bar" id="br"></div>
-            <button class="bg" id="up" onclick="sub()">PUBLICAR</button>
+            <button class="bg" onclick="sub()">PUBLICAR</button>
         </div>
         <div style="background:rgba(255,255,255,0.02);padding:15px;border-radius:12px">
-            <input type="text" id="ub" class="in" placeholder="UID-CLIENTE">
-            <div style="display:flex;gap:8px"><button class="bg" style="background:red;color:#fff" onclick="bn(1)">BAN</button><button class="bg" style="background:green;color:#fff" onclick="bn(0)">ALTA</button></div>
+            <input type="text" id="ub" style="padding:12px;width:80%;border-radius:8px" placeholder="ID CLIENTE (BAN)">
+            <div style="display:flex;gap:5px"><button class="bg" style="background:red;color:#fff" onclick="bn(1)">BAN</button><button class="bg" style="background:green;color:#fff" onclick="bn(0)">ALTA</button></div>
         </div>
-        <button class="bg" style="background:none;color:#444" onclick="location.reload()">SALIR</button>
+        <button class="bg" style="background:none;color:#444" onclick="location.reload()">CERRAR SESIÓN</button>
     </div>
 </div>
 
@@ -88,25 +96,22 @@ function sel(v,e){pS=v;document.querySelectorAll('.box').forEach(x=>x.classList.
 function tAdmin(){cl++;if(cl>=5){vP('u','l');cl=0}setTimeout(()=>cl=0,3000)}
 function vP(o,n){document.getElementById(o).classList.remove('a');document.getElementById(n).classList.add('a')}
 function vPk(){if(document.getElementById('pk').value==="ADMIN123")vP('l','ad');else location.reload()}
-async function sub(){
-    const f=document.getElementById('fi').files[0],b=document.getElementById('up');if(!f)return;
-    b.disabled=true;const r=st.ref('galeria/'+Date.now()+'_'+f.name),t=r.put(f);
-    t.on('state_changed',s=>{document.getElementById('br').style.width=(s.bytesTransferred/s.totalBytes)*100+"%"},null,async()=>{
-        const u=await t.snapshot.ref.getDownloadURL();await db.collection("galeria").add({url:u,fecha:firebase.firestore.FieldValue.serverTimestamp()});
-        alert("OK");location.reload();
-    });
-}
-async function bn(s){const i=document.getElementById('ub').value;if(i){await db.collection("baneos").doc(i).set({baneado:!!s});alert("OK");}}
 function prot(){
     document.getElementById('mo').style.display='flex';let t=15;
     const i=setInterval(()=>{t--;document.getElementById('ts').innerText=t+"s";if(t<=0){clearInterval(i);wa()}},1000);
 }
 function wa(){
     const t=T[ps],m=(pS*t.f).toLocaleString(),h=new Date().getDate().toString().padStart(2,'0');
-    location.href=`https://wa.me/50664535475?text=Plan:${pS}d-Monto:${t.m}${m}-ID:93${h}`;
+    location.href=`https://wa.me/50664535475?text=Plan:${pS}d-Monto:${t.m}${m}-ID:93${h}-ComprobanteListo`;
 }
+async function sub(){
+    const f=document.getElementById('fi').files[0];if(!f)return;
+    const r=st.ref('galeria/'+Date.now()+'_'+f.name);await r.put(f);
+    const u=await r.getDownloadURL();await db.collection("galeria").add({url:u,fecha:firebase.firestore.FieldValue.serverTimestamp()});
+    alert("SUBIDO");location.reload();
+}
+async function bn(s){const i=document.getElementById('ub').value;if(i){await db.collection("baneos").doc(i).set({baneado:!!s});alert("OK");}}
 init();
 </script>
 </body>
-    </html>
-    
+</html>
