@@ -3,44 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • PLATINUM</title>
+    <title>FRAN CRUZ VIP • GESTIÓN TOTAL</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
     <style>
-        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #e74c3c; --v: #2ecc71; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
+        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #ff4444; --v: #00c851; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; }
         body { background: var(--n); color: #fff; margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         
         header { padding: 10px; text-align: center; cursor: pointer; flex-shrink: 0; }
-        .logo { color: var(--o); font-size: 1.7rem; font-weight: 900; letter-spacing: 3px; }
+        .logo { color: var(--o); font-size: 1.8rem; font-weight: 900; letter-spacing: 3px; }
         
-        .view { display: none; width: 100%; max-width: 450px; margin: auto; height: 100%; flex-direction: column; padding: 5px 15px; animation: fadeIn 0.3s; overflow-y: auto; }
+        .view { display: none; width: 100%; max-width: 450px; margin: auto; height: 100%; flex-direction: column; padding: 10px; animation: fadeIn 0.3s; overflow-y: auto; }
         .view.active { display: flex; }
 
-        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 5px 0; padding: 8px; background: #0f0f0f; border-radius: 12px; }
-        .flag { width: 100%; height: 22px; opacity: 0.3; border-radius: 3px; cursor: pointer; object-fit: cover; }
-        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 8px var(--o); }
+        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0; }
+        .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; border: 1px solid #333; }
+        .flag.active { opacity: 1; border-color: var(--o); box-shadow: 0 0 10px var(--o); }
         
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 10px; padding: 12px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
-        .card b { color: var(--o); font-size: 1.1rem; }
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.1); }
+        .card b { color: var(--o); font-size: 1.2rem; }
 
-        .acc-item { border: 1px solid #1a1a1a; border-radius: 10px; margin-bottom: 6px; overflow: hidden; }
-        .acc-head { background: #111; padding: 12px; font-size: 0.75rem; font-weight: bold; color: #888; cursor: pointer; display: flex; justify-content: space-between; }
-        .acc-body { display: none; background: #080808; padding: 10px; border-top: 1px solid #1a1a1a; }
-        .acc-body.active { display: block; }
-        .copy-box { background: #111; padding: 10px; border-radius: 8px; margin: 5px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; font-size: 0.8rem; text-align: center; }
+        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; margin: 10px 0; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
+        .btn-sec { background: #1a1a1a; color: #fff; border: 1px solid #333; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 5px; }
 
-        /* CORRECCIÓN BOTÓN CONGELADO: z-index y posición */
-        .btn-gold { position: relative; z-index: 99; width: 100%; background: var(--g); color: #000 !important; border: none; padding: 18px; border-radius: 12px; font-weight: 900; margin: 10px 0; cursor: pointer; text-transform: uppercase; display: block; }
-        .btn-access { width: 100%; background: #111; color: var(--o); border: 2px solid var(--o); padding: 16px; border-radius: 12px; font-weight: 900; margin-bottom: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; }
+        /* --- ESTILOS ADMIN MEJORADOS --- */
+        .adm-card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 15px; padding: 15px; margin-bottom: 12px; }
+        .adm-label { color: var(--o); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block; border-left: 4px solid var(--o); padding-left: 10px; }
+        .user-row { background: #000; border: 1px solid #222; padding: 12px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
+        .adm-input { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 14px; border-radius: 10px; margin-bottom: 10px; font-size: 1rem; }
+        
+        .prog-bar { width: 100%; height: 6px; background: #111; border-radius: 10px; margin: 10px 0; display: none; overflow: hidden; }
+        .prog-fill { height: 100%; background: var(--v); width: 0%; transition: 0.3s; }
+        .preview-img { width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px; margin-bottom: 10px; display: none; border: 1px solid #333; }
 
-        /* --- ESTILOS PANEL ADMIN --- */
-        .adm-card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; margin-bottom: 10px; }
-        .adm-label { color: var(--o); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: block; border-left: 3px solid var(--o); padding-left: 8px; }
-        .user-row { background: #000; border: 1px solid #222; padding: 12px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .adm-input { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 1rem; }
+        .btn-act { color: var(--v); font-weight: 800; background: none; border: none; cursor: pointer; }
+        .btn-ban { color: var(--r); font-weight: 800; background: none; border: none; cursor: pointer; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
@@ -49,7 +49,7 @@
 
 <header onclick="adminAccess()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div id="tagline" style="font-size: 0.6rem; color: #555; letter-spacing: 2px;">SALA PRIVADA • COSTA RICA</div>
+    <div id="tagline" style="font-size: 0.7rem; color: #666; letter-spacing: 2px;">SALA PRIVADA • COSTA RICA</div>
 </header>
 
 <div id="v-client" class="view active">
@@ -57,51 +57,45 @@
         <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setLoc('COSTA RICA', '₡', 540)">
         <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setLoc('NICARAGUA', 'C$', 37)">
         <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setLoc('PANAMÁ', '$', 1)">
-        <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('WORLDWIDE', '$', 1)">
+        <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('RESTO DEL MUNDO', '$', 1)">
     </div>
     
-    <div class="card" onclick="selP(this, 'HOY', 1)"><span>ACCESO HOY</span><b id="p1">₡540</b></div>
-    <div class="card" onclick="selP(this, '7 DÍAS', 5)"><span>7 DÍAS SILVER</span><b id="p2">₡2,700</b></div>
-    <div class="card sel" onclick="selP(this, '30 DÍAS', 20)"><span>30 DÍAS GOLD</span><b id="p3">₡10,800</b></div>
+    <div class="card" onclick="selP(this, 'HOY')"><span>ACCESO HOY</span><b id="p1">₡540</b></div>
+    <div class="card sel" onclick="selP(this, '30 DÍAS')"><span>30 DÍAS GOLD</span><b id="p2">₡10,800</b></div>
     
-    <div class="acc-item">
-        <div class="acc-head" onclick="toggleAcc(this)">MÉTODOS DE PAGO <span>▼</span></div>
-        <div class="acc-body active">
-            <small style="color:var(--o)">GRUPO MUTUAL (IBAN)</small>
-            <div class="copy-box" onclick="copy('CR80080315001000035641')">CR80080315001000035641</div>
-            <small style="color:var(--o)">SINPE MÓVIL</small>
-            <div class="copy-box" onclick="copy('70835833')">70835833</div>
-            <small style="color:var(--o)">PAYPAL</small>
-            <div class="copy-box" onclick="copy('Randallesc061376@gmail.com')">Randallesc061376@gmail.com</div>
-        </div>
-    </div>
-    
-    <button type="button" class="btn-gold" id="btn-submit" onclick="requestAccess()">ENVIAR COMPROBANTE</button>
-    <button type="button" class="btn-access" onclick="enterWithKey()">YA TENGO MI CLAVE</button>
+    <button type="button" class="btn-gold" style="z-index:99" onclick="requestAccess()">ENVIAR COMPROBANTE</button>
+    <button type="button" class="btn-sec" onclick="enterWithKey()">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-admin" class="view">
     <div class="adm-card">
         <span class="adm-label">Control de Usuarios</span>
-        <div id="admin-user-list"></div>
+        <input type="text" id="adm-search" class="adm-input" placeholder="Buscar por ID...">
+        <div id="admin-user-list" style="max-height: 200px; overflow-y: auto;"></div>
     </div>
+
     <div class="adm-card">
         <span class="adm-label">Publicar en Galería</span>
-        <input type="file" id="f-upload" class="adm-input" accept="image/*">
-        <button class="btn-gold" style="margin:0" onclick="uploadImg()">SUBIR AHORA</button>
+        <img id="img-prev" class="preview-img">
+        <input type="file" id="f-upload" class="adm-input" accept="image/*" onchange="preview(this)">
+        <div class="prog-bar" id="p-bar"><div class="prog-fill" id="p-fill"></div></div>
+        <button class="btn-gold" style="margin:0" id="btn-up" onclick="uploadImg()">SUBIR AHORA</button>
     </div>
+
     <div class="adm-card">
-        <span class="adm-label">Tasas de Cambio ($1 USD)</span>
-        <input type="number" id="t-cr" class="adm-input" placeholder="CRC ₡">
-        <input type="number" id="t-ni" class="adm-input" placeholder="NIO C$">
-        <button class="btn-gold" style="background:#222; color:#fff !important" onclick="saveRates()">ACTUALIZAR TASAS</button>
+        <span class="adm-label">Tasas ($1 USD)</span>
+        <div style="display:flex; gap:10px">
+            <input type="number" id="t-cr" class="adm-input" placeholder="CRC ₡">
+            <input type="number" id="t-ni" class="adm-input" placeholder="NIO C$">
+        </div>
+        <button class="btn-gold" style="background:#222; color:#fff" onclick="saveRates()">ACTUALIZAR TASAS</button>
     </div>
-    <button class="btn-gold" style="background:#111; color:#fff !important" onclick="location.reload()">CERRAR PANEL</button>
+    <button class="btn-sec" onclick="location.reload()">CERRAR PANEL</button>
 </div>
 
 <div id="v-gallery" class="view">
     <div id="vip-grid" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; padding-bottom:30px;"></div>
-    <button class="btn-gold" style="background:#111; color:#fff !important" onclick="location.reload()">SALIR</button>
+    <button class="btn-sec" onclick="location.reload()">SALIR DE SALA</button>
 </div>
 
 <script>
@@ -117,10 +111,11 @@
 
     let myID = localStorage.getItem('fc_id') || 'VIP' + Math.floor(Math.random()*9000+1000);
     localStorage.setItem('fc_id', myID);
-    let curTasa = 540, curSim = "₡", curP = "30 DÍAS", clicks = 0;
+    
     let rates = { CR: 540, NI: 37 };
+    let curSim = "₡", curTasa = 540, curP = "30 DÍAS", clicks = 0;
 
-    // Sincronizar Tasas
+    // Sincronización de Tasas en tiempo real
     db.ref('settings/rates').on('value', ss => {
         if(ss.exists()){
             rates = ss.val();
@@ -130,47 +125,109 @@
         }
     });
 
-    function saveRates(){
-        const CR = document.getElementById('t-cr').value;
-        const NI = document.getElementById('t-ni').value;
-        db.ref('settings/rates').set({ CR, NI }).then(() => alert("Tasas actualizadas"));
+    function updatePrices() {
+        document.getElementById('p1').innerText = curSim + Math.round(1 * curTasa).toLocaleString();
+        document.getElementById('p2').innerText = curSim + Math.round(20 * curTasa).toLocaleString();
     }
 
     function setLoc(n, s, t) {
-        curSim = s; curTasa = (n === 'NICARAGUA') ? rates.NI : (n === 'COSTA RICA') ? rates.CR : t;
+        curSim = s; 
+        curTasa = (n === 'NICARAGUA') ? rates.NI : (n === 'COSTA RICA') ? rates.CR : t;
         document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         event.target.classList.add('active');
         updatePrices();
     }
 
-    function updatePrices() {
-        document.getElementById('p1').innerText = curSim + Math.round(1 * curTasa).toLocaleString();
-        document.getElementById('p2').innerText = curSim + Math.round(5 * curTasa).toLocaleString();
-        document.getElementById('p3').innerText = curSim + Math.round(20 * curTasa).toLocaleString();
+    function saveRates(){
+        const CR = document.getElementById('t-cr').value;
+        const NI = document.getElementById('t-ni').value;
+        db.ref('settings/rates').set({ CR, NI }).then(() => alert("✅ Tasas actualizadas en el sistema"));
     }
 
-    function requestAccess() {
-        db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP, time: Date.now() }).then(() => {
-            window.location.href = `https://wa.me/50664535475?text=Comprobante VIP. ID: ${myID} - Plan: ${curP}`;
-        }).catch(e => alert("Error de red: " + e.message));
+    function preview(input) {
+        const file = input.files[0];
+        if(file) {
+            const reader = new FileReader();
+            reader.onload = e => { 
+                const p = document.getElementById('img-prev');
+                p.src = e.target.result; p.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
     }
 
-    function enterWithKey() {
-        const k = prompt("INGRESA TU CLAVE:");
-        if(!k) return;
-        db.ref('users/'+k).once('value', ss => {
-            if(ss.exists() && ss.val().status === 'active') { enterGallery(); }
-            else { alert("Clave inválida o acceso pendiente de activación."); }
+    function uploadImg() {
+        const file = document.getElementById('f-upload').files[0];
+        if(!file) return alert("Selecciona una imagen");
+        
+        const btn = document.getElementById('btn-up');
+        const bar = document.getElementById('p-bar');
+        const fill = document.getElementById('p-fill');
+        
+        btn.disabled = true; bar.style.display = 'block';
+        
+        const ref = st.ref('laminas/' + Date.now());
+        const task = ref.put(file);
+
+        task.on('state_changed', 
+            s => { fill.style.width = (s.bytesTransferred / s.totalBytes * 100) + '%'; },
+            e => alert(e.message),
+            () => {
+                task.snapshot.ref.getDownloadURL().then(url => {
+                    // Guardamos con timestamp invertido para que la última sea la primera
+                    db.ref('gallery').push({ url, time: -Date.now() });
+                    alert("✅ Publicado con éxito");
+                    location.reload();
+                });
+            }
+        );
+    }
+
+    function loadAdminUsers() {
+        db.ref('users').on('value', ss => {
+            const list = document.getElementById('admin-user-list'); list.innerHTML = "";
+            ss.forEach(u => {
+                const user = u.val();
+                list.innerHTML += `<div class="user-row">
+                    <span><b>${user.id}</b> <small>(${user.status})</small></span>
+                    <div>
+                        <button class="btn-act" onclick="updateUser('${user.id}', 'active')">OK</button>
+                        <button class="btn-ban" onclick="updateUser('${user.id}', 'banned')">BAN</button>
+                    </div>
+                </div>`;
+            });
         });
     }
 
-    function enterGallery() {
+    function updateUser(id, stat) { db.ref('users/'+id).update({status: stat}); }
+
+    function requestAccess() {
+        db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP, time: Date.now() }).then(() => {
+            window.location.href = `https://wa.me/50664535475?text=Pago VIP. ID: ${myID} - Plan: ${curP}`;
+        });
+    }
+
+    function enterWithKey() {
+        const k = prompt("TU ID O CLAVE:");
+        if(!k) return;
+        db.ref('users/'+k).once('value', ss => {
+            if(ss.exists() && ss.val().status === 'active') { showGallery(); }
+            else if(ss.val()?.status === 'banned') { alert("❌ Acceso denegado (Baneado)"); }
+            else { alert("Pendiente de activación o ID incorrecto."); }
+        });
+    }
+
+    function showGallery() {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById('v-gallery').classList.add('active');
-        db.ref('gallery').on('value', ss => {
+        db.ref('gallery').orderByChild('time').on('value', ss => {
             const grid = document.getElementById('vip-grid'); grid.innerHTML = "";
-            ss.forEach(img => { grid.innerHTML += `<div style="border-radius:10px; overflow:hidden; aspect-ratio:9/16"><img src="${img.val().url}" style="width:100%; height:100%; object-fit:cover"></div>`; });
+            ss.forEach(img => { 
+                grid.innerHTML += `<div style="border-radius:12px; overflow:hidden; border:1px solid #222">
+                    <img src="${img.val().url}" style="width:100%; display:block">
+                </div>`;
+            });
         });
     }
 
@@ -187,32 +244,7 @@
         setTimeout(() => clicks = 0, 2000);
     }
 
-    function loadAdminUsers() {
-        db.ref('users').on('value', ss => {
-            const list = document.getElementById('admin-user-list'); list.innerHTML = "";
-            ss.forEach(u => {
-                const user = u.val();
-                list.innerHTML += `<div class="user-row">
-                    <span><b>${user.id}</b> (${user.status})</span>
-                    <button onclick="db.ref('users/${user.id}').update({status:'active'})" style="color:var(--v); background:none; border:none; font-weight:900">ACTIVAR</button>
-                </div>`;
-            });
-        });
-    }
-
-    function uploadImg() {
-        const file = document.getElementById('f-upload').files[0];
-        if(!file) return;
-        const ref = st.ref('laminas/' + Date.now());
-        ref.put(file).then(s => s.ref.getDownloadURL().then(url => {
-            db.ref('gallery').push({url});
-            alert("Lámina publicada en la sala VIP");
-        }));
-    }
-
     function selP(el, p) { curP = p; document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); el.classList.add('sel'); }
-    function copy(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
-    function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
 </script>
 </body>
 </html>
