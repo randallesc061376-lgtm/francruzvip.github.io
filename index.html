@@ -21,14 +21,17 @@ header{padding:35px 10px;background:#111;border-bottom:1px solid #222;cursor:poi
 .area-pago{background:#0a0a0a;border-radius:25px;padding:20px;width:90%;max-width:380px;border:1px solid #222;margin-top:20px}
 .tabs-pago{display:flex;justify-content:space-around;margin-bottom:20px;color:#555;font-weight:700;font-size:.8rem}
 .tab-activa{color:var(--oro);border-bottom:2px solid var(--oro)}
-.btn-accion{background:linear-gradient(135deg,var(--oro),#f9e498);color:#000;border:none;padding:18px;border-radius:12px;width:100%;font-weight:900;margin-top:10px;text-transform:uppercase}
+.btn-accion{background:linear-gradient(135deg,var(--oro),#f9e498);color:#000;border:none;padding:18px;border-radius:12px;width:100%;font-weight:900;margin-top:10px;text-transform:uppercase;transition:0.3s}
+.btn-accion:disabled{opacity:0.5;filter:grayscale(1)}
 .btn-negro{background:transparent;color:var(--oro);border:1px solid var(--oro);margin-top:15px}
 .galeria-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;width:100%;padding:10px;box-sizing:border-box}
 .contenedor-foto{position:relative;border-radius:10px;overflow:hidden;background:#111;aspect-ratio:1/1}
 .foto-vip{width:100%;height:100%;object-fit:cover}
 .admin-input{width:100%;padding:15px;margin:10px 0;background:#1a1a1a;border:1px solid var(--oro);color:#fff;border-radius:10px;box-sizing:border-box}
 #previa-carga{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;width:100%;margin:15px 0}
-#progress-bar{width:0;height:4px;background:var(--oro);transition:.3s}
+.progreso-container{width:100%;background:#111;border-radius:10px;height:25px;margin:15px 0;overflow:hidden;display:none;position:relative;border:1px solid #333}
+#progress-bar{width:0%;height:100%;background:linear-gradient(90deg,var(--oro),#f9e498);transition:width 0.3s ease}
+#progress-text{position:absolute;width:100%;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;font-weight:900;color:#fff;text-shadow:1px 1px 2px #000}
 </style>
 </head>
 <body>
@@ -55,62 +58,121 @@ header{padding:35px 10px;background:#111;border-bottom:1px solid #222;cursor:poi
         <button class="btn-accion" onclick="sendWA()">ADQUIRIR ACCESO</button>
         <button class="btn-accion btn-negro" onclick="irAPaso('pantalla-pago')">YA TENGO CLAVE</button>
     </div>
-</div><div id="pantalla-seguridad" class="pantalla">
-    <h2 style="color:var(--oro);margin-top:20vh">VERIFICACIÓN</h2>
+</div>
+<div id="pantalla-seguridad" class="pantalla">
+    <h2 style="color:var(--oro);margin-top:20vh;letter-spacing:4px">VERIFICACIÓN SEGURA</h2>
     <div id="timer" style="font-size:5rem;color:var(--oro);font-weight:700">15</div>
-    <div id="status-ia" style="color:#666;font-size:.8rem;letter-spacing:2px">VALIDANDO...</div>
+    <div id="status-ia" style="color:#666;font-size:.8rem;letter-spacing:2px">SISTEMA ANTI-FRAUDE...</div>
 </div>
+
 <div id="pantalla-pago" class="pantalla">
-    <h3 style="margin-top:10vh">ACCESO VIP</h3>
+    <h3 style="margin-top:10vh;letter-spacing:2px">ACCESO RESTRINGIDO</h3>
     <div class="area-pago" style="border-color:var(--oro)">
-        <input type="text" id="clave-cliente" class="admin-input" style="text-align:center;font-size:1.8rem;color:var(--oro)" placeholder="0000" maxlength="4">
-        <button class="btn-accion" onclick="validarAcceso()">ENTRAR</button>
+        <input type="text" id="clave-cliente" class="admin-input" style="text-align:center;font-size:1.8rem;color:var(--oro);letter-spacing:8px" placeholder="0000" maxlength="4">
+        <button class="btn-accion" onclick="validarAcceso()">VERIFICAR CLAVE</button>
     </div>
-    <button class="btn-accion btn-negro" onclick="irAPaso('pantalla-inicio')">VOLVER</button>
+    <button class="btn-accion btn-negro" onclick="irAPaso('pantalla-inicio')">VOLVER AL INICIO</button>
 </div>
+
 <div id="pantalla-sala" class="pantalla">
-    <h2 style="color:var(--oro);margin-bottom:20px">SALA VIP</h2>
+    <h2 style="color:var(--oro);margin-bottom:20px;letter-spacing:3px">SALA VIP FRAN CRUZ</h2>
     <div id="lista-fotos" class="galeria-grid"></div>
-    <button class="btn-accion btn-negro" onclick="location.reload()" style="margin:30px 0;width:80%">SALIR</button>
+    <button class="btn-accion btn-negro" onclick="location.reload()" style="margin:30px 0;width:80%">CERRAR SESIÓN SEGURA</button>
 </div>
+
 <div id="pantalla-admin" class="pantalla">
-    <h2 style="color:var(--oro)">MASTER PANEL</h2>
-    <input type="password" id="pass-admin" class="admin-input" placeholder="PASSKEY">
-    <button class="btn-accion" onclick="loginAdmin()">ACCESO</button>
+    <h2 style="color:var(--oro)">CONTROL MAESTRO</h2>
+    <input type="password" id="pass-admin" class="admin-input" placeholder="CONTRASEÑA DE ACCESO">
+    <button class="btn-accion" onclick="loginAdmin()">ENTRAR AL PANEL</button>
+    
     <div id="controles-admin" style="display:none;width:100%">
-        <h4 style="color:var(--oro)">CARGAR EN ORDEN</h4>
-        <label style="display:block;background:#222;padding:15px;border:1px dashed var(--oro);border-radius:10px;color:var(--oro);cursor:pointer" for="foto-file">📸 TOCAR GALERÍA</label>
+        <h4 style="color:var(--oro);margin-top:25px">CARGAR NUEVAS LÁMINAS</h4>
+        <label style="display:block;background:#111;padding:20px;border:1px dashed var(--oro);border-radius:12px;color:var(--oro);cursor:pointer;font-weight:700" for="foto-file">📸 SELECCIONAR IMÁGENES</label>
         <input type="file" id="foto-file" accept="image/*" multiple style="display:none" onchange="previsualizarFotos()">
+        
         <div id="previa-carga"></div>
-        <div style="width:100%;background:#111;margin-bottom:10px"><div id="progress-bar"></div></div>
-        <button class="btn-accion" id="btn-subir" onclick="subirLoteFotos()">PUBLICAR TODO</button>
-        <hr style="border:0.5px solid #333;margin:25px 0">
-        <div id="lista-admin" class="galeria-grid"></div>
+        
+        <div class="progreso-container" id="contenedor-barra">
+            <div id="progress-bar"></div>
+            <div id="progress-text">ESPERANDO...</div>
+        </div>
+
+        <button class="btn-accion" id="btn-subir" onclick="subirLoteFotos()">PUBLICAR EN SALA VIP</button>
+        
+        <hr style="border:0.5px solid #222;margin:30px 0">
+        <input type="text" id="user-uid" class="admin-input" placeholder="ID DEL CLIENTE A BANEAR">
+        <div style="display:flex;gap:10px">
+            <button class="btn-accion" style="background:var(--rojo);color:#fff" onclick="setBan(true)">BANEAR</button>
+            <button class="btn-accion" style="background:green;color:#fff" onclick="setBan(false)">DESBANEAR</button>
+        </div>
+        <div id="lista-admin" class="galeria-grid" style="margin-top:30px"></div>
     </div>
-    <button class="btn-accion btn-negro" onclick="irAPaso('pantalla-inicio')">CERRAR</button>
+    <button class="btn-accion btn-negro" onclick="irAPaso('pantalla-inicio')">SALIR DEL PANEL</button>
 </div>
+
 <script>
 const firebaseConfig={apiKey:"AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",authDomain:"fran-cruz-sala-vip.firebaseapp.com",projectId:"fran-cruz-sala-vip",storageBucket:"fran-cruz-sala-vip.appspot.com",messagingSenderId:"1022733043010",appId:"1:1022733043010:web:379db18e37bbfde2cf34db"};
 firebase.initializeApp(firebaseConfig);const db=firebase.firestore(),storage=firebase.storage();
 let planActivo="HOY",uidCliente="UID-"+Math.random().toString(36).substr(2,6).toUpperCase(),archivosSeleccionados=[];
+
 const rates={'CR':{n:'₡',v:525},'PA':{n:'$',v:1},'GT':{n:'Q',v:7.62},'HN':{n:'L',v:26.5},'NI':{n:'C$',v:36.7},'SV':{n:'$',v:1}};
-function cambiarDivisa(c){const r=rates[c];if(r){document.getElementById('txt-p1').innerText=`$1.00 (${r.n}${(1*r.v).toFixed(0)})`;document.getElementById('txt-p7').innerText=`$5.00 (${r.n}${(5*r.v).toFixed(0)})`;document.getElementById('txt-p30').innerText=`$15.00 (${r.n}${(15*r.v).toFixed(0)})`}}
+function cambiarDivisa(c){const r=rates[c]||rates['CR'];document.getElementById('txt-p1').innerText=`$1.00 (${r.n}${(1*r.v).toFixed(0)})`;document.getElementById('txt-p7').innerText=`$5.00 (${r.n}${(5*r.v).toFixed(0)})`;document.getElementById('txt-p30').innerText=`$15.00 (${r.n}${(15*r.v).toFixed(0)})`}
 async function geolocalizar(){try{const res=await fetch('https://ipapi.co/json/'),data=await res.json();cambiarDivisa(data.country_code)}catch(e){cambiarDivisa('CR')}}geolocalizar();
+
 function irAPaso(p){document.querySelectorAll('.pantalla').forEach(d=>d.style.display='none');document.getElementById(p).style.display='flex'}
-function selectPlan(n){planActivo=n;document.querySelectorAll('.card-precio').forEach(c=>c.classList.remove('card-oro'));event.currentTarget.classList.add('card-oro')}
-function setTab(t){const d=document.getElementById('detalle-pago');document.querySelectorAll('.tabs-pago span').forEach(s=>s.classList.remove('tab-activa'));event.target.classList.add('tab-activa');if(t==='SINPE')d.innerText="70835833";else if(t==='IBAN')d.innerText="CR80080315001000035641";else d.innerText="randallesc061376@gmail.com"}
-function sendWA(){const h=new Date().getDate().toString().padStart(2,'0'),a=Math.floor(10+Math.random()*89),c=a+h,t=`*ACCESO VIP*\nID: ${uidCliente}\nClave: ${c}`;window.open(`https://wa.me/50664535475?text=${encodeURIComponent(t)}`)}
-async function validarAcceso(){const v=document.getElementById('clave-cliente').value,d=new Date().getDate().toString().padStart(2,'0');if(v.endsWith(d)&&v.length===4)iniciarSeguridad();else alert("ERROR")}
+function setTab(t){const d=document.getElementById('detalle-pago');document.querySelectorAll('.tabs-pago span').forEach(s=>s.classList.remove('tab-activa'));event.target.classList.add('tab-activa');
+if(t==='SINPE')d.innerText="70835833";else if(t==='IBAN')d.innerText="CR80080315001000035641";else d.innerText="randallesc061376@gmail.com"}
+
+function sendWA(){const h=new Date().getDate().toString().padStart(2,'0'),a=Math.floor(10+Math.random()*89),c=a+h;
+window.open(`https://wa.me/50664535475?text=${encodeURIComponent('*VIP FRAN CRUZ*\nID: '+uidCliente+'\nClave: '+c+'\nAdjunte comprobante.')}`)}
+
+async function validarAcceso(){const v=document.getElementById('clave-cliente').value,d=new Date().getDate().toString().padStart(2,'0');if(v.endsWith(d)&&v.length===4)iniciarSeguridad();else alert("CLAVE INCORRECTA")}
 function iniciarSeguridad(){irAPaso('pantalla-seguridad');let s=15;const t=document.getElementById('timer'),i=setInterval(()=>{s--;t.innerText=s;if(s<=0){clearInterval(i);irAPaso('pantalla-sala');cargarFotos(false)}},1000)}
+
 function previsualizarFotos(){const i=document.getElementById('foto-file');archivosSeleccionados=[...archivosSeleccionados,...Array.from(i.files)].slice(0,15);renderPrevia()}
-function renderPrevia(){const c=document.getElementById('previa-carga');c.innerHTML='';archivosSeleccionados.forEach((f,i)=>{const r=new FileReader();r.onload=(e)=>{const d=document.createElement('div');d.style="position:relative;aspect-ratio:1/1;border:1px solid var(--oro);border-radius:5px;overflow:hidden";d.innerHTML=`<div style="position:absolute;top:2px;left:2px;background:var(--oro);color:#000;font-size:10px;padding:2px 4px">${i+1}</div><img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover"><button onclick="quitarFoto(${i})" style="position:absolute;top:2px;right:2px;background:red;border:none;color:#fff;width:18px;height:18px">X</button>`;c.appendChild(d)};r.readAsDataURL(f)})}
+function renderPrevia(){const c=document.getElementById('previa-carga');c.innerHTML='';archivosSeleccionados.forEach((f,i)=>{const r=new FileReader();r.onload=(e)=>{const d=document.createElement('div');d.style="position:relative;aspect-ratio:1/1;border:1px solid var(--oro);border-radius:8px;overflow:hidden";
+d.innerHTML=`<div style="position:absolute;top:2px;left:2px;background:var(--oro);color:#000;font-size:10px;padding:2px 5px;font-weight:800">${i+1}</div><img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover"><button onclick="quitarFoto(${i})" style="position:absolute;top:2px;right:2px;background:red;border:none;color:#fff;border-radius:50%;width:20px;height:20px">X</button>`;c.appendChild(d)};r.readAsDataURL(f)})}
 function quitarFoto(i){archivosSeleccionados.splice(i,1);renderPrevia()}
-async function subirLoteFotos(){if(!archivosSeleccionados.length)return;const btn=document.getElementById('btn-subir'),bar=document.getElementById('progress-bar'),base=Date.now();btn.disabled=true;for(let i=0;i<archivosSeleccionados.length;i++){const f=archivosSeleccionados[i],ref=storage.ref('galeria/'+base+'_'+i),task=ref.put(f);await new Promise((res)=>{task.on('state_changed',s=>{bar.style.width=(s.bytesTransferred/s.totalBytes)*100+"%"},null,async()=>{const u=await task.snapshot.ref.getDownloadURL();await db.collection("galeria").add({url:u,orden:base-i,fecha:firebase.firestore.FieldValue.serverTimestamp()});res()})})}location.reload()}
-function cargarFotos(a){const c=a?document.getElementById('lista-admin'):document.getElementById('lista-fotos');db.collection("galeria").orderBy("orden","desc").onSnapshot(s=>{c.innerHTML='';s.forEach(doc=>{const x=doc.data(),v=document.createElement('div');v.className='contenedor-foto';v.innerHTML=`<img src="${x.url}" class="foto-vip">${a?`<button style="position:absolute;top:5px;right:5px;background:red;border:none;color:#fff;padding:5px" onclick="borrarFoto('${doc.id}')">X</button>`:''}`;c.appendChild(v)})})}
-let cl=0;function trucoAdmin(){cl++;if(cl>=5){irAPaso('pantalla-admin');cl=0}setTimeout(()=>cl=0,3000)}
-function loginAdmin(){if(document.getElementById('pass-admin').value==="ADMIN123"){document.getElementById('controles-admin').style.display='block';cargarFotos(true)}else alert("ERROR")}
-async function borrarFoto(id){if(confirm("¿Eliminar?"))await db.collection("galeria").doc(id).delete()}
+
+async function subirLoteFotos(){
+    if(!archivosSeleccionados.length) return;
+    const btn=document.getElementById('btn-subir'),bar=document.getElementById('progress-bar'),txt=document.getElementById('progress-text'),cont=document.getElementById('contenedor-barra');
+    btn.disabled=true; cont.style.display='block';
+    const base=Date.now();
+
+    for(let i=0; i<archivosSeleccionados.length; i++){
+        const f=archivosSeleccionados[i];
+        const ref=storage.ref('galeria/'+base+'_'+i);
+        const task=ref.put(f);
+
+        await new Promise((resolve)=>{
+            task.on('state_changed', 
+                (snap)=>{
+                    let p=Math.round((snap.bytesTransferred/snap.totalBytes)*100);
+                    bar.style.width=p+'%';
+                    txt.innerText=`SUBIENDO ${i+1} DE ${archivosSeleccionados.length} (${p}%)`;
+                },
+                null,
+                async()=>{
+                    const u=await task.snapshot.ref.getDownloadURL();
+                    await db.collection("galeria").add({url:u,orden:base-i,fecha:firebase.firestore.FieldValue.serverTimestamp()});
+                    resolve();
+                }
+            );
+        });
+    }
+    alert("¡Lote publicado con éxito!");
+    location.reload();
+}
+
+function cargarFotos(a){const c=a?document.getElementById('lista-admin'):document.getElementById('lista-fotos');db.collection("galeria").orderBy("orden","desc").onSnapshot(s=>{c.innerHTML='';s.forEach(doc=>{const x=doc.data(),v=document.createElement('div');v.className='contenedor-foto';
+v.innerHTML=`<img src="${x.url}" class="foto-vip">${a?`<button style="position:absolute;top:5px;right:5px;background:red;border:none;color:#fff;padding:5px;z-index:20" onclick="borrarFoto('${doc.id}')">BORRAR</button>`:''}`;c.appendChild(v)})})}
+
+let cl=0; function trucoAdmin(){cl++; if(cl>=5){irAPaso('pantalla-admin'); cl=0} setTimeout(()=>cl=0,3000)}
+function loginAdmin(){if(document.getElementById('pass-admin').value==="ADMIN123"){document.getElementById('controles-admin').style.display='block';cargarFotos(true)}else alert("DENEGADO")}
+async function borrarFoto(id){if(confirm("¿Eliminar lámina?"))await db.collection("galeria").doc(id).delete()}
+async function setBan(s){const u=document.getElementById('user-uid').value; if(u){await db.collection("baneos").doc(u).set({baneado:s}); alert("ESTADO ACTUALIZADO")}}
 </script>
 </body>
-</html>
-
+            </html>
+            
