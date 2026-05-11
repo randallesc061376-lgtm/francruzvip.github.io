@@ -5,106 +5,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FRAN CRUZ VIP</title>
     <style>
-        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #c0392b; }
+        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #8b0000; }
         body { background: var(--n); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; user-select: none; }
         
+        /* HEADER ESTILO CAPTURA */
         header { padding: 45px 20px 10px; text-align: center; width: 100%; cursor: pointer; }
-        .logo { color: var(--o); font-size: 2rem; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; }
-        .sub { color: #555; font-size: .65rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; }
+        .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 15px; }
+        .flags { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
+        .flags img { width: 25px; border-radius: 2px; opacity: 0.8; }
+        .tagline { color: #444; font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; font-weight: bold; }
 
         /* VISTAS */
         .v { display: none; width: 100%; max-width: 400px; flex-direction: column; padding: 0 25px 40px; box-sizing: border-box; }
         .active { display: flex; }
 
-        /* ESTILOS DE BOTONES Y CAJAS */
-        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 15px; }
-        .box { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .box b { color: var(--o); font-size: 1.15rem; }
+        /* BOTONES DORADOS ELEGANTES */
+        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 22px; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 15px; font-size: 0.9rem; letter-spacing: 1px; }
+        
+        /* CAJAS DE PLANES */
+        .plan-box { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; box-sizing: border-box; transition: 0.3s; }
+        .plan-box.sel { border-color: var(--o); background: rgba(212,175,55,0.03); }
+        .plan-box span { font-size: 1rem; color: #eee; }
+        .plan-box b { color: #fff; font-size: 1.1rem; }
 
+        /* MÉTODOS DE PAGO */
+        .pay-label { color: var(--o); font-size: 0.75rem; font-weight: 900; letter-spacing: 2px; margin: 35px 0 15px; text-align: center; text-transform: uppercase; }
+        .method-btn { width: 100%; background: #080808; border: 1px solid #151515; border-radius: 10px; padding: 18px; margin-bottom: 10px; text-align: center; font-size: 0.85rem; font-weight: 900; color: var(--o); text-transform: uppercase; cursor: pointer; }
+        
         /* PANEL ADMIN */
-        .admin-sec { background: #0a0a0a; border: 1px solid #151515; border-radius: 15px; padding: 20px; margin-top: 20px; width: 100%; }
-        .admin-label { color: var(--o); font-size: 0.7rem; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; display: block; letter-spacing: 2px; }
-        .inp { width: 100%; background: #000; border: 1px solid #222; padding: 15px; color: #fff; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
+        .admin-sec { background: #0a0a0a; border: 1px solid #151515; border-radius: 15px; padding: 20px; margin-top: 20px; }
+        .inp { width: 100%; background: #000; border: 1px solid #222; padding: 15px; color: #fff; border-radius: 8px; margin-bottom: 10px; text-align: center; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-<header onclick="hdlTaps()">
+<header onclick="checkAdminTaps()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div id="reg-tag" class="sub">SALA PRIVADA • COSTA RICA</div>
+    <div class="flags">
+        <img src="https://flagcdn.com/cr.svg"> <img src="https://flagcdn.com/ni.svg">
+        <img src="https://flagcdn.com/pa.svg"> <img src="https://flagcdn.com/hn.svg">
+        <img src="https://flagcdn.com/sv.svg"> <img src="https://flagcdn.com/gt.svg">
+        <img src="https://flagcdn.com/bz.svg">
+    </div>
+    <div class="tagline">SISTEMA REGIONAL PROTEGIDO</div>
 </header>
 
-<div id="view-main" class="v active">
-    <div class="box"><span>Acceso Hoy</span><b>₡550</b></div>
-    <div class="box"><span>7 Días Silver</span><b>₡3,850</b></div>
-    <div class="box" style="border-color:var(--o)"><span>30 Días Gold</span><b>₡8,250</b></div>
+<div id="view-client" class="v active">
+    <div class="plan-box"><span>Acceso Hoy</span><b>₡550</b></div>
+    <div class="plan-box"><span>7 Días Silver</span><b>₡3,850</b></div>
+    <div class="plan-box sel"><span>30 Días Gold</span><b>₡8,250</b></div>
+
+    <div class="pay-label">MÉTODOS DE PAGO (TOCA PARA VER)</div>
     
-    <div style="text-align:center; margin:30px 0 10px; color:var(--o); font-size:0.8rem; font-weight:900;">SINPE MÓVIL</div>
-    <div style="background:#0c0c0c; padding:20px; border-radius:12px; text-align:center; font-size:1.5rem; font-weight:900;">50664535475</div>
-    
-    <button class="btn-gold" onclick="sendWA()">ENVIAR COMPROBANTE DE PAGO</button>
+    <div class="method-btn">1. SINPE MÓVIL</div>
+    <div style="background:#0c0c0c; border:1px solid var(--o); border-radius:12px; padding:20px; text-align:center; margin-bottom:15px;">
+        <small style="color:var(--o); font-weight:bold; letter-spacing:1px;">TOCA PARA COPIAR</small>
+        <div style="font-size:1.6rem; font-weight:900; margin:5px 0;">50664535475</div>
+        <small style="color:#555">A nombre de Randall Sánchez C.</small>
+    </div>
+
+    <div class="method-btn" style="color:#444">2. TRANSFERENCIA IBAN</div>
+    <div class="method-btn" style="color:#444">3. PAYPAL / CORREO</div>
+
+    <button class="btn-gold" onclick="enviarComprobante()">ENVIAR COMPROBANTE DE PAGO</button>
+    <button style="background:none; border:1px solid #222; color:#555; width:100%; padding:15px; border-radius:12px; margin-top:10px; font-weight:900; cursor:pointer; font-size:0.75rem;">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="view-admin" class="v">
-    <div style="text-align:center; color:var(--o); font-weight:900; letter-spacing:3px; margin:20px 0;">SISTEMA DE CONTROL</div>
+    <div style="text-align:center; color:var(--o); font-weight:900; letter-spacing:3px; margin:20px 0; font-size:0.8rem;">SISTEMA DE GESTIÓN</div>
+    
+    <button class="btn-gold" style="margin-top:0;">ELEGIR LÁMINA</button>
+    <button class="btn-gold" style="background:#000; color:var(--o); border:1px solid var(--o);">PUBLICAR LÁMINA</button>
 
     <div class="admin-sec">
-        <span class="admin-label">Cambio de Divisa</span>
-        <select class="inp" id="pais-sel">
-            <option value="CR">Costa Rica (₡)</option>
-            <option value="NI">Nicaragua (C$)</option>
-            <option value="PA">Panamá ($)</option>
-        </select>
-        <input type="number" class="inp" id="new-rate" placeholder="Nuevo valor">
-        <button class="btn-gold" style="padding:12px;" onclick="alert('Cambio actualizado')">APLICAR CAMBIO</button>
+        <small style="color:var(--o); font-weight:900; display:block; margin-bottom:10px;">CAMBIO DE DIVISA</small>
+        <input type="number" class="inp" placeholder="Nuevo valor ₡">
+        <button class="btn-gold" style="padding:12px; font-size:0.7rem;">APLICAR CAMBIO</button>
     </div>
 
     <div class="admin-sec">
-        <span class="admin-label">Contenido VIP</span>
-        <button class="btn-gold" onclick="alert('Abriendo galería...')">ELEGIR LÁMINA</button>
-        <button class="btn-gold" style="background:none; border:1px solid var(--o); color:var(--o);" onclick="alert('Lámina publicada')">PUBLICAR LÁMINA</button>
+        <small style="color:var(--o); font-weight:900; display:block; margin-bottom:10px;">CONTROL DE ACCESO (BANEO)</small>
+        <input type="text" class="inp" placeholder="ID Usuario">
+        <button class="btn-gold" style="background:var(--r); color:#fff; padding:12px; font-size:0.7rem;">BANEAR USUARIO</button>
     </div>
 
-    <div class="admin-sec">
-        <span class="admin-label">Seguridad de Usuarios</span>
-        <input type="text" class="inp" id="user-id" placeholder="ID del Usuario">
-        <div style="display:flex; gap:10px;">
-            <button class="btn-gold" style="background:var(--r); color:#fff;" onclick="alert('Usuario Baneado')">BANEAR</button>
-            <button class="btn-gold" style="background:#27ae60; color:#fff;" onclick="alert('Alta concedida')">DAR ALTA</button>
-        </div>
-    </div>
-
-    <button class="btn-gold" style="background:none; color:#444;" onclick="location.reload()">CERRAR SESIÓN</button>
+    <button class="btn-gold" style="background:none; color:#444; border:none;" onclick="location.reload()">CERRAR SESIÓN</button>
 </div>
 
-<div id="modal-pass" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:100;">
-    <span class="admin-label">ADMIN PASSKEY</span>
-    <input type="password" id="psk" class="inp" style="width:200px; text-align:center; font-size:1.5rem; letter-spacing:8px;">
-    <button class="btn-gold" style="width:200px" onclick="validar()">ENTRAR AL PANEL</button>
+<div id="modal-pass" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:100;">
+    <div style="color:var(--o); font-weight:900; letter-spacing:3px; margin-bottom:20px;">PASSKEY</div>
+    <input type="password" id="psk" class="inp" style="width:200px; font-size:2rem; letter-spacing:10px;">
+    <button class="btn-gold" style="width:200px" onclick="validarAcceso()">ENTRAR</button>
+    <button style="background:none; border:none; color:#333; margin-top:20px;" onclick="document.getElementById('modal-pass').style.display='none'">CANCELAR</button>
 </div>
 
 <script>
     let taps = 0;
-    function hdlTaps() {
+    function checkAdminTaps() {
         taps++;
-        if(taps >= 5) { document.getElementById('modal-pass').style.display = 'flex'; taps = 0; }
+        if(taps >= 5) {
+            document.getElementById('modal-pass').style.display = 'flex';
+            taps = 0;
+        }
         setTimeout(() => taps = 0, 3000);
     }
 
-    function validar() {
+    function validarAcceso() {
         if(document.getElementById('psk').value === "2026") {
             alert("ADMINISTRADOR IDENTIFICADO");
             document.getElementById('modal-pass').style.display = 'none';
-            document.getElementById('view-main').classList.remove('active');
+            document.getElementById('view-client').classList.remove('active');
             document.getElementById('view-admin').classList.add('active');
         } else {
-            alert("ERROR");
-            document.getElementById('modal-pass').style.display = 'none';
+            alert("ACCESO DENEGADO");
         }
     }
 
-    function sendWA() {
-        const msg = encodeURIComponent("Buen día. Envío mi comprobante para la activación de mi acceso.");
+    function enviarComprobante() {
+        const msg = encodeURIComponent("Buen día. He seleccionado el Plan Gold (₡8,250). Adjunto mi comprobante para la activación de mi acceso.");
         window.location.href = `https://wa.me/50664535475?text=${msg}`;
     }
 </script>
