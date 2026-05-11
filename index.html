@@ -18,27 +18,29 @@
         .view { display: none; width: 100%; max-width: 450px; margin: auto; height: 100%; flex-direction: column; padding: 10px 20px; animation: fadeIn 0.3s; overflow-y: auto; }
         .view.active { display: flex; }
 
-        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; padding: 10px; background: #0f0f0f; border-radius: 12px; }
-        .flag { width: 100%; height: 30px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; border: 1px solid #333; }
+        /* MENÚ DE 8 BANDERAS APROBADO */
+        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 15px 0; padding: 10px; background: #0f0f0f; border-radius: 12px; }
+        .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 3px; cursor: pointer; object-fit: cover; border: 1px solid #333; }
         .flag.active { opacity: 1; border-color: var(--o); box-shadow: 0 0 10px var(--o); }
         
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.1); }
         .card b { color: var(--o); font-size: 1.2rem; }
 
-        .btn-gold { position: relative; z-index: 99; width: 100%; background: var(--g); color: #000 !important; border: none; padding: 20px; border-radius: 15px; font-weight: 900; margin: 15px 0; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
+        .btn-gold { width: 100%; background: var(--g); color: #000 !important; border: none; padding: 20px; border-radius: 15px; font-weight: 900; margin: 15px 0; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
         .btn-sec { width: 100%; background: #111; color: #555; border: 1px solid #222; padding: 15px; border-radius: 12px; font-weight: 800; margin-bottom: 15px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
 
-        /* ADMIN STYLES */
-        .adm-card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 15px; padding: 15px; margin-bottom: 12px; }
+        /* PANEL ADMIN MEJORADO */
+        .adm-card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 15px; padding: 15px; margin-bottom: 12px; position: relative; }
         .adm-label { color: var(--o); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block; border-left: 4px solid var(--o); padding-left: 10px; }
-        .user-row { background: #000; border: 1px solid #222; padding: 12px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .adm-input { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 14px; border-radius: 10px; margin-bottom: 10px; font-size: 1rem; }
         
+        .prev-cont { position: relative; display: none; margin-bottom: 10px; }
+        .preview-img { width: 100%; max-height: 250px; object-fit: contain; border-radius: 10px; border: 1px solid #333; }
+        .btn-cancel { position: absolute; top: 10px; right: 10px; background: var(--r); color: #fff; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: 900; cursor: pointer; z-index: 10; }
+
         .prog-bar { width: 100%; height: 6px; background: #111; border-radius: 10px; margin: 10px 0; display: none; overflow: hidden; }
         .prog-fill { height: 100%; background: var(--v); width: 0%; transition: 0.3s; }
-        .preview-img { width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px; margin-bottom: 10px; display: none; border: 1px solid #333; }
-
+        
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
@@ -54,6 +56,10 @@
         <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setLoc('COSTA RICA', '₡', 540)">
         <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setLoc('NICARAGUA', 'C$', 37)">
         <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setLoc('PANAMÁ', '$', 1)">
+        <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setLoc('HONDURAS', 'L', 24)">
+        <img src="https://flagcdn.com/sv.svg" class="flag" onclick="setLoc('EL SALVADOR', '$', 1)">
+        <img src="https://flagcdn.com/gt.svg" class="flag" onclick="setLoc('GUATEMALA', 'Q', 7.7)">
+        <img src="https://flagcdn.com/bz.svg" class="flag" onclick="setLoc('BELICE', 'BZ$', 2)">
         <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('MUNDO', '$', 1)">
     </div>
     <div class="card" onclick="selP(this, 'HOY')"><span>ACCESO HOY</span><b id="p1">₡540</b></div>
@@ -64,30 +70,25 @@
 
 <div id="v-admin" class="view">
     <div class="adm-card">
-        <span class="adm-label">Control de Usuarios</span>
-        <div id="admin-user-list" style="max-height: 200px; overflow-y: auto;"></div>
-    </div>
-    <div class="adm-card">
         <span class="adm-label">Publicar Lámina</span>
-        <img id="img-prev" class="preview-img">
-        <input type="file" id="f-upload" class="adm-input" accept="image/*" onchange="preview(this)">
+        <div id="p-cont" class="prev-cont">
+            <button class="btn-cancel" onclick="cancelUpload()">X</button>
+            <img id="img-prev" class="preview-img">
+        </div>
+        <input type="file" id="f-upload" class="adm-input" style="width:100%; background:#111; color:#fff; padding:10px; border-radius:10px; border:1px solid #333;" accept="image/*" onchange="preview(this)">
         <div class="prog-bar" id="p-bar"><div class="prog-fill" id="p-fill"></div></div>
-        <button class="btn-gold" style="margin:0" id="btn-up" onclick="uploadImg()">SUBIR AHORA</button>
+        <button class="btn-gold" id="btn-up" onclick="uploadImg()" style="margin-top:10px">SUBIR AHORA</button>
     </div>
     <div class="adm-card">
-        <span class="adm-label">Tasas ($1 USD)</span>
-        <div style="display:flex; gap:10px">
-            <input type="number" id="t-cr" class="adm-input" placeholder="₡ CR">
-            <input type="number" id="t-ni" class="adm-input" placeholder="C$ NI">
-        </div>
-        <button class="btn-gold" style="background:#222; color:#fff" onclick="saveRates()">GUARDAR TASAS</button>
+        <span class="adm-label">Control de Usuarios</span>
+        <div id="admin-user-list" style="max-height: 150px; overflow-y: auto;"></div>
     </div>
     <button class="btn-sec" onclick="location.reload()">CERRAR PANEL</button>
 </div>
 
 <div id="v-gallery" class="view">
-    <div id="vip-grid" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; padding-bottom:30px;"></div>
-    <button class="btn-sec" onclick="location.reload()">SALIR</button>
+    <div id="vip-grid" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;"></div>
+    <button class="btn-sec" onclick="location.reload()" style="margin-top:20px">SALIR</button>
 </div>
 
 <script>
@@ -106,45 +107,33 @@
     let rates = { CR: 540, NI: 37 };
     let curSim = "₡", curTasa = 540, curP = "30 DÍAS", clicks = 0;
 
-    db.ref('settings/rates').on('value', ss => {
-        if(ss.exists()){ rates = ss.val(); updatePrices(); }
-    });
-
-    function updatePrices() {
-        document.getElementById('p1').innerText = curSim + Math.round(1 * curTasa).toLocaleString();
-        document.getElementById('p2').innerText = curSim + Math.round(20 * curTasa).toLocaleString();
-    }
-
-    function setLoc(n, s, t) {
-        curSim = s; curTasa = (n==='NICARAGUA')?rates.NI:(n==='COSTA RICA')?rates.CR:t;
-        document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`;
-        document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
-        event.target.classList.add('active');
-        updatePrices();
-    }
-
     function preview(input) {
-        const file = input.files[0];
-        if(file) {
+        if(input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = e => { const p = document.getElementById('img-prev'); p.src = e.target.result; p.style.display = 'block'; };
-            reader.readAsDataURL(file);
+            reader.onload = e => { 
+                document.getElementById('img-prev').src = e.target.result;
+                document.getElementById('p-cont').style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
         }
+    }
+
+    function cancelUpload() {
+        document.getElementById('f-upload').value = "";
+        document.getElementById('p-cont').style.display = 'none';
     }
 
     function uploadImg() {
         const file = document.getElementById('f-upload').files[0];
         if(!file) return;
-        const btn = document.getElementById('btn-up');
         const bar = document.getElementById('p-bar');
         const fill = document.getElementById('p-fill');
-        btn.disabled = true; bar.style.display = 'block';
-        const ref = st.ref('laminas/' + Date.now());
-        const task = ref.put(file);
-        task.on('state_changed', s => { fill.style.width = (s.bytesTransferred / s.totalBytes * 100) + '%'; }, null, () => {
+        bar.style.display = 'block';
+        const task = st.ref('laminas/' + Date.now()).put(file);
+        task.on('state_changed', s => { fill.style.width = (s.bytesTransferred/s.totalBytes*100)+'%'; }, null, () => {
             task.snapshot.ref.getDownloadURL().then(url => {
                 db.ref('gallery').push({ url, time: -Date.now() });
-                alert("Lámina publicada"); location.reload();
+                alert("Publicado con éxito"); location.reload();
             });
         });
     }
@@ -152,31 +141,46 @@
     function adminAccess() {
         clicks++;
         if(clicks >= 5) {
-            if(prompt("PASS:") === "1376") {
-                switchView('v-admin');
-                loadAdminUsers();
-            }
+            if(prompt("PASS:") === "1376") { switchView('v-admin'); loadAdminUsers(); }
             clicks = 0;
         }
         setTimeout(() => clicks = 0, 2000);
+    }
+
+    function switchView(id) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
     }
 
     function loadAdminUsers() {
         db.ref('users').on('value', ss => {
             const list = document.getElementById('admin-user-list'); list.innerHTML = "";
             ss.forEach(u => {
-                const user = u.val();
-                list.innerHTML += `<div class="user-row">
-                    <span><b>${user.id}</b></span>
-                    <button onclick="db.ref('users/${user.id}').update({status:'active'})" style="color:var(--v); background:none; border:none; font-weight:800">ACTIVAR</button>
+                list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; background:#000; margin-bottom:5px; border-radius:8px; border:1px solid #222;">
+                    <span>${u.val().id}</span>
+                    <button onclick="db.ref('users/${u.val().id}').update({status:'active'})" style="color:var(--v); background:none; border:none; font-weight:800">ACTIVAR</button>
                 </div>`;
             });
         });
     }
 
-    function switchView(id) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
+    function setLoc(n, s, t) {
+        curSim = s; curTasa = t;
+        document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`;
+        document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
+        event.target.classList.add('active');
+        updatePrices();
+    }
+
+    function updatePrices() {
+        document.getElementById('p1').innerText = curSim + Math.round(1 * curTasa).toLocaleString();
+        document.getElementById('p2').innerText = curSim + Math.round(20 * curTasa).toLocaleString();
+    }
+
+    function requestAccess() {
+        db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP, time: Date.now() }).then(() => {
+            window.location.href = `https://wa.me/50664535475?text=Pago VIP. ID: ${myID}`;
+        });
     }
 
     function enterWithKey() {
@@ -188,20 +192,8 @@
                     const grid = document.getElementById('vip-grid'); grid.innerHTML = "";
                     gs.forEach(img => { grid.innerHTML += `<img src="${img.val().url}" style="width:100%; border-radius:10px; border:1px solid #222">`; });
                 });
-            } else { alert("No activo"); }
+            } else { alert("ID Inválido o Pendiente"); }
         });
-    }
-
-    function requestAccess() {
-        db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP, time: Date.now() }).then(() => {
-            window.location.href = `https://wa.me/50664535475?text=Pago VIP. ID: ${myID}`;
-        });
-    }
-
-    function saveRates() {
-        const CR = document.getElementById('t-cr').value;
-        const NI = document.getElementById('t-ni').value;
-        db.ref('settings/rates').set({ CR, NI }).then(() => alert("Tasas guardadas"));
     }
 
     function selP(el, p) { curP = p; document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); el.classList.add('sel'); }
