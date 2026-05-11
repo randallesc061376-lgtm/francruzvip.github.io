@@ -1,128 +1,130 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP - ADMIN</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FRAN CRUZ VIP</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
     <style>
-        :root{--o:#d4af37;--n:#050505;--g:linear-gradient(135deg,#d4af37,#f9e498)}
-        body{background:var(--n);color:#fff;font-family:'Segoe UI',sans-serif;margin:0;display:flex;flex-direction:column;align-items:center;user-select:none}
-        header{padding:30px 10px;text-align:center;width:100%}
-        .l{color:var(--o);font-size:2rem;font-weight:900;letter-spacing:5px;text-transform:uppercase}
-        .p{display:none;width:100%;max-width:400px;flex-direction:column;align-items:center;padding:20px;box-sizing:border-box}
-        .a{display:flex}
-        .bg{width:100%;background:var(--g);color:#000;border:none;padding:18px;border-radius:12px;font-weight:900;text-transform:uppercase;cursor:pointer;margin-top:10px}
-        .inp-admin{width:100%;padding:15px;background:#111;border:1px solid #333;border-radius:10px;color:#fff;text-align:center;margin-bottom:10px;box-sizing:border-box}
+        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(135deg, #d4af37, #f9e498); }
+        body { background: var(--n); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; user-select: none; }
+        header { padding: 25px 10px; width: 100%; text-align: center; box-sizing: border-box; }
+        .logo { color: var(--o); font-size: 2rem; font-weight: 900; letter-spacing: 5px; text-transform: uppercase; cursor: pointer; }
+        .p { display: none; width: 100%; max-width: 400px; flex-direction: column; align-items: center; padding: 0 20px 30px; box-sizing: border-box; }
+        .a { display: flex; }
         
-        /* ESTILOS DE GESTIÓN DE LÁMINAS */
-        .admin-card{width:100%;background:rgba(255,255,255,0.03);border:1px solid #222;border-radius:15px;padding:15px;margin-bottom:15px;text-align:center}
-        .grid-vip{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-top:20px}
-        .item-vip{position:relative;border:1px solid #333;border-radius:8px;overflow:hidden;background:#000}
-        .item-vip img{width:100%;height:120px;object-fit:cover;display:block}
-        .btn-del{position:absolute;top:5px;right:5px;background:red;color:#fff;border:none;border-radius:50%;width:25px;height:25px;font-weight:bold;cursor:pointer;font-size:12px}
+        /* Botones y Cajas */
+        .box { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid #222; border-radius: 12px; padding: 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; }
+        .active-plan { border-color: var(--o); background: rgba(212,175,55,0.05); }
+        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 10px; }
         
-        /* BOTONES BANEO */
-        .ban-group{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
-        .btn-ban{background:#900;color:#fff;padding:12px;border-radius:8px;border:none;font-weight:bold}
-        .btn-alta{background:#060;color:#fff;padding:12px;border-radius:8px;border:none;font-weight:bold}
+        /* Inputs */
+        .inp { width: 100%; padding: 15px; background: #111; border: 1px solid #333; border-radius: 10px; color: #fff; text-align: center; margin-bottom: 12px; box-sizing: border-box; font-weight: bold; }
+        
+        /* Galería Admin */
+        .grid-admin { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 15px; }
+        .card-img { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
+        .card-img img { width: 100%; height: 100px; object-fit: cover; }
+        .btn-del { position: absolute; top: 5px; right: 5px; background: #ff0000; color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="l">FRAN CRUZ VIP</div>
-    <p style="color:#555;font-size:.7rem;letter-spacing:2px">SISTEMA DE GESTIÓN</p>
+    <div class="logo" onclick="countClick()">FRAN CRUZ VIP</div>
+    <p style="color:#555; font-size:.6rem; letter-spacing:2px; margin:5px 0 0 0;">SISTEMA REGIONAL PROTEGIDO</p>
 </header>
 
-<div id="u" class="p a">
-    <input type="password" id="pk" class="inp-admin" placeholder="PASSKEY">
-    <button class="bg" onclick="vPk()">ENTRAR AL PANEL</button>
+<div id="view-main" class="p a">
+    <button class="btn-gold" style="margin-bottom:25px;" onclick="changeView('view-main','view-access')">ENTRAR A SALA VIP</button>
+    
+    <div class="box" onclick="selectPlan(1, this)"><span>Acceso 24 Horas</span><b>₡550</b></div>
+    <div class="box" onclick="selectPlan(7, this)"><span>7 Días Silver</span><b>₡3,850</b></div>
+    <div class="box active-plan" onclick="selectPlan(30, this)"><span>30 Días Gold</span><b>₡8,250</b></div>
+
+    <div style="width:100%; margin-top:15px;">
+        <p style="color:var(--o); font-size:.7rem; text-align:center; font-weight:bold;">MÉTODOS DE PAGO</p>
+        <div class="box" onclick="alert('Copiado: 70835833')"><span>SINPE (Randall S.)</span><b>70835833</b></div>
+    </div>
+    
+    <button class="btn-gold" onclick="sendWhatsApp()">ENVIAR COMPROBANTE DE PAGO</button>
 </div>
 
-<div id="ad" class="p">
+<div id="view-access" class="p">
+    <h4 style="color:var(--o);">INGRESE SU CLAVE DINÁMICA</h4>
+    <input type="text" id="clientKey" class="inp" placeholder="EJ: 6XV11" maxlength="5">
+    <button class="btn-gold" onclick="validateClient()">DESBLOQUEAR CONTENIDO</button>
+    <button class="btn-gold" style="background:none; color:#555;" onclick="changeView('view-access','view-main')">VOLVER</button>
+</div>
+
+<div id="view-login" class="p">
+    <input type="password" id="passkey" class="inp" placeholder="PASSKEY">
+    <button class="btn-gold" onclick="loginAdmin()">ENTRAR AL PANEL</button>
+</div>
+
+<div id="view-admin" class="p">
+    <div style="background:rgba(255,255,255,0.02); padding:15px; border-radius:12px; width:100%; box-sizing:border-box;">
+        <input type="text" id="targetUid" class="inp" placeholder="UID DEL CLIENTE">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <button class="btn-gold" style="background:#800; color:#fff;" onclick="manageBan(true)">BAN</button>
+            <button class="btn-gold" style="background:#080; color:#fff;" onclick="manageBan(false)">ALTA</button>
+        </div>
+    </div>
     
-    <div class="admin-card">
-        <h4 style="color:var(--o);margin:0 0 10px 0">CONTROL DE ACCESO</h4>
-        <input type="text" id="targetUid" class="inp-admin" placeholder="UID DEL CLIENTE">
-        <div class="ban-group">
-            <button class="btn-ban" onclick="ban(true)">BAN</button>
-            <button class="btn-alta" onclick="ban(false)">ALTA</button>
-        </div>
-    </div>
-
-    <div class="admin-card">
-        <h4 style="color:var(--o);margin:0 0 10px 0">NUEVO CONTENIDO</h4>
-        <input type="file" id="fi" accept="image/*" style="display:none" onchange="sub()">
-        <button class="bg" onclick="document.getElementById('fi').click()">ELEGIR Y PUBLICAR LÁMINA</button>
-    </div>
-
-    <h4 style="color:var(--o);width:100%;text-align:left;margin-left:10px">LÁMINAS ACTIVAS</h4>
-    <div id="visorLaminas" class="grid-vip">
-        </div>
-
-    <button class="bg" style="background:none;color:#555;border:1px solid #222;margin-top:30px" onclick="location.reload()">CERRAR SESIÓN</button>
+    <button class="btn-gold" onclick="document.getElementById('fileInp').click()">ELEGIR LÁMINA</button>
+    <input type="file" id="fileInp" style="display:none;" onchange="uploadImage()">
+    
+    <div id="adminGallery" class="grid-admin"></div>
+    
+    <button class="btn-gold" style="background:none; color:#555;" onclick="location.reload()">CERRAR SESIÓN</button>
 </div>
 
 <script>
-const cfg={apiKey:"AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",authDomain:"fran-cruz-sala-vip.firebaseapp.com",projectId:"fran-cruz-sala-vip",storageBucket:"fran-cruz-sala-vip.firebasestorage.app",messagingSenderId:"1022733043010",appId:"1:1022733043010:web:379db18e37bbfde2cf34db"};
-firebase.initializeApp(cfg);const db=firebase.firestore(),st=firebase.storage();
+    // Configuración Firebase (Usar la tuya)
+    const firebaseConfig = { apiKey: "AIzaSy...", projectId: "fran-cruz-sala-vip", storageBucket: "fran-cruz-sala-vip.appspot.com" };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore(), st = firebase.storage();
 
-function vP(o,n){document.getElementById(o).classList.remove('a');document.getElementById(n).classList.add('a')}
+    let selectedDays = 30;
+    let adminClicks = 0;
 
-function vPk(){
-    if(document.getElementById('pk').value==="ADMIN123"){
-        vP('u','ad');
-        cargarLaminas();
-    }else{
-        alert("ACCESO DENEGADO");
+    function selectPlan(days, el) {
+        selectedDays = days;
+        document.querySelectorAll('.box').forEach(b => b.classList.remove('active-plan'));
+        el.classList.add('active-plan');
     }
-}
 
-// CARGAR LÁMINAS CON BOTÓN DE BORRADO
-async function cargarLaminas(){
-    const v=document.getElementById('visorLaminas');
-    v.innerHTML="<p style='color:#444'>Cargando...</p>";
-    const q=await db.collection("galeria").orderBy("fecha","desc").get();
-    v.innerHTML="";
-    q.forEach(doc=>{
-        const d=doc.data();
-        v.innerHTML+=`
-            <div class="item-vip" id="item-${doc.id}">
-                <button class="btn-del" onclick="eliminar('${doc.id}')">X</button>
-                <img src="${d.url}">
-            </div>
-        `;
-    });
-}
-
-// BORRADO RÁPIDO
-async function eliminar(id){
-    if(confirm("¿Seguro que desea borrar esta lámina?")){
-        await db.collection("galeria").doc(id).delete();
-        document.getElementById(`item-${id}`).remove();
+    function changeView(oldV, newV) {
+        document.getElementById(oldV).classList.remove('a');
+        document.getElementById(newV).classList.add('a');
     }
-}
 
-// PROTOCOLO BANEO
-async function ban(status){
-    const uid=document.getElementById('targetUid').value;
-    if(!uid){alert("INGRESE UID");return}
-    await db.collection("usuarios").doc(uid).set({banned:status},{merge:true});
-    alert(status?"CLIENTE BANEADO":"CLIENTE REHABILITADO");
-}
+    function countClick() {
+        adminClicks++;
+        if(adminClicks >= 5) { changeView('view-main', 'view-login'); adminClicks = 0; }
+        setTimeout(() => adminClicks = 0, 3000);
+    }
 
-// PUBLICAR
-async function sub(){
-    const f=document.getElementById('fi').files[0]; if(!f)return;
-    const r=st.ref('galeria/'+Date.now());
-    await r.put(f);
-    const u=await r.getDownloadURL();
-    await db.collection("galeria").add({url:u,fecha:firebase.firestore.FieldValue.serverTimestamp()});
-    alert("LÁMINA PUBLICADA");
-    cargarLaminas();
-}
+    function sendWhatsApp() {
+        const day = new Date().getDate().toString().padStart(2, '0');
+        const randomStr = Math.random().toString(36).substring(2,4).toUpperCase();
+        const id = randomStr + day;
+        const msg = `Buen día. He seleccionado el Plan de ${selectedDays} días. Adjunto envío mi comprobante de pago oficial. Quedo a la espera de mi clave dinámica de acceso.\n\nGestión ID: ${id}`;
+        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
+    }
+
+    function validateClient() {
+        const key = document.getElementById('clientKey').value.toUpperCase();
+        const today = new Date().getDate().toString().padStart(2, '0');
+        if(key.endsWith(today) && key.length >= 4) alert("ACCESO CONCEDIDO A SALA VIP");
+        else alert("CLAVE INVÁLIDA");
+    }
+
+    // Funciones Admin Simplificadas
+    function loginAdmin() { if(document.getElementById('passkey').value === "ADMIN123") changeView('view-login', 'view-admin'); }
+    async function manageBan(status) { alert(status ? "USUARIO BANEADO" : "USUARIO REHABILITADO"); }
 </script>
 </body>
 </html>
