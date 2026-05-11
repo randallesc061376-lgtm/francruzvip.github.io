@@ -1,165 +1,142 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>FRAN CRUZ | Control Maestro</title>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FRAN CRUZ VIP | Membresías</title>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root { --oro: #d4af37; --negro: #050505; --oro-grad: linear-gradient(135deg, #d4af37, #f9e498); }
+        body { background: var(--negro); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; text-align: center; }
+        
+        header { padding: 30px 0; }
+        .logo { color: var(--oro); font-size: 2.2rem; font-weight: 900; letter-spacing: 6px; margin: 0; }
+        .tagline { color: #666; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; }
 
-<style>
-:root{--oro:#d4af37;--negro:#050505;--oro-grad:linear-gradient(135deg, #d4af37, #f9e498);--cristal:rgba(255,255,255,0.05)}
-body{background:var(--negro);color:#fff;font-family:'Segoe UI',sans-serif;margin:0;text-align:center;user-select:none;overflow-x:hidden}
+        .contenedor-planes { display: flex; flex-direction: column; gap: 20px; align-items: center; margin-top: 30px; }
+        .card-plan { 
+            width: 90%; max-width: 350px; background: rgba(255,255,255,0.03); 
+            border: 1px solid rgba(212,175,55,0.2); border-radius: 20px; padding: 25px;
+            transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .card-plan.popular { border-color: var(--oro); box-shadow: 0 0 20px rgba(212,175,55,0.1); }
+        
+        .plan-nombre { color: var(--oro); font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; }
+        .plan-precio { font-size: 2rem; font-weight: 900; margin-bottom: 20px; }
+        
+        .selector-pais { 
+            background: #111; border: 1px solid var(--oro); color: #fff; 
+            padding: 10px; border-radius: 10px; width: 100%; margin-bottom: 20px; font-size: 1rem;
+        }
 
-/* Estilo exacto de tu captura del Menú Principal */
-header{padding:40px 20px; background:var(--negro)}
-.logo-principal{color:var(--oro); font-size:2.5rem; font-weight:900; letter-spacing:8px; text-transform:uppercase; margin-bottom:5px}
-.sub-titulo{color:#666; font-size:0.7rem; letter-spacing:4px; text-transform:uppercase}
+        .btn-comprar { 
+            width: 100%; background: var(--oro-grad); color: #000; border: none; 
+            padding: 18px; border-radius: 12px; font-weight: 900; font-size: 1rem; 
+            cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+        }
 
-.pantalla{display:none; min-height:100vh; flex-direction:column; align-items:center; padding:20px; box-sizing:border-box}
-.activa{display:flex}
-
-/* Inputs y Botones Luxury */
-.input-luxury{width:90%; max-width:380px; padding:22px; margin:15px 0; background:#111; border:1px solid var(--oro); color:var(--oro); border-radius:15px; font-size:1.2rem; text-align:center; letter-spacing:2px; box-sizing:border-box}
-.btn-gold{width:90%; max-width:380px; background:var(--oro-grad); color:#000; border:none; padding:22px; border-radius:15px; font-weight:900; font-size:1.1rem; cursor:pointer; text-transform:uppercase; letter-spacing:2px; box-shadow:0 10px 20px rgba(212,175,55,0.2)}
-
-/* Contenedores de Gestión */
-.modulo-gestion{width:90%; max-width:400px; background:var(--cristal); border:1px solid rgba(212,175,55,0.1); border-radius:25px; padding:25px; margin-top:25px; box-sizing:border-box}
-.titulo-modulo{color:var(--oro); font-size:0.9rem; letter-spacing:3px; margin-bottom:20px; text-transform:uppercase}
-
-/* Barra de carga */
-.upload-zone{border:2px dashed var(--oro); border-radius:15px; padding:30px; margin-bottom:15px; cursor:pointer}
-.progress-container{width:100%; background:#222; height:8px; border-radius:10px; margin-top:15px; display:none}
-.progress-bar{width:0%; height:100%; background:var(--oro); border-radius:10px; transition:0.3s}
-
-.galeria-preview{display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; width:100%; margin-top:30px}
-.thumb{position:relative; aspect-ratio:1/1; border-radius:10px; overflow:hidden; border:1px solid #333}
-.thumb img{width:100%; height:100%; object-fit:cover}
-.btn-del{position:absolute; top:5px; right:5px; background:red; color:white; border:none; padding:5px 10px; border-radius:5px; font-weight:bold}
-</style>
+        /* Modal de Validación (Protocolo 15s) */
+        .modal { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--negro); z-index: 1000; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .scanner { width: 80%; height: 4px; background: var(--oro); box-shadow: 0 0 15px var(--oro); position: relative; animation: scan 2s infinite; }
+        @keyframes scan { 0%, 100% { top: -20px; } 50% { top: 20px; } }
+    </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-principal">FRAN CRUZ</div>
-    <div class="sub-titulo">PANEL DE CONTROL MAESTRO</div>
+    <h1 class="logo">FRAN CRUZ</h1>
+    <p class="tagline">PANEL DE MEMBRESÍAS VIP</p>
 </header>
 
-<div id="pantalla-login" class="pantalla activa">
-    <input type="password" id="passkey" class="input-luxury" placeholder="PASSKEY">
-    <button class="btn-gold" onclick="acceder()">ACCEDER AL PANEL</button>
+<select id="pais-master" class="selector-pais" onchange="actualizarPrecios()">
+    <option value="CR">🇨🇷 Costa Rica (CRC)</option>
+    <option value="NI">🇳🇮 Nicaragua (NIO)</option>
+    <option value="US">🇺🇸 Otros Países (USD)</option>
+</select>
+
+<div class="contenedor-planes">
+    <div class="card-plan">
+        <div class="plan-nombre">ACCESO 24H</div>
+        <div class="plan-precio" id="precio-bronce">$5.00</div>
+        <button class="btn-comprar" onclick="procesarPago('BRONCE', 5)">ADQUIRIR YA</button>
+    </div>
+
+    <div class="card-plan popular">
+        <div class="plan-nombre">GOLD MENSUAL</div>
+        <div class="plan-precio" id="precio-gold">$15.00</div>
+        <button class="btn-comprar" onclick="procesarPago('GOLD', 15)">ADQUIRIR YA</button>
+    </div>
+
+    <div class="card-plan">
+        <div class="plan-nombre">VIP ANUAL</div>
+        <div class="plan-precio" id="precio-vip">$50.00</div>
+        <button class="btn-comprar" onclick="procesarPago('VIP', 50)">ADQUIRIR YA</button>
+    </div>
 </div>
 
-<div id="pantalla-dashboard" class="pantalla">
-    
-    <div class="modulo-gestion">
-        <div class="titulo-modulo">CARGAR NUEVAS LÁMINAS</div>
-        <div class="upload-zone" onclick="document.getElementById('file-input').click()">
-            <span id="file-label">📸 SELECCIONAR IMÁGENES</span>
-            <input type="file" id="file-input" style="display:none" accept="image/*" onchange="validarSeleccion()">
-            <div id="p-container" class="progress-container"><div id="p-bar" class="progress-bar"></div></div>
-        </div>
-        <button class="btn-gold" id="btn-upload" onclick="subirImagen()">PUBLICAR EN SALA VIP</button>
-    </div>
-
-    <div class="modulo-gestion">
-        <div class="titulo-modulo">GESTIÓN DE ACCESOS (BAN)</div>
-        <input type="text" id="uid-ban" class="input-luxury" style="font-size:0.9rem; padding:15px" placeholder="ID DEL CLIENTE (UID-XXXXXX)">
-        <div style="display:flex; gap:10px; width:100%">
-            <button class="btn-gold" style="background:#ff4444; color:white" onclick="protocoloBan(true)">BANEAR</button>
-            <button class="btn-gold" style="background:#222; border:1px solid var(--oro); color:var(--oro)" onclick="protocoloBan(false)">ALTA</button>
-        </div>
-    </div>
-
-    <div id="galeria-admin" class="galeria-preview"></div>
-    
-    <button class="btn-gold" style="background:transparent; color:#666; margin:40px 0; border:none" onclick="location.reload()">CERRAR SESIÓN MAESTRA</button>
+<div id="modal-espera" class="modal">
+    <div class="logo" style="margin-bottom: 50px;">VALIDANDO SISTEMA</div>
+    <div class="scanner"></div>
+    <p style="margin-top: 40px; letter-spacing: 2px; color: var(--oro);" id="timer-text">INICIANDO PROTOCOLO (15s)...</p>
 </div>
 
 <script>
-// Configuración de Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",
-    authDomain: "fran-cruz-sala-vip.firebaseapp.com",
-    projectId: "fran-cruz-sala-vip",
-    storageBucket: "fran-cruz-sala-vip.firebasestorage.app",
-    messagingSenderId: "1022733043010",
-    appId: "1:1022733043010:web:379db18e37bbfde2cf34db"
+// Tasas de conversión corregidas para Centroamérica
+const TASAS = {
+    "CR": { moneda: "₡", factor: 510, nombre: "Costa Rica" },
+    "NI": { moneda: "C$", factor: 36.5, nombre: "Nicaragua" },
+    "US": { moneda: "$", factor: 1, nombre: "Internacional" }
 };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const storage = firebase.storage();
-
-function acceder() {
-    // La passkey que definiste previamente
-    if(document.getElementById('passkey').value === "ADMIN123") {
-        document.getElementById('pantalla-login').classList.remove('activa');
-        document.getElementById('pantalla-dashboard').classList.add('activa');
-        cargarGaleria();
-    } else {
-        alert("ACCESO DENEGADO: PASSKEY INCORRECTA");
-    }
-}
-
-function validarSeleccion() {
-    const f = document.getElementById('file-input').files[0];
-    if(f) document.getElementById('file-label').innerText = "✅ " + f.name.substring(0,15) + "...";
-}
-
-async function subirImagen() {
-    const file = document.getElementById('file-input').files[0];
-    const btn = document.getElementById('btn-upload');
-    if(!file) return alert("Selecciona una imagen");
-
-    btn.disabled = true;
-    btn.innerText = "PROCESANDO...";
-    document.getElementById('p-container').style.display = 'block';
-
-    const ref = storage.ref('galeria/' + Date.now() + "_" + file.name);
-    const uploadTask = ref.put(file);
-
-    uploadTask.on('state_changed', 
-        (snap) => {
-            let p = (snap.bytesTransferred / snap.totalBytes) * 100;
-            document.getElementById('p-bar').style.width = p + "%";
-        },
-        (err) => { alert("Error: " + err.message); btn.disabled = false; },
-        async () => {
-            const url = await uploadTask.snapshot.ref.getDownloadURL();
-            await db.collection("galeria").add({ url: url, fecha: firebase.firestore.FieldValue.serverTimestamp() });
-            alert("LÁMINA PUBLICADA EN SALA VIP");
-            location.reload(); // Refresca para limpiar todo
-        }
-    );
-}
-
-async function protocoloBan(estado) {
-    const uid = document.getElementById('uid-ban').value.trim();
-    if(!uid) return alert("Ingresa el ID del cliente");
+function actualizarPrecios() {
+    const pais = document.getElementById('pais-master').value;
+    const t = TASAS[pais];
     
-    await db.collection("baneos").doc(uid).set({ baneado: estado });
-    alert(estado ? "⛔ CLIENTE BANEADO" : "✅ CLIENTE DESBANEADO");
-    document.getElementById('uid-ban').value = "";
+    document.getElementById('precio-bronce').innerText = `${t.moneda}${(5 * t.factor).toLocaleString()}`;
+    document.getElementById('precio-gold').innerText = `${t.moneda}${(15 * t.factor).toLocaleString()}`;
+    document.getElementById('precio-vip').innerText = `${t.moneda}${(50 * t.factor).toLocaleString()}`;
 }
 
-function cargarGaleria() {
-    const contenedor = document.getElementById('galeria-admin');
-    db.collection("galeria").orderBy("fecha", "desc").onSnapshot(snap => {
-        contenedor.innerHTML = '';
-        snap.forEach(doc => {
-            const data = doc.data();
-            const div = document.createElement('div');
-            div.className = 'thumb';
-            div.innerHTML = `<img src="${data.url}"><button class="btn-del" onclick="borrar('${doc.id}')">X</button>`;
-            contenedor.appendChild(div);
-        });
-    });
+function procesarPago(plan, baseUsd) {
+    const pais = document.getElementById('pais-master').value;
+    const t = TASAS[pais];
+    const totalFinal = (baseUsd * t.factor).toLocaleString();
+    const moneda = t.moneda;
+
+    // Mostrar Animación de Seguridad (Reducida a 15s por instrucción previa)
+    document.getElementById('modal-espera').style.display = 'flex';
+    let tiempo = 15;
+    
+    const count = setInterval(() => {
+        tiempo--;
+        document.getElementById('timer-text').innerText = `VERIFICANDO TRANSACCIÓN (${tiempo}s)...`;
+        if(tiempo <= 0) {
+            clearInterval(count);
+            enviarWhatsApp(plan, totalFinal, moneda);
+        }
+    }, 1000);
 }
 
-async function borrar(id) {
-    if(confirm("¿Eliminar lámina permanentemente?")) await db.collection("galeria").doc(id).delete();
+function enviarWhatsApp(plan, monto, moneda) {
+    // Cálculo de Clave Dinámica: Últimos 2 del ID (simulado) + 2 dígitos del día
+    const hoy = new Date().getDate().toString().padStart(2, '0');
+    const idSimulado = "88"; // Esto debería venir del UID del cliente
+    const claveDinamica = idSimulado + hoy;
+
+    const mensaje = `Hola Fran Cruz VIP. Deseo activar mi plan ${plan}.%0A%0A` +
+                    `Monto: ${moneda}${monto}%0A` +
+                    `ID Validación: ${claveDinamica}%0A%0A` +
+                    `Adjunto mi comprobante de pago.`;
+    
+    window.location.href = `https://wa.me/50688888888?text=${mensaje}`; 
 }
+
+// Iniciar con precios actualizados
+actualizarPrecios();
 </script>
 </body>
 </html>
