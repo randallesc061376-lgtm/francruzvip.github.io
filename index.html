@@ -13,26 +13,42 @@
         header { padding: 40px 20px 10px; text-align: center; width: 100%; box-sizing: border-box; cursor: pointer; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; }
         .tagline { color: #555; font-size: .7rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; font-weight: bold; }
+        
+        /* Geolocalización */
         .geo-bar { display: flex; justify-content: center; gap: 10px; margin: 20px 0; background: #0a0a0a; padding: 12px 18px; border-radius: 50px; border: 1px solid #111; }
         .flag { width: 28px; height: 19px; opacity: 0.3; transition: 0.3s; cursor: pointer; border: 1px solid transparent; }
         .flag.active { opacity: 1; border-color: var(--o); transform: scale(1.15); }
+
+        /* Contenedores Principales */
         .p { display: none; width: 100%; max-width: 400px; flex-direction: column; padding: 0 20px 40px; box-sizing: border-box; }
         .a { display: flex; }
+
+        /* Membresías */
         .plan-box { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; }
         .plan-box.sel { border-color: var(--o); background: rgba(212,175,55,0.03); }
         .plan-box b { color: var(--o); font-size: 1.2rem; }
+
+        /* Métodos de Pago */
         .method { width: 100%; background: #080808; border: 1px solid #151515; border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
         .method-h { padding: 18px; text-align: center; font-size: 0.85rem; font-weight: 900; color: #444; cursor: pointer; text-transform: uppercase; }
         .method-c { display: none; padding: 20px; text-align: center; border-top: 1px solid #151515; background: #050505; }
         .method.open .method-c { display: block; }
         .method.open .method-h { color: var(--o); background: #0c0c0c; }
-        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 15px; }
+
+        /* Botones */
+        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 15px rgba(212,175,55,0.2); }
+        .btn-outline { width: 100%; background: transparent; color: var(--o); border: 1px solid var(--o); padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+
+        /* Panel Admin */
         .admin-sec { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 20px; margin-top: 20px; width: 100%; box-sizing: border-box; }
         .inp-admin { width: 100%; background: #000; border: 1px solid #222; padding: 12px; color: #fff; border-radius: 8px; margin-bottom: 8px; text-align: center; box-sizing: border-box; }
+        .user-card { background: #111; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; }
+        
+        /* Galería */
         .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .gallery-item { position: relative; aspect-ratio: 1; border-radius: 5px; overflow: hidden; border: 1px solid #222; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
-        .del-btn { position: absolute; top: 2px; right: 2px; background: var(--r); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-weight: bold; }
+        .del-btn { position: absolute; top: 2px; right: 2px; background: var(--r); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 10px; }
     </style>
 </head>
 <body>
@@ -45,66 +61,67 @@
 <div class="geo-bar">
     <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setRegion('COSTA RICA', '₡', 'cr', this)">
     <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setRegion('NICARAGUA', 'C$', 'ni', this)">
-    <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setRegion('PANAMÁ', '$', 'usd', this)">
+    <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setRegion('PANAMÁ', '$', 'pa', this)">
     <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setRegion('HONDURAS', 'L', 'hn', this)">
-    <img src="https://flagcdn.com/sv.svg" class="flag" onclick="setRegion('EL SALVADOR', '$', 'usd', this)">
+    <img src="https://flagcdn.com/sv.svg" class="flag" onclick="setRegion('EL SALVADOR', '$', 'sv', this)">
     <img src="https://flagcdn.com/gt.svg" class="flag" onclick="setRegion('GUATEMALA', 'Q', 'gt', this)">
-    <img src="https://flagcdn.com/bz.svg" class="flag" onclick="setRegion('BELICE', '$', 'usd', this)">
+    <img src="https://flagcdn.com/bz.svg" class="flag" onclick="setRegion('BELICE', '$', 'bz', this)">
 </div>
 
 <div id="view-client" class="p a">
-    <div id="planes-container"></div>
+    <div id="planes-list"></div>
+    
     <div style="color:var(--o); font-size:0.7rem; font-weight:900; margin:30px 0 15px; text-align:center; letter-spacing:2px;">MÉTODOS DE PAGO</div>
     
     <div class="method" onclick="tglM(this)">
         <div class="method-h">1. SINPE MÓVIL</div>
         <div class="method-c">
-            <div id="txt-sinpe" style="font-size:1.3rem; font-weight:bold; margin-bottom:5px; color:var(--o);">Cargando...</div>
-            <span id="txt-titular">Cargando...</span>
+            <div id="disp-sinpe" style="font-size:1.3rem; font-weight:bold; color:var(--o);">...</div>
+            <span id="disp-titular">...</span>
         </div>
     </div>
     <div class="method" onclick="tglM(this)">
         <div class="method-h">2. TRANSFERENCIA IBAN</div>
-        <div class="method-c"><span id="txt-iban" style="font-size:0.8rem; word-break:break-all;">Cargando...</span></div>
+        <div class="method-c"><span id="disp-iban" style="font-size:0.8rem; word-break:break-all;">...</span></div>
     </div>
     <div class="method" onclick="tglM(this)">
         <div class="method-h">3. PAYPAL / CORREO</div>
-        <div class="method-c"><span id="txt-paypal">Cargando...</span></div>
+        <div class="method-c"><span id="disp-mail">...</span></div>
     </div>
 
     <button class="btn-gold" onclick="sendWA()">ENVIAR COMPROBANTE DE PAGO</button>
+    <button class="btn-outline" onclick="checkKey()">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="view-admin" class="p">
-    <div style="color:var(--o); text-align:center; font-weight:900; letter-spacing:3px; margin-bottom:20px;">SISTEMA DE GESTIÓN</div>
+    <div class="admin-sec">
+        <span style="color:var(--o); font-size:0.7rem; font-weight:bold;">USUARIOS EN ESPERA / BANEO</span>
+        <div id="user-list" style="margin-top:10px;">Cargando lista...</div>
+    </div>
 
     <div class="admin-sec">
-        <span style="color:var(--o); font-size:0.7rem; font-weight:bold; letter-spacing:1px;">SUBIR LÁMINAS DEL DÍA</span>
-        <input type="file" id="file" onchange="subirLamina(this)" style="margin-top:10px; width:100%; color:#555;">
+        <span style="color:var(--o); font-size:0.7rem; font-weight:bold;">SUBIR LÁMINAS (GALERÍA)</span>
+        <input type="file" id="file" accept="image/*" onchange="subirImg(this)" style="margin-top:10px; width:100%; color:#555;">
         <div class="gallery-grid" id="admin-gallery"></div>
     </div>
 
     <div class="admin-sec">
-        <span style="color:var(--o); font-size:0.7rem; font-weight:bold; letter-spacing:1px;">MIS DATOS DE ACTIVACIÓN</span>
-        <input type="text" id="inp-wa" class="inp-admin" placeholder="WhatsApp (Ej: 50664535475)">
-        <input type="text" id="inp-titular" class="inp-admin" placeholder="Nombre de Titular">
-        <input type="text" id="inp-sinpe" class="inp-admin" placeholder="Número SINPE">
-        <input type="text" id="inp-iban" class="inp-admin" placeholder="Cuenta IBAN">
-        <input type="text" id="inp-mail" class="inp-admin" placeholder="Correo PayPal">
-    </div>
-
-    <div class="admin-sec">
-        <span style="color:var(--o); font-size:0.7rem; font-weight:bold; letter-spacing:1px;">TIPOS DE CAMBIO</span>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+        <span style="color:var(--o); font-size:0.7rem; font-weight:bold;">DATOS DE PAGO Y ACTIVACIÓN</span>
+        <input type="text" id="inp-wa" class="inp-admin" placeholder="WhatsApp">
+        <input type="text" id="inp-titular" class="inp-admin" placeholder="Titular">
+        <input type="text" id="inp-sinpe" class="inp-admin" placeholder="SINPE">
+        <input type="text" id="inp-iban" class="inp-admin" placeholder="IBAN">
+        <input type="text" id="inp-mail" class="inp-admin" placeholder="PayPal">
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:10px;">
             <input type="number" id="inp-cr" class="inp-admin" placeholder="CR ₡">
             <input type="number" id="inp-ni" class="inp-admin" placeholder="NI C$">
             <input type="number" id="inp-hn" class="inp-admin" placeholder="HN L">
             <input type="number" id="inp-gt" class="inp-admin" placeholder="GT Q">
         </div>
-        <button class="btn-gold" onclick="guardarTodo()">APLICAR CAMBIOS PERMANENTES</button>
+        <button class="btn-gold" onclick="saveAdmin()">APLICAR CAMBIOS PERMANENTES</button>
     </div>
-
-    <button class="btn-gold" style="background:#222; color:#fff;" onclick="location.reload()">VOLVER AL INICIO</button>
+    <button class="btn-outline" onclick="location.reload()">SALIR DEL PANEL</button>
 </div>
 
 <script>
@@ -113,129 +130,107 @@
       authDomain: "fran-cruz-sala-vip.firebaseapp.com",
       projectId: "fran-cruz-sala-vip",
       storageBucket: "fran-cruz-sala-vip.firebasestorage.app",
-      messagingSenderId: "1022733043010",
+      databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com",
       appId: "1:1022733043010:web:379db18e37bbfde2cf34db"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const storage = firebase.storage();
 
-    let symbol = "₡", rate = 540, pSel = "30 DÍAS GOLD", uSel = 15;
-    let currentRates = { cr: 540, ni: 36.5, pa: 1, hn: 24.7, sv: 1, gt: 7.8, bz: 1, usd: 1 };
-    let settings = { wa: "50664535475", titular: "Randall Sánchez C.", sinpe: "6453 5475", iban: "CR80080315001000035641", mail: "randallesc061376@gmail.com" };
+    let curSym = "₡", curRate = 540, curPlan = "30 DÍAS GOLD", curUSD = 15;
+    let rates = { cr: 540, ni: 37.1, pa: 1, hn: 26.6, sv: 1, gt: 7.7, bz: 1 };
+    let cfg = { wa: "50664535475", titular: "Randall Sánchez C.", sinpe: "70835833", iban: "CR80080315001000035641", mail: "randallesc061376@gmail.com" };
 
-    // Fecha de hoy para el borrado automático (Formato: YYYY-MM-DD)
-    const hoy = new Date().toISOString().split('T')[0];
-
-    // Cargar y limpiar datos al iniciar
-    db.ref('config').on('value', (snap) => {
-        const data = snap.val();
-        if(data) {
-            if(data.rates) currentRates = {...currentRates, ...data.rates};
-            if(data.settings) {
-                settings = data.settings;
-                document.getElementById('txt-sinpe').innerText = settings.sinpe;
-                document.getElementById('txt-titular').innerText = settings.titular;
-                document.getElementById('txt-iban').innerText = settings.iban;
-                document.getElementById('txt-paypal').innerText = settings.mail;
+    // Sincronización en tiempo real
+    db.ref('config').on('value', snap => {
+        const d = snap.val();
+        if(d) {
+            if(d.rates) rates = {...rates, ...d.rates};
+            if(d.settings) {
+                cfg = d.settings;
+                document.getElementById('disp-sinpe').innerText = cfg.sinpe;
+                document.getElementById('disp-titular').innerText = cfg.titular;
+                document.getElementById('disp-iban').innerText = cfg.iban;
+                document.getElementById('disp-mail').innerText = cfg.mail;
             }
         }
-        renderPlanes();
-    });
-
-    // SISTEMA DE BORRADO AUTOMÁTICO A MEDIANOCHE
-    db.ref('gallery').on('value', snap => {
-        snap.forEach(child => {
-            const item = child.val();
-            // Si la fecha de la lámina es distinta a la de hoy, se borra automáticamente
-            if(item.fecha !== hoy) {
-                db.ref('gallery/' + child.key).remove();
-            }
-        });
-        loadGalleryUI(); // Recargar la vista del admin
+        render();
     });
 
     function setRegion(name, sym, key, el) {
-        symbol = sym; rate = currentRates[key] || 1;
+        curSym = sym; curRate = rates[key] || 1;
         document.getElementById('region-tag').innerText = `SALA PRIVADA • ${name}`;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         el.classList.add('active');
-        renderPlanes();
+        render();
     }
 
-    function renderPlanes() {
-        const cont = document.getElementById('planes-container'); cont.innerHTML = '';
-        [{n:"HOY",u:1.5},{n:"7 DÍAS SILVER",u:5},{n:"30 DÍAS GOLD",u:15}].forEach(p => {
-            const val = Math.round(p.u * rate).toLocaleString();
-            cont.innerHTML += `<div class="plan-box ${p.n===pSel?'sel':''}" onclick="pSel='${p.n}';uSel=${p.u};renderPlanes()"><span>${p.n}</span><b>${symbol}${val}</b></div>`;
+    function render() {
+        const list = document.getElementById('planes-list'); list.innerHTML = '';
+        [{n:"ACCESO HOY",u:1.5},{n:"7 DÍAS SILVER",u:5},{n:"30 DÍAS GOLD",u:15}].forEach(p => {
+            const price = Math.round(p.u * curRate).toLocaleString();
+            list.innerHTML += `<div class="plan-box ${p.n===curPlan?'sel':''}" onclick="curPlan='${p.n}';curUSD=${p.u};render()"><span>${p.n}</span><b>${curSym}${price}</b></div>`;
         });
     }
 
-    function guardarTodo() {
-        const newRates = {
-            cr: document.getElementById('inp-cr').value || currentRates.cr,
-            ni: document.getElementById('inp-ni').value || currentRates.ni,
-            hn: document.getElementById('inp-hn').value || currentRates.hn,
-            gt: document.getElementById('inp-gt').value || currentRates.gt
-        };
-        const newSettings = {
-            wa: document.getElementById('inp-wa').value || settings.wa,
-            titular: document.getElementById('inp-titular').value || settings.titular,
-            sinpe: document.getElementById('inp-sinpe').value || settings.sinpe,
-            iban: document.getElementById('inp-iban').value || settings.iban,
-            mail: document.getElementById('inp-mail').value || settings.mail
-        };
-        db.ref('config').update({ rates: newRates, settings: newSettings }).then(() => alert("¡Datos actualizados!"));
+    function saveAdmin() {
+        const newRates = { cr: document.getElementById('inp-cr').value || rates.cr, ni: document.getElementById('inp-ni').value || rates.ni, hn: document.getElementById('inp-hn').value || rates.hn, gt: document.getElementById('inp-gt').value || rates.gt };
+        const newCfg = { wa: document.getElementById('inp-wa').value || cfg.wa, titular: document.getElementById('inp-titular').value || cfg.titular, sinpe: document.getElementById('inp-sinpe').value || cfg.sinpe, iban: document.getElementById('inp-iban').value || cfg.iban, mail: document.getElementById('inp-mail').value || cfg.mail };
+        db.ref('config').update({ rates: newRates, settings: newCfg }).then(() => alert("✅ Cambios aplicados en toda la red."));
     }
 
-    function subirLamina(e) {
-        const file = e.files[0];
-        if(!file) return;
-        const ref = storage.ref('laminas/' + Date.now() + "_" + file.name);
-        ref.put(file).then(snap => snap.ref.getDownloadURL().then(url => {
-            // Guardamos la lámina con la fecha de hoy
-            db.ref('gallery').push({url: url, fecha: hoy});
-            alert("Lámina cargada con éxito.");
+    // Gestión de Galería y Borrado
+    function subirImg(e) {
+        const file = e.files[0]; if(!file) return;
+        const ref = storage.ref('laminas/' + Date.now());
+        ref.put(file).then(s => s.ref.getDownloadURL().then(url => {
+            db.ref('gallery').push({url, date: new Date().toISOString().split('T')[0]});
+            loadGallery();
         }));
     }
 
-    function loadGalleryUI() {
+    function loadGallery() {
         const grid = document.getElementById('admin-gallery');
-        if(!grid) return;
-        db.ref('gallery').once('value', snap => {
+        db.ref('gallery').on('value', snap => {
             grid.innerHTML = '';
-            snap.forEach(child => {
-                grid.innerHTML += `<div class="gallery-item"><img src="${child.val().url}"><button class="del-btn" onclick="borrarLamina('${child.key}')">✕</button></div>`;
+            snap.forEach(c => {
+                grid.innerHTML += `<div class="gallery-item"><img src="${c.val().url}"><button class="del-btn" onclick="db.ref('gallery/${c.key}').remove()">✕</button></div>`;
             });
         });
     }
 
-    function borrarLamina(key) {
-        if(confirm("¿Eliminar lámina manualmente?")) db.ref('gallery/' + key).remove().then(() => loadGalleryUI());
+    // Protocolo Baneo/Espera
+    function loadUsers() {
+        const list = document.getElementById('user-list');
+        db.ref('users').on('value', snap => {
+            list.innerHTML = '';
+            snap.forEach(c => {
+                const u = c.val();
+                list.innerHTML += `<div class="user-card"><span>${c.key} (${u.status})</span><div><button onclick="updateUser('${c.key}','active')" style="color:var(--v)">ALTA</button><button onclick="updateUser('${c.key}','banned')" style="color:var(--r)">BAN</button></div></div>`;
+            });
+        });
     }
+    function updateUser(id, stat) { db.ref('users/'+id).update({status: stat}); }
 
     function sendWA() {
-        const val = Math.round(uSel * rate).toLocaleString();
-        const msg = `Hola! He seleccionado el Plan de *${pSel}* por un valor de *${symbol}${val}*.\n\nAdjunto envío mi comprobante para la activación.`;
-        window.location.href = `https://wa.me/${settings.wa}?text=${encodeURIComponent(msg)}`;
+        const total = Math.round(curUSD * curRate).toLocaleString();
+        const msg = `Hola! Seleccioné: *${curPlan}* (${curSym}${total}). Adjunto comprobante.`;
+        window.location.href = `https://wa.me/${cfg.wa}?text=${encodeURIComponent(msg)}`;
     }
 
+    function checkKey() { const k = prompt("INGRESE SU CLAVE DE ACCESO:"); if(k) alert("Validando clave..."); }
     function tglM(e) { e.classList.toggle('open'); }
 
-    // Acceso Admin (5 toques logo)
+    // Acceso Oculto Admin (5 toques logo)
     let clicks = 0;
     document.getElementById('adminTrigger').onclick = () => {
-        clicks++;
-        if(clicks >= 5) {
-            const p = prompt("PASSKEY:");
-            if(p === "2026") {
+        clicks++; if(clicks >= 5) {
+            if(prompt("PASSKEY:") === "2026") {
                 document.getElementById('view-client').classList.remove('a');
                 document.getElementById('view-admin').classList.add('a');
-                loadGalleryUI();
-            }
-            clicks = 0;
-        }
-        setTimeout(() => clicks = 0, 3000);
+                loadGallery(); loadUsers();
+            } clicks = 0;
+        } setTimeout(() => clicks = 0, 3000);
     };
 </script>
 </body>
