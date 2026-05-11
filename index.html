@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • PLATINUM MASTER</title>
+    <title>FRAN CRUZ VIP • PLATINUM FINAL</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
@@ -15,53 +15,54 @@
         header { padding: 30px 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
         .logo { color: var(--o); font-size: 2rem; font-weight: 900; letter-spacing: 4px; }
         
-        .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.4s; }
+        .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
 
-        /* Banderas */
+        /* Menú Principal (INTOCABLE) */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 10px; background: #0f0f0f; border-radius: 15px; }
-        .flag { width: 100%; height: 25px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
-        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 10px var(--o); transform: scale(1.1); }
-
-        /* Planes */
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin: 0 20px 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+        .flag { width: 100%; height: 25px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
+        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 10px var(--o); }
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin: 0 20px 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.2rem; }
-
-        /* Acordeón y Copiado */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 10px; margin: 0 20px 8px; overflow: hidden; }
         .acc-head { background: #111; padding: 15px; font-size: 0.8rem; font-weight: bold; color: #888; cursor: pointer; display: flex; justify-content: space-between; }
         .acc-body { display: none; background: #080808; padding: 15px; border-top: 1px solid #1a1a1a; text-align: center; }
         .acc-body.active { display: block; }
         .copy-box { background: #111; padding: 12px; border-radius: 8px; margin: 8px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; }
-
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; margin: 15px 20px; cursor: pointer; text-transform: uppercase; }
 
-        /* Pantallas de Estado */
-        .status-box { text-align: center; padding: 60px 20px; }
-        .loader { border: 4px solid #111; border-top: 4px solid var(--o); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 30px auto; }
-        .success-icon { font-size: 60px; color: #4caf50; margin-bottom: 20px; }
+        /* PANEL ADMINISTRADOR (RECONSTRUIDO) */
+        .adm-container { padding: 20px; }
+        .adm-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 15px; margin-bottom: 20px; }
+        .adm-label { font-size: 0.75rem; color: var(--o); font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: block; letter-spacing: 1px; }
+        .adm-input { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 0.9rem; }
+        
+        .user-row { background: #000; border: 1px solid #222; padding: 12px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .badge { font-size: 0.6rem; padding: 3px 7px; border-radius: 4px; font-weight: bold; }
+        .badge.wait { background: #d4af37; color: #000; }
+        .badge.active { background: #2ecc71; color: #fff; }
+        
+        .btn-action { border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.7rem; }
+        .btn-approve { background: #2ecc71; color: #fff; }
+        .btn-ban { background: #e74c3c; color: #fff; margin-left: 5px; }
 
-        /* Galería Blindada VIP */
-        #vip-gallery img { width: 100%; height: auto; display: block; pointer-events: none; border-bottom: 2px solid #000; }
-        .glass-shield { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; background: transparent; }
+        /* Galería en Admin */
+        .prog-cont { width: 100%; background: #111; height: 8px; border-radius: 4px; margin: 10px 0; display: none; overflow: hidden; }
+        .prog-bar { width: 0%; height: 100%; background: var(--g); transition: 0.3s; }
+        .grid-gal { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .img-wrap { position: relative; aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 1px solid #222; }
+        .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .btn-del { position: absolute; top: 0; right: 0; background: rgba(231,76,60,0.9); color: #fff; border: none; padding: 4px 8px; font-size: 10px; cursor: pointer; }
 
-        /* Admin UI */
-        .adm-section { margin: 15px 20px; padding: 15px; background: #0a0a0a; border: 1px solid #111; border-radius: 12px; }
-        .thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px; }
-        .thumb-wrap { position: relative; aspect-ratio: 1; border: 1px solid #222; border-radius: 4px; overflow: hidden; }
-        .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; }
-        .btn-del { position: absolute; top: 0; right: 0; background: rgba(255,0,0,0.9); color: #fff; border: none; padding: 2px 6px; font-size: 10px; cursor: pointer; }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-<header onclick="handleAdminEntry()">
+<header onclick="adminAccess()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div style="font-size: 0.7rem; color: #555; letter-spacing: 2px;">SALA PRIVADA • <span id="loc-name">COSTA RICA</span></div>
+    <div id="tagline" style="font-size: 0.7rem; color: #555; letter-spacing: 2px;">SALA PRIVADA • COSTA RICA</div>
 </header>
 
 <div id="v-client" class="view active">
@@ -75,62 +76,67 @@
         <img src="https://flagcdn.com/bz.svg" class="flag" onclick="setLoc('BELICE', 'BZ$', 2)">
         <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('WORLDWIDE', '$', 1)">
     </div>
-
     <div class="card" onclick="selP(this, 'HOY', 1)"><span>ACCESO HOY</span><b class="p-val">₡540</b></div>
     <div class="card" onclick="selP(this, '7 DÍAS', 5)"><span>7 DÍAS SILVER</span><b class="p-val">₡2,700</b></div>
     <div class="card sel" onclick="selP(this, '30 DÍAS', 20)"><span>30 DÍAS GOLD</span><b class="p-val">₡10,800</b></div>
-
     <div class="acc-item">
         <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL / GRUPO MUTUAL <span>▼</span></div>
         <div class="acc-body active">
-            <div class="copy-box" onclick="copyText('70835833')">70835833</div>
-            <div class="copy-box" onclick="copyText('CR80080315001000035641')">CR80...641</div>
-            <div style="font-size:11px; color:#666">Titular: Randall Sánchez C.</div>
+            <div class="copy-box" onclick="copy('70835833')">70835833</div>
+            <div class="copy-box" onclick="copy('CR80080315001000035641')">CR80...641</div>
         </div>
     </div>
     <div class="acc-item">
         <div class="acc-head" onclick="toggleAcc(this)">2. PAYPAL <span>▼</span></div>
         <div class="acc-body">
-            <div class="copy-box" onclick="copyText('randallesc061376@gmail.com')">randallesc061376@gmail.com</div>
+            <div class="copy-box" onclick="copy('randallesc061376@gmail.com')">randallesc061376@gmail.com</div>
         </div>
     </div>
-
-    <button class="btn-gold" onclick="sendToValidation()">SOLICITAR ACCESO VIP</button>
-</div>
-
-<div id="v-status" class="view">
-    <div id="status-content" class="status-box">
-        <h2 id="st-title" style="color:var(--o)">VALIDANDO PAGO</h2>
-        <div id="st-media"><div class="loader"></div></div>
-        <p id="st-msg">Estamos procesando tu solicitud. Mantente en esta pantalla.</p>
-        <div id="st-btn-place"></div>
-    </div>
-</div>
-
-<div id="v-vip" class="view">
-    <div class="glass-shield"></div>
-    <div style="background:#000; padding:15px; text-align:center; position:sticky; top:0; z-index:110; border-bottom:1px solid var(--o);">
-        <div style="color:var(--o); font-size:0.7rem; font-weight:bold;">SALA VIP ACTIVA</div>
-        <div id="vip-timer" style="font-size:1.5rem; font-weight:900;">00:00:00</div>
-    </div>
-    <div id="vip-gallery"></div>
+    <button class="btn-gold" onclick="requestAccess()">SOLICITAR ACCESO VIP</button>
 </div>
 
 <div id="v-admin" class="view">
-    <div class="adm-section">
-        <span style="color:var(--o); font-weight:bold">APROBACIÓN DE CLIENTES</span>
-        <div id="admin-users" style="margin-top:10px"></div>
+    <div class="adm-container">
+        
+        <div class="adm-card">
+            <span class="adm-label">Control de Usuarios y Baneo</span>
+            <div id="admin-user-list">
+                <p style="font-size:0.7rem; color:#444">Cargando lista de espera...</p>
+            </div>
+        </div>
+
+        <div class="adm-card">
+            <span class="adm-label">Gestión de Galería (10 Láminas)</span>
+            <input type="file" id="f-upload" class="adm-input" accept="image/*">
+            <div class="prog-cont" id="p-cont"><div class="prog-bar" id="p-bar"></div></div>
+            <button class="btn-gold" style="margin:0; width:100%" onclick="uploadImg()">PUBLICAR LÁMINA</button>
+            <div id="admin-gallery" class="grid-gal"></div>
+        </div>
+
+        <div class="adm-card">
+            <span class="adm-label">Tipos de Cambio ($1 USD)</span>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
+                <div><small style="font-size:9px">₡ CR</small><input type="number" id="rate-cr" class="adm-input" value="540"></div>
+                <div><small style="font-size:9px">C$ NI</small><input type="number" id="rate-ni" class="adm-input" value="37"></div>
+            </div>
+            <button class="btn-gold" style="margin:5px 0; width:100%; height:40px; padding:0" onclick="saveRates()">ACTUALIZAR CAMBIOS</button>
+        </div>
+
+        <div class="adm-card">
+            <span class="adm-label">Seguridad del Panel</span>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
+                <div><small style="font-size:9px">TOQUES</small><input type="number" id="cfg-clicks" class="adm-input" value="5"></div>
+                <div><small style="font-size:9px">KEYPASS</small><input type="text" id="cfg-pass" class="adm-input" value="1376"></div>
+            </div>
+            <button class="btn-gold" style="margin:5px 0; width:100%; height:40px; padding:0" onclick="saveSecurity()">GUARDAR AJUSTES</button>
+        </div>
+
+        <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">CERRAR SESIÓN</button>
     </div>
-    <div class="adm-section">
-        <span style="color:var(--o); font-weight:bold">CARGAR PROBABILIDADES</span>
-        <input type="file" id="f-up" class="adm-input" style="width:100%; margin:10px 0" accept="image/*">
-        <button class="btn-gold" style="margin:0; width:100%" onclick="uploadVip()">PUBLICAR LÁMINA</button>
-        <div id="admin-gal" class="thumb-grid"></div>
-    </div>
-    <button class="btn-gold" onclick="location.reload()">SALIR</button>
 </div>
 
 <script>
+    // Configuración Firebase
     const firebaseConfig = { 
         apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
         projectId: "fran-cruz-sala-vip",
@@ -142,113 +148,117 @@
     const st = firebase.storage();
 
     let curTasa = 540, curSim = "₡", curP = "30 DÍAS", curU = 20, clicks = 0;
+    let reqClicks = 5, masterKey = "1376";
     let myID = localStorage.getItem('fc_id') || 'VIP' + Math.floor(Math.random()*9000+1000);
     localStorage.setItem('fc_id', myID);
 
-    // ESCUCHA DE ESTADO DEL CLIENTE
-    db.ref('users/' + myID).on('value', ss => {
-        const user = ss.val();
-        if(user && user.status === 'activo') {
-            showSuccessScreen();
+    // 1. CARGA DE CONFIGURACIÓN
+    db.ref('config').on('value', ss => {
+        if(ss.val()){
+            reqClicks = ss.val().clicks || 5;
+            masterKey = ss.val().pass || "1376";
+            document.getElementById('cfg-clicks').value = reqClicks;
+            document.getElementById('cfg-pass').value = masterKey;
         }
     });
 
-    function sendToValidation() {
-        const key = `${myID}-${new Date().getDate()}${Math.floor(Math.random()*99)}`;
-        const text = `*FC VIP: SOLICITUD*%0AID: ${myID}%0APlan: ${curP}%0AClave: ${key}`;
-        
-        db.ref('users/' + myID).set({ id: myID, status: 'espera', plan: curP, key: key, time: Date.now() });
-        
-        window.location.href = `https://wa.me/50664535475?text=${text}`;
-        setTimeout(() => {
-            document.getElementById('v-client').classList.remove('active');
-            document.getElementById('v-status').classList.add('active');
-        }, 1500);
-    }
-
-    function showSuccessScreen() {
-        document.getElementById('st-title').innerText = "¡FELICIDADES!";
-        document.getElementById('st-title').style.color = "#4caf50";
-        document.getElementById('st-media').innerHTML = '<div class="success-icon">✔</div>';
-        document.getElementById('st-msg').innerHTML = "<b>¡Bienvenido a la Familia Fran Cruz VIP!</b><br>Tu pago ha sido validado con éxito. Prepárate para ganar.";
-        document.getElementById('st-btn-place').innerHTML = '<button class="btn-gold" onclick="enterVip()">ENTRAR A LA SALA VIP</button>';
-    }
-
-    function enterVip() {
-        document.getElementById('v-status').classList.remove('active');
-        document.getElementById('v-vip').classList.add('active');
-        loadVipGallery();
-    }
-
-    // FUNCIONES ADMIN
-    function handleAdminEntry() {
+    // 2. ACCESO ADMIN
+    function adminAccess() {
         clicks++;
-        if(clicks >= 5) {
-            if(prompt("PASS:") === "1376") {
-                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        if(clicks >= reqClicks) {
+            if(prompt("KEYPASS ADMINISTRADOR:") === masterKey) {
+                document.getElementById('v-client').classList.remove('active');
                 document.getElementById('v-admin').classList.add('active');
-                loadAdminTools();
+                loadAdminData();
             }
             clicks = 0;
         }
+        setTimeout(() => clicks = 0, 2000);
     }
 
-    function loadAdminTools() {
-        // Cargar Usuarios en Espera
+    // 3. GESTIÓN DE USUARIOS (BANEO/APROBACIÓN)
+    function loadAdminData() {
         db.ref('users').on('value', ss => {
-            const container = document.getElementById('admin-users');
-            container.innerHTML = "";
+            const list = document.getElementById('admin-user-list');
+            list.innerHTML = "";
             ss.forEach(u => {
                 const user = u.val();
-                if(user.status === 'espera') {
-                    container.innerHTML += `<div style="background:#111; padding:10px; margin-bottom:5px; border-radius:8px; display:flex; justify-content:space-between">
-                        <span>${user.id}</span>
-                        <button onclick="approve('${user.id}')" style="background:green; color:white; border:none; border-radius:4px; padding:2px 10px">APROBAR</button>
-                    </div>`;
-                }
+                list.innerHTML += `
+                <div class="user-row">
+                    <div>
+                        <div style="font-size:0.8rem; font-weight:bold">${user.id}</div>
+                        <span class="badge ${user.status}">${user.status.toUpperCase()}</span>
+                    </div>
+                    <div>
+                        <button class="btn-action btn-approve" onclick="updateStatus('${user.id}', 'active')">✓</button>
+                        <button class="btn-action btn-ban" onclick="updateStatus('${user.id}', 'ban')">X</button>
+                    </div>
+                </div>`;
             });
         });
         loadAdminGallery();
     }
 
-    function approve(id) { db.ref('users/' + id).update({status: 'activo'}); }
+    function updateStatus(id, stat) { db.ref('users/' + id).update({status: stat}); }
 
-    function uploadVip() {
-        const file = document.getElementById('f-up').files[0];
+    // 4. GALERÍA ADMIN
+    function uploadImg() {
+        const file = document.getElementById('f-upload').files[0];
         if(!file) return;
-        const ref = st.ref('laminas/' + Date.now());
-        ref.put(file).then(() => ref.getDownloadURL().then(url => {
-            db.ref('gallery').push({url, time: Date.now()});
-            alert("LÁMINA PUBLICADA");
-        }));
-    }
+        const pCont = document.getElementById('p-cont');
+        const pBar = document.getElementById('p-bar');
+        pCont.style.display = 'block';
 
-    function loadAdminGallery() {
-        db.ref('gallery').on('value', ss => {
-            const gal = document.getElementById('admin-gal');
-            gal.innerHTML = "";
-            ss.forEach(img => {
-                gal.innerHTML += `<div class="thumb-wrap"><img src="${img.val().url}"><button class="btn-del" onclick="delImg('${img.key}')">X</button></div>`;
+        const ref = st.ref('laminas/' + Date.now());
+        const task = ref.put(file);
+
+        task.on('state_changed', s => {
+            pBar.style.width = (s.bytesTransferred / s.totalBytes * 100) + '%';
+        }, null, () => {
+            task.snapshot.ref.getDownloadURL().then(url => {
+                db.ref('gallery').push({url, time: Date.now()});
+                pCont.style.display = 'none';
+                pBar.style.width = '0%';
+                alert("LÁMINA PUBLICADA");
             });
         });
     }
 
-    function loadVipGallery() {
+    function loadAdminGallery() {
         db.ref('gallery').orderByChild('time').on('value', ss => {
-            const gal = document.getElementById('vip-gallery');
+            const gal = document.getElementById('admin-gallery');
             gal.innerHTML = "";
-            let items = [];
-            ss.forEach(img => items.unshift(img.val()));
-            items.forEach(item => { gal.innerHTML += `<img src="${item.url}">`; });
+            ss.forEach(img => {
+                gal.innerHTML += `
+                <div class="img-wrap">
+                    <img src="${img.val().url}">
+                    <button class="btn-del" onclick="deleteImg('${img.key}')">X</button>
+                </div>`;
+            });
         });
     }
 
-    function delImg(k) { if(confirm("¿Borrar?")) db.ref('gallery/' + k).remove(); }
-    function copyText(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
-    function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
+    function deleteImg(key) { if(confirm("¿Eliminar imagen?")) db.ref('gallery/' + key).remove(); }
+
+    // 5. GUARDAR AJUSTES
+    function saveRates() {
+        const cr = document.getElementById('rate-cr').value;
+        const ni = document.getElementById('rate-ni').value;
+        db.ref('rates').set({cr, ni});
+        alert("TIPOS DE CAMBIO ACTUALIZADOS");
+    }
+
+    function saveSecurity() {
+        const c = document.getElementById('cfg-clicks').value;
+        const p = document.getElementById('cfg-pass').value;
+        db.ref('config').set({clicks: c, pass: p});
+        alert("SEGURIDAD ACTUALIZADA");
+    }
+
+    // FUNCIONES CLIENTE (INTOCABLES)
     function setLoc(n, s, t) {
         curTasa = t; curSim = s;
-        document.getElementById('loc-name').innerText = n;
+        document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         event.target.classList.add('active');
         updatePrices();
@@ -263,6 +273,13 @@
         curP = p; curU = u;
         document.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
         el.classList.add('sel');
+    }
+    function copy(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
+    function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
+    function requestAccess() {
+        const key = `${myID}-${new Date().getDate()}`;
+        db.ref('users/' + myID).set({id: myID, status: 'wait', plan: curP, key: key, time: Date.now()});
+        window.location.href = `https://wa.me/50664535475?text=Solicito ${curP}. ID: ${myID}`;
     }
 </script>
 </body>
