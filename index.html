@@ -18,7 +18,7 @@
         .view { display: none; width: 100%; max-width: 450px; margin: auto; height: 100%; flex-direction: column; padding: 10px 20px; animation: fadeIn 0.3s; overflow-y: auto; }
         .view.active { display: flex; }
 
-        /* MENÚ 4 BANDERAS - RECUPERADO */
+        /* GRID DE 4 BANDERAS */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; padding: 10px; background: #0f0f0f; border-radius: 12px; }
         .flag { width: 100%; height: 32px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; border: 1px solid #333; }
         .flag.active { opacity: 1; border-color: var(--o); box-shadow: 0 0 10px var(--o); }
@@ -27,7 +27,7 @@
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.1); }
         .card b { color: var(--o); font-size: 1.25rem; }
 
-        .btn-gold { width: 100%; background: var(--g); color: #000 !important; border: none; padding: 20px; border-radius: 15px; font-weight: 900; margin: 15px 0; cursor: pointer; text-transform: uppercase; font-size: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        .btn-gold { width: 100%; background: var(--g); color: #000 !important; border: none; padding: 20px; border-radius: 15px; font-weight: 900; margin: 15px 0; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
         .btn-sec { width: 100%; background: #111; color: #555; border: 1px solid #222; padding: 15px; border-radius: 12px; font-weight: 800; margin-bottom: 15px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
 
         /* PANEL ADMIN CON BOTÓN X */
@@ -35,8 +35,8 @@
         .adm-label { color: var(--o); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block; border-left: 4px solid var(--o); padding-left: 10px; }
         
         .prev-cont { position: relative; display: none; margin-bottom: 15px; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
-        .preview-img { width: 100%; max-height: 250px; object-fit: contain; background: #000; }
-        .btn-x { position: absolute; top: 10px; right: 10px; background: var(--r); color: #fff; border: none; border-radius: 50%; width: 32px; height: 32px; font-weight: 900; cursor: pointer; z-index: 10; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .preview-img { width: 100%; max-height: 250px; object-fit: contain; background: #000; display: block; margin: auto; }
+        .btn-x { position: absolute; top: 10px; right: 10px; background: var(--r); color: #fff; border: none; border-radius: 50%; width: 32px; height: 32px; font-weight: 900; cursor: pointer; z-index: 10; }
 
         .prog-bar { width: 100%; height: 6px; background: #111; border-radius: 10px; margin: 10px 0; display: none; overflow: hidden; }
         .prog-fill { height: 100%; background: var(--v); width: 0%; transition: 0.3s; }
@@ -78,8 +78,8 @@
         <button class="btn-gold" id="btn-up" onclick="uploadImg()" style="margin-top:10px">SUBIR AHORA</button>
     </div>
     <div class="adm-card">
-        <span class="adm-label">Lista de Espera</span>
-        <div id="admin-user-list" style="max-height: 200px; overflow-y: auto;"></div>
+        <span class="adm-label">Usuarios en Espera</span>
+        <div id="admin-user-list"></div>
     </div>
     <button class="btn-sec" onclick="location.reload()">CERRAR PANEL</button>
 </div>
@@ -147,10 +147,12 @@
         db.ref('users').on('value', ss => {
             const list = document.getElementById('admin-user-list'); list.innerHTML = "";
             ss.forEach(u => {
-                list.innerHTML += `<div class="user-row">
-                    <span>${u.val().id} <small>(${u.val().plan})</small></span>
-                    <button onclick="db.ref('users/${u.val().id}').update({status:'active'})" style="color:var(--v); background:none; border:none; font-weight:800">ACTIVAR</button>
-                </div>`;
+                if(u.val().status === 'wait') {
+                    list.innerHTML += `<div class="user-row">
+                        <span>${u.val().id}</span>
+                        <button onclick="db.ref('users/${u.val().id}').update({status:'active'})" style="color:var(--v); background:none; border:none; font-weight:800">ACTIVAR</button>
+                    </div>`;
+                }
             });
         });
     }
@@ -195,4 +197,5 @@
     function selP(el, p) { curP = p; document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); el.classList.add('sel'); }
 </script>
 </body>
-</html>
+            </html>
+            
