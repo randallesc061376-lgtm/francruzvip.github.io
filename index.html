@@ -100,11 +100,6 @@ header{padding:35px 10px;background:#111;border-bottom:1px solid #222;cursor:poi
         <button class="btn-accion" id="btn-subir" onclick="subirLoteFotos()">PUBLICAR EN SALA VIP</button>
         
         <hr style="border:0.5px solid #222;margin:30px 0">
-        <input type="text" id="user-uid" class="admin-input" placeholder="ID DEL CLIENTE A BANEAR">
-        <div style="display:flex;gap:10px">
-            <button class="btn-accion" style="background:var(--rojo);color:#fff" onclick="setBan(true)">BANEAR</button>
-            <button class="btn-accion" style="background:green;color:#fff" onclick="setBan(false)">DESBANEAR</button>
-        </div>
         <div id="lista-admin" class="galeria-grid" style="margin-top:30px"></div>
     </div>
     <button class="btn-accion btn-negro" onclick="irAPaso('pantalla-inicio')">SALIR DEL PANEL</button>
@@ -143,16 +138,17 @@ async function subirLoteFotos(){
     for(let i=0; i<archivosSeleccionados.length; i++){
         const f=archivosSeleccionados[i];
         const ref=storage.ref('galeria/'+base+'_'+i);
-        const task=ref.put(f);
+        const metadata = { contentType: f.type }; 
+        const task=ref.put(f, metadata);
 
-        await new Promise((resolve)=>{
+        await new Promise((resolve, reject)=>{
             task.on('state_changed', 
                 (snap)=>{
                     let p=Math.round((snap.bytesTransferred/snap.totalBytes)*100);
                     bar.style.width=p+'%';
                     txt.innerText=`SUBIENDO ${i+1} DE ${archivosSeleccionados.length} (${p}%)`;
                 },
-                null,
+                (err)=>{ console.error(err); alert("Error en imagen "+(i+1)); btn.disabled=false; reject(); },
                 async()=>{
                     const u=await task.snapshot.ref.getDownloadURL();
                     await db.collection("galeria").add({url:u,orden:base-i,fecha:firebase.firestore.FieldValue.serverTimestamp()});
@@ -171,8 +167,6 @@ v.innerHTML=`<img src="${x.url}" class="foto-vip">${a?`<button style="position:a
 let cl=0; function trucoAdmin(){cl++; if(cl>=5){irAPaso('pantalla-admin'); cl=0} setTimeout(()=>cl=0,3000)}
 function loginAdmin(){if(document.getElementById('pass-admin').value==="ADMIN123"){document.getElementById('controles-admin').style.display='block';cargarFotos(true)}else alert("DENEGADO")}
 async function borrarFoto(id){if(confirm("¿Eliminar lámina?"))await db.collection("galeria").doc(id).delete()}
-async function setBan(s){const u=document.getElementById('user-uid').value; if(u){await db.collection("baneos").doc(u).set({baneado:s}); alert("ESTADO ACTUALIZADO")}}
 </script>
 </body>
-            </html>
-            
+</html>
