@@ -13,34 +13,39 @@
         header { padding: 40px 20px 10px; text-align: center; width: 100%; cursor: pointer; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; }
         .tagline { color: #555; font-size: .7rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; font-weight: bold; }
+        
+        /* Barra de Países */
         .geo-bar { display: flex; justify-content: center; gap: 8px; margin: 20px 0; background: #0a0a0a; padding: 12px; border-radius: 50px; border: 1px solid #111; overflow-x: auto; max-width: 90%; }
         .flag { width: 28px; height: 19px; opacity: 0.3; transition: 0.3s; cursor: pointer; border: 1px solid transparent; flex-shrink: 0; }
         .flag.active { opacity: 1; border-color: var(--o); transform: scale(1.1); }
+        
         .view { display: none; width: 100%; max-width: 400px; flex-direction: column; padding: 0 20px 40px; box-sizing: border-box; }
         .view.active { display: flex; }
-        
-        /* Menú de Membresías Estilo VIP */
-        .plan-box { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; box-sizing: border-box; }
+
+        /* Menú de Membresías Solicitado */
+        .plan-box { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; box-sizing: border-box; }
         .plan-box.sel { border-color: var(--o); background: rgba(212,175,55,0.05); }
-        .plan-box span { color: #fff; font-size: 0.95rem; font-weight: 600; text-transform: uppercase; }
+        .plan-box span { color: #fff; font-size: 1rem; font-weight: 600; text-transform: uppercase; }
         .plan-box b { color: var(--o); font-size: 1.2rem; font-weight: 900; }
 
+        /* Métodos de Pago */
         .method { width: 100%; background: #080808; border: 1px solid #151515; border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
         .method-h { padding: 15px; text-align: center; font-size: 0.8rem; font-weight: 900; color: #444; cursor: pointer; }
         .method-c { display: none; padding: 15px; text-align: center; background: #050505; border-top: 1px solid #151515; }
         .method.open .method-c { display: block; }
-        .method.open .method-h { color: var(--o); }
+        .method.open .method-h { color: var(--o); background: #0c0c0c; }
 
         .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 15px; }
         .btn-outline { width: 100%; background: transparent; color: var(--o); border: 1px solid var(--o); padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 10px; cursor: pointer; }
 
         /* Estilos Admin */
         .admin-sec { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; margin-top: 15px; width: 100%; box-sizing: border-box; }
-        .inp-admin { width: 100%; background: #000; border: 1px solid #222; padding: 10px; color: #fff; border-radius: 6px; margin-bottom: 8px; text-align: center; box-sizing: border-box; font-size: 0.9rem; }
+        .inp-admin { width: 100%; background: #000; border: 1px solid #222; padding: 10px; color: #fff; border-radius: 6px; margin-bottom: 8px; text-align: center; box-sizing: border-box; }
+        .user-card { background: #111; padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; font-size: 0.75rem; }
         .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
         .thumb { position: relative; aspect-ratio: 1; border-radius: 4px; overflow: hidden; border: 1px solid #222; }
         .thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .del { position: absolute; top: 0; right: 0; background: var(--r); color: #fff; border: none; width: 20px; height: 20px; font-size: 10px; cursor: pointer; }
+        .del { position: absolute; top: 0; right: 0; background: var(--r); color: #fff; border: none; width: 20px; height: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -57,51 +62,42 @@
     <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setLoc('HONDURAS', 'L', 'hn', this)">
     <img src="https://flagcdn.com/sv.svg" class="flag" onclick="setLoc('EL SALVADOR', '$', 'usd', this)">
     <img src="https://flagcdn.com/gt.svg" class="flag" onclick="setLoc('GUATEMALA', 'Q', 'gt', this)">
-    <img src="https://flagcdn.com/bz.svg" class="flag" onclick="setLoc('BELICE', '$', 'usd', this)">
 </div>
 
 <div id="v-client" class="view active">
     <div id="cont-planes"></div>
     <div style="color:var(--o); font-size:0.6rem; font-weight:900; margin:25px 0 10px; text-align:center; letter-spacing:2px;">MÉTODOS DE PAGO</div>
     <div class="method" onclick="this.classList.toggle('open')">
-        <div class="method-h">OPCIÓN 1: SINPE MÓVIL</div>
+        <div class="method-h">1. SINPE MÓVIL</div>
         <div class="method-c"><b id="d-sinpe" style="color:var(--o); font-size:1.2rem;">...</b><br><span id="d-titular" style="font-size:0.8rem; color:#888;">...</span></div>
     </div>
     <div class="method" onclick="this.classList.toggle('open')">
-        <div class="method-h">OPCIÓN 2: CUENTA IBAN</div>
+        <div class="method-h">2. CUENTA IBAN</div>
         <div class="method-c"><span id="d-iban" style="font-size:0.75rem; word-break:break-all;">...</span></div>
     </div>
-    <button class="btn-gold" onclick="sendWA()">ENVIAR COMPROBANTE</button>
-    <button class="btn-outline" onclick="prompt('Ingrese su clave:')">YA TENGO MI CLAVE</button>
+    <button class="btn-gold" onclick="sendWA()">SOLICITAR ACCESO VIP</button>
+    <button class="btn-outline" onclick="checkKey()">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-admin" class="view">
+    <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">LISTA DE ESPERA / BANEO</span>
+        <div id="admin-users" style="margin-top:10px;"></div>
+    </div>
     <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">TIPO DE CAMBIO</span>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:8px;">
-            <input type="number" id="i-cr" class="inp-admin" placeholder="Costa Rica ₡">
-            <input type="number" id="i-ni" class="inp-admin" placeholder="Nicaragua C$">
-            <input type="number" id="i-hn" class="inp-admin" placeholder="Honduras L">
-            <input type="number" id="i-gt" class="inp-admin" placeholder="Guatemala Q">
+            <input type="number" id="i-cr" class="inp-admin" placeholder="CR ₡">
+            <input type="number" id="i-ni" class="inp-admin" placeholder="NI C$">
         </div>
     </div>
     <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">DATOS DE PAGO</span>
         <input type="text" id="i-sinpe" class="inp-admin" placeholder="Número SINPE">
-        <input type="text" id="i-titular" class="inp-admin" placeholder="Nombre del Titular">
-        <input type="text" id="i-iban" class="inp-admin" placeholder="Cuenta IBAN">
+        <input type="text" id="i-tit" class="inp-admin" placeholder="Titular">
         <input type="text" id="i-wa" class="inp-admin" placeholder="WhatsApp (Ej: 506...)">
     </div>
-    <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">LÁMINAS HOY</span>
-        <input type="file" accept="image/*" onchange="upImg(this)" style="margin-top:8px; width:100%; font-size:0.7rem;">
-        <div id="admin-gal" class="gallery-grid"></div>
-    </div>
-    <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">LISTA DE ESPERA / BANEO</span>
-        <div id="admin-users" style="margin-top:10px; font-size:0.8rem;"></div>
-    </div>
-    <button class="btn-gold" onclick="save()">GUARDAR TODO</button>
-    <button class="btn-outline" onclick="location.reload()">CERRAR PANEL</button>
+    <button class="btn-gold" onclick="save()">APLICAR CAMBIOS</button>
+    <button class="btn-outline" onclick="location.reload()">SALIR PANEL</button>
 </div>
 <script>
-    // 1. CONFIGURACIÓN DE FIREBASE
     const firebaseConfig = {
       apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",
       authDomain: "fran-cruz-sala-vip.firebaseapp.com",
@@ -113,15 +109,12 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const st = firebase.storage();
-
-    // Variables de control
+    
     let sym = "₡", rate = 540, curPlan = "30 DÍAS GOLD", curUSD = 15;
     let rates = { cr: 540, ni: 37, hn: 24.5, gt: 7.8, usd: 1 };
     let sets = { wa: "50664535475", tit: "Randall Sánchez C.", sinpe: "70835833", iban: "CR80080315001000035641" };
-    const hoy = new Date().toISOString().split('T')[0];
 
-    // 2. SINCRONIZACIÓN REAL CON FIREBASE
+    // Sincronización con Firebase
     db.ref('config').on('value', snap => {
         const d = snap.val();
         if(d) {
@@ -133,29 +126,25 @@
                 document.getElementById('d-iban').innerText = sets.iban;
             }
         }
-        render(); // Redibuja los precios con los datos nuevos
+        render();
     });
 
-    // 3. CAMBIO DE PAÍS
     function setLoc(name, s, key, el) {
-        sym = s; 
-        rate = rates[key] || 1;
+        sym = s; rate = rates[key] || 1;
         document.getElementById('region-tag').innerText = `SALA PRIVADA • ${name}`;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         el.classList.add('active');
         render();
     }
 
-    // 4. DIBUJAR MENÚ (Precios $1, $5, $15)
     function render() {
         const cont = document.getElementById('cont-planes');
         cont.innerHTML = '';
         const planes = [
-            {n: "MEMBRESÍA POR HOY", u: 1}, 
+            {n: "ACCESO HOY", u: 1}, 
             {n: "7 DÍAS SILVER", u: 5}, 
             {n: "30 DÍAS GOLD", u: 15}
         ];
-
         planes.forEach(p => {
             const final = Math.round(p.u * rate).toLocaleString();
             const div = document.createElement('div');
@@ -166,71 +155,66 @@
         });
     }
 
-    // 5. GUARDAR DESDE EL ADMIN
-    function save() {
-        const newRates = {
-            cr: document.getElementById('i-cr').value || rates.cr,
-            ni: document.getElementById('i-ni').value || rates.ni,
-            hn: document.getElementById('i-hn').value || rates.hn,
-            gt: document.getElementById('i-gt').value || rates.gt
-        };
-        const newSets = {
-            wa: document.getElementById('i-wa').value || sets.wa,
-            tit: document.getElementById('i-titular').value || sets.tit,
-            sinpe: document.getElementById('i-sinpe').value || sets.sinpe,
-            iban: document.getElementById('i-iban').value || sets.iban
-        };
-        db.ref('config').update({ rates: newRates, settings: newSets }).then(() => {
-            alert("✅ ¡Todo actualizado con éxito!");
-        });
-    }
-
-    // 6. GALERÍA Y USUARIOS
-    function upImg(e) {
-        const f = e.files[0]; if(!f) return;
-        const ref = st.ref('laminas/' + Date.now());
-        ref.put(f).then(s => s.ref.getDownloadURL().then(url => {
-            db.ref('gallery').push({ url, fecha: hoy });
-        }));
-    }
-
-    db.ref('gallery').on('value', snap => {
-        const g = document.getElementById('admin-gal'); g.innerHTML = '';
-        snap.forEach(c => {
-            const it = c.val();
-            if(it.fecha !== hoy) { db.ref('gallery/'+c.key).remove(); return; }
-            g.innerHTML += `<div class="thumb"><img src="${it.url}"><button class="del" onclick="db.ref('gallery/${c.key}').remove()">✕</button></div>`;
-        });
-    });
-
+    // GESTIÓN DE USUARIOS (Baneo y Alta)
     db.ref('users').on('value', snap => {
-        const l = document.getElementById('admin-users'); l.innerHTML = '';
+        const l = document.getElementById('admin-users');
+        l.innerHTML = '';
         snap.forEach(c => {
             const u = c.val();
-            l.innerHTML += `<div style="display:flex; justify-content:space-between; padding:5px; border-bottom:1px solid #222;">
-                <span>${c.key}</span>
-                <button onclick="db.ref('users/${c.key}').update({status:'active'})" style="color:var(--v); background:none; border:none; font-weight:bold;">ALTA</button>
-            </div>`;
+            const color = u.status === 'baneado' ? 'var(--r)' : (u.status === 'activo' ? 'var(--v)' : '#666');
+            l.innerHTML += `
+                <div class="user-card">
+                    <div><b style="color:${color}">${u.status || 'espera'}</b><br>${c.key.substring(0,8)}</div>
+                    <div>
+                        <button onclick="alta('${c.key}')" style="background:var(--v); color:#fff; border:none; padding:5px; border-radius:4px; font-size:0.6rem; cursor:pointer;">ALTA</button>
+                        <button onclick="ban('${c.key}')" style="background:var(--r); color:#fff; border:none; padding:5px; border-radius:4px; font-size:0.6rem; cursor:pointer;">BAN</button>
+                    </div>
+                </div>`;
         });
     });
 
-    // 7. ENVÍO A WHATSAPP
+    function alta(id) {
+        // Genera clave dinámica: Primeros 4 chars ID + Día y Mes actual
+        const d = new Date();
+        const clave = id.substring(0,4).toUpperCase() + String(d.getDate()).padStart(2,'0') + String(d.getMonth()+1).padStart(2,'0');
+        db.ref('users/'+id).update({ status: 'activo', key: clave }).then(() => alert("Activado. Clave: " + clave));
+    }
+
+    function ban(id) { db.ref('users/'+id).update({ status: 'baneado', key: 'BANNED' }); }
+
+    function save() {
+        const newR = { cr: document.getElementById('i-cr').value || rates.cr, ni: document.getElementById('i-ni').value || rates.ni };
+        const newS = { wa: document.getElementById('i-wa').value || sets.wa, tit: document.getElementById('i-tit').value || sets.tit, sinpe: document.getElementById('i-sinpe').value || sets.sinpe, iban: sets.iban };
+        db.ref('config').update({ rates: newR, settings: newS }).then(() => alert("Cambios Aplicados"));
+    }
+
+    // WHATSAPP CON ADVERTENCIA MANDATARIA
     function sendWA() {
         const total = Math.round(curUSD * rate).toLocaleString();
-        const msg = `Hola! Seleccioné: *${curPlan}* (${sym}${total}). Adjunto comprobante.`;
+        const msg = `SOLICITUD DE ACCESO VIP\n--------------------\nPlan: *${curPlan}*\nPrecio: ${sym}${total}\n\n⚠️ *AVISO MANDATARIO:*\nPara procesar su clave dinámica, es *obligatorio* adjuntar el comprobante de pago a este mensaje. De lo contrario, no se podrá activar el acceso.`;
         window.location.href = `https://wa.me/${sets.wa}?text=${encodeURIComponent(msg)}`;
     }
 
-    // Acceso oculto (5 clics al logo)
-    let c = 0;
+    function checkKey() { 
+        const k = prompt("INGRESE SU CLAVE DINÁMICA:");
+        if(k) alert("Validando con el servidor..."); 
+    }
+
+    // Acceso Admin (5 clics logo)
+    let count = 0;
     document.getElementById('adminTrigger').onclick = () => {
-        c++; if(c>=5) {
-            if(prompt("CLAVE ADMIN:") === "2026") {
+        count++;
+        if(count >= 5) {
+            if(prompt("PASSWORD:") === "2026") {
                 document.getElementById('v-client').classList.remove('active');
                 document.getElementById('v-admin').classList.add('active');
-            } c=0;
-        } setTimeout(()=>c=0, 3000);
+            }
+            count = 0;
+        }
+        setTimeout(() => count = 0, 3000);
     };
 
     render();
 </script>
+</body>
+</html>
