@@ -18,42 +18,50 @@
         .box{width:100%;background:rgba(255,255,255,0.03);border:1px solid #222;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;box-sizing:border-box}
         .s{border-color:var(--o);background:rgba(212,175,55,0.05)}
         .bg{width:100%;background:var(--g);color:#000;border:none;padding:20px;border-radius:12px;font-weight:900;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:10px}
-        .pago-header{width:100%;padding:15px;background:rgba(255,255,255,0.05);border:1px solid #333;border-radius:10px;margin-top:8px;cursor:pointer;text-align:center;color:var(--o);font-size:.8rem;font-weight:bold;letter-spacing:1px;box-sizing:border-box}
-        .pago-content{display:none;width:100%;background:rgba(0,0,0,0.5);border:1px solid var(--o);border-top:none;padding:15px;border-radius:0 0 10px 10px;box-sizing:border-box;text-align:center}
-        .pago-content p{margin:5px 0;font-size:1.1rem;color:#fff;font-weight:bold}
-        .admin-section{width:100%;background:rgba(255,255,255,0.02);border:1px solid #333;border-radius:15px;padding:20px;margin-bottom:15px;box-sizing:border-box;text-align:center}
+        
+        /* GALERÍA VIP */
+        #galeriaVip img{width:100%;border-radius:10px;margin-bottom:15px;border:1px solid #333}
         .inp-admin{width:100%;padding:15px;background:#111;border:1px solid #444;border-radius:10px;color:#fff;text-align:center;margin-bottom:10px;box-sizing:border-box;font-weight:bold;text-transform:uppercase}
-        .toast{position:fixed;top:20px;background:var(--o);color:#000;padding:10px 20px;border-radius:20px;font-size:0.8rem;font-weight:bold;z-index:1000;display:none}
-        .btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+        .pago-header{width:100%;padding:15px;background:rgba(255,255,255,0.05);border:1px solid #333;border-radius:10px;margin-top:8px;cursor:pointer;text-align:center;color:var(--o);font-size:.8rem;font-weight:bold;box-sizing:border-box}
+        .pago-content{display:none;width:100%;background:rgba(0,0,0,0.5);border:1px solid var(--o);padding:15px;border-radius:0 0 10px 10px;box-sizing:border-box;text-align:center}
     </style>
 </head>
 <body>
 
-<div id="toast" class="toast">COPIADO</div>
-
 <header onclick="tAdmin()">
     <div class="l">FRAN CRUZ VIP</div>
     <div class="b" id="bc"></div>
-    <p style="color:#444;font-size:.6rem;letter-spacing:3px;margin:0;text-transform:uppercase">Sistema Regional Protegido</p>
 </header>
 
 <div id="u" class="p a">
+    <button class="bg" style="margin-bottom:30px" onclick="vP('u','accesoClave')">INGRESAR A SALA VIP</button>
+    
     <div class="box" onclick="sel(1,this)"><span>Acceso Hoy</span><b id="v1">--</b></div>
     <div class="box" onclick="sel(7,this)"><span>7 Días Silver</span><b id="v7">--</b></div>
     <div class="box s" onclick="sel(15,this)"><span>30 Días Gold</span><b id="v15">--</b></div>
 
     <div style="width:100%;margin:15px 0">
-        <h4 style="color:var(--o);text-align:center;font-size:.7rem;letter-spacing:2px">MÉTODOS DE PAGO (TOCA PARA VER)</h4>
         <div class="pago-header" onclick="tP('s1')">1. SINPE MÓVIL</div>
-        <div id="s1" class="pago-content" onclick="copy('70835833')"><b>TOCA PARA COPIAR</b><p>70835833</p><small>Randall Sánchez C.</small></div>
-
+        <div id="s1" class="pago-content" onclick="copy('70835833')"><p>70835833</p></div>
         <div class="pago-header" onclick="tP('s2')">2. TRANSFERENCIA IBAN</div>
-        <div id="s2" class="pago-content" onclick="copy('CR80080315001000035641')"><b>TOCA PARA COPIAR</b><p>CR80080315001000035641</p></div>
-
-        <div class="pago-header" onclick="tP('s3')">3. PAYPAL / CORREO</div>
-        <div id="s3" class="pago-content" onclick="copy('randallesc061376@gmail.com')"><b>TOCA PARA COPIAR</b><p>randallesc061376@gmail.com</p></div>
+        <div id="s2" class="pago-content" onclick="copy('CR80080315001000035641')"><p>CR80080315001000035641</p></div>
+        <div class="pago-header" onclick="tP('s3')">3. PAYPAL</div>
+        <div id="s3" class="pago-content" onclick="copy('randallesc061376@gmail.com')"><p>randallesc061376@gmail.com</p></div>
     </div>
-    <button class="bg" onclick="wa()">ENVIAR COMPROBANTE DE PAGO</button>
+    <button class="bg" onclick="wa()">SOLICITAR MI CLAVE ACCESO</button>
+</div>
+
+<div id="accesoClave" class="p">
+    <h3 style="color:var(--o);text-align:center">INGRESE SU CLAVE DINÁMICA</h3>
+    <input type="text" id="claveCliente" class="inp-admin" placeholder="EJ: 6XV11" maxlength="5">
+    <button class="bg" onclick="validarAcceso()">VER CONTENIDO VIP</button>
+    <button class="bg" style="background:none;color:#555" onclick="vP('accesoClave','u')">VOLVER</button>
+</div>
+
+<div id="salaVip" class="p">
+    <h3 style="color:var(--o);margin-bottom:20px">BIENVENIDO A LA SALA VIP</h3>
+    <div id="galeriaVip"></div>
+    <button class="bg" style="background:none;color:#555" onclick="location.reload()">SALIR</button>
 </div>
 
 <div id="l" class="p">
@@ -62,20 +70,10 @@
 </div>
 
 <div id="ad" class="p">
-    <div class="admin-section">
-        <button class="bg" style="background:#222;color:var(--o);border:1px solid var(--o);margin-bottom:15px" onclick="document.getElementById('fi').click()">ELEGIR LÁMINA</button>
-        <input type="file" id="fi" accept="image/*" style="display:none">
-        <button class="bg" onclick="sub()">PUBLICAR LÁMINA</button>
-    </div>
-
-    <div class="admin-section">
-        <input type="text" id="targetUid" class="inp-admin" placeholder="UID DEL CLIENTE">
-        <div class="btn-grid">
-            <button class="bg" style="background:#800;color:#fff" onclick="ban(true)">BAN</button>
-            <button class="bg" style="background:#080;color:#fff" onclick="ban(false)">ALTA</button>
-        </div>
-    </div>
-    <button class="bg" style="background:none;color:#555;border:1px solid #222" onclick="location.reload()">CERRAR SESIÓN</button>
+    <input type="file" id="fi" accept="image/*" style="display:none">
+    <button class="bg" onclick="document.getElementById('fi').click()">ELEGIR LÁMINA</button>
+    <button class="bg" onclick="sub()">PUBLICAR LÁMINA</button>
+    <button class="bg" style="background:none;color:#555" onclick="location.reload()">CERRAR SESIÓN</button>
 </div>
 
 <script>
@@ -92,41 +90,50 @@ function init(){
     });updP();
 }
 function updP(){
-    const t=T[ps];document.getElementById('v1').innerText=t.m+(1*t.f).toLocaleString();
+    const t=T[ps];
+    document.getElementById('v1').innerText=t.m+(1*t.f).toLocaleString();
     document.getElementById('v7').innerText=t.m+(7*t.f).toLocaleString();
     document.getElementById('v15').innerText=t.m+(15*t.f).toLocaleString();
 }
-function tP(id){const e=document.getElementById(id);const v=e.style.display==='block';document.querySelectorAll('.pago-content').forEach(x=>x.style.display='none');e.style.display=v?'none':'block'}
+function tP(id){document.querySelectorAll('.pago-content').forEach(x=>x.style.display='none');document.getElementById(id).style.display='block'}
 function sel(v,e){pS=v;document.querySelectorAll('.box').forEach(x=>x.classList.remove('s'));e.classList.add('s')}
 function tAdmin(){cl++;if(cl>=5){vP('u','l');cl=0}setTimeout(()=>cl=0,3000)}
 function vP(o,n){document.getElementById(o).classList.remove('a');document.getElementById(n).classList.add('a')}
 function vPk(){if(document.getElementById('pk').value==="ADMIN123")vP('l','ad');else location.reload()}
-function copy(t){navigator.clipboard.writeText(t);const o=document.getElementById('toast');o.style.display='block';setTimeout(()=>o.style.display='none',1500)}
+
+// LÓGICA DE CLIENTE: VALIDAR CLAVE DINÁMICA
+function validarAcceso(){
+    const input=document.getElementById('claveCliente').value.toUpperCase();
+    const hoy=new Date().getDate().toString().padStart(2,'0');
+    // Verifica que termine en el día actual (seguridad básica)
+    if(input.endsWith(hoy) && input.length >= 4){
+        cargarGaleria();
+        vP('accesoClave','salaVip');
+    } else {
+        alert("CLAVE INVÁLIDA O VENCIDA");
+    }
+}
+
+async function cargarGaleria(){
+    const q=await db.collection("galeria").orderBy("fecha","desc").get();
+    const g=document.getElementById('galeriaVip');g.innerHTML="";
+    q.forEach(d=>{g.innerHTML+=`<img src="${d.data().url}">`});
+}
 
 function wa(){
     const t=T[ps],m=(pS*t.f).toLocaleString(),hoy=new Date().getDate().toString().padStart(2,'0');
-    const fullUid=Math.random().toString(36).substring(2,10).toUpperCase();
-    const shortUid=fullUid.charAt(Math.floor(Math.random()*fullUid.length))+fullUid.charAt(Math.floor(Math.random()*fullUid.length));
-    const finalKey=shortUid+hoy;
-    
-    const msg=`Buen día. He seleccionado el Plan de ${pS} días (${t.m}${m}).\n\nAdjunto envío mi comprobante de pago oficial. Quedo a la espera de la validación para recibir mi clave dinámica de acceso.\n\nGestión ID: ${finalKey}`;
+    const id=Math.random().toString(36).substring(2,4).toUpperCase()+hoy;
+    const msg=`Buen día. Adjunto comprobante del Plan ${pS} días (${t.m}${m}).\n\nGestión ID: ${id}`;
     window.location.href=`https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
-}
-
-async function ban(status){
-    const id=document.getElementById('targetUid').value;if(!id)return;
-    await db.collection("usuarios").doc(id).set({banned:status},{merge:true});
-    alert(status?"CLIENTE BANEADO":"CLIENTE REHABILITADO");
 }
 
 async function sub(){
     const f=document.getElementById('fi').files[0];if(!f)return;
     const r=st.ref('galeria/'+Date.now());await r.put(f);
     const u=await r.getDownloadURL();await db.collection("galeria").add({url:u,fecha:firebase.firestore.FieldValue.serverTimestamp()});
-    alert("PUBLICACIÓN EXITOSA");location.reload();
+    alert("PUBLICADA");location.reload();
 }
 init();
 </script>
 </body>
-            </html>
-            
+</html>
