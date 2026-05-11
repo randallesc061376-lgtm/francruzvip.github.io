@@ -18,14 +18,7 @@
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
 
-        /* Estilos Pantalla de Estados (Protocolo de Validación) */
-        .status-screen { text-align: center; padding: 40px 20px; }
-        .loader-ring { width: 60px; height: 60px; border: 3px solid #111; border-top: 3px solid var(--o); border-radius: 50%; margin: 20px auto; animation: spin 1s linear infinite; }
-        .msg-box { background: #0c0c0c; border: 1px solid #1a1a1a; padding: 25px; border-radius: 15px; margin-top: 20px; }
-        .msg-box h2 { color: var(--o); margin-top: 0; font-size: 1.2rem; text-transform: uppercase; }
-        .msg-box p { font-size: 0.9rem; color: #ccc; line-height: 1.5; }
-
-        /* Menú Principal (8 BANDERAS - RESTAURADO) */
+        /* --- FRONT END ORIGINAL --- */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 10px; background: #0f0f0f; border-radius: 15px; }
         .flag { width: 100%; height: 25px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 10px var(--o); }
@@ -39,15 +32,25 @@
         .copy-box { background: #111; padding: 12px; border-radius: 8px; margin: 8px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; }
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; margin: 15px 20px; cursor: pointer; text-transform: uppercase; }
 
-        /* Admin y Galería */
-        .grid-gal { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 15px; }
-        .img-wrap { border-radius: 10px; overflow: hidden; border: 1px solid #1a1a1a; aspect-ratio: 9/16; background: #000; }
-        .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        /* --- TORRE DE CONTROL (ADMIN) --- */
+        .adm-card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 15px; padding: 15px; margin: 10px 20px; }
+        .adm-label { color: var(--o); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: block; letter-spacing: 1px; }
+        .adm-input { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 0.9rem; }
+        
         .user-row { background: #000; border: 1px solid #222; padding: 12px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .badge { font-size: 0.6rem; padding: 3px 7px; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
         .badge.wait { background: var(--o); color: #000; }
         .badge.active { background: #2ecc71; color: #fff; }
         .badge.ban { background: #e74c3c; color: #fff; }
+
+        .grid-gal-adm { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+        .img-adm { position: relative; aspect-ratio: 1; border-radius: 5px; overflow: hidden; border: 1px solid #222; }
+        .img-adm img { width: 100%; height: 100%; object-fit: cover; }
+        .btn-del { position: absolute; top: 0; right: 0; background: rgba(231,76,60,0.8); color: #fff; border: none; padding: 2px 6px; font-size: 10px; cursor: pointer; }
+
+        /* Mensajes de Estado */
+        .status-screen { text-align: center; padding: 40px 20px; }
+        .loader-ring { width: 50px; height: 50px; border: 3px solid #111; border-top: 3px solid var(--o); border-radius: 50%; margin: 20px auto; animation: spin 1s linear infinite; }
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -71,20 +74,15 @@
         <img src="https://flagcdn.com/bz.svg" class="flag" onclick="setLoc('BELICE', 'BZ$', 2)">
         <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('WORLDWIDE', '$', 1)">
     </div>
-    <div class="card" onclick="selP(this, 'HOY', 1)"><span>ACCESO HOY</span><b class="p-val">₡540</b></div>
-    <div class="card" onclick="selP(this, '7 DÍAS', 5)"><span>7 DÍAS SILVER</span><b class="p-val">₡2,700</b></div>
-    <div class="card sel" onclick="selP(this, '30 DÍAS', 20)"><span>30 DÍAS GOLD</span><b class="p-val">₡10,800</b></div>
+    <div class="card" onclick="selP(this, 'HOY')"><span>ACCESO HOY</span><b class="p-val">₡540</b></div>
+    <div class="card" onclick="selP(this, '7 DÍAS')"><span>7 DÍAS SILVER</span><b class="p-val">₡2,700</b></div>
+    <div class="card sel" onclick="selP(this, '30 DÍAS')"><span>30 DÍAS GOLD</span><b class="p-val">₡10,800</b></div>
+    
     <div class="acc-item">
-        <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL / GRUPO MUTUAL <span>▼</span></div>
+        <div class="acc-head" onclick="toggleAcc(this)">MÉTODOS DE PAGO <span>▼</span></div>
         <div class="acc-body active">
             <div class="copy-box" onclick="copy('70835833')">70835833</div>
-            <div class="copy-box" onclick="copy('CR80080315001000035641')">CR80...641</div>
-        </div>
-    </div>
-    <div class="acc-item">
-        <div class="acc-head" onclick="toggleAcc(this)">2. PAYPAL <span>▼</span></div>
-        <div class="acc-body">
-            <div class="copy-box" onclick="copy('randallesc061376@gmail.com')">randallesc061376@gmail.com</div>
+            <div class="copy-box" onclick="copy('randallesc061376@gmail.com')">PayPal Email</div>
         </div>
     </div>
     <button class="btn-gold" onclick="requestAccess()">ENVIAR COMPROBANTE</button>
@@ -95,18 +93,33 @@
 </div>
 
 <div id="v-gallery" class="view">
-    <div style="padding: 20px; text-align: center; color: var(--o); font-weight: 800;">SALA PLATINUM EXCLUSIVA</div>
-    <div id="vip-grid" class="grid-gal"></div>
+    <div id="vip-grid" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; padding:15px;"></div>
     <button class="btn-gold" style="background:#111; color:#fff" onclick="location.reload()">SALIR</button>
 </div>
 
 <div id="v-admin" class="view">
-    <div style="padding:20px">
+    <div class="adm-card">
+        <span class="adm-label">Lista de Espera y Baneos</span>
         <div id="admin-user-list"></div>
-        <input type="file" id="f-upload" style="margin-top:20px">
-        <button class="btn-gold" onclick="uploadImg()">PUBLICAR LÁMINA</button>
-        <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">CERRAR SESIÓN</button>
     </div>
+
+    <div class="adm-card">
+        <span class="adm-label">Cargar Nueva Lámina</span>
+        <input type="file" id="f-upload" class="adm-input">
+        <button class="btn-gold" style="margin:0; width:100%; padding:12px" onclick="uploadImg()">PUBLICAR EN GALERÍA</button>
+        <div id="admin-gallery-view" class="grid-gal-adm"></div>
+    </div>
+
+    <div class="adm-card">
+        <span class="adm-label">Tipos de Cambio ($1 USD)</span>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
+            <input type="number" id="rate-cr" class="adm-input" placeholder="₡ CR">
+            <input type="number" id="rate-ni" class="adm-input" placeholder="C$ NI">
+        </div>
+        <button class="btn-gold" style="margin:0; width:100%; padding:10px" onclick="saveRates()">ACTUALIZAR TASAS</button>
+    </div>
+
+    <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">CERRAR TORRE DE CONTROL</button>
 </div>
 
 <script>
@@ -124,27 +137,83 @@
     localStorage.setItem('fc_id', myID);
     let curTasa = 540, curSim = "₡", curP = "30 DÍAS", clicks = 0;
 
-    // MONITOR DE ESTADO - PROTOCOLO DE MENSAJES
+    // --- MONITOR DE USUARIO ---
     db.ref('users/' + myID).on('value', ss => {
         const user = ss.val();
         if(!user) return;
-        
         showView('v-status');
         const cont = document.getElementById('status-content');
-
         if(user.status === 'wait') {
-            cont.innerHTML = `<div class="loader-ring"></div><div class="msg-box"><h2>VALIDANDO COMPROBANTE</h2><p>Estamos verificando tu pago. <b>Por favor espera unos minutos.</b> No cierres esta ventana.</p></div>`;
+            cont.innerHTML = `<div class="loader-ring"></div><div class="adm-card"><h2>VERIFICANDO PAGO</h2><p>Estamos procesando tu comprobante. <b>Recibirás acceso en segundos.</b></p></div>`;
         } else if(user.status === 'active') {
-            cont.innerHTML = `<div class="msg-box" style="border-color:#2ecc71"><h2 style="color:#2ecc71">¡BIENVENIDO VIP!</h2><p>Tu acceso ha sido confirmado.</p><button class="btn-gold" onclick="enterGallery()">ENTRAR A LA SALA</button></div>`;
+            cont.innerHTML = `<div class="adm-card" style="border-color:#2ecc71"><h2>¡ACCESO ACTIVADO!</h2><p>Bienvenido a la sala privada.</p><button class="btn-gold" onclick="enterGallery()">ENTRAR AHORA</button></div>`;
         } else if(user.status === 'ban') {
-            cont.innerHTML = `<div class="msg-box" style="border-color:#e74c3c"><h2 style="color:#e74c3c">ACCESO RESTRINGIDO</h2><p>Contacta a soporte para reactivar tu ID: ${myID}</p><button class="btn-gold" style="background:#e74c3c" onclick="window.location.href='https://wa.me/50664535475?text=Reactivar ID: ${myID}'">APELAR BANEO</button></div>`;
+            cont.innerHTML = `<div class="adm-card" style="border-color:#e74c3c"><h2>ACCESO DENEGADO</h2><p>Tu ID ha sido bloqueado por seguridad.</p><button class="btn-gold" style="background:#e74c3c" onclick="window.location.href='https://wa.me/50664535475?text=Reactivar ID: ${myID}'">CONTACTAR SOPORTE</button></div>`;
         }
     });
 
+    // --- FUNCIONES ADMIN ---
+    function adminAccess() {
+        clicks++;
+        if(clicks >= 5) {
+            if(prompt("PASS:") === "1376") { 
+                showView('v-admin'); 
+                loadAdminUsers();
+                loadAdminGallery();
+            }
+            clicks = 0;
+        }
+        setTimeout(() => clicks = 0, 2000);
+    }
+
+    function loadAdminUsers() {
+        db.ref('users').on('value', ss => {
+            const list = document.getElementById('admin-user-list');
+            list.innerHTML = "";
+            ss.forEach(u => {
+                const user = u.val();
+                list.innerHTML += `<div class="user-row">
+                    <div><b>${user.id}</b> <span class="badge ${user.status}">${user.status}</span></div>
+                    <div>
+                        <button onclick="db.ref('users/${user.id}').update({status:'active'})" style="color:#2ecc71; background:none; border:none; font-weight:900">✓</button>
+                        <button onclick="db.ref('users/${user.id}').update({status:'ban'})" style="color:#e74c3c; background:none; border:none; font-weight:900; margin-left:10px">X</button>
+                    </div>
+                </div>`;
+            });
+        });
+    }
+
+    function uploadImg() {
+        const file = document.getElementById('f-upload').files[0];
+        if(!file) return;
+        const ref = st.ref('laminas/' + Date.now());
+        ref.put(file).then(s => s.ref.getDownloadURL().then(url => {
+            db.ref('gallery').push({url, time: Date.now()});
+            alert("LÁMINA PUBLICADA");
+        }));
+    }
+
+    function loadAdminGallery() {
+        db.ref('gallery').on('value', ss => {
+            const view = document.getElementById('admin-gallery-view');
+            view.innerHTML = "";
+            ss.forEach(img => {
+                view.innerHTML += `<div class="img-adm"><img src="${img.val().url}"><button class="btn-del" onclick="db.ref('gallery/${img.key}').remove()">X</button></div>`;
+            });
+        });
+    }
+
+    function saveRates() {
+        const cr = document.getElementById('rate-cr').value;
+        const ni = document.getElementById('rate-ni').value;
+        db.ref('rates').set({cr, ni});
+        alert("TASAS ACTUALIZADAS");
+    }
+
+    // --- FUNCIONES CLIENTE ---
     function requestAccess() {
-        const key = `${myID}-${new Date().getDate()}`;
-        db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP, key: key, time: Date.now() }).then(() => {
-            window.location.href = `https://wa.me/50664535475?text=Hola Randall, envío mi comprobante para el plan ${curP}. Mi ID de validación es: ${myID}`;
+        db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP, time: Date.now() }).then(() => {
+            window.location.href = `https://wa.me/50664535475?text=Hola, envío comprobante para ${curP}. ID: ${myID}`;
         });
     }
 
@@ -153,7 +222,7 @@
         db.ref('gallery').on('value', ss => {
             const grid = document.getElementById('vip-grid');
             grid.innerHTML = "";
-            ss.forEach(img => { grid.innerHTML += `<div class="img-wrap"><img src="${img.val().url}"></div>`; });
+            ss.forEach(img => { grid.innerHTML += `<div style="border-radius:8px; overflow:hidden; aspect-ratio:9/16; background:#111"><img src="${img.val().url}" style="width:100%; height:100%; object-fit:cover"></div>`; });
         });
     }
 
@@ -171,13 +240,14 @@
     }
 
     function updatePrices() {
-        const base = [1, 5, 20];
-        document.querySelectorAll('.p-val').forEach((el, i) => {
-            el.innerText = curSim + Math.round(base[i] * curTasa).toLocaleString();
+        const base = {'HOY':1, '7 DÍAS':5, '30 DÍAS':20};
+        document.querySelectorAll('.card').forEach(c => {
+            const plan = c.querySelector('span').innerText.split(' ')[0] === 'HOY' ? 'HOY' : c.querySelector('span').innerText.split(' ')[0] + ' DÍAS';
+            if(base[plan]) c.querySelector('b').innerText = curSim + Math.round(base[plan] * curTasa).toLocaleString();
         });
     }
 
-    function selP(el, p, u) {
+    function selP(el, p) {
         curP = p;
         document.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
         el.classList.add('sel');
@@ -185,35 +255,6 @@
 
     function copy(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
     function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
-
-    function adminAccess() {
-        clicks++;
-        if(clicks >= 5) {
-            if(prompt("KEYPASS:") === "1376") { showView('v-admin'); loadAdmin(); }
-            clicks = 0;
-        }
-    }
-
-    function loadAdmin() {
-        db.ref('users').on('value', ss => {
-            const list = document.getElementById('admin-user-list');
-            list.innerHTML = "";
-            ss.forEach(u => {
-                const user = u.val();
-                list.innerHTML += `<div class="user-row"><div><b>${user.id}</b> <span class="badge ${user.status}">${user.status}</span></div><div><button onclick="db.ref('users/${user.id}').update({status:'active'})">✓</button><button onclick="db.ref('users/${user.id}').update({status:'ban'})">X</button></div></div>`;
-            });
-        });
-    }
-
-    function uploadImg() {
-        const file = document.getElementById('f-upload').files[0];
-        if(!file) return;
-        const ref = st.ref('laminas/' + Date.now());
-        ref.put(file).then(s => s.ref.getDownloadURL().then(url => {
-            db.ref('gallery').push({url, time: Date.now()});
-            alert("LÁMINA PUBLICADA");
-        }));
-    }
 </script>
 </body>
 </html>
