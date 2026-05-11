@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • TORRE DE CONTROL</title>
+    <title>FRAN CRUZ VIP • PLATINUM</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
@@ -18,7 +18,7 @@
         .view { display: none; width: 100%; max-width: 450px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
 
-        /* --- MENÚ PRINCIPAL (8 BANDERAS INTACTO) --- */
+        /* --- FRONT END BLINDADO --- */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 10px; background: #0f0f0f; border-radius: 15px; }
         .flag { width: 100%; height: 25px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 10px var(--o); }
@@ -27,42 +27,25 @@
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.2rem; }
 
-        .acc-item { border: 1px solid #1a1a1a; border-radius: 10px; margin: 0 20px 8px; overflow: hidden; }
-        .acc-head { background: #111; padding: 15px; font-size: 0.8rem; font-weight: bold; color: #888; cursor: pointer; display: flex; justify-content: space-between; }
-        .acc-body { display: none; background: #080808; padding: 15px; border-top: 1px solid #1a1a1a; text-align: center; }
-        .acc-body.active { display: block; }
-        .copy-box { background: #111; padding: 12px; border-radius: 8px; margin: 8px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; }
+        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; margin: 10px 20px; cursor: pointer; text-transform: uppercase; }
+        
+        /* BOTÓN NUEVO: YA TENGO MI CLAVE */
+        .btn-outline { width: calc(100% - 40px); background: transparent; color: #555; border: 1px solid #222; padding: 12px; border-radius: 10px; font-weight: 700; margin: 5px 20px; cursor: pointer; font-size: 0.75rem; letter-spacing: 1px; transition: 0.3s; }
+        .btn-outline:active { border-color: var(--o); color: var(--o); }
 
-        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; margin: 15px 20px; cursor: pointer; text-transform: uppercase; }
-
-        /* --- TORRE DE CONTROL (ADMIN COMPLETO) --- */
+        /* --- TORRE DE CONTROL (ADMIN) --- */
         .adm-card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 15px; padding: 20px; margin: 10px 20px; }
         .adm-label { color: var(--o); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; display: block; border-left: 3px solid var(--o); padding-left: 10px; }
-        
         .user-row { background: #000; border: 1px solid #222; padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .u-info b { font-family: monospace; font-size: 1.1rem; }
-        .u-info span { display: block; font-size: 0.65rem; color: #666; }
-        
-        .btn-act { border: none; padding: 8px 12px; border-radius: 6px; font-weight: 900; cursor: pointer; margin-left: 5px; font-size: 0.7rem; }
-        .btn-v { background: var(--v); color: #000; }
-        .btn-r { background: var(--r); color: #fff; }
-
-        .grid-adm-gal { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 10px; }
+        .grid-adm-gal { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .img-adm { position: relative; aspect-ratio: 9/16; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
         .img-adm img { width: 100%; height: 100%; object-fit: cover; }
-        .btn-del { position: absolute; bottom: 8px; right: 8px; background: var(--r); border: none; color: #fff; padding: 10px; border-radius: 50%; cursor: pointer; font-weight: 900; }
+        .adm-input { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 10px; margin-bottom: 10px; }
 
-        .adm-input { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 10px; margin-bottom: 10px; font-size: 1rem; }
-
-        /* Mensajes de Estado */
-        .status-screen { text-align: center; padding: 40px 20px; }
-        .loader { width: 50px; height: 50px; border: 3px solid #111; border-top: 3px solid var(--o); border-radius: 50%; margin: 20px auto; animation: spin 1s linear infinite; }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
 <header onclick="adminAccess()">
     <div class="logo">FRAN CRUZ VIP</div>
@@ -82,21 +65,11 @@
     </div>
     
     <div class="card" onclick="selP(this, 'HOY')"><span>ACCESO HOY</span><b class="p-val">₡540</b></div>
-    <div class="card" onclick="selP(this, '7 DÍAS')"><span>7 DÍAS SILVER</span><b class="p-val">₡2,700</b></div>
     <div class="card sel" onclick="selP(this, '30 DÍAS')"><span>30 DÍAS GOLD</span><b class="p-val">₡10,800</b></div>
     
-    <div class="acc-item">
-        <div class="acc-head" onclick="toggleAcc(this)">MÉTODOS DE PAGO <span>▼</span></div>
-        <div class="acc-body active">
-            <div class="copy-box" onclick="copy('70835833')">70835833 (SINPE)</div>
-            <div class="copy-box" onclick="copy('randallesc061376@gmail.com')">PayPal Email</div>
-        </div>
-    </div>
     <button class="btn-gold" onclick="requestAccess()">ENVIAR COMPROBANTE</button>
-</div>
-
-<div id="v-status" class="view">
-    <div class="status-screen" id="status-content"></div>
+    
+    <button class="btn-outline" onclick="loginWithKey()">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-gallery" class="view">
@@ -106,30 +79,18 @@
 
 <div id="v-admin" class="view">
     <div class="adm-card">
-        <span class="adm-label">Control de Usuarios y Baneos</span>
+        <span class="adm-label">Lista de Espera y Baneos</span>
         <div id="admin-user-list"></div>
     </div>
-
     <div class="adm-card">
         <span class="adm-label">Publicar Lámina</span>
         <input type="file" id="f-upload" class="adm-input" accept="image/*">
-        <button class="btn-gold" style="margin:0; width:100%" onclick="uploadImg()">SUBIR A GALERÍA</button>
+        <button class="btn-gold" style="margin:0; width:100%" onclick="uploadImg()">SUBIR AHORA</button>
     </div>
-
     <div class="adm-card">
-        <span class="adm-label">Revisar Galería Actual</span>
+        <span class="adm-label">Galería</span>
         <div id="admin-gallery-view" class="grid-adm-gal"></div>
     </div>
-
-    <div class="adm-card">
-        <span class="adm-label">Tipos de Cambio ($1 USD)</span>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
-            <input type="number" id="rate-cr" class="adm-input" placeholder="CRC ₡">
-            <input type="number" id="rate-ni" class="adm-input" placeholder="NIO C$">
-        </div>
-        <button class="btn-gold" style="margin:0; width:100%" onclick="saveRates()">ACTUALIZAR TASAS</button>
-    </div>
-
     <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">SALIR DEL PANEL</button>
 </div>
 
@@ -146,32 +107,45 @@
 
     let myID = localStorage.getItem('fc_id') || 'VIP' + Math.floor(Math.random()*9000+1000);
     localStorage.setItem('fc_id', myID);
-    let curTasa = 540, curSim = "₡", curP = "30 DÍAS", clicks = 0;
+    let curTasa = 540, curSim = "₡", clicks = 0;
 
-    // --- PROTOCOLO DE ESTADOS ---
-    db.ref('users/' + myID).on('value', ss => {
-        const user = ss.val();
-        if(!user) return;
-        showView('v-status');
-        const cont = document.getElementById('status-content');
-        if(user.status === 'wait') {
-            cont.innerHTML = `<div class="loader"></div><div class="adm-card"><h2>ESPERANDO VALIDACIÓN</h2><p>Randall está verificando tu pago. <b>Recibirás acceso en breve.</b></p></div>`;
-        } else if(user.status === 'active') {
-            cont.innerHTML = `<div class="adm-card" style="border-color:#2ecc71"><h2>ACCESO CONCEDIDO</h2><p>Tu suscripción está activa.</p><button class="btn-gold" onclick="enterGallery()">ENTRAR A LA SALA</button></div>`;
-        } else if(user.status === 'ban') {
-            cont.innerHTML = `<div class="adm-card" style="border-color:#e74c3c"><h2>ID BLOQUEADO</h2><p>ID: ${myID}. Contacta a soporte para más información.</p><button class="btn-gold" style="background:#e74c3c; color:#fff" onclick="window.location.href='https://wa.me/50664535475?text=Reactivar ID: ${myID}'">SOPORTE</button></div>`;
-        }
-    });
+    // Lógica para el botón "Ya tengo mi clave"
+    function loginWithKey() {
+        const pass = prompt("INGRESA TU CLAVE DINÁMICA:");
+        if(!pass) return;
+        
+        // Buscamos si el ID existe y está activo en la base de datos
+        db.ref('users/' + pass).once('value', ss => {
+            if(ss.exists() && ss.val().status === 'active') {
+                localStorage.setItem('fc_id', pass);
+                enterGallery();
+            } else {
+                alert("CLAVE INVÁLIDA O EXPIRADA");
+            }
+        });
+    }
 
-    // --- FUNCIONES ADMIN ---
+    function enterGallery() {
+        document.getElementById('v-client').classList.remove('active');
+        document.getElementById('v-gallery').classList.add('active');
+        db.ref('gallery').on('value', ss => {
+            const grid = document.getElementById('vip-grid');
+            grid.innerHTML = "";
+            ss.forEach(img => { 
+                grid.innerHTML += `<div style="border-radius:10px; overflow:hidden; aspect-ratio:9/16"><img src="${img.val().url}" style="width:100%; height:100%; object-fit:cover"></div>`; 
+            });
+        });
+    }
+
+    // Funciones del Admin y Cliente se mantienen...
     function adminAccess() {
         clicks++;
         if(clicks >= 5) {
-            if(prompt("PASSWORD:") === "1376") { 
-                showView('v-admin'); 
+            if(prompt("PASS:") === "1376") { 
+                document.getElementById('v-client').classList.remove('active');
+                document.getElementById('v-admin').classList.add('active');
                 loadAdminUsers();
                 loadAdminGallery();
-                loadRates();
             }
             clicks = 0;
         }
@@ -185,10 +159,10 @@
             ss.forEach(u => {
                 const user = u.val();
                 list.innerHTML += `<div class="user-row">
-                    <div class="u-info"><b>${user.id}</b><span>${user.plan} | ${user.status}</span></div>
+                    <div><b>${user.id}</b><br><small>${user.status}</small></div>
                     <div>
-                        <button class="btn-act btn-v" onclick="db.ref('users/${user.id}').update({status:'active'})">✓</button>
-                        <button class="btn-act btn-r" onclick="db.ref('users/${user.id}').update({status:'ban'})">X</button>
+                        <button onclick="db.ref('users/${user.id}').update({status:'active'})" style="color:var(--v); background:none; border:none; font-weight:900; margin-right:10px">✓</button>
+                        <button onclick="db.ref('users/${user.id}').update({status:'ban'})" style="color:var(--r); background:none; border:none; font-weight:900">X</button>
                     </div>
                 </div>`;
             });
@@ -200,8 +174,8 @@
         if(!file) return;
         const ref = st.ref('laminas/' + Date.now());
         ref.put(file).then(s => s.ref.getDownloadURL().then(url => {
-            db.ref('gallery').push({url, time: Date.now()});
-            alert("LÁMINA PUBLICADA");
+            db.ref('gallery').push({url});
+            alert("PUBLICADO");
         }));
     }
 
@@ -210,45 +184,15 @@
             const view = document.getElementById('admin-gallery-view');
             view.innerHTML = "";
             ss.forEach(img => {
-                view.innerHTML += `<div class="img-adm"><img src="${img.val().url}"><button class="btn-del" onclick="db.ref('gallery/${img.key}').remove()">×</button></div>`;
+                view.innerHTML += `<div class="img-adm"><img src="${img.val().url}"><button onclick="db.ref('gallery/${img.key}').remove()" style="position:absolute; top:5px; right:5px; background:red; border:none; color:white; border-radius:50%">X</button></div>`;
             });
         });
     }
 
-    function loadRates() {
-        db.ref('rates').once('value', ss => {
-            if(ss.exists()){
-                document.getElementById('rate-cr').value = ss.val().cr;
-                document.getElementById('rate-ni').value = ss.val().ni;
-            }
-        });
-    }
-
-    function saveRates() {
-        const cr = document.getElementById('rate-cr').value;
-        const ni = document.getElementById('rate-ni').value;
-        db.ref('rates').set({cr, ni}).then(() => alert("TASAS ACTUALIZADAS"));
-    }
-
-    // --- FUNCIONES CLIENTE ---
     function requestAccess() {
-        db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP, time: Date.now() }).then(() => {
-            window.location.href = `https://wa.me/50664535475?text=Hola Randall, envío comprobante para ${curP}. ID: ${myID}`;
+        db.ref('users/' + myID).set({ id: myID, status: 'wait', time: Date.now() }).then(() => {
+            window.location.href = `https://wa.me/50664535475?text=Comprobante VIP. Mi ID: ${myID}`;
         });
-    }
-
-    function enterGallery() {
-        showView('v-gallery');
-        db.ref('gallery').on('value', ss => {
-            const grid = document.getElementById('vip-grid');
-            grid.innerHTML = "";
-            ss.forEach(img => { grid.innerHTML += `<div style="border-radius:10px; overflow:hidden; aspect-ratio:9/16"><img src="${img.val().url}" style="width:100%; height:100%; object-fit:cover"></div>`; });
-        });
-    }
-
-    function showView(id) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
     }
 
     function setLoc(n, s, t) {
@@ -256,26 +200,12 @@
         document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         event.target.classList.add('active');
-        updatePrices();
-    }
-
-    function updatePrices() {
-        const base = {'HOY':1, '7 DÍAS':5, '30 DÍAS':20};
-        document.querySelectorAll('.card').forEach(c => {
-            const plan = c.querySelector('span').innerText.split(' ').slice(0,2).join(' ');
-            const key = plan.includes('HOY') ? 'HOY' : plan;
-            if(base[key]) c.querySelector('b').innerText = curSim + Math.round(base[key] * curTasa).toLocaleString();
-        });
     }
 
     function selP(el, p) {
-        curP = p;
         document.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
         el.classList.add('sel');
     }
-
-    function copy(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
-    function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
 </script>
 </body>
 </html>
