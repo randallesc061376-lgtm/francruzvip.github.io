@@ -10,121 +10,113 @@
     <style>
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(135deg, #d4af37, #f9e498); }
         body { background: var(--n); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; user-select: none; }
-        header { padding: 25px 10px; width: 100%; text-align: center; box-sizing: border-box; }
-        .logo { color: var(--o); font-size: 2rem; font-weight: 900; letter-spacing: 5px; text-transform: uppercase; cursor: pointer; }
-        .p { display: none; width: 100%; max-width: 400px; flex-direction: column; align-items: center; padding: 0 20px 30px; box-sizing: border-box; }
+        
+        /* DISTRIBUCIÓN DE CABECERA */
+        header { padding: 45px 20px 20px; text-align: center; width: 100%; box-sizing: border-box; }
+        .logo { color: var(--o); font-size: 2.1rem; font-weight: 900; letter-spacing: 7px; text-transform: uppercase; margin-bottom: 5px; }
+        .sub { color: #444; font-size: .6rem; letter-spacing: 4px; text-transform: uppercase; font-weight: bold; }
+        
+        .p { display: none; width: 100%; max-width: 400px; flex-direction: column; align-items: center; padding: 20px 25px; box-sizing: border-box; }
         .a { display: flex; }
-        
-        /* Botones y Cajas */
-        .box { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid #222; border-radius: 12px; padding: 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; }
-        .active-plan { border-color: var(--o); background: rgba(212,175,55,0.05); }
-        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 10px; }
-        
-        /* Inputs */
-        .inp { width: 100%; padding: 15px; background: #111; border: 1px solid #333; border-radius: 10px; color: #fff; text-align: center; margin-bottom: 12px; box-sizing: border-box; font-weight: bold; }
-        
-        /* Galería Admin */
-        .grid-admin { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 15px; }
-        .card-img { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
-        .card-img img { width: 100%; height: 100px; object-fit: cover; }
-        .btn-del { position: absolute; top: 5px; right: 5px; background: #ff0000; color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; }
+
+        /* CAJAS DE PLANES (DISTRIBUCIÓN EXACTA) */
+        .box { width: 100%; background: rgba(255,255,255,0.02); border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; box-sizing: border-box; }
+        .box span { font-size: 0.95rem; letter-spacing: 0.5px; color: #eee; }
+        .box b { color: var(--o); font-size: 1.1rem; font-weight: bold; }
+        .s { border-color: var(--o); background: rgba(212,175,55,0.04); }
+
+        /* SECCIÓN DE PAGOS */
+        .pay-label { color: var(--o); font-size: .7rem; font-weight: 900; letter-spacing: 3px; margin: 30px 0 15px; text-transform: uppercase; width: 100%; text-align: center; }
+        .pay-box { width: 100%; background: rgba(255,255,255,0.02); border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; text-align: center; margin-bottom: 20px; cursor: pointer; }
+        .pay-box b { color: var(--o); font-size: 1.2rem; letter-spacing: 1px; }
+
+        /* BOTONES DE ACCIÓN FINAL */
+        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-top: 10px; font-size: 0.9rem; }
+        .btn-access { width: 100%; background: none; color: var(--o); border: 1px solid var(--o); padding: 18px; border-radius: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-top: 12px; font-size: 0.85rem; }
+
+        /* INPUTS SALA VIP */
+        .inp-vip { width: 100%; padding: 20px; background: #0a0a0a; border: 1px solid #333; border-radius: 12px; color: #fff; text-align: center; font-size: 1.4rem; letter-spacing: 8px; font-weight: bold; margin-bottom: 15px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="logo" onclick="countClick()">FRAN CRUZ VIP</div>
-    <p style="color:#555; font-size:.6rem; letter-spacing:2px; margin:5px 0 0 0;">SISTEMA REGIONAL PROTEGIDO</p>
+<header onclick="adminCheck()">
+    <div class="logo">FRAN CRUZ VIP</div>
+    <div class="sub">SALA PRIVADA • COSTA RICA</div>
 </header>
 
 <div id="view-main" class="p a">
-    <button class="btn-gold" style="margin-bottom:25px;" onclick="changeView('view-main','view-access')">ENTRAR A SALA VIP</button>
-    
-    <div class="box" onclick="selectPlan(1, this)"><span>Acceso 24 Horas</span><b>₡550</b></div>
-    <div class="box" onclick="selectPlan(7, this)"><span>7 Días Silver</span><b>₡3,850</b></div>
-    <div class="box active-plan" onclick="selectPlan(30, this)"><span>30 Días Gold</span><b>₡8,250</b></div>
+    <div class="box" onclick="setPlan('HOY', 550, this)"><span>Acceso Hoy</span><b>₡550</b></div>
+    <div class="box" onclick="setPlan('7 DÍAS SILVER', 3850, this)"><span>7 Días Silver</span><b>₡3,850</b></div>
+    <div class="box s" onclick="setPlan('30 DÍAS GOLD', 8250, this)"><span>30 Días Gold</span><b>₡8,250</b></div>
 
-    <div style="width:100%; margin-top:15px;">
-        <p style="color:var(--o); font-size:.7rem; text-align:center; font-weight:bold;">MÉTODOS DE PAGO</p>
-        <div class="box" onclick="alert('Copiado: 70835833')"><span>SINPE (Randall S.)</span><b>70835833</b></div>
+    <div class="pay-label">Depósitos Directos</div>
+    <div class="pay-box" onclick="copy('70835833')">
+        <small style="color:#555; display:block; margin-bottom:5px; font-weight:bold; letter-spacing:1px;">SINPE MÓVIL</small>
+        <b>70835833</b>
     </div>
     
-    <button class="btn-gold" onclick="sendWhatsApp()">ENVIAR COMPROBANTE DE PAGO</button>
+    <button class="btn-gold" onclick="openWa()">ENVIAR COMPROBANTE DE PAGO</button>
+    <button class="btn-access" onclick="nav('view-main','view-vip')">YA TENGO MI CLAVE</button>
 </div>
 
-<div id="view-access" class="p">
-    <h4 style="color:var(--o);">INGRESE SU CLAVE DINÁMICA</h4>
-    <input type="text" id="clientKey" class="inp" placeholder="EJ: 6XV11" maxlength="5">
-    <button class="btn-gold" onclick="validateClient()">DESBLOQUEAR CONTENIDO</button>
-    <button class="btn-gold" style="background:none; color:#555;" onclick="changeView('view-access','view-main')">VOLVER</button>
-</div>
-
-<div id="view-login" class="p">
-    <input type="password" id="passkey" class="inp" placeholder="PASSKEY">
-    <button class="btn-gold" onclick="loginAdmin()">ENTRAR AL PANEL</button>
-</div>
-
-<div id="view-admin" class="p">
-    <div style="background:rgba(255,255,255,0.02); padding:15px; border-radius:12px; width:100%; box-sizing:border-box;">
-        <input type="text" id="targetUid" class="inp" placeholder="UID DEL CLIENTE">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <button class="btn-gold" style="background:#800; color:#fff;" onclick="manageBan(true)">BAN</button>
-            <button class="btn-gold" style="background:#080; color:#fff;" onclick="manageBan(false)">ALTA</button>
-        </div>
-    </div>
-    
-    <button class="btn-gold" onclick="document.getElementById('fileInp').click()">ELEGIR LÁMINA</button>
-    <input type="file" id="fileInp" style="display:none;" onchange="uploadImage()">
-    
-    <div id="adminGallery" class="grid-admin"></div>
-    
-    <button class="btn-gold" style="background:none; color:#555;" onclick="location.reload()">CERRAR SESIÓN</button>
+<div id="view-vip" class="p">
+    <h4 style="color:var(--o); letter-spacing: 2px; margin-bottom: 25px; text-align:center;">INGRESE SU CLAVE DINÁMICA</h4>
+    <input type="text" id="claveInput" class="inp-vip" placeholder="XXXXX" maxlength="5">
+    <button class="btn-gold" onclick="checkAccess()">ENTRAR A SALA</button>
+    <button class="btn-access" style="border-color:#222; color:#444" onclick="nav('view-vip','view-main')">VOLVER AL MENÚ</button>
 </div>
 
 <script>
-    // Configuración Firebase (Usar la tuya)
-    const firebaseConfig = { apiKey: "AIzaSy...", projectId: "fran-cruz-sala-vip", storageBucket: "fran-cruz-sala-vip.appspot.com" };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore(), st = firebase.storage();
+    let planSel = "30 DÍAS GOLD";
+    let count = 0;
 
-    let selectedDays = 30;
-    let adminClicks = 0;
-
-    function selectPlan(days, el) {
-        selectedDays = days;
-        document.querySelectorAll('.box').forEach(b => b.classList.remove('active-plan'));
-        el.classList.add('active-plan');
+    function setPlan(p, precio, el) {
+        planSel = p;
+        document.querySelectorAll('.box').forEach(b => b.classList.remove('s'));
+        el.classList.add('s');
     }
 
-    function changeView(oldV, newV) {
-        document.getElementById(oldV).classList.remove('a');
-        document.getElementById(newV).classList.add('a');
+    function nav(o, n) {
+        document.getElementById(o).classList.remove('a');
+        document.getElementById(n).classList.add('a');
     }
 
-    function countClick() {
-        adminClicks++;
-        if(adminClicks >= 5) { changeView('view-main', 'view-login'); adminClicks = 0; }
-        setTimeout(() => adminClicks = 0, 3000);
+    function copy(t) {
+        navigator.clipboard.writeText(t);
+        alert("Copiado al portapapeles");
     }
 
-    function sendWhatsApp() {
-        const day = new Date().getDate().toString().padStart(2, '0');
-        const randomStr = Math.random().toString(36).substring(2,4).toUpperCase();
-        const id = randomStr + day;
-        const msg = `Buen día. He seleccionado el Plan de ${selectedDays} días. Adjunto envío mi comprobante de pago oficial. Quedo a la espera de mi clave dinámica de acceso.\n\nGestión ID: ${id}`;
-        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
+    function openWa() {
+        const d = new Date().getDate().toString().padStart(2, '0');
+        const uid = Math.random().toString(36).substring(2,8).toUpperCase();
+        const cDin = Math.random().toString(36).substring(2,4).toUpperCase() + d;
+        
+        const msg = `*SOLICITUD VIP FRAN CRUZ*\n` +
+                    `Plan: ${planSel}\n` +
+                    `ID: UID-${uid}\n` +
+                    `Clave: *${cDin}*\n\n` +
+                    `⚠️ *IMPORTANTE:* Debe adjuntar el comprobante de pago ahora para activar su acceso.`;
+        
+        window.location.href = `https://wa.me/50670835833?text=${encodeURIComponent(msg)}`;
     }
 
-    function validateClient() {
-        const key = document.getElementById('clientKey').value.toUpperCase();
-        const today = new Date().getDate().toString().padStart(2, '0');
-        if(key.endsWith(today) && key.length >= 4) alert("ACCESO CONCEDIDO A SALA VIP");
-        else alert("CLAVE INVÁLIDA");
+    function checkAccess() {
+        const val = document.getElementById('claveInput').value.toUpperCase();
+        const d = new Date().getDate().toString().padStart(2, '0');
+        if(val.endsWith(d) && val.length >= 4) {
+            alert("ACCESO AUTORIZADO");
+            // Redirección a la galería de Firebase
+        } else {
+            alert("CLAVE INCORRECTA");
+        }
     }
 
-    // Funciones Admin Simplificadas
-    function loginAdmin() { if(document.getElementById('passkey').value === "ADMIN123") changeView('view-login', 'view-admin'); }
-    async function manageBan(status) { alert(status ? "USUARIO BANEADO" : "USUARIO REHABILITADO"); }
+    function adminCheck() {
+        count++;
+        if(count >= 5) alert("MODO ADMIN"); // Aquí va el salto al login admin
+        setTimeout(() => count = 0, 3000);
+    }
 </script>
 </body>
 </html>
