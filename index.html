@@ -3,177 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • PLATINUM TOTAL</title>
+    <title>FRAN CRUZ VIP • PLATINUM FINAL</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
     <style>
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; -webkit-user-select: none; }
-        body { background: var(--n); color: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { background: var(--n); color: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
         
-        /* HEADER Y LOGOTIPO */
-        header { padding: 30px 20px; text-align: center; width: 100%; cursor: pointer; }
-        .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; }
-        .sub-logo { color: #666; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; }
+        header { padding: 30px 20px; text-align: center; width: 100%; cursor: pointer; z-index: 100; }
+        .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-shadow: 0 0 15px rgba(212,175,55,0.3); }
+        .sub-logo { color: #666; font-size: 0.7rem; letter-spacing: 2px; margin-top: 5px; text-transform: uppercase; }
 
-        /* NAVEGACIÓN Y VISTAS */
-        .view { display: none; width: 100%; max-width: 420px; flex-direction: column; animation: fadeIn 0.3s ease; }
+        .view { display: none; width: 100%; max-width: 420px; flex-direction: column; padding: 0 0 60px; animation: fadeIn 0.4s ease; }
         .view.active { display: flex; }
 
-        /* BANDERAS SELECTORAS */
-        .flag-bar { display: flex; justify-content: center; gap: 10px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 50px; margin: 10px 20px; }
-        .flag { width: 35px; height: 22px; cursor: pointer; opacity: 0.4; transition: 0.3s; border-radius: 3px; }
-        .flag.active { opacity: 1; box-shadow: 0 0 15px var(--o); transform: scale(1.1); }
+        .geo-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 50px; }
+        .flag { width: 35px; height: 22px; opacity: 0.4; transition: 0.4s; cursor: pointer; border-radius: 3px; object-fit: cover; border: 1px solid #222; }
+        .flag.active { opacity: 1; transform: scale(1.25); box-shadow: 0 0 15px var(--o); border-color: #fff; }
 
-        /* PLANES Y PRECIOS */
+        /* Membresías [BITÁCORA: Sin medianoche en HOY] */
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
-        .card b { color: var(--o); font-size: 1.2rem; }
+        .card b { color: var(--o); font-size: 1.3rem; }
 
-        /* ACORDEÓN DE PAGOS */
+        /* Acordeón de Pagos */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 8px; margin: 0 20px 8px; overflow: hidden; }
         .acc-head { background: #111; padding: 15px; font-size: 0.8rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; }
         .acc-body { display: none; background: #080808; padding: 15px; border-top: 1px solid #1a1a1a; text-align: center; }
         .acc-body.active { display: block; }
 
-        /* BOTONES PRINCIPALES */
-        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin: 15px 20px; }
+        /* Botones */
+        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin: 15px 20px 0; letter-spacing: 1px; }
+        .btn-black { width: calc(100% - 40px); background: #000; color: #555; border: 1px solid #222; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; margin: 10px 20px; }
 
-        /* SALA VIP Y BLINDAJE */
-        .glass-shield { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1000; background: transparent; pointer-events: all; }
-        #gallery-vip img { width: 100%; height: auto; display: block; pointer-events: none; }
+        /* Blindaje de Galería */
+        .glass-shield { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 150; background: transparent; cursor: default; }
+        #gallery-vip img { width: 100%; height: auto; display: block; pointer-events: none; -webkit-touch-callout: none; }
 
-        /* PANEL ADMIN */
-        .adm-section { padding: 20px; border-top: 1px solid #222; }
-        .adm-input { width: 100%; background: #000; border: 1px solid #333; padding: 12px; color: #fff; border-radius: 8px; margin-bottom: 10px; }
-        .grid-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        /* Admin UI */
+        .adm-label { font-size: 0.7rem; color: var(--o); font-weight: bold; margin: 15px 20px 8px; display: block; letter-spacing: 1px; }
+        .adm-input { width: calc(100% - 40px); background: #000; border: 1px solid #333; padding: 12px; color: #fff; border-radius: 8px; margin: 0 20px 10px; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-<header onclick="toggleAdmin()">
+<div class="glass-shield" id="global-shield" style="display:none;"></div>
+
+<header onclick="accessAdmin()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div class="sub-logo">SALA PRIVADA • COSTA RICA</div>
+    <div id="tagline" class="sub-logo">SALA PRIVADA • COSTA RICA</div>
 </header>
 
 <div id="v-client" class="view active">
-    <div class="flag-bar">
-        <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setCountry('CR', 1)">
-        <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setCountry('NI', 36.8)">
-        <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setCountry('HN', 24.6)">
-        <img src="https://flagcdn.com/gt.svg" class="flag" onclick="setCountry('GT', 7.7)">
+    <div class="geo-bar">
+        <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setLoc('COSTA RICA', '₡', 540, '70835833')">
+        <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setLoc('NICARAGUA', 'C$', 37, '50664535475')">
+        <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setLoc('PANAMÁ', '$', 1, '70835833')">
+        <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setLoc('HONDURAS', 'L', 24.6, '70835833')">
+        <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('WORLDWIDE', '$', 1, '70835833')">
     </div>
 
-    <div id="plans-container">
-        <div class="card" onclick="selPlan(this, 'HOY')">
-            <span>ACCESO HOY (Medianoche)</span> <b id="price-today">₡540</b>
-        </div>
-        <div class="card" onclick="selPlan(this, 'SILVER')">
-            <span>7 DÍAS SILVER</span> <b id="price-silver">₡2,700</b>
-        </div>
-        <div class="card sel" onclick="selPlan(this, 'GOLD')">
-            <span>30 DÍAS GOLD</span> <b id="price-gold">₡10,800</b>
-        </div>
-    </div>
+    <div class="card plan-box" onclick="selP(this, 'HOY', 1)"><span>ACCESO HOY</span><b class="p-val">₡540</b></div>
+    <div class="card plan-box" onclick="selP(this, '7 DÍAS', 5)"><span>7 DÍAS SILVER</span><b class="p-val">₡2,700</b></div>
+    <div class="card plan-box sel" onclick="selP(this, '30 DÍAS', 20)"><span>30 DÍAS GOLD</span><b class="p-val">₡10,800</b></div>
 
-    <div class="acc-item">
-        <div class="acc-head" onclick="toggleAcc(this)">1. MÉTODOS DE PAGO <span>▼</span></div>
-        <div class="acc-body active" id="pay-details">
-            <p id="sinpe-data">SINPE MÓVIL (CR): 70835833<br><small>Randall Sánchez C.</small></p>
-            <button class="btn-gold" style="padding:10px; margin:5px 0; width:100%" onclick="copyData()">COPIAR DATOS</button>
+    <div class="pay-acc">
+        <div class="adm-label" style="text-align:center">MÉTODOS DE PAGO DISPONIBLES</div>
+        <div class="acc-item">
+            <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL / IBAN / PAYPAL <span>▼</span></div>
+            <div class="acc-body active">
+                <div id="pay-info">70835833<br>Randall Sánchez C.<br>randallesc061376@gmail.com</div>
+            </div>
         </div>
     </div>
 
-    <button class="btn-gold" onclick="requestAccess()">SOLICITAR ACCESO VIP</button>
+    <button class="btn-gold" onclick="sendWasp()">SOLICITAR ACCESO VIP</button>
+    <button class="btn-black">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-vip" class="view">
-    <div class="glass-shield" id="vip-shield" style="display:none"></div>
-    <div style="background:#000; padding:15px; text-align:center; position:sticky; top:0; z-index:1100;">
-        <div style="color:var(--o); font-size:0.7rem;">ACCESO TEMPORAL ACTIVO</div>
-        <div id="vip-timer" style="font-size:1.5rem; font-weight:900;">00:00:00</div>
+    <div style="background:#000; padding:15px; text-align:center; position:sticky; top:0; z-index:200; border-bottom:1px solid #111;">
+        <div style="color:var(--o); font-size:0.7rem; font-weight:bold;">CONTENIDO EXCLUSIVO ACTIVO</div>
+        <div id="vip-timer" style="font-size:1.4rem; font-weight:900;">00:00:00</div>
     </div>
     <div id="gallery-vip"></div>
 </div>
 
 <div id="v-admin" class="view">
-    <div class="adm-section">
-        <h4 style="color:var(--o)">TIPOS DE CAMBIO (1 USD)</h4>
-        <div class="grid-prices">
-            <input type="number" id="ex-cr" class="adm-input" value="495">
-            <input type="number" id="ex-ni" class="adm-input" value="36.8">
-            <input type="number" id="ex-hn" class="adm-input" value="24.6">
-            <input type="number" id="ex-gt" class="adm-input" value="7.7">
-        </div>
-        <button class="btn-gold" style="margin:10px 0; width:100%" onclick="saveEx()">GUARDAR CAMBIOS</button>
-    </div>
+    <h2 style="color:var(--o); text-align:center; font-size:1.2rem; margin:20px 0;">ADMINISTRACIÓN MAESTRA</h2>
+    
+    <span class="adm-label">TIPOS DE CAMBIO</span>
+    <input type="number" id="rate-cr" class="adm-input" value="495" placeholder="CR ₡">
+    <input type="number" id="rate-ni" class="adm-input" value="36.8" placeholder="NI C$">
+    
+    <span class="adm-label">DATOS DE CONTACTO</span>
+    <input type="text" id="adm-wa" class="adm-input" value="50670835833" placeholder="WhatsApp">
+    
+    <span class="adm-label">GALERÍA (ORDEN DE CARGA)</span>
+    <input type="file" id="img-upload" class="adm-input" accept="image/*">
+    <button class="btn-gold" onclick="uploadImg()">PUBLICAR LÁMINA</button>
 
-    <div class="adm-section">
-        <h4 style="color:var(--o)">GESTIÓN DE USUARIOS (BANEO)</h4>
-        <select id="user-list" class="adm-input"><option>Seleccionar Usuario...</option></select>
-        <div style="display:flex; gap:10px">
-            <button class="btn-gold" style="background:#400; color:#f00; margin:0" onclick="banUser()">BANEAR</button>
-            <button class="btn-gold" style="background:#040; color:#0f0; margin:0" onclick="unbanUser()">DESBANEAR</button>
-        </div>
-    </div>
+    <div id="admin-gallery" style="display:grid; grid-template-columns: repeat(4,1fr); gap:5px; padding:20px;"></div>
 
-    <div class="adm-section">
-        <h4 style="color:var(--o)">SUBIR LÁMINA VIP</h4>
-        <input type="file" id="img-file" class="adm-input">
-        <button class="btn-gold" onclick="uploadVip()">PUBLICAR LÁMINA</button>
-    </div>
+    <button class="btn-gold" style="margin-top:40px" onclick="saveAll()">GUARDAR BITÁCORA</button>
+    <button class="btn-black" onclick="location.reload()">SALIR DEL PANEL</button>
 </div>
 
 <script>
-    // Configuración Firebase
-    const firebaseConfig = { apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", projectId: "fran-cruz-sala-vip", databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com", storageBucket: "fran-cruz-sala-vip.appspot.com" };
+    const firebaseConfig = { apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", projectId: "fran-cruz-sala-vip", databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com", storageBucket: "fran-cruz-sala-vip.firebasestorage.app" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const st = firebase.storage();
+    const storage = firebase.storage();
 
-    // Lógica de Blindaje de Teclado
+    let curTasa = 540; let curSim = "₡"; let curUsd = 20; let curPlan = "30 DÍAS";
+
+    // Bloqueo de teclado
     document.onkeydown = function(e) {
         if(e.ctrlKey && (e.keyCode === 67 || e.keyCode === 85 || e.keyCode === 83)) return false;
         if(e.keyCode === 123) return false;
     };
 
-    // Funciones de Navegación
-    function toggleAdmin() {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById('v-admin').classList.add('active');
-    }
-
     function toggleAcc(el) {
         el.nextElementSibling.classList.toggle('active');
     }
 
-    // Lógica de Precios y Países
-    function setCountry(code, rate) {
-        const symbol = code === 'CR' ? '₡' : (code === 'NI' ? 'C$' : (code === 'HN' ? 'L' : 'Q'));
-        document.getElementById('price-today').innerText = symbol + (1 * rate).toFixed(0);
-        document.getElementById('price-silver').innerText = symbol + (5 * rate).toFixed(0);
-        document.getElementById('price-gold').innerText = symbol + (20 * rate).toFixed(0);
-        // Actualizar UI de banderas...
+    function setLoc(pais, sim, tasa, num) {
+        curTasa = tasa; curSim = sim;
+        document.getElementById('tagline').innerText = `SALA PRIVADA • ${pais}`;
+        document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
+        event.target.classList.add('active');
+        updatePrices();
     }
 
-    // Carga de Galería (Orden Cronológico)
-    function loadGallery() {
-        db.ref('laminas').orderByChild('timestamp').on('value', snap => {
-            const container = document.getElementById('gallery-vip');
-            container.innerHTML = '';
-            let list = [];
-            snap.forEach(child => list.unshift(child.val())); // Unshift para lo más nuevo arriba
-            list.forEach(item => {
-                container.innerHTML += `<img src="${item.url}" alt="VIP">`;
-            });
-            document.getElementById('vip-shield').style.display = 'block';
+    function updatePrices() {
+        const base = [1, 5, 20];
+        document.querySelectorAll('.p-val').forEach((el, i) => {
+            el.innerText = curSim + Math.round(base[i] * curTasa).toLocaleString();
         });
     }
 
-    // Inicializar app...
+    function selP(el, p, usd) {
+        curPlan = p; curUsd = usd;
+        document.querySelectorAll('.plan-box').forEach(b => b.classList.remove('sel'));
+        el.classList.add('sel');
+    }
+
+    function uploadImg() {
+        const file = document.getElementById('img-upload').files[0];
+        if(!file) return;
+        const time = Date.now();
+        const ref = storage.ref('gallery/' + time + "_" + file.name);
+        ref.put(file).then(snap => snap.ref.getDownloadURL().then(url => {
+            db.ref('gallery').push({ url, timestamp: time });
+            alert("CARGADA EN ORDEN");
+        }));
+    }
+
+    function sendWasp() {
+        const wa = document.getElementById('adm-wa').value;
+        const msg = encodeURIComponent(`Hola Fran Cruz VIP. Solicito el plan ${curPlan}.`);
+        window.location.href = `https://wa.me/${wa}?text=${msg}`;
+    }
+
+    let clicks = 0;
+    function accessAdmin() {
+        clicks++;
+        if(clicks >= 5) {
+            document.getElementById('v-client').classList.remove('active');
+            document.getElementById('v-admin').classList.add('active');
+        }
+        setTimeout(() => clicks = 0, 2000);
+    }
+
+    function saveAll() { alert("BITÁCORA ACTUALIZADA"); location.reload(); }
 </script>
 </body>
 </html>
