@@ -19,13 +19,13 @@
         .s{border-color:var(--o);background:rgba(212,175,55,0.05)}
         .bg{width:100%;background:var(--g);color:#000;border:none;padding:20px;border-radius:12px;font-weight:900;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:10px}
         
-        /* ACORDEÓN DE PAGOS */
-        .pago-header{width:100%;padding:15px;background:rgba(255,255,255,0.05);border:1px solid #333;border-radius:10px;margin-top:8px;cursor:pointer;text-align:center;color:var(--o);font-size:.8rem;font-weight:bold;letter-spacing:1px}
+        /* VENTANILLAS TOTALMENTE CENTRADAS */
+        .pago-header{width:100%;padding:15px;background:rgba(255,255,255,0.05);border:1px solid #333;border-radius:10px;margin-top:8px;cursor:pointer;text-align:center;color:var(--o);font-size:.8rem;font-weight:bold;letter-spacing:1px;box-sizing:border-box}
         .pago-content{display:none;width:100%;background:rgba(0,0,0,0.5);border:1px solid var(--o);border-top:none;padding:15px;border-radius:0 0 10px 10px;box-sizing:border-box;text-align:center}
-        .pago-content p{margin:5px 0;font-size:1rem;color:#fff}
+        .pago-content p{margin:5px 0;font-size:1.1rem;color:#fff;font-weight:bold}
         
-        .admin-section{width:100%;background:rgba(255,255,255,0.02);border:1px solid #333;border-radius:15px;padding:20px;margin-bottom:15px;box-sizing:border-box}
-        #pre{width:100%;max-height:200px;object-fit:contain;margin-bottom:10px;display:none;border:1px solid var(--o)}
+        .admin-section{width:100%;background:rgba(255,255,255,0.02);border:1px solid #333;border-radius:15px;padding:20px;margin-bottom:15px;box-sizing:border-box;text-align:center}
+        #pre{width:100%;max-height:200px;object-fit:contain;margin:10px auto;display:none;border:1px solid var(--o)}
         .inp-admin{width:100%;padding:15px;background:#111;border:1px solid #444;border-radius:10px;color:#fff;text-align:center;margin-bottom:10px;box-sizing:border-box}
         .toast{position:fixed;top:20px;background:var(--o);color:#000;padding:10px 20px;border-radius:20px;font-size:0.8rem;font-weight:bold;z-index:1000;display:none}
     </style>
@@ -42,20 +42,20 @@
 
 <div id="u" class="p a">
     <div class="box" onclick="sel(1,this)"><span>Acceso Hoy</span><b id="v1">--</b></div>
-    <div class="box" onclick="sel(5,this)"><span>7 Días Silver</span><b id="v7">--</b></div>
+    <div class="box" onclick="sel(7,this)"><span>7 Días Silver</span><b id="v7">--</b></div>
     <div class="box s" onclick="sel(15,this)"><span>30 Días Gold</span><b id="v15">--</b></div>
 
     <div style="width:100%;margin:15px 0">
         <h4 style="color:var(--o);text-align:center;font-size:.7rem;letter-spacing:2px">MÉTODOS DE PAGO (TOCA PARA VER)</h4>
         
         <div class="pago-header" onclick="tP('s1')">1. SINPE MÓVIL</div>
-        <div id="s1" class="pago-content" onclick="copy('64535475')"><b>TOCA PARA COPIAR</b><p>6453-5475</p><small>A nombre de Randall Sánchez C.</small></div>
+        <div id="s1" class="pago-content" onclick="copy('70835833')"><b>TOCA PARA COPIAR</b><p>70835833</p><small>A nombre de Randall Sánchez C.</small></div>
 
-        <div class="pago-header" onclick="tP('s2')">2. TRANSFERENCIA IBAN</div>
+        <div class="pago-header" onclick="tP('s2')">2. TRANSFERENCIA NACIONAL / INT.</div>
         <div id="s2" class="pago-content" onclick="copy('CR80080315001000035641')"><b>TOCA PARA COPIAR</b><p>CR80080315001000035641</p></div>
 
         <div class="pago-header" onclick="tP('s3')">3. PAYPAL</div>
-        <div id="s3" class="pago-content" onclick="copy('randallesc061376@gmail.com')"><b>TOCA PARA COPIAR</b><p>rsanchez@live.com</p></div>
+        <div id="s3" class="pago-content" onclick="copy('randallesc061376@gmail.com')"><b>TOCA PARA COPIAR</b><p>randallesc061376@gmail.com</p></div>
     </div>
 
     <button class="bg" onclick="wa()">ENVIAR COMPROBANTE DE PAGO</button>
@@ -91,7 +91,7 @@ function init(){
 }
 function updP(){
     const t=T[ps];document.getElementById('v1').innerText=t.m+(1*t.f).toLocaleString();
-    document.getElementById('v7').innerText=t.m+(5*t.f).toLocaleString();
+    document.getElementById('v7').innerText=t.m+(7*t.f).toLocaleString();
     document.getElementById('v15').innerText=t.m+(15*t.f).toLocaleString();
 }
 function tP(id){const e=document.getElementById(id);const v=e.style.display==='block';document.querySelectorAll('.pago-content').forEach(x=>x.style.display='none');e.style.display=v?'none':'block'}
@@ -101,15 +101,13 @@ function vP(o,n){document.getElementById(o).classList.remove('a');document.getEl
 function vPk(){if(document.getElementById('pk').value==="ADMIN123")vP('l','ad');else location.reload()}
 function copy(t){navigator.clipboard.writeText(t);const o=document.getElementById('toast');o.style.display='block';setTimeout(()=>o.style.display='none',1500)}
 
-// CORRECCIÓN WHATSAPP Y MENSAJE CORTÉS
 function wa(){
     const t=T[ps],m=(pS*t.f).toLocaleString(),hoy=new Date().getDate().toString().padStart(2,'0');
     const uid=Math.random().toString(36).substring(2,5).toUpperCase()+hoy;
-    const msg=`Buen día. He seleccionado el Plan de ${pS} días (${t.m}${m}). Adjunto envío mi comprobante de pago oficial para la activación de mi acceso.\n\nGestión ID: ${uid}`;
+    const msg=`Buen día. He seleccionado el Plan de ${pS} días (${t.m}${m}).\n\nAdjunto envío mi comprobante de pago oficial. Quedo a la espera de la validación para recibir mi clave dinámica de acceso.\n\nGestión ID: ${uid}`;
     window.location.href=`https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
 }
 
-// VISTA PREVIA ANTES DE CARGAR
 function vPre(i){const f=i.files[0];if(f){const r=new FileReader();r.onload=(e)=>{const p=document.getElementById('pre');p.src=e.target.result;p.style.display='block'};r.readAsDataURL(f)}}
 
 async function sub(){
