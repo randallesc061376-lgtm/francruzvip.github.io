@@ -3,209 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SALA VIP FRAN CRUZ • INTERNACIONAL V3</title>
+    <title>FRAN CRUZ VIP • OFICIAL</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
     <style>
-        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #8b0000; --v: #006400; }
+        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--n); color: #fff; font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; user-select: none; min-height: 100vh; overflow-x: hidden; }
+        body { background: var(--n); color: #fff; font-family: sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         
-        /* Sistema de Notificaciones y Carga */
-        #progress-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: #111; z-index: 10000; }
-        #progress-bar { width: 0%; height: 100%; background: var(--g); transition: width 0.3s; box-shadow: 0 0 10px var(--o); }
-        #toast { display: none; position: fixed; bottom: 30px; background: var(--g); color: #000; padding: 15px 30px; border-radius: 50px; font-weight: 900; z-index: 10000; text-align: center; }
+        /* Encabezado y Logo Centrado */
+        header { padding: 40px 20px; text-align: center; width: 100%; cursor: pointer; }
+        .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; }
+        .sub-logo { color: #555; font-size: 0.7rem; letter-spacing: 3px; margin-top: 8px; text-transform: uppercase; }
 
-        header { padding: 50px 20px 20px; text-align: center; width: 100%; cursor: pointer; }
-        .logo { color: var(--o); font-size: 2.3rem; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; }
-        .geo-bar { display: flex; justify-content: center; gap: 12px; margin: 20px 0; background: #0a0a0a; padding: 12px; border-radius: 50px; border: 1px solid #111; width: 95%; max-width: 480px; overflow-x: auto; }
-        .flag { width: 32px; height: 22px; opacity: 0.3; transition: 0.4s; cursor: pointer; border-radius: 2px; }
-        .flag.active { opacity: 1; transform: scale(1.3); filter: drop-shadow(0 0 8px var(--o)); }
-        
-        .view { display: none; width: 100%; max-width: 400px; flex-direction: column; padding: 0 25px 50px; align-items: center; }
+        /* Selector de Banderas */
+        .geo-bar { display: flex; justify-content: center; gap: 10px; margin: 10px 0 30px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 50px; width: 90%; max-width: 400px; }
+        .flag { width: 30px; height: 20px; opacity: 0.3; transition: 0.3s; cursor: pointer; border-radius: 2px; }
+        .flag.active { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px var(--o); }
+
+        /* Planes y Botones */
+        .view { display: none; width: 100%; max-width: 380px; flex-direction: column; align-items: center; padding-bottom: 40px; }
         .view.active { display: flex; }
+        .plan-box { width: 90%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .plan-box.sel { border-color: var(--o); background: rgba(212,175,55,0.05); }
+        .plan-box b { color: var(--o); font-size: 1.2rem; }
 
-        /* Estilos de Control */
-        .admin-sec { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; margin-top: 12px; width: 100%; }
-        .inp-admin { width: 100%; background: #000; border: 1px solid #222; padding: 12px; color: #fff; border-radius: 8px; margin-top: 8px; text-align: center; font-size: 0.9rem; }
-        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 15px; }
+        .method { width: 90%; background: #080808; border: 1px solid #151515; border-radius: 10px; margin-bottom: 8px; text-align: center; }
+        .method-h { padding: 15px; font-size: 0.8rem; font-weight: bold; color: #444; }
+        .btn-gold { width: 90%; background: var(--g); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; text-transform: uppercase; margin-top: 20px; cursor: pointer; }
         
-        /* Galería Admin */
-        .thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 10px; }
-        .thumb { position: relative; aspect-ratio: 1; border: 1px solid #222; border-radius: 4px; overflow: hidden; }
-        .thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .del-btn { position: absolute; top: 0; right: 0; background: var(--r); color: #fff; border: none; width: 20px; height: 20px; font-size: 10px; cursor: pointer; }
+        /* Admin */
+        .admin-sec { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 10px; padding: 15px; margin-top: 10px; width: 95%; }
+        .inp-admin { width: 100%; background: #000; border: 1px solid #222; padding: 10px; color: #fff; border-radius: 5px; margin-top: 5px; text-align: center; }
+        #toast { display: none; position: fixed; top: 20px; background: var(--g); color: #000; padding: 10px 20px; border-radius: 20px; font-weight: bold; z-index: 10000; }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
-<div id="progress-container"><div id="progress-bar"></div></div>
 <div id="toast"></div>
 
 <header id="adminTrigger">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div id="region-tag" style="color:#555; font-size:0.65rem; letter-spacing:3px; margin-top:5px;">SALA PRIVADA • COSTA RICA</div>
+    <div id="region-tag" class="sub-logo">SALA PRIVADA • COSTA RICA</div>
 </header>
 
-<div class="geo-bar" id="geo-bar">
-    <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setLoc('COSTA RICA', '₡', 'cr', true)">
-    <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setLoc('NICARAGUA', 'C$', 'ni', false)">
-    <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setLoc('HONDURAS', 'L', 'hn', false)">
-    <img src="https://flagcdn.com/gt.svg" class="flag" onclick="setLoc('GUATEMALA', 'Q', 'gt', false)">
-    <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('RESTO DEL MUNDO', '$', 'wd', false)">
+<div class="geo-bar">
+    <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setLoc('COSTA RICA', '₡', 540, true)">
+    <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setLoc('NICARAGUA', 'C$', 37, false)">
+    <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setLoc('HONDURAS', 'L', 24.5, false)">
+    <img src="https://flagcdn.com/gt.svg" class="flag" onclick="setLoc('GUATEMALA', 'Q', 7.8, false)">
+    <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('MUNDO', '$', 1, false)">
 </div>
 
 <div id="v-client" class="view active">
-    <div id="cont-planes" style="width:100%"></div>
-    <button class="btn-gold" onclick="sendWA()">SOLICITAR ACCESO VIP</button>
+    <div class="plan-box" id="p1"><span>ACCESO HOY</span><b id="price1">₡540</b></div>
+    <div class="plan-box" id="p2"><span>7 DÍAS SILVER</span><b id="price2">₡2,700</b></div>
+    <div class="plan-box sel" id="p3"><span>30 DÍAS GOLD</span><b id="price3">₡8,100</b></div>
+
+    <div style="margin: 20px 0 10px; font-size: 0.7rem; color: var(--o); font-weight: bold;">MÉTODOS DE PAGO</div>
+    <div class="method"><div class="method-h">1. SINPE MÓVIL (CR)</div></div>
+    <div class="method"><div class="method-h">2. TRANSFERENCIAS / OTROS</div></div>
+    <div class="method"><div class="method-h">3. PAYPAL / INTERNACIONAL</div></div>
+
+    <button class="btn-gold" onclick="notify('SOLICITANDO...')">SOLICITAR ACCESO VIP</button>
+    <button style="background:none; border:none; color:#444; margin-top:15px; font-weight:bold;">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-admin" class="view">
-    <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">TIPO DE CAMBIO (1 USD = X)</span>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+    <div class="admin-sec">
+        <span style="color:var(--o); font-size:0.7rem;">TIPOS DE CAMBIO</span>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-top:5px;">
             <input type="number" id="i-cr" class="inp-admin" placeholder="CR ₡">
             <input type="number" id="i-ni" class="inp-admin" placeholder="NI C$">
-            <input type="number" id="i-hn" class="inp-admin" placeholder="HN L">
-            <input type="number" id="i-gt" class="inp-admin" placeholder="GT Q">
         </div>
     </div>
-
-    <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">CONTACTO Y PAGOS</span>
-        <input type="text" id="i-sinpe" class="inp-admin" placeholder="Número SINPE">
-        <input type="text" id="i-tit" class="inp-admin" placeholder="Nombre del Titular">
-        <input type="text" id="i-iban" class="inp-admin" placeholder="Cuenta IBAN">
-        <input type="text" id="i-pp" class="inp-admin" placeholder="Correo PayPal">
-        <input type="text" id="i-wa" class="inp-admin" placeholder="WhatsApp (506...)">
+    <div class="admin-sec">
+        <span style="color:var(--o); font-size:0.7rem;">DATOS DE PAGO</span>
+        <input type="text" id="i-sinpe" class="inp-admin" placeholder="SINPE">
+        <input type="text" id="i-titular" class="inp-admin" placeholder="Titular">
+        <input type="text" id="i-pp" class="inp-admin" placeholder="PayPal">
     </div>
-
-    <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">CONTROL DE USUARIOS (ALTA/BAN)</span>
-        <div id="admin-users" style="margin-top:10px; font-size:0.8rem;"></div>
+    <div class="admin-sec">
+        <span style="color:var(--o); font-size:0.7rem;">LISTA DE ESPERA / BANEO</span>
+        <div id="lista-espera" style="font-size:0.8rem; padding:10px; color:#555;">No hay solicitudes pendientes.</div>
     </div>
-
-    <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">GALERÍA VIP (CARGAR FOTOS)</span>
-        <input type="file" id="fileInput" accept="image/*" onchange="preView(this)" style="display:none;">
-        <button class="btn-gold" style="background:none; border:1px dashed var(--o); color:var(--o); padding:10px;" onclick="document.getElementById('fileInput').click()">SELECCIONAR IMAGEN</button>
-        <div id="pre-box" style="display:none; margin-top:10px; text-align:center;">
-            <img id="img-pre" style="width:80px; height:80px; object-fit:cover; border-radius:5px; border:1px solid var(--o);">
-            <div style="display:flex; gap:5px; margin-top:5px;">
-                <button onclick="upImg()" style="flex:1; background:var(--v); color:#fff; border:none; padding:5px; border-radius:4px;">SUBIR</button>
-                <button onclick="cancelPre()" style="flex:1; background:var(--r); color:#fff; border:none; padding:5px; border-radius:4px;">X</button>
-            </div>
-        </div>
-        <div id="admin-gal" class="thumb-grid"></div>
+    <div class="admin-sec">
+        <span style="color:var(--o); font-size:0.7rem;">GALERÍA VIP</span>
+        <input type="file" id="fileInp" class="inp-admin">
     </div>
-
-    <button class="btn-gold" onclick="saveAdmin()">GUARDAR TODO (APLICAR CAMBIOS)</button>
-    <button style="width:100%; background:none; color:#555; border:none; margin-top:15px; cursor:pointer;" onclick="location.reload()">CERRAR PANEL</button>
+    <button class="btn-gold" onclick="saveAdmin()">APLICAR TODOS LOS CAMBIOS</button>
+    <button onclick="location.reload()" style="background:none; border:none; color:#555; margin-top:10px;">CERRAR PANEL</button>
 </div>
 
 <script>
-    // ... Configuración de Firebase y Variables iniciales ...
+    // Configuración mínima para que no se congele
+    const firebaseConfig = { apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", authDomain: "fran-cruz-sala-vip.firebaseapp.com", projectId: "fran-cruz-sala-vip", storageBucket: "fran-cruz-sala-vip.firebasestorage.app", databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com", appId: "1:1022733043010:web:379db18e37bbfde2cf34db" };
+    firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const st = firebase.storage();
-    const hoy = new Date().toISOString().split('T')[0];
-    let fileToUpload = null;
 
-    function showProg(v) { 
-        document.getElementById('progress-container').style.display = 'block'; 
-        document.getElementById('progress-bar').style.width = v + '%';
-        if(v >= 100) setTimeout(() => document.getElementById('progress-container').style.display='none', 1000);
+    function setLoc(pais, sim, tasa, esCR) {
+        document.getElementById('region-tag').innerText = `SALA PRIVADA • ${pais}`;
+        document.getElementById('price1').innerText = sim + Math.round(1 * tasa);
+        document.getElementById('price2').innerText = sim + Math.round(5 * tasa);
+        document.getElementById('price3').innerText = sim + Math.round(15 * tasa);
+        document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
+        event.target.classList.add('active');
     }
 
-    // --- FUNCIÓN DE GUARDADO REPARADA ---
     function saveAdmin() {
-        showProg(20);
-        const data = {
-            rates: {
-                cr: document.getElementById('i-cr').value || 540,
-                ni: document.getElementById('i-ni').value || 37,
-                hn: document.getElementById('i-hn').value || 24.5,
-                gt: document.getElementById('i-gt').value || 7.8,
-                wd: 1
-            },
-            settings: {
-                sinpe: document.getElementById('i-sinpe').value,
-                titular: document.getElementById('i-tit').value,
-                iban: document.getElementById('i-iban').value,
-                pp: document.getElementById('i-pp').value,
-                wa: document.getElementById('i-wa').value
-            }
+        const settings = {
+            sinpe: document.getElementById('i-sinpe').value,
+            titular: document.getElementById('i-titular').value,
+            paypal: document.getElementById('i-pp').value
         };
-        
-        showProg(60);
-        db.ref('config').set(data).then(() => {
-            showProg(100);
-            notify("✅ CAMBIOS APLICADOS CON ÉXITO");
-        }).catch(err => {
-            notify("❌ ERROR AL GUARDAR");
-            console.error(err);
-        });
+        db.ref('config/settings').set(settings).then(() => notify("✅ CAMBIOS GUARDADOS"));
     }
 
-    // --- GESTIÓN DE GALERÍA ---
-    function preView(input) {
-        if(input.files && input.files[0]) {
-            fileToUpload = input.files[0];
-            const reader = new FileReader();
-            reader.onload = e => { document.getElementById('img-pre').src = e.target.result; document.getElementById('pre-box').style.display = 'block'; };
-            reader.readAsDataURL(fileToUpload);
+    function notify(msg) {
+        const t = document.getElementById('toast');
+        t.innerText = msg; t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 3000);
+    }
+
+    // Acceso Admin: 5 clics en el logo
+    let clicks = 0;
+    document.getElementById('adminTrigger').onclick = () => {
+        clicks++;
+        if(clicks >= 5) {
+            document.getElementById('v-client').classList.remove('active');
+            document.getElementById('v-admin').classList.add('active');
+            clicks = 0;
         }
-    }
-
-    function upImg() {
-        if(!fileToUpload) return;
-        showProg(10);
-        const ref = st.ref('laminas/' + Date.now());
-        const task = ref.put(fileToUpload);
-        task.on('state_changed', s => showProg((s.bytesTransferred/s.totalBytes)*100), null, () => {
-            task.snapshot.ref.getDownloadURL().then(url => {
-                db.ref('gallery').push({ url: url, fecha: hoy });
-                notify("📸 IMAGEN SUBIDA");
-                document.getElementById('pre-box').style.display = 'none';
-                fileToUpload = null;
-            });
-        });
-    }
-
-    // Escucha de Galería para borrar
-    db.ref('gallery').on('value', snap => {
-        const gal = document.getElementById('admin-gal'); gal.innerHTML = '';
-        snap.forEach(img => {
-            if(img.val().fecha === hoy) {
-                gal.innerHTML += `<div class="thumb"><img src="${img.val().url}"><button onclick="db.ref('gallery/${img.key}').remove()" class="del-btn">✕</button></div>`;
-            }
-        });
-    });
-
-    // --- CONTROL DE USUARIOS ---
-    db.ref('users').on('value', snap => {
-        const cont = document.getElementById('admin-users'); cont.innerHTML = '';
-        snap.forEach(u => {
-            const d = u.val();
-            if(d.status === 'espera' || d.status === 'baneado') {
-                cont.innerHTML += `
-                <div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
-                    <span><b>${u.key}</b> <small>(${d.status})</small></span>
-                    <div>
-                        <button onclick="darAlta('${u.key}')" style="background:var(--v); border:none; color:#fff; padding:5px 8px; border-radius:4px; cursor:pointer; margin-right:5px;">ALTA</button>
-                        <button onclick="banUsuario('${u.key}')" style="background:var(--r); border:none; color:#fff; padding:5px 8px; border-radius:4px; cursor:pointer;">BAN</button>
-                    </div>
-                </div>`;
-            }
-        });
-    });
-
-    function darAlta(id) {
-        const expira = new Date().setHours(23,59,59);
-        db.ref('users/'+id).update({ status: 'activo', expira: expira }).then(() => notify("✅ USUARIO ACTIVADO"));
-    }
-    
-    function banUsuario(id) {
-        db.ref('users/'+id).update({ status: 'baneado' }).then(() => notify("🚫 USUARIO BANEADO"));
-    }
-
-    // ... Resto de funciones auxiliares (notify, hideAll, adminTrigger, etc) ...
+    };
 </script>
 </body>
 </html>
