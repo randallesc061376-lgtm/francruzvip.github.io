@@ -4,138 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FRAN CRUZ VIP | Membresías</title>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <style>
         :root { --oro: #d4af37; --negro: #050505; --oro-grad: linear-gradient(135deg, #d4af37, #f9e498); }
-        body { background: var(--negro); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; text-align: center; }
+        body { background: var(--negro); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; text-align: center; user-select: none; }
         
-        header { padding: 30px 0; }
-        .logo { color: var(--oro); font-size: 2.2rem; font-weight: 900; letter-spacing: 6px; margin: 0; }
-        .tagline { color: #666; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; }
+        /* Estética idéntica a captura 1001647734.jpg */
+        header { padding: 20px 0; }
+        .logo { color: var(--oro); font-size: 1.8rem; font-weight: 900; letter-spacing: 5px; margin: 0; }
+        .banderas { display: flex; justify-content: center; gap: 8px; margin: 15px 0; }
+        .banderas img { width: 25px; height: auto; border-radius: 3px; }
+        
+        .sub-titulo { color: #666; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 25px; }
 
-        .contenedor-planes { display: flex; flex-direction: column; gap: 20px; align-items: center; margin-top: 30px; }
-        .card-plan { 
-            width: 90%; max-width: 350px; background: rgba(255,255,255,0.03); 
-            border: 1px solid rgba(212,175,55,0.2); border-radius: 20px; padding: 25px;
-            transition: 0.3s; position: relative; overflow: hidden;
+        .contenedor-planes { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .plan-box { 
+            width: 100%; max-width: 380px; background: rgba(255,255,255,0.03); 
+            border: 1px solid #222; border-radius: 15px; padding: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; transition: 0.2s;
         }
-        .card-plan.popular { border-color: var(--oro); box-shadow: 0 0 20px rgba(212,175,55,0.1); }
-        
-        .plan-nombre { color: var(--oro); font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; }
-        .plan-precio { font-size: 2rem; font-weight: 900; margin-bottom: 20px; }
-        
+        .plan-box.selected { border-color: var(--oro); background: rgba(212,175,55,0.05); }
+        .plan-txt { text-align: left; font-size: 1.1rem; color: #ddd; }
+        .plan-precio { color: var(--oro); font-weight: 900; font-size: 1.3rem; }
+
         .selector-pais { 
-            background: #111; border: 1px solid var(--oro); color: #fff; 
-            padding: 10px; border-radius: 10px; width: 100%; margin-bottom: 20px; font-size: 1rem;
+            background: #111; border: 1px solid #333; color: #fff; 
+            padding: 12px; border-radius: 10px; width: 100%; max-width: 380px; 
+            margin-bottom: 25px; font-size: 0.9rem; text-align: center;
         }
 
-        .btn-comprar { 
-            width: 100%; background: var(--oro-grad); color: #000; border: none; 
-            padding: 18px; border-radius: 12px; font-weight: 900; font-size: 1rem; 
-            cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+        .btn-gold { 
+            width: 100%; max-width: 380px; background: var(--oro-grad); color: #000; border: none; 
+            padding: 20px; border-radius: 15px; font-weight: 900; font-size: 1rem; 
+            cursor: pointer; text-transform: uppercase; letter-spacing: 2px; margin-top: 25px;
+        }
+        .btn-outline {
+            width: 100%; max-width: 380px; background: transparent; color: var(--oro); 
+            border: 1px solid var(--oro); padding: 15px; border-radius: 12px; 
+            font-weight: 700; margin-top: 15px; cursor: pointer; text-transform: uppercase;
         }
 
-        /* Modal de Validación (Protocolo 15s) */
+        /* Modal Protocolo 15s */
         .modal { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: var(--negro); z-index: 1000; flex-direction: column; justify-content: center; align-items: center;
         }
-        .scanner { width: 80%; height: 4px; background: var(--oro); box-shadow: 0 0 15px var(--oro); position: relative; animation: scan 2s infinite; }
-        @keyframes scan { 0%, 100% { top: -20px; } 50% { top: 20px; } }
+        .scanner { width: 70%; height: 2px; background: var(--oro); box-shadow: 0 0 15px var(--oro); position: relative; animation: scan 2s infinite; }
+        @keyframes scan { 0%, 100% { transform: translateY(-30px); } 50% { transform: translateY(30px); } }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 class="logo">FRAN CRUZ</h1>
-    <p class="tagline">PANEL DE MEMBRESÍAS VIP</p>
+    <h1 class="logo">FRAN CRUZ VIP</h1>
+    <div class="banderas">
+        <img src="https://flagcdn.com/cr.svg" alt="CR">
+        <img src="https://flagcdn.com/pa.svg" alt="PA">
+        <img src="https://flagcdn.com/ni.svg" alt="NI">
+        <img src="https://flagcdn.com/hn.svg" alt="HN">
+        <img src="https://flagcdn.com/sv.svg" alt="SV">
+        <img src="https://flagcdn.com/gt.svg" alt="GT">
+        <img src="https://flagcdn.com/bz.svg" alt="BZ">
+    </div>
+    <p class="sub-titulo">SISTEMA DE VERIFICACIÓN REGIONAL</p>
 </header>
 
 <select id="pais-master" class="selector-pais" onchange="actualizarPrecios()">
-    <option value="CR">🇨🇷 Costa Rica (CRC)</option>
-    <option value="NI">🇳🇮 Nicaragua (NIO)</option>
-    <option value="US">🇺🇸 Otros Países (USD)</option>
+    <option value="CR">Costa Rica (CRC)</option>
+    <option value="NI">Nicaragua (NIO)</option>
+    <option value="PA">Panamá / USA (USD)</option>
+    <option value="HN">Honduras (HNL)</option>
+    <option value="GT">Guatemala (GTQ)</option>
 </select>
 
 <div class="contenedor-planes">
-    <div class="card-plan">
-        <div class="plan-nombre">ACCESO 24H</div>
-        <div class="plan-precio" id="precio-bronce">$5.00</div>
-        <button class="btn-comprar" onclick="procesarPago('BRONCE', 5)">ADQUIRIR YA</button>
+    <div class="plan-box" onclick="seleccionar(1, this)">
+        <span class="plan-txt">Acceso Hoy</span>
+        <span class="plan-precio" id="p1">--</span>
     </div>
-
-    <div class="card-plan popular">
-        <div class="plan-nombre">GOLD MENSUAL</div>
-        <div class="plan-precio" id="precio-gold">$15.00</div>
-        <button class="btn-comprar" onclick="procesarPago('GOLD', 15)">ADQUIRIR YA</button>
+    <div class="plan-box" onclick="seleccionar(5, this)">
+        <span class="plan-txt">7 Días Silver</span>
+        <span class="plan-precio" id="p7">--</span>
     </div>
-
-    <div class="card-plan">
-        <div class="plan-nombre">VIP ANUAL</div>
-        <div class="plan-precio" id="precio-vip">$50.00</div>
-        <button class="btn-comprar" onclick="procesarPago('VIP', 50)">ADQUIRIR YA</button>
+    <div class="plan-box selected" onclick="seleccionar(15, this)">
+        <span class="plan-txt">30 Días Gold</span>
+        <span class="plan-precio" id="p30">--</span>
     </div>
 </div>
 
+<button class="btn-gold" onclick="iniciarProtocolo()">ADQUIRIR MEMBRESÍA</button>
+<button class="btn-outline">YA TENGO MI CLAVE</button>
+
 <div id="modal-espera" class="modal">
-    <div class="logo" style="margin-bottom: 50px;">VALIDANDO SISTEMA</div>
+    <div class="logo" style="margin-bottom: 40px;">VALIDANDO</div>
     <div class="scanner"></div>
-    <p style="margin-top: 40px; letter-spacing: 2px; color: var(--oro);" id="timer-text">INICIANDO PROTOCOLO (15s)...</p>
+    <p style="margin-top: 40px; color: var(--oro);" id="timer-text">VERIFICANDO DISPONIBILIDAD (15s)...</p>
 </div>
 
 <script>
-// Tasas de conversión corregidas para Centroamérica
+let planSeleccionado = 15;
 const TASAS = {
-    "CR": { moneda: "₡", factor: 510, nombre: "Costa Rica" },
-    "NI": { moneda: "C$", factor: 36.5, nombre: "Nicaragua" },
-    "US": { moneda: "$", factor: 1, nombre: "Internacional" }
+    "CR": { m: "₡", f: 550 }, // Según captura 1001647734.jpg
+    "NI": { m: "C$", f: 36.8 },
+    "PA": { m: "$", f: 1 },
+    "HN": { m: "L", f: 24.7 },
+    "GT": { m: "Q", f: 7.8 }
 };
 
 function actualizarPrecios() {
-    const pais = document.getElementById('pais-master').value;
-    const t = TASAS[pais];
-    
-    document.getElementById('precio-bronce').innerText = `${t.moneda}${(5 * t.factor).toLocaleString()}`;
-    document.getElementById('precio-gold').innerText = `${t.moneda}${(15 * t.factor).toLocaleString()}`;
-    document.getElementById('precio-vip').innerText = `${t.moneda}${(50 * t.factor).toLocaleString()}`;
+    const t = TASAS[document.getElementById('pais-master').value];
+    document.getElementById('p1').innerText = t.m + (1 * t.f).toLocaleString();
+    document.getElementById('p7').innerText = t.m + (5 * t.f).toLocaleString();
+    document.getElementById('p30').innerText = t.m + (15 * t.f).toLocaleString();
 }
 
-function procesarPago(plan, baseUsd) {
-    const pais = document.getElementById('pais-master').value;
-    const t = TASAS[pais];
-    const totalFinal = (baseUsd * t.factor).toLocaleString();
-    const moneda = t.moneda;
+function seleccionar(valor, elemento) {
+    planSeleccionado = valor;
+    document.querySelectorAll('.plan-box').forEach(b => b.classList.remove('selected'));
+    elemento.classList.add('selected');
+}
 
-    // Mostrar Animación de Seguridad (Reducida a 15s por instrucción previa)
+function iniciarProtocolo() {
     document.getElementById('modal-espera').style.display = 'flex';
-    let tiempo = 15;
-    
-    const count = setInterval(() => {
-        tiempo--;
-        document.getElementById('timer-text').innerText = `VERIFICANDO TRANSACCIÓN (${tiempo}s)...`;
-        if(tiempo <= 0) {
-            clearInterval(count);
-            enviarWhatsApp(plan, totalFinal, moneda);
+    let t = 15; // Protocolo reducido por instrucción
+    const timer = setInterval(() => {
+        t--;
+        document.getElementById('timer-text').innerText = `VERIFICANDO DISPONIBILIDAD (${t}s)...`;
+        if(t <= 0) {
+            clearInterval(timer);
+            enviarWhatsApp();
         }
     }, 1000);
 }
 
-function enviarWhatsApp(plan, monto, moneda) {
-    // Cálculo de Clave Dinámica: Últimos 2 del ID (simulado) + 2 dígitos del día
+function enviarWhatsApp() {
+    const t = TASAS[document.getElementById('pais-master').value];
+    const monto = (planSeleccionado * t.f).toLocaleString();
     const hoy = new Date().getDate().toString().padStart(2, '0');
-    const idSimulado = "88"; // Esto debería venir del UID del cliente
-    const claveDinamica = idSimulado + hoy;
-
-    const mensaje = `Hola Fran Cruz VIP. Deseo activar mi plan ${plan}.%0A%0A` +
-                    `Monto: ${moneda}${monto}%0A` +
-                    `ID Validación: ${claveDinamica}%0A%0A` +
-                    `Adjunto mi comprobante de pago.`;
+    const id = "93"; // Simulación de últimos 2 del ID
     
-    window.location.href = `https://wa.me/50688888888?text=${mensaje}`; 
+    const msg = `Hola Fran Cruz VIP. Deseo activar el plan de ${planSeleccionado} días.%0A` +
+                `Monto: ${t.m}${monto}%0A` +
+                `ID Validación: ${id}${hoy}`;
+    
+    window.location.href = `https://wa.me/50688888888?text=${msg}`;
 }
 
-// Iniciar con precios actualizados
 actualizarPrecios();
 </script>
 </body>
