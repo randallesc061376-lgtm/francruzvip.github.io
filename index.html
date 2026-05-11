@@ -3,156 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • PLATINUM BLINDADO</title>
+    <title>FRAN CRUZ VIP • PLATINUM TOTAL</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
     <style>
-        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --b: #000; }
+        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; -webkit-user-select: none; }
+        body { background: var(--n); color: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         
-        /* Bloqueo Global de Selección y Copiado */
-        * { 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; 
-            font-family: 'Segoe UI', sans-serif;
-            user-select: none; /* Bloquea selección de texto */
-            -webkit-user-select: none;
-            -ms-user-select: none;
-        }
+        /* HEADER Y LOGOTIPO */
+        header { padding: 30px 20px; text-align: center; width: 100%; cursor: pointer; }
+        .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; }
+        .sub-logo { color: #666; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; }
 
-        body { background: var(--n); color: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
-        
-        header { padding: 30px 20px; text-align: center; width: 100%; cursor: pointer; position: relative; z-index: 100; }
-        .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-shadow: 0 0 15px rgba(212,175,55,0.3); }
-        .sub-logo { color: #666; font-size: 0.7rem; letter-spacing: 2px; margin-top: 5px; text-transform: uppercase; }
-
-        .view { display: none; width: 100%; max-width: 420px; flex-direction: column; padding: 0 0 60px; animation: fadeIn 0.4s ease; }
+        /* NAVEGACIÓN Y VISTAS */
+        .view { display: none; width: 100%; max-width: 420px; flex-direction: column; animation: fadeIn 0.3s ease; }
         .view.active { display: flex; }
 
-        /* GALERÍA VIP BLINDADA */
-        #v-vip { align-items: center; width: 100vw; max-width: 100%; padding: 0; }
-        #timer-bar { background: #000; padding: 15px; text-align: center; border-bottom: 1px solid #111; width: 100%; position: sticky; top: 0; z-index: 200; }
-        
-        .gallery-container { position: relative; width: 100vw; max-width: 100%; display: flex; flex-direction: column; gap: 0; }
-        
-        /* Capa Invisible Anti-Clic y Anti-Toque Prolongado */
-        .glass-shield { 
-            position: fixed; /* Ocupa toda la pantalla flotando */
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: 150; /* Por encima de las imágenes, debajo del timer */
-            background: rgba(0,0,0,0); /* Totalmente transparente */
-            cursor: default;
-        }
-        
-        #gallery-vip img { 
-            width: 100%; 
-            height: auto; 
-            display: block; 
-            z-index: 140; /* Por debajo de la capa glass */
-            pointer-events: none; /* Desactiva interacción directa con la imagen */
-            -webkit-touch-callout: none; /* Desactiva menú contextual en iOS */
-        }
+        /* BANDERAS SELECTORAS */
+        .flag-bar { display: flex; justify-content: center; gap: 10px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 50px; margin: 10px 20px; }
+        .flag { width: 35px; height: 22px; cursor: pointer; opacity: 0.4; transition: 0.3s; border-radius: 3px; }
+        .flag.active { opacity: 1; box-shadow: 0 0 15px var(--o); transform: scale(1.1); }
 
-        /* --- Resto del Diseño (Planes, Acordeón, Admin) --- */
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin: 0 20px 12px; }
-        .plan-box { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .plan-box.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
-        .plan-box b { color: var(--o); font-size: 1.3rem; }
+        /* PLANES Y PRECIOS */
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
+        .card b { color: var(--o); font-size: 1.2rem; }
 
+        /* ACORDEÓN DE PAGOS */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 8px; margin: 0 20px 8px; overflow: hidden; }
         .acc-head { background: #111; padding: 15px; font-size: 0.8rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; }
-        .acc-body { display: none; background: #080808; padding: 15px; border-top: 1px solid #1a1a1a; }
+        .acc-body { display: none; background: #080808; padding: 15px; border-top: 1px solid #1a1a1a; text-align: center; }
         .acc-body.active { display: block; }
 
-        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin: 15px 20px 0; }
-        
-        /* Admin UI */
+        /* BOTONES PRINCIPALES */
+        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin: 15px 20px; }
+
+        /* SALA VIP Y BLINDAJE */
+        .glass-shield { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1000; background: transparent; pointer-events: all; }
+        #gallery-vip img { width: 100%; height: auto; display: block; pointer-events: none; }
+
+        /* PANEL ADMIN */
+        .adm-section { padding: 20px; border-top: 1px solid #222; }
         .adm-input { width: 100%; background: #000; border: 1px solid #333; padding: 12px; color: #fff; border-radius: 8px; margin-bottom: 10px; }
-        .adm-label { font-size: 0.7rem; color: var(--o); font-weight: bold; margin: 15px 20px 8px; display: block; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 0 20px; }
+        .grid-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<body oncontextmenu="return false;"> <div class="glass-shield"></div>
+<body oncontextmenu="return false;">
 
-<header onclick="accessAdmin()">
+<header onclick="toggleAdmin()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div id="tagline" class="sub-logo">SALA PRIVADA • COSTA RICA</div>
+    <div class="sub-logo">SALA PRIVADA • COSTA RICA</div>
 </header>
 
 <div id="v-client" class="view active">
-    <div class="card plan-box sel" onclick="selP(this, '30 DÍAS', 20)"><span>30 DÍAS GOLD</span><b class="p-val">₡10,800</b></div>
+    <div class="flag-bar">
+        <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setCountry('CR', 1)">
+        <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setCountry('NI', 36.8)">
+        <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setCountry('HN', 24.6)">
+        <img src="https://flagcdn.com/gt.svg" class="flag" onclick="setCountry('GT', 7.7)">
+    </div>
 
-    <div class="pay-acc">
-        <div class="adm-label" style="text-align:center">MÉTODOS DE PAGO DISPONIBLES</div>
-        <div class="acc-item">
-            <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL (CR) <span>▼</span></div>
-            <div class="acc-body active">70835833<br><small>Randall Sánchez C.</small></div>
+    <div id="plans-container">
+        <div class="card" onclick="selPlan(this, 'HOY')">
+            <span>ACCESO HOY (Medianoche)</span> <b id="price-today">₡540</b>
         </div>
+        <div class="card" onclick="selPlan(this, 'SILVER')">
+            <span>7 DÍAS SILVER</span> <b id="price-silver">₡2,700</b>
         </div>
-    <button class="btn-gold">SOLICITAR ACCESO VIP</button>
+        <div class="card sel" onclick="selPlan(this, 'GOLD')">
+            <span>30 DÍAS GOLD</span> <b id="price-gold">₡10,800</b>
+        </div>
+    </div>
+
+    <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc(this)">1. MÉTODOS DE PAGO <span>▼</span></div>
+        <div class="acc-body active" id="pay-details">
+            <p id="sinpe-data">SINPE MÓVIL (CR): 70835833<br><small>Randall Sánchez C.</small></p>
+            <button class="btn-gold" style="padding:10px; margin:5px 0; width:100%" onclick="copyData()">COPIAR DATOS</button>
+        </div>
+    </div>
+
+    <button class="btn-gold" onclick="requestAccess()">SOLICITAR ACCESO VIP</button>
 </div>
 
 <div id="v-vip" class="view">
-    <div id="timer-bar">
-        <div style="font-size:0.7rem; color:var(--o);">SALA VIP ACTIVA</div>
-        <div id="timer" style="font-size:1.3rem; font-weight:900;">00:00:00</div>
+    <div class="glass-shield" id="vip-shield" style="display:none"></div>
+    <div style="background:#000; padding:15px; text-align:center; position:sticky; top:0; z-index:1100;">
+        <div style="color:var(--o); font-size:0.7rem;">ACCESO TEMPORAL ACTIVO</div>
+        <div id="vip-timer" style="font-size:1.5rem; font-weight:900;">00:00:00</div>
     </div>
-    <div class="gallery-container">
-        <div id="gallery-vip"></div>
-    </div>
+    <div id="gallery-vip"></div>
 </div>
 
 <div id="v-admin" class="view">
-    <span class="adm-label">GALERÍA (ORDEN CRONOLÓGICO)</span>
-    <input type="file" id="img-upload" class="adm-input" style="margin:0 20px" accept="image/*">
-    <button class="btn-gold" style="padding:15px; font-size:0.8rem" onclick="uploadImg()">CARGAR NUEVA LÁMINA</button>
-    <div id="admin-gallery" class="grid-4"></div>
+    <div class="adm-section">
+        <h4 style="color:var(--o)">TIPOS DE CAMBIO (1 USD)</h4>
+        <div class="grid-prices">
+            <input type="number" id="ex-cr" class="adm-input" value="495">
+            <input type="number" id="ex-ni" class="adm-input" value="36.8">
+            <input type="number" id="ex-hn" class="adm-input" value="24.6">
+            <input type="number" id="ex-gt" class="adm-input" value="7.7">
+        </div>
+        <button class="btn-gold" style="margin:10px 0; width:100%" onclick="saveEx()">GUARDAR CAMBIOS</button>
+    </div>
+
+    <div class="adm-section">
+        <h4 style="color:var(--o)">GESTIÓN DE USUARIOS (BANEO)</h4>
+        <select id="user-list" class="adm-input"><option>Seleccionar Usuario...</option></select>
+        <div style="display:flex; gap:10px">
+            <button class="btn-gold" style="background:#400; color:#f00; margin:0" onclick="banUser()">BANEAR</button>
+            <button class="btn-gold" style="background:#040; color:#0f0; margin:0" onclick="unbanUser()">DESBANEAR</button>
+        </div>
+    </div>
+
+    <div class="adm-section">
+        <h4 style="color:var(--o)">SUBIR LÁMINA VIP</h4>
+        <input type="file" id="img-file" class="adm-input">
+        <button class="btn-gold" onclick="uploadVip()">PUBLICAR LÁMINA</button>
+    </div>
 </div>
 
 <script>
-    // Inicialización Firebase
-    const firebaseConfig = { apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", projectId: "fran-cruz-sala-vip", storageBucket: "fran-cruz-sala-vip.firebasestorage.app", databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com" };
+    // Configuración Firebase
+    const firebaseConfig = { apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", projectId: "fran-cruz-sala-vip", databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com", storageBucket: "fran-cruz-sala-vip.appspot.com" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const storage = firebase.storage();
+    const st = firebase.storage();
 
-    // Bloqueo Adicional de Teclas de Descarga (Ctrl+S, Ctrl+U, F12)
+    // Lógica de Blindaje de Teclado
     document.onkeydown = function(e) {
-        if(e.ctrlKey && (e.keyCode === 67 || e.keyCode === 85 || e.keyCode === 83)) { return false; }
-        if(e.keyCode === 123) { return false; } // Bloquea F12
+        if(e.ctrlKey && (e.keyCode === 67 || e.keyCode === 85 || e.keyCode === 83)) return false;
+        if(e.keyCode === 123) return false;
     };
 
-    function startVip() {
-        document.getElementById('v-client').classList.remove('active');
-        document.getElementById('v-vip').classList.add('active');
-        
-        // Cargar Galería en Orden Cronológico
-        db.ref('gallery').orderByChild('timestamp').on('value', snap => {
-            const gal = document.getElementById('gallery-vip'); gal.innerHTML = '';
-            snap.forEach(img => {
-                gal.innerHTML += `<img src="${img.val().url}" alt="VIP Image">`;
+    // Funciones de Navegación
+    function toggleAdmin() {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById('v-admin').classList.add('active');
+    }
+
+    function toggleAcc(el) {
+        el.nextElementSibling.classList.toggle('active');
+    }
+
+    // Lógica de Precios y Países
+    function setCountry(code, rate) {
+        const symbol = code === 'CR' ? '₡' : (code === 'NI' ? 'C$' : (code === 'HN' ? 'L' : 'Q'));
+        document.getElementById('price-today').innerText = symbol + (1 * rate).toFixed(0);
+        document.getElementById('price-silver').innerText = symbol + (5 * rate).toFixed(0);
+        document.getElementById('price-gold').innerText = symbol + (20 * rate).toFixed(0);
+        // Actualizar UI de banderas...
+    }
+
+    // Carga de Galería (Orden Cronológico)
+    function loadGallery() {
+        db.ref('laminas').orderByChild('timestamp').on('value', snap => {
+            const container = document.getElementById('gallery-vip');
+            container.innerHTML = '';
+            let list = [];
+            snap.forEach(child => list.unshift(child.val())); // Unshift para lo más nuevo arriba
+            list.forEach(item => {
+                container.innerHTML += `<img src="${item.url}" alt="VIP">`;
             });
+            document.getElementById('vip-shield').style.display = 'block';
         });
     }
 
-    function uploadImg() {
-        const file = document.getElementById('img-upload').files[0];
-        if(!file) return;
-        const time = Date.now(); // Marca temporal para el orden
-        const ref = storage.ref('gallery/' + time + "_" + file.name);
-        
-        ref.put(file).then(snap => {
-            snap.ref.getDownloadURL().then(url => {
-                // Guardar URL y timestamp para ordenar
-                db.ref('gallery').push({ url: url, timestamp: time });
-                alert("LÁMINA PROTEGIDA Y CARGADA");
-            });
-        });
-    }
-
-    // Funciones Auxiliares (Acceso Admin, Acordeón, etc.) ...
+    // Inicializar app...
 </script>
 </body>
 </html>
