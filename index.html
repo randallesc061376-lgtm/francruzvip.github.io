@@ -3,359 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • ACCESO PRIVADO</title>
+    <title>SALA VIP FRAN CRUZ • INTERNACIONAL</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
     <style>
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #8b0000; --v: #006400; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            background: var(--n); color: #fff; font-family: 'Segoe UI', Roboto, sans-serif; 
-            margin: 0; display: flex; flex-direction: column; align-items: center; 
-            user-select: none; -webkit-user-select: none; min-height: 100vh; overflow-x: hidden;
-        }
-
-        /* Bloqueo de capturas visual (Capa invisible) */
+        body { background: var(--n); color: #fff; font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; user-select: none; -webkit-user-select: none; min-height: 100vh; overflow-x: hidden; }
         .glass-shield { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; pointer-events: none; }
-
-        /* UI Elements */
-        #progress-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: #111; z-index: 10000; }
-        #progress-bar { width: 0%; height: 100%; background: var(--g); transition: width 0.3s; box-shadow: 0 0 10px var(--o); }
-        
-        #toast { display: none; position: fixed; bottom: 30px; background: var(--g); color: #000; padding: 15px 30px; border-radius: 50px; font-weight: 900; z-index: 10000; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
-        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        header { padding: 60px 20px 20px; text-align: center; width: 100%; }
-        .logo { color: var(--o); font-size: 2.5rem; font-weight: 900; letter-spacing: 8px; text-transform: uppercase; text-shadow: 0 0 15px rgba(212,175,55,0.3); }
-        .tagline { color: #555; font-size: .75rem; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; font-weight: bold; }
-        
-        .geo-bar { display: flex; justify-content: center; gap: 15px; margin: 25px 0; background: #0a0a0a; padding: 15px; border-radius: 50px; border: 1px solid #111; width: 90%; max-width: 450px; overflow-x: auto; scrollbar-width: none; }
-        .flag { width: 35px; height: 24px; opacity: 0.2; transition: 0.4s; cursor: pointer; border-radius: 3px; }
-        .flag.active { opacity: 1; transform: scale(1.25); filter: drop-shadow(0 0 8px var(--o)); }
-        
-        .view { display: none; width: 100%; max-width: 400px; flex-direction: column; padding: 0 25px 50px; animation: fadeIn 0.5s; }
+        #toast { display: none; position: fixed; bottom: 30px; background: var(--g); color: #000; padding: 15px 30px; border-radius: 50px; font-weight: 900; z-index: 10000; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        header { padding: 50px 20px 20px; text-align: center; width: 100%; cursor: pointer; }
+        .logo { color: var(--o); font-size: 2.3rem; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; }
+        .geo-bar { display: flex; justify-content: center; gap: 12px; margin: 20px 0; background: #0a0a0a; padding: 12px; border-radius: 50px; border: 1px solid #111; width: 95%; max-width: 480px; overflow-x: auto; }
+        .flag { width: 32px; height: 22px; opacity: 0.3; transition: 0.4s; cursor: pointer; border-radius: 2px; }
+        .flag.active { opacity: 1; transform: scale(1.3); filter: drop-shadow(0 0 8px var(--o)); }
+        .view { display: none; width: 100%; max-width: 400px; flex-direction: column; padding: 0 25px 50px; align-items: center; }
         .view.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Planes */
-        .plan-box { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 15px; padding: 25px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; cursor: pointer; transition: 0.3s; }
-        .plan-box.sel { border-color: var(--o); background: rgba(212,175,55,0.05); transform: translateY(-2px); }
-        .plan-box span { font-weight: 700; letter-spacing: 1px; color: #aaa; }
-        .plan-box.sel span { color: #fff; }
-        .plan-box b { color: var(--o); font-size: 1.4rem; font-weight: 900; }
-
-        /* Acordeón de Pagos */
-        .method { width: 100%; background: #080808; border: 1px solid #151515; border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
-        .method-h { padding: 18px; text-align: center; font-size: 0.8rem; font-weight: 900; color: #555; cursor: pointer; transition: 0.3s; }
+        .plan-box { width: 100%; background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 15px; padding: 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; }
+        .plan-box.sel { border-color: var(--o); background: rgba(212,175,55,0.05); }
+        .plan-box b { color: var(--o); font-size: 1.3rem; text-align: right; }
+        .plan-box small { display: block; font-size: 0.65rem; color: #666; margin-top: 4px; }
+        .method { width: 100%; background: #080808; border: 1px solid #151515; border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
+        .method-h { padding: 15px; text-align: center; font-size: 0.75rem; font-weight: 900; color: #444; cursor: pointer; }
         .method.open .method-h { color: var(--o); background: #0c0c0c; }
-        .method-c { display: none; padding: 20px; text-align: center; background: #050505; border-top: 1px solid #151515; }
-        .method.open .method-c { display: block; animation: slideDown 0.3s; }
-        @keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
-
-        .copy-btn { background: rgba(212,175,55,0.1); color: var(--o); border: 1px solid var(--o); padding: 5px 12px; border-radius: 5px; font-size: 0.6rem; font-weight: bold; margin-top: 10px; cursor: pointer; text-transform: uppercase; }
-
-        /* Botones */
-        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 20px; border-radius: 15px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 20px; font-size: 1rem; letter-spacing: 1px; }
-        .btn-outline { width: 100%; background: transparent; color: var(--o); border: 1px solid var(--o); padding: 18px; border-radius: 15px; font-weight: bold; margin-top: 15px; cursor: pointer; font-size: 0.9rem; }
-
-        /* Galería VIP (Scroll Down) */
-        #vip-gallery { width: 100%; display: flex; flex-direction: column; gap: 0; }
-        #vip-gallery img { width: 100%; height: auto; display: block; pointer-events: none; -webkit-user-drag: none; }
-
-        /* Admin Panels */
-        .admin-sec { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 20px; margin-top: 15px; width: 100%; }
-        .inp-admin { width: 100%; background: #000; border: 1px solid #222; padding: 15px; color: #fff; border-radius: 10px; margin-top: 10px; text-align: center; font-size: 0.9rem; }
-        .user-card { background: #111; padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; font-size: 0.8rem; }
+        .method-c { display: none; padding: 15px; text-align: center; }
+        .method.open .method-c { display: block; }
+        .copy-btn { background: rgba(212,175,55,0.1); color: var(--o); border: 1px solid var(--o); padding: 6px 12px; border-radius: 4px; font-size: 0.6rem; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 15px; }
+        #vip-gallery img { width: 100%; height: auto; pointer-events: none; }
+        .admin-sec { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; margin-top: 12px; width: 100%; }
+        .inp-admin { width: 100%; background: #000; border: 1px solid #222; padding: 12px; color: #fff; border-radius: 8px; margin-top: 8px; text-align: center; }
     </style>
 </head>
 <body oncontextmenu="return false;">
-
 <div class="glass-shield"></div>
-<div id="progress-container"><div id="progress-bar"></div></div>
 <div id="toast"></div>
 
 <header id="adminTrigger">
-    <div class="logo">FRAN CRUZ</div>
-    <div id="region-tag" class="tagline">SALA PRIVADA • COSTA RICA</div>
+    <div class="logo">FRAN CRUZ VIP</div>
+    <div id="region-tag" style="color:#555; font-size:0.65rem; letter-spacing:3px; margin-top:5px;">SALA PRIVADA • COSTA RICA</div>
 </header>
 
 <div class="geo-bar" id="geo-bar">
-    <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setLoc('COSTA RICA', '₡', 'cr', this)">
-    <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setLoc('NICARAGUA', 'C$', 'ni', this)">
-    <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setLoc('PANAMÁ', '$', 'pa', this)">
-    <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setLoc('HONDURAS', 'L', 'hn', this)">
-    <img src="https://flagcdn.com/sv.svg" class="flag" onclick="setLoc('EL SALVADOR', '$', 'sv', this)">
-    <img src="https://flagcdn.com/gt.svg" class="flag" onclick="setLoc('GUATEMALA', 'Q', 'gt', this)">
-    <img src="https://flagcdn.com/bz.svg" class="flag" onclick="setLoc('BELICE', '$', 'bz', this)">
+    <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setLoc('COSTA RICA', '₡', 'cr', true)">
+    <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setLoc('NICARAGUA', 'C$', 'ni', false)">
+    <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setLoc('HONDURAS', 'L', 'hn', false)">
+    <img src="https://flagcdn.com/gt.svg" class="flag" onclick="setLoc('GUATEMALA', 'Q', 'gt', false)">
+    <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('RESTO DEL MUNDO', '$', 'wd', false)">
 </div>
 
 <div id="v-client" class="view active">
-    <div id="cont-planes"></div>
-    <div style="color:var(--o); font-size:0.6rem; font-weight:900; margin:35px 0 15px; text-align:center; letter-spacing:4px; opacity:0.6;">MÉTODOS DE PAGO</div>
+    <div id="cont-planes" style="width:100%"></div>
+    <div style="color:var(--o); font-size:0.55rem; font-weight:900; margin:30px 0 12px; text-align:center; letter-spacing:3px; opacity:0.5;">MÉTODOS DE PAGO DISPONIBLES</div>
     
-    <div class="method" id="m1">
-        <div class="method-h" onclick="toggleAcc('m1')">1. SINPE MÓVIL</div>
-        <div class="method-c">
-            <b id="d-sinpe" style="color:var(--o); font-size:1.4rem;">...</b><br>
-            <span id="d-titular" style="font-size:0.8rem; color:#888;">...</span><br>
-            <button class="copy-btn" onclick="copyText('d-sinpe')">Copiar Número</button>
-        </div>
+    <div id="pago-cr" style="width:100%; display:block;">
+        <div class="method" id="m1"><div class="method-h" onclick="toggleAcc('m1')">1. SINPE MÓVIL (CR)</div><div class="method-c"><b id="d-sinpe" style="color:var(--o); font-size:1.3rem;">...</b><br><button class="copy-btn" onclick="copyText('d-sinpe')">Copiar</button></div></div>
+        <div class="method" id="m2"><div class="method-h" onclick="toggleAcc('m2')">2. TRANSFERENCIA IBAN</div><div class="method-c"><span id="d-iban" style="font-size:0.7rem; color:#aaa;">...</span><br><button class="copy-btn" onclick="copyText('d-iban')">Copiar</button></div></div>
     </div>
 
-    <div class="method" id="m2">
-        <div class="method-h" onclick="toggleAcc('m2')">2. TRANSFERENCIAS</div>
+    <div class="method" id="m3" style="width:100%">
+        <div class="method-h" onclick="toggleAcc('m3')">PAGO GLOBAL (PAYPAL)</div>
         <div class="method-c">
-            <span id="d-iban" style="font-size:0.75rem; word-break:break-all; color:#aaa;">...</span><br>
-            <button class="copy-btn" onclick="copyText('d-iban')">Copiar IBAN</button>
-        </div>
-    </div>
-
-    <div class="method" id="m3">
-        <div class="method-h" onclick="toggleAcc('m3')">3. PAYPAL / INTERNACIONAL</div>
-        <div class="method-c">
-            <span style="font-size:0.8rem; color:#aaa;">Disponible para pagos globales</span><br>
-            <button class="copy-btn" onclick="notify('Solicite el link por WhatsApp')">Pedir Enlace</button>
+            <span id="d-pp" style="font-size:0.8rem; color:#aaa;">francruz.vip@gmail.com</span><br>
+            <button class="copy-btn" onclick="copyText('d-pp')">Copiar Correo PayPal</button>
         </div>
     </div>
 
     <button class="btn-gold" onclick="sendWA()">SOLICITAR ACCESO VIP</button>
-    <button class="btn-outline" onclick="checkKey()">YA TENGO MI CLAVE</button>
+    <button style="background:none; border:1px solid #333; color:#555; padding:15px; width:100%; border-radius:12px; margin-top:10px; font-weight:bold; cursor:pointer;" onclick="checkKey()">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-wait" class="view">
-    <div style="text-align:center; padding:40px 20px;">
-        <div style="font-size:3rem; margin-bottom:20px;">⏳</div>
+    <div style="text-align:center; padding:50px 20px;">
+        <div style="font-size:4rem; margin-bottom:20px;">⏳</div>
         <h2 style="color:var(--o); letter-spacing:2px;">SOLICITUD EN PROCESO</h2>
-        <p style="color:#888; line-height:1.6;">Estamos validando su comprobante. Por favor, mantenga esta ventana abierta. Recibirá una notificación automática cuando su acceso sea liberado.</p>
-        <div style="margin-top:30px; font-size:0.7rem; color:#444; letter-spacing:1px;" id="wait-id">ID: ...</div>
+        <p style="color:#888; font-size:0.9rem;">Validando su comprobante internacional. Mantenga esta ventana abierta para recibir su acceso automático.</p>
     </div>
 </div>
 
 <div id="v-vip" class="view" style="max-width:100%; padding:0;">
-    <div id="vip-header" style="background:#000; padding:20px; text-align:center; border-bottom:1px solid #111; position:sticky; top:0; z-index:9999;">
-        <div style="color:var(--o); font-size:0.7rem; font-weight:bold; letter-spacing:2px;">SALA VIP ACTIVA</div>
-        <div id="timer" style="font-size:1.2rem; font-weight:900; margin-top:5px;">--:--:--</div>
+    <div style="background:#000; padding:15px; text-align:center; border-bottom:1px solid #111; position:sticky; top:0; z-index:9999; width:100%">
+        <div style="color:var(--o); font-size:0.6rem; font-weight:bold; letter-spacing:2px;">SALA VIP FRAN CRUZ</div>
+        <div id="timer" style="font-size:1.2rem; font-weight:900; color:#fff;">00:00:00</div>
     </div>
     <div id="vip-gallery"></div>
 </div>
 
 <div id="v-admin" class="view">
-    <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">CONFIGURACIÓN GENERAL</span>
-        <input type="text" id="i-sinpe" class="inp-admin" placeholder="Número SINPE">
-        <input type="text" id="i-tit" class="inp-admin" placeholder="Nombre Titular">
+    <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">TIPO DE CAMBIO (1 USD = X)</span>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <input type="number" id="i-cr" class="inp-admin" placeholder="CR ₡">
+            <input type="number" id="i-ni" class="inp-admin" placeholder="NI C$">
+            <input type="number" id="i-hn" class="inp-admin" placeholder="HN L">
+            <input type="number" id="i-gt" class="inp-admin" placeholder="GT Q">
+        </div>
+    </div>
+    <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">CONTACTO Y PAYPAL</span>
+        <input type="text" id="i-sinpe" class="inp-admin" placeholder="SINPE">
         <input type="text" id="i-iban" class="inp-admin" placeholder="IBAN">
-        <input type="text" id="i-wa" class="inp-admin" placeholder="WhatsApp (506...)">
+        <input type="text" id="i-pp" class="inp-admin" placeholder="Correo PayPal">
+        <input type="text" id="i-wa" class="inp-admin" placeholder="WA (506...)">
     </div>
-    <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">LISTA DE ESPERA</span>
-        <div id="admin-users" style="margin-top:15px;"></div>
+    <div class="admin-sec"><span style="color:var(--o); font-size:0.7rem; font-weight:bold;">USUARIOS EN ESPERA</span>
+        <div id="admin-users" style="margin-top:10px;"></div>
     </div>
-    <button class="btn-gold" onclick="saveConfig()">GUARDAR CAMBIOS</button>
-    <button class="btn-outline" onclick="location.reload()">CERRAR PANEL</button>
+    <button class="btn-gold" onclick="saveAdmin()">GUARDAR TODO</button>
+    <button style="width:100%; background:none; color:#555; border:none; margin-top:15px; cursor:pointer;" onclick="location.reload()">CERRAR</button>
 </div>
 
 <script>
-    // CONFIGURACIÓN FIREBASE (REEMPLAZAR CON TUS DATOS)
-    const firebaseConfig = {
-      apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE",
-      authDomain: "fran-cruz-sala-vip.firebaseapp.com",
-      projectId: "fran-cruz-sala-vip",
-      storageBucket: "fran-cruz-sala-vip.firebasestorage.app",
-      databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com",
-      appId: "1:1022733043010:web:379db18e37bbfde2cf34db"
-    };
-
+    const firebaseConfig = { apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", authDomain: "fran-cruz-sala-vip.firebaseapp.com", projectId: "fran-cruz-sala-vip", storageBucket: "fran-cruz-sala-vip.firebasestorage.app", databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com", appId: "1:1022733043010:web:379db18e37bbfde2cf34db" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     
-    let sym = "₡", rate = 540, curPlan = "30 DÍAS GOLD", curUSD = 15;
-    let rates = { cr: 540, ni: 37, pa: 1, hn: 24.5, sv: 1, gt: 7.8, bz: 1 };
-    let sets = { wa: "50664535475", tit: "Randall Sánchez C.", sinpe: "70835833", iban: "CR80080315001000035641" };
-    const hoy = new Date().toISOString().split('T')[0];
+    let isCR = true, sym = "₡", rate = 540, curPlan = "30 DÍAS GOLD", curUSD = 15;
+    let rates = { cr: 540, ni: 37, hn: 24.5, gt: 7.8, wd: 1 };
+    let sets = { wa: "50664535475", sinpe: "70835833", iban: "CR80...", pp: "francruz.vip@gmail.com" };
 
-    // ID Único y Escucha de Estado
     let myID = localStorage.getItem('vip_id') || 'VIP' + Math.floor(1000 + Math.random()*9000);
     localStorage.setItem('vip_id', myID);
-    document.getElementById('wait-id').innerText = `MI ID: ${myID}`;
 
-    // --- ESCUCHA DE ESTADO EN TIEMPO REAL ---
+    db.ref('config').on('value', snap => {
+        const d = snap.val();
+        if(d) {
+            if(d.rates) rates = {...rates, ...d.rates};
+            if(d.settings) {
+                sets = d.settings;
+                document.getElementById('d-sinpe').innerText = sets.sinpe;
+                document.getElementById('d-iban').innerText = sets.iban;
+                document.getElementById('d-pp').innerText = sets.pp;
+            }
+        }
+        renderPlanes();
+    });
+
     db.ref('users/' + myID).on('value', snap => {
-        const u = snap.val();
-        if(!u) return;
-        
+        const u = snap.val(); if(!u) return;
         hideAll();
-        if(u.status === 'espera') {
-            document.getElementById('v-wait').classList.add('active');
-        } else if(u.status === 'activo') {
-            notify("¡ACCESO CONCEDIDO! BIENVENIDO");
-            document.getElementById('v-vip').classList.add('active');
-            document.getElementById('geo-bar').style.display = 'none';
-            startVip(u.expira);
-        } else {
-            document.getElementById('v-client').classList.add('active');
-        }
+        if(u.status === 'espera') document.getElementById('v-wait').classList.add('active');
+        else if(u.status === 'activo') { document.getElementById('v-vip').classList.add('active'); startVip(u.expira); }
+        else document.getElementById('v-client').classList.add('active');
     });
 
-    function hideAll() {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    }
-
-    function notify(msg) {
-        const t = document.getElementById('toast');
-        t.innerText = msg; t.style.display = 'block';
-        setTimeout(() => t.style.display = 'none', 4000);
-    }
-
-    function toggleAcc(id) {
-        const el = document.getElementById(id);
-        const isOpen = el.classList.contains('open');
-        document.querySelectorAll('.method').forEach(m => m.classList.remove('open'));
-        if(!isOpen) el.classList.add('open');
-    }
-
-    function copyText(id) {
-        const text = document.getElementById(id).innerText;
-        navigator.clipboard.writeText(text);
-        notify("¡COPIADO AL PORTAPAPELES!");
-    }
-
-    // --- LÓGICA DE WHATSAPP Y AUTO-BANEO ---
-    function sendWA() {
-        const d = new Date();
-        const clave = myID.substring(0,2).toUpperCase() + String(d.getDate()).padStart(2,'0') + String(d.getMonth()+1).padStart(2,'0');
-        const total = Math.round(curUSD * rate).toLocaleString();
-        
-        const msg = `*SOLICITUD DE ACCESO VIP*\n--------------------\n*ID:* ${myID}\n*PLAN:* ${curPlan}\n*PRECIO:* ${sym}${total}\n*CLAVE:* ${clave}\n--------------------\n⚠️ _Adjunte el comprobante para activar._`;
-
-        // Auto-Baneo Preventivo
-        db.ref('users/' + myID).update({ 
-            status: 'espera', 
-            plan: curPlan,
-            solicitado: Date.now() 
-        }).then(() => {
-            window.location.href = `https://wa.me/${sets.wa}?text=${encodeURIComponent(msg)}`;
-        });
-    }
-
-    // --- SALA VIP ---
-    function startVip(expiraTimestamp) {
-        // Cargar Galería
-        db.ref('gallery').on('value', snap => {
-            const gal = document.getElementById('vip-gallery');
-            gal.innerHTML = '';
-            snap.forEach(img => {
-                if(img.val().fecha === hoy) {
-                    gal.innerHTML += `<img src="${img.val().url}" alt="VIP Content">`;
-                }
-            });
-        });
-
-        // Timer
-        setInterval(() => {
-            const diff = expiraTimestamp - Date.now();
-            if(diff <= 0) {
-                location.reload(); // Expira acceso
-            } else {
-                const h = Math.floor(diff / 3600000);
-                const m = Math.floor((diff % 3600000) / 60000);
-                const s = Math.floor((diff % 60000) / 1000);
-                document.getElementById('timer').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-            }
-        }, 1000);
-    }
-
-    // --- ADMIN FUNCTIONS ---
-    function saveConfig() {
-        const newS = {
-            wa: document.getElementById('i-wa').value || sets.wa,
-            tit: document.getElementById('i-tit').value || sets.tit,
-            sinpe: document.getElementById('i-sinpe').value || sets.sinpe,
-            iban: document.getElementById('i-iban').value || sets.iban
-        };
-        db.ref('config/settings').set(newS).then(() => notify("✅ AJUSTES GUARDADOS"));
-    }
-
-    db.ref('users').on('value', snap => {
-        const cont = document.getElementById('admin-users');
-        cont.innerHTML = '';
-        snap.forEach(u => {
-            const d = u.val();
-            if(d.status === 'espera') {
-                cont.innerHTML += `
-                <div class="user-card">
-                    <div><b>${u.key}</b><br><small>${d.plan}</small></div>
-                    <button onclick="darAlta('${u.key}', '${d.plan}')" style="background:var(--v); color:#fff; border:none; padding:8px; border-radius:5px; font-weight:bold; cursor:pointer;">DAR ALTA</button>
-                </div>`;
-            }
-        });
-    });
-
-    function darAlta(id, plan) {
-        let duracion = 0;
-        const ahora = new Date();
-        const midnight = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate(), 23, 59, 59).getTime();
-
-        if(plan.includes("HOY")) duracion = midnight;
-        else if(plan.includes("7 DÍAS")) duracion = Date.now() + (7 * 24 * 60 * 60 * 1000);
-        else duracion = Date.now() + (30 * 24 * 60 * 60 * 1000);
-
-        db.ref('users/' + id).update({
-            status: 'activo',
-            expira: duracion,
-            activado_en: Date.now()
-        }).then(() => notify("✅ USUARIO ACTIVADO"));
-    }
-
-    // Config Inicial e Interfaz
-    db.ref('config/settings').on('value', snap => {
-        if(snap.val()) {
-            sets = snap.val();
-            document.getElementById('d-sinpe').innerText = sets.sinpe;
-            document.getElementById('d-titular').innerText = sets.tit;
-            document.getElementById('d-iban').innerText = sets.iban;
-        }
-    });
-
-    function setLoc(n, s, k, el) {
-        sym = s; rate = rates[k] || 1;
+    function setLoc(n, s, k, cr) {
+        sym = s; rate = rates[k]; isCR = cr;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
-        el.classList.add('active');
+        event.target.classList.add('active');
         document.getElementById('region-tag').innerText = `SALA PRIVADA • ${n}`;
+        document.getElementById('pago-cr').style.display = cr ? 'block' : 'none';
         renderPlanes();
     }
 
     function renderPlanes() {
         const c = document.getElementById('cont-planes'); c.innerHTML = '';
         [{n:"ACCESO HOY", u:1}, {n:"7 DÍAS SILVER", u:5}, {n:"30 DÍAS GOLD", u:15}].forEach(p => {
-            const price = Math.round(p.u * rate).toLocaleString();
+            const localPrice = Math.round(p.u * rate).toLocaleString();
             const div = document.createElement('div');
             div.className = `plan-box ${p.n === curPlan ? 'sel' : ''}`;
             div.onclick = () => { curPlan = p.n; curUSD = p.u; renderPlanes(); };
-            div.innerHTML = `<span>${p.n}</span><b>${sym}${price}</b>`;
+            div.innerHTML = `<div><span>${p.n}</span><small>PAGO FINAL: $${p.u} USD</small></div><b>${sym}${localPrice}</b>`;
             c.appendChild(div);
         });
     }
 
-    // Trigger Admin
-    let clicks = 0;
-    document.getElementById('adminTrigger').onclick = () => {
-        clicks++;
-        if(clicks >= 5) {
-            if(prompt("PASS:") === "2026") {
-                hideAll();
-                document.getElementById('v-admin').classList.add('active');
-                document.getElementById('i-wa').value = sets.wa;
-                document.getElementById('i-tit').value = sets.tit;
-                document.getElementById('i-sinpe').value = sets.sinpe;
-                document.getElementById('i-iban').value = sets.iban;
-            }
-            clicks = 0;
-        }
-        setTimeout(() => clicks = 0, 3000);
-    };
+    function sendWA() {
+        const totalLocal = Math.round(curUSD * rate).toLocaleString();
+        const msg = `*SOLICITUD VIP*\n*ID:* ${myID}\n*PAÍS:* ${document.getElementById('region-tag').innerText}\n*VALOR LOCAL:* ${sym}${totalLocal}\n*PAGO REQUERIDO:* $${curUSD} USD\n*MÉTODO:* ${isCR ? 'SINPE/IBAN' : 'PAYPAL'}`;
+        db.ref('users/' + myID).update({ status: 'espera' }).then(() => {
+            window.location.href = `https://wa.me/${sets.wa}?text=${encodeURIComponent(msg)}`;
+        });
+    }
 
-    renderPlanes();
+    function startVip(exp) {
+        db.ref('gallery').on('value', snap => {
+            const gal = document.getElementById('vip-gallery'); gal.innerHTML = '';
+            snap.forEach(img => { if(img.val().fecha === new Date().toISOString().split('T')[0]) gal.innerHTML += `<img src="${img.val().url}">`; });
+        });
+        setInterval(() => {
+            const diff = exp - Date.now();
+            if(diff <= 0) location.reload();
+            const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+            document.getElementById('timer').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }, 1000);
+    }
+
+    function saveAdmin() {
+        db.ref('config').set({
+            rates: { cr: document.getElementById('i-cr').value, ni: document.getElementById('i-ni').value, hn: document.getElementById('i-hn').value, gt: document.getElementById('i-gt').value, wd: 1 },
+            settings: { wa: document.getElementById('i-wa').value, sinpe: document.getElementById('i-sinpe').value, iban: document.getElementById('i-iban').value, pp: document.getElementById('i-pp').value }
+        }).then(() => notify("✅ GUARDADO"));
+    }
+
+    db.ref('users').on('value', snap => {
+        const cont = document.getElementById('admin-users'); cont.innerHTML = '';
+        snap.forEach(u => { if(u.val().status === 'espera') cont.innerHTML += `<div style="background:#111; padding:10px; margin-bottom:5px; display:flex; justify-content:space-between;">${u.key} <button onclick="darAlta('${u.key}')" style="background:var(--v); border:none; color:#fff; font-weight:bold; padding:5px 10px; border-radius:5px;">ALTA</button></div>`; });
+    });
+
+    function darAlta(id) { db.ref('users/'+id).update({ status: 'activo', expira: new Date().setHours(23,59,59) }).then(() => notify("✅ ACTIVADO")); }
+    function hideAll() { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); }
+    function toggleAcc(id) { document.querySelectorAll('.method').forEach(m => { if(m.id === id) m.classList.toggle('open'); else m.classList.remove('open'); }); }
+    function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText); notify("¡COPIADO!"); }
+    function notify(m) { const t = document.getElementById('toast'); t.innerText = m; t.style.display = 'block'; setTimeout(() => t.style.display='none', 3000); }
+
+    let cl = 0; document.getElementById('adminTrigger').onclick = () => { cl++; if(cl >= 5) { if(prompt("PASS:") === "2026") { hideAll(); document.getElementById('v-admin').classList.add('active'); } cl = 0; } setTimeout(() => cl = 0, 3000); };
 </script>
 </body>
-    </html>
-                                                                                                                
+</html>
