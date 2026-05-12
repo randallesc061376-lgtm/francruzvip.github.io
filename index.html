@@ -8,45 +8,46 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <style>
-        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --v: #2ecc71; --neon-v: 0 0 10px rgba(46, 204, 113, 0.4); }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        body { background: var(--n); color: #fff; user-select: none; }
-        header { padding: 30px; text-align: center; border-bottom: 1px solid #111; cursor: pointer; }
+        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --v: #2ecc71; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
+        body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
+        header { padding: 30px 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
-        .view { display: none; width: 100%; max-width: 450px; margin: auto; padding-bottom: 40px; }
-        .view.active { display: block; }
-        
-        /* Galería Clientes */
-        #gallery-client { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 20px; }
-        .lamina { width: 100%; border-radius: 10px; border: 1px solid #222; }
-
-        /* Admin */
-        .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 10px 20px; overflow: hidden; background: #0a0a0a; }
-        .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: var(--o); cursor: pointer; text-transform: uppercase; display: flex; justify-content: space-between; }
-        .acc-body { display: none; padding: 15px; border-top: 1px solid #1a1a1a; }
+        .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; }
+        .view.active { display: flex; }
+        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
+        .flag { width: 100%; height: 28px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
+        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); }
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
+        .card b { color: var(--o); font-size: 1.3rem; }
+        .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
+        .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
+        .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
-        
-        /* Grid de Imágenes Admin */
-        .admin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }
-        .thumb-wrap { position: relative; }
-        .thumb { width: 100%; height: 80px; object-fit: cover; border-radius: 5px; }
-        .del-btn { position: absolute; top: 2px; right: 2px; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; cursor: pointer; }
-
-        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 15px; font-weight: 900; margin: 20px; cursor: pointer; }
-        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px dashed #333; cursor: pointer; }
-        .copy-box.success { border-color: var(--v); box-shadow: var(--neon-v); }
-        .flag-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 20px; }
-        .flag { width: 100%; height: 30px; opacity: 0.4; cursor: pointer; border-radius: 4px; object-fit: cover; }
-        .flag.active { opacity: 1; border: 1px solid var(--o); }
+        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed #333; cursor: pointer; }
+        .copy-box.success { border-color: var(--v); box-shadow: 0 0 10px rgba(46, 204, 113, 0.3); }
+        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; }
+        .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; }
+        /* Galería Estilos */
+        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 20px; }
+        .lamina-img { width: 100%; border-radius: 8px; border: 1px solid #222; }
+        .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .thumb-container { position: relative; }
+        .thumb-img { width: 100%; height: 70px; object-fit: cover; border-radius: 5px; }
+        .btn-del { position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; }
     </style>
 </head>
 <body>
 
-<header onclick="adminAccess()"><div class="logo">FRAN CRUZ VIP</div></header>
+<header onclick="adminAccess()">
+    <div class="logo">FRAN CRUZ VIP</div>
+    <div id="tagline" style="font-size: 0.75rem; color: #666; letter-spacing: 2.5px; margin-top: 5px;">SALA PRIVADA • COSTA RICA</div>
+</header>
 
-<div id="v-pay" class="view active">
-    <div class="flag-grid" id="flags"></div>
-    <div id="planes" style="padding: 0 20px;"></div>
+<div id="v-main" class="view active">
+    <div class="geo-grid" id="geo-flags"></div>
+    <div id="planes-area"></div>
     <div class="acc-item">
         <div class="acc-head" onclick="this.nextElementSibling.classList.toggle('show')">PAGOS DISPONIBLES ▼</div>
         <div class="acc-body show">
@@ -54,30 +55,29 @@
             <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)"><small>PAYPAL</small><br><b>randallesc061376@gmail.com</b></div>
         </div>
     </div>
-    <button class="btn-gold" onclick="requestAccess()">ENVIAR COMPROBANTE</button>
+    <button class="btn-gold" onclick="sendToWA()">ENVIAR COMPROBANTE</button>
 </div>
 
-<div id="v-gallery" class="view">
-    <h3 style="text-align:center; padding: 20px; color: var(--o);">SUS LÁMINAS VIP</h3>
-    <div id="gallery-client"></div>
-    <button class="btn-gold" onclick="location.reload()">CERRAR SESIÓN</button>
+<div id="v-vip" class="view">
+    <h4 style="text-align:center; color:var(--o); padding:20px;">CONTENIDO EXCLUSIVO VIP</h4>
+    <div id="gallery-container" class="gallery-grid"></div>
+    <button class="btn-dark" onclick="location.reload()">CERRAR SESIÓN</button>
 </div>
 
 <div id="v-admin" class="view">
     <div class="acc-item">
-        <div class="acc-head" onclick="this.nextElementSibling.classList.toggle('show')">GALERÍA DE LÁMINAS ▼</div>
+        <div class="acc-head" style="color:var(--o)">GALERÍA DE LÁMINAS ▼</div>
         <div class="acc-body show">
-            <input type="file" id="fileInp" style="display:none" onchange="uploadImg(this)" accept="image/*">
-            <button class="btn-gold" style="margin:0; width:100%" onclick="document.getElementById('fileInp').click()">+ CARGAR DESDE TELÉFONO</button>
-            <div id="adm-gal" class="admin-grid"></div>
+            <input type="file" id="up-file" style="display:none" onchange="handleUpload(this)">
+            <button class="btn-gold" style="width:100%; margin:0 0 15px 0" onclick="document.getElementById('up-file').click()">+ SUBIR DESDE GALERÍA</button>
+            <div id="adm-gallery-list" class="admin-thumb-grid"></div>
         </div>
     </div>
-
     <div class="acc-item">
-        <div class="acc-head" onclick="this.nextElementSibling.classList.toggle('show')">TASAS DE CAMBIO ▼</div>
-        <div class="acc-body" id="adm-rates"></div>
+        <div class="acc-head" style="color:var(--o)">TASAS DE CAMBIO ▼</div>
+        <div class="acc-body show" id="rates-editor"></div>
     </div>
-    <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">SALIR DEL PANEL</button>
+    <button class="btn-dark" onclick="location.reload()">SALIR</button>
 </div>
 
 <script>
@@ -85,88 +85,78 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database(), st = firebase.storage();
 
-    let rates = { cr: 540, ni: 37, hn: 24.6, gt: 7.7, usd: 1 }, iso = 'cr', adminClicks = 0;
+    let rates = { cr: 540, ni: 37, hn: 24.6, gt: 7.7, usd: 1 }, iso = 'cr', currentPlan = '30 DÍAS', adminClicks = 0;
     const uid = localStorage.getItem('fc_id') || 'ID-' + Math.random().toString(36).substr(2, 5).toUpperCase();
     localStorage.setItem('fc_id', uid);
 
     function init() {
-        db.ref('rates').on('value', ss => { if(ss.val()) { rates = ss.val(); renderFlags(); renderAdminRates(); } });
-        checkStatus();
-        loadGallery();
+        db.ref('rates').on('value', ss => { if(ss.val()){ rates = ss.val(); renderMain(); renderRatesAdmin(); } });
+        db.ref('users/'+uid).on('value', ss => { if(ss.val()?.status === 'active'){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-vip').classList.add('active'); loadVIPGallery(); } });
+        renderMain();
     }
 
-    function checkStatus() {
-        db.ref('users/'+uid).on('value', ss => {
-            if(ss.val()?.status === 'active') {
-                document.getElementById('v-pay').classList.remove('active');
-                document.getElementById('v-gallery').classList.add('active');
-            }
+    function renderMain() {
+        const f = document.getElementById('geo-flags'), p = document.getElementById('planes-area');
+        f.innerHTML = ''; ['cr','ni','pa','hn','sv','gt','bz','un'].forEach(c => {
+            f.innerHTML += `<img src="https://flagcdn.com/${c=='un'?'un':c}.svg" class="flag ${iso==c?'active':''}" onclick="setCountry('${c}')">`;
+        });
+        const plans = {"HOY":1, "7 DÍAS":5, "30 DÍAS":20}; // Blindado: Gold $20
+        p.innerHTML = ''; Object.entries(plans).forEach(([n,v]) => {
+            const price = Math.round(v * rates[iso === 'pa'||iso === 'un' ? 'usd' : iso]);
+            const sym = iso === 'cr' ? '₡' : '$';
+            p.innerHTML += `<div class="card ${currentPlan==n?'sel':''}" onclick="selectPlan('${n}')"><span>${n}</span><b>${sym}${price.toLocaleString()}</b></div>`;
         });
     }
 
-    // --- LÓGICA DE GALERÍA (EL ALMA DEL PROYECTO) ---
-    async function uploadImg(inp) {
-        const file = inp.files[0]; if(!file) return;
-        alert("Subiendo imagen...");
-        const ref = st.ref('laminas/' + Date.now());
-        await ref.put(file);
-        const url = await ref.getDownloadURL();
-        db.ref('laminas').push(url);
-        alert("¡Lámina agregada!");
+    function setCountry(c){ iso = c; renderMain(); }
+    function selectPlan(n){ currentPlan = n; renderMain(); }
+
+    function sendToWA() {
+        const d = new Date().getDate().toString().padStart(2, '0');
+        const key = `${uid.charAt(1)}${uid.charAt(3)}${d}`;
+        db.ref('users/'+uid).set({id:uid, plan:currentPlan, status:'wait', key:key});
+        const msg = `Hola!\nPlan ${currentPlan}\nID: ${uid}\nClave: \`${key}\` (Tocar para copiar)\n\n⚠️ Adjunte el comprobante.`;
+        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
     }
 
-    function loadGallery() {
-        db.ref('laminas').on('value', ss => {
-            const gc = document.getElementById('gallery-client'), ga = document.getElementById('adm-gal');
-            gc.innerHTML = ""; ga.innerHTML = "";
-            ss.forEach(snap => {
-                const url = snap.val(), key = snap.key;
-                gc.innerHTML += `<img src="${url}" class="lamina" onclick="window.open('${url}')">`;
-                ga.innerHTML += `<div class="thumb-wrap"><img src="${url}" class="thumb"><button class="del-btn" onclick="delImg('${key}')">X</button></div>`;
-            });
+    // --- MOTOR DE TASAS (BLINDADO) ---
+    function renderRatesAdmin() {
+        const div = document.getElementById('rates-editor'); div.innerHTML = '';
+        ['cr','ni','hn','gt'].forEach(k => {
+            div.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:8px"><span>${k.toUpperCase()}</span><input type="number" id="inp-${k}" value="${rates[k]}" style="width:80px; background:#111; color:var(--o); border:1px solid #333; text-align:center"></div>`;
         });
-    }
-
-    function delImg(key) { if(confirm("¿Borrar lámina?")) db.ref('laminas/'+key).remove(); }
-
-    // --- LÓGICA DE TASAS ---
-    function renderAdminRates() {
-        const d = document.getElementById('adm-rates'); d.innerHTML = "";
-        Object.entries(rates).forEach(([k, v]) => {
-            if(k === 'usd') return;
-            d.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px">
-                <span>${k.toUpperCase()}</span>
-                <input type="number" value="${v}" id="rate-${k}" style="width:70px; background:#000; color:var(--o); border:1px solid #333; text-align:center">
-            </div>`;
-        });
-        d.innerHTML += `<button class="btn-gold" style="margin:10px 0; width:100%" onclick="saveRates()">GUARDAR CAMBIOS</button>`;
+        div.innerHTML += `<button class="btn-gold" style="width:100%; margin:10px 0 0 0" onclick="saveRates()">GUARDAR CAMBIOS</button>`;
     }
 
     function saveRates() {
         const newRates = {...rates};
-        ['cr','ni','hn','gt'].forEach(k => newRates[k] = parseFloat(document.getElementById('rate-'+k).value));
-        db.ref('rates').set(newRates).then(() => alert("Tasas actualizadas a nivel mundial"));
+        ['cr','ni','hn','gt'].forEach(k => newRates[k] = parseFloat(document.getElementById('inp-'+k).value));
+        db.ref('rates').set(newRates).then(() => alert("Tasas guardadas correctamente"));
     }
 
-    function renderFlags() {
-        const f = document.getElementById('flags'), p = document.getElementById('planes');
-        f.innerHTML = `<img src="https://flagcdn.com/cr.svg" class="flag ${iso==='cr'?'active':''}" onclick="setIso('cr')">
-                       <img src="https://flagcdn.com/ni.svg" class="flag ${iso==='ni'?'active':''}" onclick="setIso('ni')">`;
-        const sym = iso === 'cr' ? '₡' : '$';
-        const base = { "HOY": 1, "7 DÍAS": 5, "30 DÍAS": 20 };
-        p.innerHTML = "";
-        Object.entries(base).forEach(([n, v]) => {
-            const final = Math.round(v * rates[iso]);
-            p.innerHTML += `<div class="card" style="display:flex; justify-content:space-between; padding:20px; border:1px solid #222; margin-bottom:10px; border-radius:10px">
-                <span>${n}</span><b>${sym}${final.toLocaleString()}</b>
-            </div>`;
+    // --- MOTOR DE GALERÍA (LÁMINAS) ---
+    async function handleUpload(inp) {
+        const file = inp.files[0]; if(!file) return;
+        const ref = st.ref('laminas/'+Date.now());
+        await ref.put(file);
+        const url = await ref.getDownloadURL();
+        db.ref('laminas').push(url);
+    }
+
+    function loadVIPGallery() {
+        db.ref('laminas').on('value', ss => {
+            const cont = document.getElementById('gallery-container'), adm = document.getElementById('adm-gallery-list');
+            cont.innerHTML = ''; adm.innerHTML = '';
+            ss.forEach(s => {
+                cont.innerHTML += `<img src="${s.val()}" class="lamina-img" onclick="window.open('${s.val()}')">`;
+                adm.innerHTML += `<div class="thumb-container"><img src="${s.val()}" class="thumb-img"><button class="btn-del" onclick="db.ref('laminas/${s.key}').remove()">X</button></div>`;
+            });
         });
     }
 
-    function setIso(i) { iso = i; renderFlags(); }
-    function copy(t, el) { navigator.clipboard.writeText(t); el.classList.add('success'); setTimeout(()=>el.classList.remove('success'), 600); }
-    function adminAccess() { adminClicks++; if(adminClicks >= 5) { if(prompt("PASS:") === "1376") { document.getElementById('v-pay').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); } adminClicks = 0; } }
-
+    function copy(t, el){ navigator.clipboard.writeText(t); el.classList.add('success'); setTimeout(()=>el.classList.remove('success'), 600); }
+    function adminAccess(){ adminClicks++; if(adminClicks>=5){ if(prompt("PASS")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); loadVIPGallery(); } adminClicks=0; } }
+    
     init();
 </script>
 </body>
