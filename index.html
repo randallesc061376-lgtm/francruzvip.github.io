@@ -8,39 +8,26 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <style>
-        :root { --o: #d4af37; --n: #050505; --neon: #39FF14; --v: #2ecc71; --r: #ff4444; --g: linear-gradient(180deg, #f9e498, #d4af37); }
+        :root { --o: #d4af37; --n: #050505; --neon: #39FF14; --g: linear-gradient(180deg, #f9e498, #d4af37); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; }
         body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; user-select: none; }
-        
-        header { padding: 30px 20px; text-align: center; border-bottom: 1px solid #1a1a1a; cursor: pointer; }
+        header { padding: 30px 20px; text-align: center; border-bottom: 1px solid #1a1a1a; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
-
         .view { display: none; width: 100%; max-width: 420px; margin: auto; padding-bottom: 50px; }
         .view.active { display: block; }
-
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
-        .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
-        .flag.active { opacity: 1; border: 1px solid var(--o); transform: scale(1.05); }
-
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; }
+        .flag.active { opacity: 1; border: 1px solid var(--o); }
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.1); }
         .card b { color: var(--o); font-size: 1.3rem; }
-
-        .section-title { margin: 25px 20px 10px; font-size: 0.75rem; color: var(--o); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
-        .copy-box { background: #0a0a0a; padding: 18px; border-radius: 14px; margin: 0 20px 12px; border: 1px solid #1a1a1a; transition: 0.4s; cursor: pointer; }
-        .copy-box.active { border: 2px solid var(--neon); box-shadow: 0 0 15px rgba(57, 255, 20, 0.4); background: #0f0f0f; }
-        .copy-box small { color: #555; display: block; margin-bottom: 4px; font-weight: 700; font-size: 0.65rem; text-transform: uppercase; }
-        .copy-box b { color: #fff; font-size: 1rem; word-break: break-all; }
-        .copy-box.active b { color: var(--o); }
-
+        .copy-box { background: #0a0a0a; padding: 18px; border-radius: 14px; margin: 0 20px 12px; border: 1px solid #1a1a1a; }
+        .copy-box.active { border: 2px solid var(--neon); }
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 10px 20px; cursor: pointer; text-transform: uppercase; }
-        .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 5px 20px; cursor: pointer; font-weight: 700; }
-        
-        .admin-box { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; margin: 15px 20px; padding: 20px; }
+        .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 5px 20px; cursor: pointer; }
         .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .thumb-wrap { position: relative; height: 90px; border: 1px solid #222; border-radius: 8px; overflow: hidden; }
         .thumb-img { width: 100%; height: 100%; object-fit: cover; }
-        .btn-del { position: absolute; top: 2px; right: 2px; background: var(--r); border: none; border-radius: 4px; color: #fff; padding: 2px 5px; font-size: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -60,25 +47,11 @@
         <img src="https://flagcdn.com/bz.svg" id="f-bz" class="flag" onclick="setLoc('bz')">
         <img src="https://flagcdn.com/un.svg" id="f-un" class="flag" onclick="setLoc('un')">
     </div>
-
     <div id="planes-list"></div>
-
-    <div class="section-title">MÉTODOS DE PAGO DISPONIBLES</div>
     <div id="payment-group">
-        <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)">
-            <small>PAYPAL (Mundial)</small>
-            <b>randallesc061376@gmail.com</b>
-        </div>
-        <div class="copy-box" onclick="copy('70835833', this)">
-            <small>SINPE MÓVIL (Costa Rica)</small>
-            <b>70835833</b>
-        </div>
-        <div class="copy-box" onclick="copy('CR80080315001000035641', this)">
-            <small>IBAN MUTUAL (Transferencia)</small>
-            <b>CR80080315001000035641</b>
-        </div>
+        <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)"><b>randallesc061376@gmail.com</b></div>
+        <div class="copy-box" onclick="copy('70835833', this)"><b>70835833</b></div>
     </div>
-
     <button class="btn-gold" onclick="sendWhatsApp()">ENVIAR COMPROBANTE</button>
     <button class="btn-dark" onclick="checkStatus()">YA TENGO MI CLAVE</button>
 </div>
@@ -89,13 +62,12 @@
 </div>
 
 <div id="v-admin" class="view">
-    <div class="admin-box">
-        <strong style="color:var(--o); display:block; margin-bottom:15px; font-size:0.8rem; letter-spacing:1px;">GESTIÓN DE LÁMINAS VIP</strong>
+    <div style="padding:20px;">
         <input type="file" id="up-file" multiple accept="image/*" style="display:none" onchange="uploadLaminas(this)">
         <button class="btn-gold" id="up-btn" onclick="document.getElementById('up-file').click()">+ CARGAR LÁMINA</button>
         <div id="admin-gallery" class="admin-thumb-grid"></div>
     </div>
-    <button class="btn-dark" onclick="location.reload()">SALIR DEL PANEL</button>
+    <button class="btn-dark" onclick="location.reload()">SALIR</button>
 </div>
 
 <script>
@@ -119,54 +91,40 @@
         setLoc('cr');
     }
 
-    // FUNCIÓN DE CARGA RECONSTRUIDA PARA FUNCIONAMIENTO INMEDIATO
+    // REGRESO A LA LÓGICA DIRECTA QUE FUNCIONABA AYER
     async function uploadLaminas(input) {
-        const files = Array.from(input.files);
+        const files = input.files;
         const btn = document.getElementById('up-btn');
-        if (files.length === 0) return;
+        if (!files.length) return;
 
-        btn.disabled = true;
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const fileName = Date.now() + "_" + file.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-            const storageRef = st.ref('laminas/' + fileName);
-
-            btn.innerText = `SUBIENDO... ${i+1}/${files.length}`;
-
+        for (let file of files) {
+            btn.innerText = "CARGANDO...";
+            const ref = st.ref().child('laminas/' + Date.now() + "_" + file.name);
+            
+            // Subida simplificada sin monitores de estado complejos que bloquean el túnel
             try {
-                // Volvemos al método directo que te funcionaba ayer, pero con manejo de errores
-                const snapshot = await storageRef.put(file);
-                const url = await snapshot.ref.getDownloadURL();
-                
-                await db.ref('laminas').push({
-                    url: url,
-                    name: fileName,
-                    timestamp: firebase.database.ServerValue.TIMESTAMP
-                });
+                const snap = await ref.put(file);
+                const url = await snap.ref.getDownloadURL();
+                await db.ref('laminas').push({ url, name: file.name });
             } catch (e) {
-                console.error("Error al cargar:", e);
-                alert("Error en la imagen: " + file.name);
+                alert("Error al subir. Intente con una sola imagen.");
             }
         }
         btn.innerText = "+ CARGAR LÁMINA";
-        btn.disabled = false;
         input.value = "";
     }
 
     function syncGallery() {
-        db.ref('laminas').orderByChild('timestamp').on('value', ss => {
+        db.ref('laminas').on('value', ss => {
             const v = document.getElementById('gallery-vip'), a = document.getElementById('admin-gallery');
             v.innerHTML = ''; a.innerHTML = '';
             ss.forEach(s => {
-                const item = s.val();
-                const url = item.url;
-                v.innerHTML = `<img src="${url}" style="width:100%; border-radius:15px; margin-bottom:15px; border:1px solid #1a1a1a;">` + v.innerHTML;
-                a.innerHTML += `<div class="thumb-wrap"><button class="btn-del" onclick="deleteImg('${s.key}', '${item.name}')">X</button><img src="${url}" class="thumb-img"></div>`;
+                const url = s.val().url;
+                v.innerHTML = `<img src="${url}" style="width:100%; border-radius:15px; margin-bottom:15px;">` + v.innerHTML;
+                a.innerHTML += `<div class="thumb-wrap"><img src="${url}" class="thumb-img"></div>`;
             });
         });
     }
-
-    function deleteImg(key, name) { if(confirm("¿Eliminar lámina?")){ st.ref('laminas/'+name).delete(); db.ref('laminas/'+key).remove(); } }
 
     function setLoc(c) { iso = c; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); document.getElementById('f-'+c).classList.add('active'); render(); }
 
@@ -180,11 +138,10 @@
         });
     }
 
-    function copy(t, el) { navigator.clipboard.writeText(t); document.querySelectorAll('.copy-box').forEach(b => b.classList.remove('active')); el.classList.add('active'); }
+    function copy(t, el) { navigator.clipboard.writeText(t); el.classList.add('active'); setTimeout(()=>el.classList.remove('active'), 1000); }
 
     function sendWhatsApp() {
-        const d = new Date().getDate().toString().padStart(2, '0');
-        const key = `I-${d}`;
+        const key = `I-${new Date().getDate().toString().padStart(2, '0')}`;
         const msg = `Plan: ${currentPlan}\nID: ${uid}\n\nEsta es su clave: \`${key}\` \nEn este momento nuestro equipo válida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
     }
@@ -201,8 +158,7 @@
     function adminAccess() {
         adminClicks++;
         if(adminClicks >= 5) {
-            const p = prompt("CLAVE:");
-            if(p === "1376") {
+            if(prompt("CLAVE:") === "1376") {
                 document.getElementById('v-main').classList.remove('active');
                 document.getElementById('v-admin').classList.add('active');
             }
