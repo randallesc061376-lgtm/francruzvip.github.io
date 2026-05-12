@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • CONTROL MAESTRO</title>
+    <title>FRAN CRUZ VIP • GLOBAL CONTROL</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
@@ -17,7 +17,7 @@
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; }
         .view.active { display: flex; }
         
-        /* FRONT-END BLINDADO */
+        /* Banderas y Planes (Blindado) */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
         .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); transform: scale(1.05); }
@@ -25,18 +25,22 @@
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
 
-        /* SECCIONES ACORDEÓN (DESBLOQUEADAS) */
+        /* Acordeones de Pago */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
         
-        /* BOTONES Y INPUTS */
+        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 12px; margin-bottom: 12px; border: 1px dashed #222; cursor: pointer; position: relative; }
+        .copy-box small { color: #555; text-transform: uppercase; font-size: 0.65rem; font-weight: 700; display: block; margin-bottom: 4px; }
+        .copy-box b { color: var(--o); font-size: 1.05rem; display: block; word-break: break-all; }
+        .copy-box.success { border-color: var(--v); box-shadow: 0 0 15px rgba(46, 204, 113, 0.2); }
+
+        /* Botones */
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; font-weight: 700; }
-        .rate-input { width: 80px; background: #111; color: var(--o); border: 1px solid #333; text-align: center; padding: 8px; border-radius: 5px; font-weight: bold; }
 
-        /* GALERÍA ADMIN */
+        /* Admin Gallery */
         .admin-thumb-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
         .thumb-wrap { position: relative; border: 1px solid #222; border-radius: 8px; overflow: hidden; height: 120px; }
         .thumb-img { width: 100%; height: 100%; object-fit: cover; }
@@ -60,18 +64,25 @@
         <img src="https://flagcdn.com/bz.svg" id="f-bz" class="flag" onclick="setLoc('bz')">
         <img src="https://flagcdn.com/un.svg" id="f-un" class="flag" onclick="setLoc('un')">
     </div>
+
     <div id="planes-list"></div>
+
     <div class="acc-item">
         <div class="acc-head" onclick="toggleSec(this)">PAGOS DISPONIBLES ▼</div>
         <div class="acc-body show">
-            <div style="padding:15px; background:#0f0f0f; border-radius:10px; margin-bottom:10px; border:1px dashed #222;">
-                <small style="color:#555">SINPE MÓVIL</small><br><b style="color:var(--o)">70835833</b>
+            <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)">
+                <small>PAYPAL (GLOBAL)</small>
+                <b>randallesc061376@gmail.com</b>
+                <span style="color:#555; font-size: 0.75rem;">Randall Sánchez C.</span>
             </div>
-            <div style="padding:15px; background:#0f0f0f; border-radius:10px; border:1px dashed #222;">
-                <small style="color:#555">PAYPAL</small><br><b style="color:var(--o)">randallesc061376@gmail.com</b>
+            <div class="copy-box" onclick="copy('70835833', this)">
+                <small>SINPE MÓVIL (CR)</small>
+                <b>70835833</b>
+                <span style="color:#555; font-size: 0.75rem;">Randall Sánchez C.</span>
             </div>
         </div>
     </div>
+
     <button class="btn-gold" onclick="sendWhatsApp()">ENVIAR COMPROBANTE</button>
     <button class="btn-dark" onclick="checkStatus()">YA TENGO MI CLAVE</button>
 </div>
@@ -79,7 +90,7 @@
 <div id="v-vip" class="view">
     <h4 style="text-align:center; color:var(--o); padding:20px;">SALA VIP ACTIVA</h4>
     <div id="gallery-container" style="display:grid; grid-template-columns:1fr; gap:15px; padding:20px;"></div>
-    <button class="btn-dark" onclick="location.reload()">SALIR</button>
+    <button class="btn-dark" onclick="location.reload()">CERRAR SESIÓN</button>
 </div>
 
 <div id="v-admin" class="view">
@@ -125,8 +136,8 @@
         loadGallery();
     }
 
-    // --- FRONT-END FUNCTIONS ---
     function setLoc(c) { iso = c; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); document.getElementById('f-'+c).classList.add('active'); render(); }
+    
     function render() {
         const p = document.getElementById('planes-list');
         const list = {"ACCESO HOY":1, "7 DÍAS SILVER":5, "30 DÍAS GOLD":20};
@@ -147,7 +158,13 @@
         body.style.display = isVisible ? "none" : "block";
     }
 
-    // --- CEREBRO: CARGA Y GESTIÓN ---
+    function copy(t, el){ 
+        navigator.clipboard.writeText(t); 
+        el.classList.add('success'); 
+        setTimeout(()=>el.classList.remove('success'), 800); 
+    }
+
+    // --- CARGA DE LÁMINAS CON FEEDBACK ---
     async function uploadFile(inp) {
         const file = inp.files[0]; if(!file) return;
         const btn = document.getElementById('btn-up');
@@ -158,7 +175,7 @@
             const url = await ref.getDownloadURL();
             await db.ref('laminas').push(url);
             alert("¡Lámina Guardada!"); 
-        } catch (e) { alert("Error"); }
+        } catch (e) { alert("Error al subir"); }
         btn.innerText = "+ CARGAR NUEVA LÁMINA"; btn.disabled = false;
     }
 
@@ -184,7 +201,7 @@
     function saveRates() {
         const nr = {...rates};
         ['cr','ni','hn','gt'].forEach(k => nr[k] = parseFloat(document.getElementById('r-'+k).value));
-        db.ref('rates').set(nr).then(() => alert("Tasas Actualizadas"));
+        db.ref('rates').set(nr).then(() => alert("Tasas Actualizadas Globalmente"));
     }
 
     function renderUsers() {
@@ -206,16 +223,15 @@
 
     function sendWhatsApp() {
         const d = new Date().getDate().toString().padStart(2, '0');
-        const text = `Plan: ${currentPlan}\nID: ${uid}\nClave: I-${d}\n\nAdjunte su comprobante.`;
+        const text = `Plan: ${currentPlan}\nID: ${uid}\nClave: I-${d}\n\nAdjunte su comprobante (SINPE o PayPal).`;
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(text)}`;
     }
 
-    function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Pendiente"); }); }
+    function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Pendiente de autorización."); }); }
     function showVIP() { document.getElementById('v-main').classList.remove('active'); document.getElementById('v-vip').classList.add('active'); }
-    function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("PASS")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); renderUsers(); } adminClicks=0; } }
+    function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("ACCESO MAESTRO")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); renderUsers(); } adminClicks=0; } }
 
     init();
 </script>
 </body>
-    </html>
-    
+</html>
