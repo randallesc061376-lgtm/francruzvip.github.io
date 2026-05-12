@@ -11,40 +11,27 @@
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --v: #2ecc71; --r: #e74c3c; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
-        
-        /* HEADER PROFESIONAL */
         header { padding: 30px 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
-
-        /* GRID DE BANDERAS (COMPLETO) */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
         .flag { width: 100%; height: 28px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); transform: scale(1.05); }
-
-        /* TARJETAS DE PLANES */
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
-
-        /* MÉTODOS DE PAGO ACORDEÓN */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
         .acc-head.adm { color: var(--o); }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
-        
         .copy-box { background: #0f0f0f; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed #333; cursor: pointer; }
         .copy-box b { display: block; color: var(--o); font-size: 1rem; font-family: monospace; }
         .copy-box.success { border-color: var(--v); box-shadow: inset 0 0 10px rgba(46, 204, 113, 0.2); }
-
-        /* BOTONES DE ACCIÓN */
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; }
-
         .user-row { background:#080808; border:1px solid #222; padding:12px; border-radius:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -89,17 +76,6 @@
         </div>
     </div>
 
-    <div class="acc-item">
-        <div class="acc-head" onclick="toggleView(this)">2. PAYPAL / INTERNACIONAL <span>▼</span></div>
-        <div class="acc-body">
-            <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)">
-                <small style="color:#555">CORREO ELECTRÓNICO</small>
-                <b>randallesc061376@gmail.com</b>
-                <span>Randall Sánchez C.</span>
-            </div>
-        </div>
-    </div>
-
     <button class="btn-gold" onclick="requestAccess()">ENVIAR COMPROBANTE DE PAGO</button>
     <button class="btn-dark" onclick="checkKey()">YA TENGO MI CLAVE</button>
 </div>
@@ -114,14 +90,6 @@
             <div class="acc-head adm" onclick="toggleAdminView(this, 'rates')">TIPOS DE CAMBIO (MANUAL) <span>▼</span></div>
             <div class="acc-body" id="adm-rates-body"><div id="adm-rates"></div></div>
         </div>
-        <div class="acc-item">
-            <div class="acc-head adm" onclick="toggleAdminView(this, 'gal')">GALERÍA DE LÁMINAS <span>▼</span></div>
-            <div class="acc-body" id="adm-gal-body">
-                <input type="file" id="up" accept="image/*" style="display:none" onchange="uploadToGallery(this)">
-                <button class="btn-gold" style="width:100%; margin:0 0 15px 0" onclick="document.getElementById('up').click()">+ CARGAR DESDE TELÉFONO</button>
-                <div id="adm-gal" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px"></div>
-            </div>
-        </div>
         <button class="btn-dark" onclick="location.reload()">CERRAR PANEL</button>
     </div>
 </div>
@@ -129,7 +97,7 @@
 <script>
     const firebaseConfig = { apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", projectId: "fran-cruz-sala-vip", databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com", storageBucket: "fran-cruz-sala-vip.appspot.com" };
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.database(), st = firebase.storage();
+    const db = firebase.database();
 
     let rates = { cr: 540, ni: 37, hn: 24.6, gt: 7.7, usd: 1 }, iso = 'cr', sim = '₡', plan = '30 DÍAS', adminClicks = 0;
     let uid = localStorage.getItem('fc_id') || 'ID-' + Math.random().toString(36).substr(2, 6).toUpperCase();
@@ -157,23 +125,40 @@
     function requestAccess() {
         const d = new Date().getDate().toString().padStart(2, '0');
         const key = `${uid.charAt(1)}${uid.charAt(3)}${d}`;
-        db.ref('users/' + uid).set({ id: uid, status: 'wait', plan: plan, key: key });
-        
-        // MENSAJE WHATSAPP CON CLAVE DINÁMICA SOMBREADA (BLINDADO)
+        db.ref('users/' + uid).set({ id: uid, status: 'wait', plan: plan, key: key, requestedAt: Date.now() });
         const msg = `Hola!\nPlan ${plan}\nID: ${uid}\n\nEsta es su clave: \`${key}\` (Toque la clave para copiar)\nNuestro equipo válida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
-        
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
     }
 
-    // PANEL DE ADMINISTRACIÓN (TODO LO PACTADO)
     function adminAccess() { adminClicks++; if(adminClicks >= 5) { if(prompt("PASS:") === "1376") { document.getElementById('v-client').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); } adminClicks = 0; } setTimeout(() => adminClicks = 0, 2000); }
-    function toggleAdminView(el, type) { const body = el.nextElementSibling; body.classList.toggle('show'); if(body.classList.contains('show')) { if(type === 'users') loadUsersAdmin(); if(type === 'rates') renderRatesAdmin(); if(type === 'gal') renderGalleryAdmin(); } }
-    function loadUsersAdmin() { db.ref('users').on('value', ss => { const l = document.getElementById('adm-users'); l.innerHTML = ""; if(!ss.val()) { l.innerHTML = "<center>Sin actividad</center>"; return; } ss.forEach(u => { const d = u.val(); l.innerHTML += `<div class="user-row" style="border-left:4px solid ${d.status==='active'?'#2ecc71':'#e74c3c'}"><small><b>${d.id}</b><br>${d.plan}</small><div><button onclick="db.ref('users/${d.id}').update({status:'active'})" style="background:var(--v); border:none; padding:8px; border-radius:5px">✓</button><button onclick="db.ref('users/${d.id}').update({status:'banned'})" style="background:var(--r); border:none; padding:8px; border-radius:5px; color:#fff">Ø</button></div></div>`; }); }); }
-    function renderRatesAdmin() { const l = document.getElementById('adm-rates'); l.innerHTML = ""; Object.entries(rates).forEach(([k, v]) => { if(k === 'usd') return; l.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px"><span style="text-transform:uppercase">${k}</span><input type="number" value="${v}" style="background:#000; color:var(--o); border:1px solid var(--o); width:80px; text-align:center" onchange="db.ref('settings/rates/${k}').set(parseFloat(this.value))"></div>`; }); }
-    function renderGalleryAdmin() { db.ref('gallery').on('value', ss => { const l = document.getElementById('adm-gal'); l.innerHTML = ""; ss.forEach(img => { l.innerHTML += `<div style="position:relative; aspect-ratio:1; border:1px solid #333; border-radius:8px; overflow:hidden"><img src="${img.val()}" style="width:100%; height:100%; object-fit:cover"><button onclick="if(confirm('¿Borrar?')) db.ref('gallery/${img.key}').remove()" style="position:absolute; top:0; right:0; background:rgba(231,76,60,0.8); color:#fff; border:none; width:22px; height:22px">×</button></div>`; }); }); }
-    function uploadToGallery(input) { const f = input.files[0]; if(!f) return; alert("Subiendo imagen..."); st.ref('gallery/' + Date.now()).put(f).then(ss => ss.ref.getDownloadURL()).then(url => db.ref('gallery').push(url)); }
+    
+    function activateUser(id, days) {
+        const expiry = new Date();
+        expiry.setHours(23, 59, 59, 999);
+        if (days > 1) expiry.setDate(expiry.getDate() + (days - 1));
+        db.ref('users/' + id).update({ status: 'active', expiresAt: expiry.getTime() });
+    }
+
+    function toggleAdminView(el, type) { 
+        const body = el.nextElementSibling; body.classList.toggle('show'); 
+        if(body.classList.contains('show') && type === 'users') loadUsersAdmin();
+    }
+
+    function loadUsersAdmin() {
+        db.ref('users').on('value', ss => {
+            const l = document.getElementById('adm-users'); l.innerHTML = "";
+            ss.forEach(u => {
+                const d = u.val();
+                const dMap = { "HOY": 1, "7 DÍAS": 7, "30 DÍAS": 30 };
+                l.innerHTML += `<div class="user-row">
+                    <small>${d.id}<br>${d.plan}</small>
+                    <button onclick="activateUser('${d.id}', ${dMap[d.plan]})" style="background:var(--v); border:none; padding:8px; border-radius:5px">✓</button>
+                </div>`;
+            });
+        });
+    }
+
     init();
 </script>
 </body>
-    </html>
-    
+</html>
