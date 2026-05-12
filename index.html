@@ -18,7 +18,7 @@
         .view { display: none; width: 100%; max-width: 420px; margin: auto; padding-bottom: 50px; }
         .view.active { display: block; }
 
-        /* BANDERAS */
+        /* BANDERAS BLINDADAS */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
         .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
         .flag.active { opacity: 1; border: 1px solid var(--o); transform: scale(1.05); }
@@ -28,7 +28,7 @@
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
 
-        /* PAGOS */
+        /* PAGOS BLINDADOS */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 15px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
@@ -39,18 +39,19 @@
         .copy-box b { color: var(--o); font-size: 1.05rem; display: block; word-break: break-all; }
         .copy-box.success { border-color: var(--v); }
 
-        /* BOTONES FRONT */
+        /* ADMIN - GALERÍA Y USUARIOS */
+        .admin-box { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; margin: 15px 20px; padding: 15px; }
+        .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .thumb-wrap { position: relative; height: 90px; border: 1px solid #222; border-radius: 8px; overflow: hidden; }
+        .thumb-img { width: 100%; height: 100%; object-fit: cover; }
+        .btn-del { position: absolute; top: 2px; right: 2px; background: var(--r); border: none; border-radius: 50%; width: 22px; height: 22px; color: #fff; cursor: pointer; font-weight: bold; }
+        
+        .rate-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #080808; border-radius: 8px; margin-bottom: 5px; border: 1px solid #1a1a1a; }
+        .rate-input { width: 80px; background: #000; color: var(--o); border: 1px solid var(--o); text-align: center; padding: 5px; border-radius: 4px; }
+
+        /* BOTONES */
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; font-weight: 700; text-transform: uppercase; }
-
-        /* ADMIN STYLES */
-        .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding-top: 10px; }
-        .thumb-wrap { position: relative; border: 1px solid #222; border-radius: 8px; overflow: hidden; height: 90px; }
-        .thumb-img { width: 100%; height: 100%; object-fit: cover; }
-        .btn-del { position: absolute; top: 2px; right: 2px; background: var(--r); border: none; border-radius: 50%; width: 22px; height: 22px; color: #fff; font-size: 12px; cursor: pointer; font-weight: bold; }
-        .rate-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #080808; border-radius: 8px; margin-bottom: 8px; border: 1px solid #1a1a1a; }
-        .rate-input { width: 90px; background: #000; color: var(--o); border: 1px solid var(--o); text-align: center; padding: 6px; border-radius: 5px; font-weight: bold; }
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #0c0c0c; border-radius: 8px; margin-bottom: 6px; border-left: 3px solid var(--o); }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -98,34 +99,29 @@
 
 <div id="v-vip" class="view">
     <h4 style="text-align:center; color:var(--o); padding:20px; letter-spacing:2px;">SALA VIP ACTIVA</h4>
-    <div id="gallery-container" style="padding:0 20px;"></div>
+    <div id="gallery-vip" style="padding:0 20px;"></div>
     <button class="btn-dark" onclick="location.reload()">CERRAR SESIÓN</button>
 </div>
 
 <div id="v-admin" class="view">
-    <div class="acc-item">
-        <div class="acc-head" onclick="toggleSec(this)">1. GESTIÓN DE LÁMINAS VIP ▼</div>
-        <div class="acc-body show">
-            <input type="file" id="up-file" multiple style="display:none" onchange="subirLaminas(this)">
-            <button class="btn-gold" id="up-btn-ui" onclick="document.getElementById('up-file').click()">+ CARGAR LÁMINA</button>
-            <div id="admin-gallery" class="admin-thumb-grid"></div>
-        </div>
+    <div class="admin-box">
+        <strong>1. GESTIÓN DE LÁMINAS (GALERÍA)</strong>
+        <input type="file" id="up-file" multiple accept="image/*" style="display:none" onchange="subirLaminas(this)">
+        <button class="btn-gold" id="up-btn-ui" onclick="document.getElementById('up-file').click()">+ SELECCIONAR DE GALERÍA</button>
+        <div id="admin-gallery" class="admin-thumb-grid"></div>
     </div>
 
-    <div class="acc-item">
-        <div class="acc-head" onclick="toggleSec(this)">2. TASAS Y MONEDAS ▼</div>
-        <div class="acc-body">
-            <div id="rates-editor"></div>
-            <button class="btn-gold" style="background:var(--v); color:#fff;" onclick="saveRates()">GUARDAR TASAS</button>
-        </div>
+    <div class="admin-box">
+        <strong>2. TASAS POR PAÍS</strong>
+        <div id="rates-editor" style="margin-top:10px;"></div>
+        <button class="btn-gold" style="background:var(--v); color:#fff; height:45px; padding:0;" onclick="saveRates()">GUARDAR TASAS</button>
     </div>
 
-    <div class="acc-item">
-        <div class="acc-head" onclick="toggleSec(this)">3. CLIENTES EN ESPERA ▼</div>
-        <div class="acc-body">
-            <div id="user-list"></div>
-        </div>
+    <div class="admin-box">
+        <strong>3. LISTA DE ESPERA / BANEO</strong>
+        <div id="user-list" style="margin-top:10px;"></div>
     </div>
+
     <button class="btn-dark" onclick="location.reload()">SALIR DEL PANEL</button>
 </div>
 
@@ -146,10 +142,10 @@
     function init() {
         db.ref('rates').on('value', ss => { if(ss.val()){ rates = ss.val(); render(); renderAdminRates(); } });
         db.ref('users/'+uid).on('value', ss => { if(ss.val()?.status === 'active') showVIP(); });
-        loadGallery(); loadUsers(); setLoc('cr');
+        syncGallery(); loadUsers(); setLoc('cr');
     }
 
-    // GESTIÓN DE LÁMINAS (1-15)
+    // GESTIÓN DE GALERÍA
     async function subirLaminas(inp) {
         const files = Array.from(inp.files).slice(0, 15);
         if(!files.length) return;
@@ -162,13 +158,13 @@
             const url = await ref.getDownloadURL();
             await db.ref('laminas').push(url);
         }
-        btn.innerText = "¡OK: CARGA TERMINADA!";
-        setTimeout(() => { btn.innerText = "+ CARGAR LÁMINA"; btn.disabled = false; }, 2000);
+        btn.innerText = "¡CARGA TERMINADA!";
+        setTimeout(() => { btn.innerText = "+ SELECCIONAR DE GALERÍA"; btn.disabled = false; }, 2000);
     }
 
-    function loadGallery() {
+    function syncGallery() {
         db.ref('laminas').on('value', ss => {
-            const v = document.getElementById('gallery-container'), a = document.getElementById('admin-gallery');
+            const v = document.getElementById('gallery-vip'), a = document.getElementById('admin-gallery');
             v.innerHTML = ''; a.innerHTML = '';
             ss.forEach(s => {
                 const url = s.val();
@@ -193,36 +189,37 @@
         db.ref('rates').set(nr).then(() => alert("Tasas guardadas."));
     }
 
-    // GESTIÓN DE CLIENTES
+    // GESTIÓN DE USUARIOS
     function loadUsers() {
         db.ref('users').on('value', ss => {
             const list = document.getElementById('user-list'); list.innerHTML = '';
             ss.forEach(u => {
                 const d = u.val();
-                list.innerHTML += `<div class="user-row"><div><b>ID: ${u.key}</b><br><small>${d.status || 'espera'}</small></div>
+                list.innerHTML += `<div class="rate-row"><div><b>ID: ${u.key}</b><br><small>${d.status || 'espera'}</small></div>
                 <div><button onclick="db.ref('users/${u.key}').update({status:'active'})" style="background:var(--v); color:#fff; border:none; padding:8px; border-radius:4px;">ACT</button>
                 <button onclick="db.ref('users/${u.key}').update({status:'banned'})" style="background:var(--r); color:#fff; border:none; padding:8px; border-radius:4px; margin-left:5px;">BAN</button></div></div>`;
             });
         });
     }
 
-    // INTERFAZ Y WHATSAPP BLINDADO
-    function setLoc(c) { iso = c; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); document.getElementById('f-'+c).classList.add('active'); render(); }
-    
-    function render() {
-        const p = document.getElementById('planes-list'), sym = iso === 'cr' ? '₡' : (['ni','hn','gt'].includes(iso) ? 'C$' : '$');
-        p.innerHTML = '';
-        Object.entries({"ACCESO HOY":1, "7 DÍAS SILVER":5, "30 DÍAS GOLD":20}).forEach(([n,v]) => {
-            const val = Math.round(v * (['pa','sv','bz','un'].includes(iso) ? rates.usd : rates[iso]));
-            p.innerHTML += `<div class="card ${currentPlan===n?'sel':''}" onclick="currentPlan='${n}';render()"><span>${n}</span><b>${sym}${val.toLocaleString()}</b></div>`;
-        });
-    }
-
+    // FORMATO WHATSAPP BLINDADO
     function sendWhatsApp() {
         const d = new Date().getDate().toString().padStart(2, '0');
         const key = `I-${d}`;
         const text = `Plan: ${currentPlan}\nID: ${uid}\n\nEsta es su clave: \`${key}\` (Toque la clave para copiar)\nEn este momento nuestro equipo válida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(text)}`;
+    }
+
+    // LÓGICA DE INTERFAZ
+    function setLoc(c) { iso = c; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); document.getElementById('f-'+c).classList.add('active'); render(); }
+    
+    function render() {
+        const p = document.getElementById('planes-list'), sym = iso === 'cr' ? '₡' : (['ni','hn','gt'].includes(iso) ? 'C$' : '$');
+        p.innerHTML = '';
+        Object.entries({"ACCESO HOY":1, "7 DÍAS SILVER":5, "30 DÍAS GOLD":15}).forEach(([n,v]) => {
+            const val = Math.round(v * (['pa','sv','bz','un'].includes(iso) ? rates.usd : rates[iso]));
+            p.innerHTML += `<div class="card ${currentPlan===n?'sel':''}" onclick="currentPlan='${n}';render()"><span>${n}</span><b>${sym}${val.toLocaleString()}</b></div>`;
+        });
     }
 
     function toggleSec(el) { const b = el.nextElementSibling; b.style.display = b.style.display === "block" ? "none" : "block"; }
@@ -234,5 +231,4 @@
     init();
 </script>
 </body>
-    </html>
-    
+</html>
