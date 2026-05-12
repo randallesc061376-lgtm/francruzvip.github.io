@@ -10,14 +10,12 @@
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
-        
         header { padding: 30px 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
         .logo { color: var(--o); font-size: 2rem; font-weight: 900; letter-spacing: 4px; }
-        
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
 
-        /* INTERFAZ CLIENTE BLINDADA */
+        /* INTERFAZ CLIENTE */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 10px; background: #0f0f0f; border-radius: 15px; }
         .flag { width: 100%; height: 25px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 10px var(--o); }
@@ -85,7 +83,7 @@
 <div id="v-admin" class="view">
     <div class="adm-container">
         <div class="adm-card">
-            <span class="adm-label">Control de Usuarios</span>
+            <span class="adm-label">Torre de Control de Usuarios</span>
             <div id="admin-user-list"></div>
         </div>
         <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">CERRAR PANEL</button>
@@ -123,7 +121,7 @@
             const list = document.getElementById('admin-user-list'); list.innerHTML = "";
             ss.forEach(u => {
                 const user = u.val();
-                list.innerHTML += `<div class="user-row"><div><b>${user.id}</b><br><span class="badge ${user.status}">${user.status.toUpperCase()}</span></div><button style="border:none; background:#2ecc71; color:white; padding:5px; border-radius:4px" onclick="db.ref('users/${user.id}').update({status:'active'})">✓</button></div>`;
+                list.innerHTML += `<div class="user-row"><div><b>${user.id}</b><br><span class="badge ${user.status}">${user.status.toUpperCase()}</span></div><button style="border:none; background:#2ecc71; color:white; padding:8px; border-radius:6px" onclick="db.ref('users/${user.id}').update({status:'active'})">APROBAR</button></div>`;
             });
         });
     }
@@ -134,22 +132,16 @@
     function copy(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
     function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
 
-    // SOLICITUD CON CLAVE DINÁMICA MONOESPACIADA (TOUCH-TO-COPY)
     function requestAccess() {
         const day = new Date().getDate().toString().padStart(2, '0');
         const pos1 = Math.floor(Math.random() * myID.length);
         let pos2 = Math.floor(Math.random() * myID.length);
         while(pos1 === pos2) pos2 = Math.floor(Math.random() * myID.length);
-
-        const char1 = myID.charAt(pos1);
-        const char2 = myID.charAt(pos2);
-        const dynamicKey = `${char1}${char2}${day}`;
+        const dynamicKey = `${myID.charAt(pos1)}${myID.charAt(pos2)}${day}`;
 
         db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP, key: dynamicKey, time: Date.now() });
 
-        // SE AGREGA EL FORMATO ` PARA QUE SEA COPIABLE EN WHATSAPP
         const cuerpoMensaje = `Hola!\nPlan ${curP}\nID: ${myID}\n\nEsta es su clave: \`${dynamicKey}\` (Toque la clave para copiar)\nNuestro equipo válida su autorización\n\n⚠️Advertencia! Debe adjuntar su comprobante de pago`;
-        
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(cuerpoMensaje)}`;
     }
 
