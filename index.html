@@ -15,67 +15,109 @@
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; }
         .view.active { display: flex; }
+        
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
-        .flag { width: 100%; height: 28px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
-        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); }
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
+        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); transform: scale(1.05); }
+
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
+
+        /* Estética de Pagos Recuperada */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
-        .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
+        .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 1px; }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
-        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed #333; cursor: pointer; }
-        .copy-box.success { border-color: var(--v); box-shadow: 0 0 10px rgba(46, 204, 113, 0.3); }
-        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; }
-        .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; }
-        /* Galería Estilos */
-        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 20px; }
-        .lamina-img { width: 100%; border-radius: 8px; border: 1px solid #222; }
-        .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .thumb-container { position: relative; }
-        .thumb-img { width: 100%; height: 70px; object-fit: cover; border-radius: 5px; }
-        .btn-del { position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; }
+
+        .copy-box { 
+            background: #0f0f0f; 
+            padding: 18px; 
+            border-radius: 12px; 
+            margin-bottom: 12px; 
+            border: 1px dashed #222; 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        .copy-box small { color: #555; text-transform: uppercase; font-size: 0.65rem; font-weight: 700; letter-spacing: 1px; display: block; margin-bottom: 4px; }
+        .copy-box b { color: var(--o); font-size: 1.05rem; display: block; font-family: monospace; }
+        .copy-box span { color: #888; font-size: 0.8rem; display: block; margin-top: 4px; }
+        .copy-box.success { border-color: var(--v); box-shadow: 0 0 15px rgba(46, 204, 113, 0.2); background: rgba(46, 204, 113, 0.02); }
+
+        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+        .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; font-weight: 700; }
+        
+        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; }
+        .lamina-img { width: 100%; border-radius: 10px; border: 1px solid #222; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 <header onclick="adminAccess()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div id="tagline" style="font-size: 0.75rem; color: #666; letter-spacing: 2.5px; margin-top: 5px;">SALA PRIVADA • COSTA RICA</div>
+    <div id="tagline" style="font-size: 0.75rem; color: #666; letter-spacing: 2.5px; margin-top: 5px;">SALA PRIVADA • SELECCIONE PAÍS</div>
 </header>
 
 <div id="v-main" class="view active">
-    <div class="geo-grid" id="geo-flags"></div>
-    <div id="planes-area"></div>
+    <div class="geo-grid" id="geo-nav">
+        <img src="https://flagcdn.com/cr.svg" id="f-cr" class="flag" onclick="setLoc('cr')">
+        <img src="https://flagcdn.com/ni.svg" id="f-ni" class="flag" onclick="setLoc('ni')">
+        <img src="https://flagcdn.com/pa.svg" id="f-pa" class="flag" onclick="setLoc('pa')">
+        <img src="https://flagcdn.com/hn.svg" id="f-hn" class="flag" onclick="setLoc('hn')">
+        <img src="https://flagcdn.com/sv.svg" id="f-sv" class="flag" onclick="setLoc('sv')">
+        <img src="https://flagcdn.com/gt.svg" id="f-gt" class="flag" onclick="setLoc('gt')">
+        <img src="https://flagcdn.com/bz.svg" id="f-bz" class="flag" onclick="setLoc('bz')">
+        <img src="https://flagcdn.com/un.svg" id="f-un" class="flag" onclick="setLoc('un')">
+    </div>
+
+    <div id="planes-list"></div>
+
     <div class="acc-item">
-        <div class="acc-head" onclick="this.nextElementSibling.classList.toggle('show')">PAGOS DISPONIBLES ▼</div>
+        <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL / GRUPO MUTUAL <span>▼</span></div>
         <div class="acc-body show">
-            <div class="copy-box" onclick="copy('70835833', this)"><small>SINPE</small><br><b>70835833</b></div>
-            <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)"><small>PAYPAL</small><br><b>randallesc061376@gmail.com</b></div>
+            <div class="copy-box" onclick="copy('70835833', this)">
+                <small>NÚMERO SINPE MÓVIL</small>
+                <b>70835833</b>
+                <span>Randall Sánchez C.</span>
+            </div>
+            <div class="copy-box" onclick="copy('CR80080315001000035641', this)">
+                <small>CUENTA IBAN (MUTUAL ALAJUELA)</small>
+                <b>CR80080315001000035641</b>
+                <span>Randall Sánchez C.</span>
+            </div>
         </div>
     </div>
-    <button class="btn-gold" onclick="sendToWA()">ENVIAR COMPROBANTE</button>
+
+    <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc(this)">2. PAYPAL / INTERNACIONAL <span>▼</span></div>
+        <div class="acc-body">
+            <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)">
+                <small>CORREO ELECTRÓNICO</small>
+                <b>randallesc061376@gmail.com</b>
+                <span>Randall Sánchez C.</span>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-gold" onclick="requestEntry()">ENVIAR COMPROBANTE DE PAGO</button>
+    <button class="btn-dark" onclick="checkActive()">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-vip" class="view">
-    <h4 style="text-align:center; color:var(--o); padding:20px;">CONTENIDO EXCLUSIVO VIP</h4>
-    <div id="gallery-container" class="gallery-grid"></div>
+    <h4 style="text-align:center; color:var(--o); padding:20px; letter-spacing:2px;">CONTENIDO EXCLUSIVO VIP</h4>
+    <div id="gallery-vip" class="gallery-grid"></div>
     <button class="btn-dark" onclick="location.reload()">CERRAR SESIÓN</button>
 </div>
 
 <div id="v-admin" class="view">
     <div class="acc-item">
-        <div class="acc-head" style="color:var(--o)">GALERÍA DE LÁMINAS ▼</div>
+        <div class="acc-head" style="color:var(--o)">LÁMINAS Y TASAS</div>
         <div class="acc-body show">
-            <input type="file" id="up-file" style="display:none" onchange="handleUpload(this)">
-            <button class="btn-gold" style="width:100%; margin:0 0 15px 0" onclick="document.getElementById('up-file').click()">+ SUBIR DESDE GALERÍA</button>
-            <div id="adm-gallery-list" class="admin-thumb-grid"></div>
+            <div id="rates-admin-ui"></div>
+            <hr style="border:0; border-top:1px solid #222; margin:20px 0">
+            <input type="file" id="f-up" style="display:none" onchange="uploadLaminas(this)">
+            <button class="btn-gold" style="width:100%; margin:0" onclick="document.getElementById('f-up').click()">+ CARGAR LÁMINA</button>
         </div>
-    </div>
-    <div class="acc-item">
-        <div class="acc-head" style="color:var(--o)">TASAS DE CAMBIO ▼</div>
-        <div class="acc-body show" id="rates-editor"></div>
     </div>
     <button class="btn-dark" onclick="location.reload()">SALIR</button>
 </div>
@@ -85,79 +127,69 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database(), st = firebase.storage();
 
-    let rates = { cr: 540, ni: 37, hn: 24.6, gt: 7.7, usd: 1 }, iso = 'cr', currentPlan = '30 DÍAS', adminClicks = 0;
+    let rates = { cr: 500, ni: 37, hn: 24.6, gt: 7.7, usd: 1 }, iso = 'cr', plan = '30 DÍAS', adminClicks = 0;
     const uid = localStorage.getItem('fc_id') || 'ID-' + Math.random().toString(36).substr(2, 5).toUpperCase();
     localStorage.setItem('fc_id', uid);
 
     function init() {
-        db.ref('rates').on('value', ss => { if(ss.val()){ rates = ss.val(); renderMain(); renderRatesAdmin(); } });
-        db.ref('users/'+uid).on('value', ss => { if(ss.val()?.status === 'active'){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-vip').classList.add('active'); loadVIPGallery(); } });
-        renderMain();
+        db.ref('rates').on('value', ss => { if(ss.val()){ rates = ss.val(); render(); renderAdmin(); } });
+        setLoc('cr');
     }
 
-    function renderMain() {
-        const f = document.getElementById('geo-flags'), p = document.getElementById('planes-area');
-        f.innerHTML = ''; ['cr','ni','pa','hn','sv','gt','bz','un'].forEach(c => {
-            f.innerHTML += `<img src="https://flagcdn.com/${c=='un'?'un':c}.svg" class="flag ${iso==c?'active':''}" onclick="setCountry('${c}')">`;
-        });
-        const plans = {"HOY":1, "7 DÍAS":5, "30 DÍAS":20}; // Blindado: Gold $20
-        p.innerHTML = ''; Object.entries(plans).forEach(([n,v]) => {
-            const price = Math.round(v * rates[iso === 'pa'||iso === 'un' ? 'usd' : iso]);
-            const sym = iso === 'cr' ? '₡' : '$';
-            p.innerHTML += `<div class="card ${currentPlan==n?'sel':''}" onclick="selectPlan('${n}')"><span>${n}</span><b>${sym}${price.toLocaleString()}</b></div>`;
+    function setLoc(c) {
+        iso = c;
+        document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
+        document.getElementById('f-'+c).classList.add('active');
+        render();
+    }
+
+    function render() {
+        const p = document.getElementById('planes-list');
+        const list = {"HOY":1, "7 DÍAS":5, "30 DÍAS":20};
+        const isUSD = ['pa','sv','bz','un'].includes(iso);
+        const sym = iso==='cr'?'₡':(iso==='ni'?'C$':'$');
+        
+        p.innerHTML = '';
+        Object.entries(list).forEach(([n,v]) => {
+            const val = Math.round(v * (isUSD ? rates.usd : rates[iso]));
+            p.innerHTML += `<div class="card ${plan==n?'sel':''}" onclick="selPlan('${n}')"><span>${n}</span><b>${sym}${val.toLocaleString()}</b></div>`;
         });
     }
 
-    function setCountry(c){ iso = c; renderMain(); }
-    function selectPlan(n){ currentPlan = n; renderMain(); }
+    function selPlan(n){ plan = n; render(); }
+    function toggleAcc(el){ el.nextElementSibling.classList.toggle('show'); }
 
-    function sendToWA() {
+    function copy(t, el) { 
+        navigator.clipboard.writeText(t); 
+        el.classList.add('success'); 
+        setTimeout(()=>el.classList.remove('success'), 600); 
+    }
+
+    function renderAdmin() {
+        const d = document.getElementById('rates-admin-ui'); d.innerHTML = '';
+        ['cr','ni','hn','gt'].forEach(k => {
+            d.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:8px"><span>${k.toUpperCase()}</span><input type="number" id="r-${k}" value="${rates[k]}" style="width:80px; background:#111; color:var(--o); border:1px solid #333; text-align:center"></div>`;
+        });
+        d.innerHTML += `<button class="btn-gold" style="width:100%; margin-top:15px" onclick="saveR()">GUARDAR CAMBIOS</button>`;
+    }
+
+    function saveR() {
+        const nr = {...rates};
+        ['cr','ni','hn','gt'].forEach(k => nr[k] = parseFloat(document.getElementById('r-'+k).value));
+        db.ref('rates').set(nr).then(() => alert("Tasas Blindadas"));
+    }
+
+    function requestEntry() {
         const d = new Date().getDate().toString().padStart(2, '0');
         const key = `${uid.charAt(1)}${uid.charAt(3)}${d}`;
-        db.ref('users/'+uid).set({id:uid, plan:currentPlan, status:'wait', key:key});
-        const msg = `Hola!\nPlan ${currentPlan}\nID: ${uid}\nClave: \`${key}\` (Tocar para copiar)\n\n⚠️ Adjunte el comprobante.`;
+        const msg = `Hola!\nPlan ${plan}\nID: ${uid}\nClave: \`${key}\` (Tocar para copiar)`;
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
     }
 
-    // --- MOTOR DE TASAS (BLINDADO) ---
-    function renderRatesAdmin() {
-        const div = document.getElementById('rates-editor'); div.innerHTML = '';
-        ['cr','ni','hn','gt'].forEach(k => {
-            div.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:8px"><span>${k.toUpperCase()}</span><input type="number" id="inp-${k}" value="${rates[k]}" style="width:80px; background:#111; color:var(--o); border:1px solid #333; text-align:center"></div>`;
-        });
-        div.innerHTML += `<button class="btn-gold" style="width:100%; margin:10px 0 0 0" onclick="saveRates()">GUARDAR CAMBIOS</button>`;
-    }
+    function adminAccess(){ adminClicks++; if(adminClicks>=5){ if(prompt("PASS")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); } adminClicks=0; } }
 
-    function saveRates() {
-        const newRates = {...rates};
-        ['cr','ni','hn','gt'].forEach(k => newRates[k] = parseFloat(document.getElementById('inp-'+k).value));
-        db.ref('rates').set(newRates).then(() => alert("Tasas guardadas correctamente"));
-    }
-
-    // --- MOTOR DE GALERÍA (LÁMINAS) ---
-    async function handleUpload(inp) {
-        const file = inp.files[0]; if(!file) return;
-        const ref = st.ref('laminas/'+Date.now());
-        await ref.put(file);
-        const url = await ref.getDownloadURL();
-        db.ref('laminas').push(url);
-    }
-
-    function loadVIPGallery() {
-        db.ref('laminas').on('value', ss => {
-            const cont = document.getElementById('gallery-container'), adm = document.getElementById('adm-gallery-list');
-            cont.innerHTML = ''; adm.innerHTML = '';
-            ss.forEach(s => {
-                cont.innerHTML += `<img src="${s.val()}" class="lamina-img" onclick="window.open('${s.val()}')">`;
-                adm.innerHTML += `<div class="thumb-container"><img src="${s.val()}" class="thumb-img"><button class="btn-del" onclick="db.ref('laminas/${s.key}').remove()">X</button></div>`;
-            });
-        });
-    }
-
-    function copy(t, el){ navigator.clipboard.writeText(t); el.classList.add('success'); setTimeout(()=>el.classList.remove('success'), 600); }
-    function adminAccess(){ adminClicks++; if(adminClicks>=5){ if(prompt("PASS")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); loadVIPGallery(); } adminClicks=0; } }
-    
     init();
 </script>
 </body>
-</html>
+            </html>
+            
