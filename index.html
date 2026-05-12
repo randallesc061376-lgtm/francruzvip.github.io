@@ -12,22 +12,23 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
         
-        /* DISEÑO ELEGANTE Y PROFESIONAL */
+        /* HEADER PROFESIONAL */
         header { padding: 30px 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
 
-        /* BANDERAS Y PLANES */
+        /* GRID DE BANDERAS (COMPLETO) */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
         .flag { width: 100%; height: 28px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); transform: scale(1.05); }
 
+        /* TARJETAS DE PLANES */
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
 
-        /* ACORDEONES DE PAGO */
+        /* MÉTODOS DE PAGO ACORDEÓN */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
         .acc-head.adm { color: var(--o); }
@@ -38,11 +39,10 @@
         .copy-box b { display: block; color: var(--o); font-size: 1rem; font-family: monospace; }
         .copy-box.success { border-color: var(--v); box-shadow: inset 0 0 10px rgba(46, 204, 113, 0.2); }
 
-        /* BOTONES */
+        /* BOTONES DE ACCIÓN */
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; }
 
-        /* ADMIN */
         .user-row { background:#080808; border:1px solid #222; padding:12px; border-radius:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -70,7 +70,7 @@
     <div id="planes">
         <div class="card" onclick="selP(this, 'HOY', 1)"><span>ACCESO HOY</span><b class="p-val">--</b></div>
         <div class="card" onclick="selP(this, '7 DÍAS', 5)"><span>7 DÍAS SILVER</span><b class="p-val">--</b></div>
-        <div class="card sel" onclick="selP(this, '30 DÍAS', 15)"><span>30 DÍAS GOLD</span><b class="p-val">--</b></div>
+        <div class="card sel" onclick="selP(this, '30 DÍAS', 20)"><span>30 DÍAS GOLD</span><b class="p-val">--</b></div>
     </div>
 
     <div class="acc-item">
@@ -127,13 +127,7 @@
 </div>
 
 <script>
-    // FIREBASE CONFIG
-    const firebaseConfig = { 
-        apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
-        projectId: "fran-cruz-sala-vip",
-        databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com",
-        storageBucket: "fran-cruz-sala-vip.appspot.com"
-    };
+    const firebaseConfig = { apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", projectId: "fran-cruz-sala-vip", databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com", storageBucket: "fran-cruz-sala-vip.appspot.com" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database(), st = firebase.storage();
 
@@ -147,17 +141,10 @@
     }
 
     function toggleView(el) { el.nextElementSibling.classList.toggle('show'); }
-    
-    function setLoc(n, s, i) { 
-        iso = i; sim = s; 
-        document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`; 
-        document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); 
-        event.target.classList.add('active'); 
-        updatePrices(); 
-    }
+    function setLoc(n, s, i) { iso = i; sim = s; document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); event.target.classList.add('active'); updatePrices(); }
 
     function updatePrices() {
-        const base = [1, 5, 15];
+        const base = [1, 5, 20]; // Blindado: Gold a $20
         document.querySelectorAll('.p-val').forEach((el, i) => {
             const val = Math.round(base[i] * (rates[iso] || 1));
             el.innerText = sim + val.toLocaleString();
@@ -165,102 +152,28 @@
     }
 
     function selP(el, p) { plan = p; document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); el.classList.add('sel'); }
-    
-    function copy(t, el) { 
-        navigator.clipboard.writeText(t); 
-        el.classList.add('success');
-        setTimeout(() => el.classList.remove('success'), 1000);
-    }
+    function copy(t, el) { navigator.clipboard.writeText(t); el.classList.add('success'); setTimeout(() => el.classList.remove('success'), 1000); }
 
-    // GESTIÓN DE ACCESO
     function requestAccess() {
         const d = new Date().getDate().toString().padStart(2, '0');
-        const key = `${uid.charAt(1)}${uid.charAt(3)}${d}`; 
+        const key = `${uid.charAt(1)}${uid.charAt(3)}${d}`;
         db.ref('users/' + uid).set({ id: uid, status: 'wait', plan: plan, key: key });
         
-        // MENSAJE WHATSAPP OPTIMIZADO PARA TOCAR Y COPIAR
-        const msg = `Hola!
-Plan ${plan}
-ID: ${uid}
-
-Esta es su clave: ${key} (Toque la clave para copiar)
-Nuestro equipo válida su autorización
-
-⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
+        // MENSAJE WHATSAPP CON CLAVE DINÁMICA SOMBREADA (BLINDADO)
+        const msg = `Hola!\nPlan ${plan}\nID: ${uid}\n\nEsta es su clave: \`${key}\` (Toque la clave para copiar)\nNuestro equipo válida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
         
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
     }
 
-    // PANEL ADMIN
-    function adminAccess() {
-        adminClicks++;
-        if(adminClicks >= 5) {
-            if(prompt("PASS:") === "1376") {
-                document.getElementById('v-client').classList.remove('active');
-                document.getElementById('v-admin').classList.add('active');
-            }
-            adminClicks = 0;
-        }
-        setTimeout(() => adminClicks = 0, 2000);
-    }
-
-    function toggleAdminView(el, type) {
-        const body = el.nextElementSibling;
-        body.classList.toggle('show');
-        if(body.classList.contains('show')) {
-            if(type === 'users') loadUsersAdmin();
-            if(type === 'rates') renderRatesAdmin();
-            if(type === 'gal') renderGalleryAdmin();
-        }
-    }
-
-    function loadUsersAdmin() {
-        db.ref('users').on('value', ss => {
-            const l = document.getElementById('adm-users'); l.innerHTML = "";
-            if(!ss.val()) { l.innerHTML = "<center>Sin actividad</center>"; return; }
-            ss.forEach(u => {
-                const d = u.val();
-                l.innerHTML += `<div class="user-row" style="border-left:4px solid ${d.status==='active'?'#2ecc71':'#e74c3c'}">
-                    <small><b>${d.id}</b><br>${d.plan}</small>
-                    <div>
-                        <button onclick="db.ref('users/${d.id}').update({status:'active'})" style="background:var(--v); border:none; padding:8px; border-radius:5px">✓</button>
-                        <button onclick="db.ref('users/${d.id}').update({status:'banned'})" style="background:var(--r); border:none; padding:8px; border-radius:5px; color:#fff">Ø</button>
-                    </div>
-                </div>`;
-            });
-        });
-    }
-
-    function renderRatesAdmin() {
-        const l = document.getElementById('adm-rates'); l.innerHTML = "";
-        Object.entries(rates).forEach(([k, v]) => {
-            if(k === 'usd') return;
-            l.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px">
-                <span style="text-transform:uppercase">${k}</span>
-                <input type="number" value="${v}" style="background:#000; color:var(--o); border:1px solid var(--o); width:80px; text-align:center" onchange="db.ref('settings/rates/${k}').set(parseFloat(this.value))">
-            </div>`;
-        });
-    }
-
-    function renderGalleryAdmin() {
-        db.ref('gallery').on('value', ss => {
-            const l = document.getElementById('adm-gal'); l.innerHTML = "";
-            ss.forEach(img => {
-                l.innerHTML += `<div style="position:relative; aspect-ratio:1; border:1px solid #333; border-radius:8px; overflow:hidden">
-                    <img src="${img.val()}" style="width:100%; height:100%; object-fit:cover">
-                    <button onclick="if(confirm('¿Borrar?')) db.ref('gallery/${img.key}').remove()" style="position:absolute; top:0; right:0; background:rgba(231,76,60,0.8); color:#fff; border:none; width:22px; height:22px">×</button>
-                </div>`;
-            });
-        });
-    }
-
-    function uploadToGallery(input) {
-        const f = input.files[0]; if(!f) return;
-        alert("Subiendo imagen...");
-        st.ref('gallery/' + Date.now()).put(f).then(ss => ss.ref.getDownloadURL()).then(url => db.ref('gallery').push(url));
-    }
-
+    // PANEL DE ADMINISTRACIÓN (TODO LO PACTADO)
+    function adminAccess() { adminClicks++; if(adminClicks >= 5) { if(prompt("PASS:") === "1376") { document.getElementById('v-client').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); } adminClicks = 0; } setTimeout(() => adminClicks = 0, 2000); }
+    function toggleAdminView(el, type) { const body = el.nextElementSibling; body.classList.toggle('show'); if(body.classList.contains('show')) { if(type === 'users') loadUsersAdmin(); if(type === 'rates') renderRatesAdmin(); if(type === 'gal') renderGalleryAdmin(); } }
+    function loadUsersAdmin() { db.ref('users').on('value', ss => { const l = document.getElementById('adm-users'); l.innerHTML = ""; if(!ss.val()) { l.innerHTML = "<center>Sin actividad</center>"; return; } ss.forEach(u => { const d = u.val(); l.innerHTML += `<div class="user-row" style="border-left:4px solid ${d.status==='active'?'#2ecc71':'#e74c3c'}"><small><b>${d.id}</b><br>${d.plan}</small><div><button onclick="db.ref('users/${d.id}').update({status:'active'})" style="background:var(--v); border:none; padding:8px; border-radius:5px">✓</button><button onclick="db.ref('users/${d.id}').update({status:'banned'})" style="background:var(--r); border:none; padding:8px; border-radius:5px; color:#fff">Ø</button></div></div>`; }); }); }
+    function renderRatesAdmin() { const l = document.getElementById('adm-rates'); l.innerHTML = ""; Object.entries(rates).forEach(([k, v]) => { if(k === 'usd') return; l.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px"><span style="text-transform:uppercase">${k}</span><input type="number" value="${v}" style="background:#000; color:var(--o); border:1px solid var(--o); width:80px; text-align:center" onchange="db.ref('settings/rates/${k}').set(parseFloat(this.value))"></div>`; }); }
+    function renderGalleryAdmin() { db.ref('gallery').on('value', ss => { const l = document.getElementById('adm-gal'); l.innerHTML = ""; ss.forEach(img => { l.innerHTML += `<div style="position:relative; aspect-ratio:1; border:1px solid #333; border-radius:8px; overflow:hidden"><img src="${img.val()}" style="width:100%; height:100%; object-fit:cover"><button onclick="if(confirm('¿Borrar?')) db.ref('gallery/${img.key}').remove()" style="position:absolute; top:0; right:0; background:rgba(231,76,60,0.8); color:#fff; border:none; width:22px; height:22px">×</button></div>`; }); }); }
+    function uploadToGallery(input) { const f = input.files[0]; if(!f) return; alert("Subiendo imagen..."); st.ref('gallery/' + Date.now()).put(f).then(ss => ss.ref.getDownloadURL()).then(url => db.ref('gallery').push(url)); }
     init();
 </script>
 </body>
-</html>
+    </html>
+    
