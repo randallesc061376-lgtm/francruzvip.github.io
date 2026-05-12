@@ -31,6 +31,7 @@
         .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .thumb-wrap { position: relative; height: 90px; border: 1px solid #222; border-radius: 8px; overflow: hidden; }
         .thumb-img { width: 100%; height: 100%; object-fit: cover; }
+        .rate-input { width:100%; background:#000; color:#fff; border:1px solid #333; padding:8px; border-radius:5px; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -80,6 +81,16 @@
 
 <div id="v-admin" class="view">
     <div style="padding:20px;">
+        <div class="section-title" style="margin-left:0">GESTIÓN DE DIVISAS</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; background: #111; padding: 15px; border-radius: 12px; border: 1px solid #222;">
+            <div><small style="color:var(--o); font-size:10px;">COSTA RICA (₡)</small><input type="number" id="rate-cr" class="rate-input"></div>
+            <div><small style="color:var(--o); font-size:10px;">NICARAGUA (C$)</small><input type="number" id="rate-ni" class="rate-input"></div>
+            <div><small style="color:var(--o); font-size:10px;">HONDURAS (L)</small><input type="number" id="rate-hn" class="rate-input"></div>
+            <div><small style="color:var(--o); font-size:10px;">GUATEMALA (Q)</small><input type="number" id="rate-gt" class="rate-input"></div>
+            <button class="btn-gold" onclick="saveRates()" style="grid-column: span 2; margin-top: 10px; padding: 12px;">GUARDAR CAMBIOS</button>
+        </div>
+
+        <div class="section-title" style="margin-left:0">CONTENIDO GALERÍA</div>
         <input type="file" id="up-file" multiple accept="image/*" style="display:none" onchange="uploadLaminas(this)">
         <button class="btn-gold" id="up-btn" onclick="document.getElementById('up-file').click()">+ CARGAR LÁMINA</button>
         <div id="admin-gallery" class="admin-thumb-grid"></div>
@@ -103,9 +114,31 @@
     localStorage.setItem('fc_id', uid);
 
     function init() {
-        db.ref('rates').on('value', ss => { if(ss.val()){ rates = ss.val(); render(); } });
+        db.ref('rates').on('value', ss => { 
+            if(ss.val()){ 
+                rates = ss.val(); 
+                render(); 
+                if(document.getElementById('rate-cr')) {
+                    document.getElementById('rate-cr').value = rates.cr;
+                    document.getElementById('rate-ni').value = rates.ni;
+                    document.getElementById('rate-hn').value = rates.hn;
+                    document.getElementById('rate-gt').value = rates.gt;
+                }
+            } 
+        });
         syncGallery();
         setLoc('cr');
+    }
+
+    function saveRates() {
+        const newRates = {
+            ...rates,
+            cr: parseFloat(document.getElementById('rate-cr').value),
+            ni: parseFloat(document.getElementById('rate-ni').value),
+            hn: parseFloat(document.getElementById('rate-hn').value),
+            gt: parseFloat(document.getElementById('rate-gt').value)
+        };
+        db.ref('rates').set(newRates).then(() => alert("Cambios guardados.")).catch(e => alert("Error: " + e.message));
     }
 
     async function uploadLaminas(input) {
@@ -155,7 +188,12 @@
 
     function sendWhatsApp() {
         const key = `I-${new Date().getDate().toString().padStart(2, '0')}`;
-        const msg = `Plan: ${currentPlan}\nID: ${uid}\n\nClave Sugerida: \`${key}\` \n\n⚠️ Adjunte su comprobante aquí.`;
+        const msg = `Plan: ${currentPlan}
+ID: ${uid}
+
+Clave Sugerida: \`${key}\` 
+
+⚠️ Adjunte su comprobante aquí.`;
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
     }
 
@@ -181,4 +219,4 @@
     init();
 </script>
 </body>
-</html>
+            </html>
