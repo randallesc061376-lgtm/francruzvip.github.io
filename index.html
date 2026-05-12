@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • CEREBRO OPERATIVO</title>
+    <title>FRAN CRUZ VIP • TORRE DE CONTROL</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
@@ -31,21 +31,25 @@
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; margin: 15px 20px; cursor: pointer; text-transform: uppercase; }
         .btn-outline { width: calc(100% - 40px); background: transparent; color: var(--o); border: 1px solid var(--o); padding: 15px; border-radius: 12px; font-weight: 800; margin: 0 20px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
 
-        /* TORRE DE CONTROL (NUEVAS MEJORAS) */
-        .adm-container { padding: 20px; }
-        .adm-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 15px; margin-bottom: 20px; }
-        .adm-label { font-size: 0.75rem; color: var(--o); font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: block; letter-spacing: 1px; }
-        .user-row { background: #000; border: 1px solid #222; padding: 12px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
-        .badge { font-size: 0.6rem; padding: 3px 7px; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
-        .badge.wait { background: #d4af37; color: #000; }
+        /* TORRE DE CONTROL (ESTRUCTURA DE MENÚS) */
+        .adm-menu-item { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; margin: 0 20px 12px; overflow: hidden; }
+        .adm-menu-head { padding: 22px; font-size: 0.85rem; color: var(--o); font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; letter-spacing: 1px; }
+        .adm-menu-body { display: none; padding: 15px; background: #000; border-top: 1px solid #1a1a1a; }
+        .adm-menu-body.active { display: block; }
+
+        .user-row { background: #080808; border: 1px solid #222; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .badge { font-size: 0.65rem; padding: 4px 8px; border-radius: 4px; font-weight: 900; text-transform: uppercase; margin-top: 5px; display: inline-block; }
+        .badge.wait { background: var(--o); color: #000; }
         .badge.active { background: #2ecc71; color: #fff; }
         .badge.banned { background: var(--r); color: #fff; }
         
-        .tasa-input { background: #111; border: 1px solid #333; color: var(--o); width: 80px; text-align: center; border-radius: 5px; padding: 5px; font-weight: bold; }
-        .gal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
-        .gal-item { position: relative; aspect-ratio: 1; border: 1px solid #222; border-radius: 5px; overflow: hidden; }
+        .tasa-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #111; }
+        .tasa-input { background: #111; border: 1px solid #333; color: var(--o); width: 90px; text-align: center; border-radius: 6px; padding: 8px; font-weight: bold; font-size: 1rem; }
+        
+        .gal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .gal-item { position: relative; aspect-ratio: 1; border: 1px solid #222; border-radius: 8px; overflow: hidden; }
         .gal-item img { width: 100%; height: 100%; object-fit: cover; }
-        .btn-del { position: absolute; top: 2px; right: 2px; background: var(--r); border: none; color: #fff; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; cursor: pointer; }
+        .btn-del { position: absolute; top: 5px; right: 5px; background: var(--r); border: none; color: #fff; border-radius: 50%; width: 22px; height: 22px; font-weight: bold; cursor: pointer; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -89,22 +93,31 @@
 </div>
 
 <div id="v-admin" class="view">
-    <div class="adm-container">
-        <div class="adm-card">
-            <span class="adm-label">Lista de Espera y Baneos</span>
-            <div id="admin-user-list"></div>
+    <div style="padding-top: 20px;">
+        <div class="adm-menu-item">
+            <div class="adm-menu-head" onclick="toggleAdmMenu(this)">LISTA DE ESPERA Y BANEOS <span>▼</span></div>
+            <div class="adm-menu-body">
+                <div id="admin-user-list"></div>
+            </div>
         </div>
-        <div class="adm-card">
-            <span class="adm-label">Tipos de Cambio (vs USD)</span>
-            <div id="admin-rates-list"></div>
+
+        <div class="adm-menu-item">
+            <div class="adm-menu-head" onclick="toggleAdmMenu(this)">TIPOS DE CAMBIO (VS USD) <span>▼</span></div>
+            <div class="adm-menu-body">
+                <div id="admin-rates-list"></div>
+            </div>
         </div>
-        <div class="adm-card">
-            <span class="adm-label">Galería de Láminas</span>
-            <input type="file" id="img-up" style="display:none" onchange="subirLamina(this)">
-            <button class="btn-gold" style="padding:10px; margin:0 0 10px 0; width:100%" onclick="document.getElementById('img-up').click()">+ AGREGAR LÁMINA</button>
-            <div id="admin-gallery" class="gal-grid"></div>
+
+        <div class="adm-menu-item">
+            <div class="adm-menu-head" onclick="toggleAdmMenu(this)">GALERÍA DE LÁMINAS <span>▼</span></div>
+            <div class="adm-menu-body">
+                <input type="file" id="img-up" accept="image/*" style="display:none" onchange="subirLamina(this)">
+                <button class="btn-gold" style="padding:15px; margin:0 0 15px 0; width:100%" onclick="document.getElementById('img-up').click()">+ ABRIR GALERÍA</button>
+                <div id="admin-gallery" class="gal-grid"></div>
+            </div>
         </div>
-        <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">CERRAR PANEL</button>
+
+        <button class="btn-gold" style="background:#111; color:#fff; border: 1px solid #333" onclick="location.reload()">CERRAR PANEL</button>
     </div>
 </div>
 
@@ -142,6 +155,21 @@
         setTimeout(() => clicks = 0, 2000);
     }
 
+    // LÓGICA DE MENÚS ACORDEÓN
+    function toggleAdmMenu(el) {
+        const body = el.nextElementSibling;
+        const icon = el.querySelector('span');
+        const isActive = body.classList.contains('active');
+        
+        document.querySelectorAll('.adm-menu-body').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.adm-menu-head span').forEach(s => s.innerText = '▼');
+
+        if(!isActive) {
+            body.classList.add('active');
+            icon.innerText = '▲';
+        }
+    }
+
     function loadAdminData() {
         db.ref('users').on('value', ss => {
             const list = document.getElementById('admin-user-list'); list.innerHTML = "";
@@ -149,10 +177,10 @@
                 const user = u.val();
                 list.innerHTML += `
                 <div class="user-row">
-                    <div><b>${user.id}</b> <span class="badge ${user.status}">${user.status}</span></div>
+                    <div><b>${user.id}</b><br><span class="badge ${user.status}">${user.status}</span></div>
                     <div>
-                        <button style="border:none; background:#2ecc71; color:white; padding:5px; border-radius:4px" onclick="db.ref('users/${user.id}').update({status:'active'})">✓</button>
-                        <button style="border:none; background:#e74c3c; color:white; padding:5px; border-radius:4px" onclick="db.ref('users/${user.id}').update({status:'banned'})">Ø</button>
+                        <button style="border:none; background:#2ecc71; color:white; padding:10px; border-radius:6px; margin-right:5px" onclick="db.ref('users/${user.id}').update({status:'active'})">✓</button>
+                        <button style="border:none; background:#e74c3c; color:white; padding:10px; border-radius:6px" onclick="db.ref('users/${user.id}').update({status:'banned'})">Ø</button>
                     </div>
                 </div>`;
             });
@@ -163,7 +191,7 @@
         const list = document.getElementById('admin-rates-list'); list.innerHTML = "";
         Object.entries(curRates).forEach(([iso, val]) => {
             if(iso === 'usd') return;
-            list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:8px"><span>${iso.toUpperCase()}</span><input class="tasa-input" type="number" value="${val}" onchange="db.ref('settings/tasas/${iso}').set(parseFloat(this.value))"></div>`;
+            list.innerHTML += `<div class="tasa-row"><span>${iso.toUpperCase()}</span><input class="tasa-input" type="number" value="${val}" onchange="db.ref('settings/tasas/${iso}').set(parseFloat(this.value))"></div>`;
         });
     }
 
@@ -181,6 +209,7 @@
         ref.put(file).then(ss => ss.ref.getDownloadURL()).then(url => db.ref('gallery').push(url));
     }
 
+    // FUNCIONES CLIENTE (BLINDADAS)
     function setLoc(n, s, t, iso) { curIso = iso; curSim = s; document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); event.target.classList.add('active'); updatePrices(); }
     function updatePrices() { const base = [1, 5, 20]; document.querySelectorAll('.p-val').forEach((el, i) => { el.innerText = curSim + Math.round(base[i] * curRates[curIso === 'usd' ? 'usd' : curIso]).toLocaleString(); }); }
     function selP(el, p) { curP = p; document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); el.classList.add('sel'); }
