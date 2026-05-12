@@ -17,7 +17,7 @@
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; }
         .view.active { display: flex; }
         
-        /* Estética Blindada */
+        /* Estética de Banderas y Planes */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
         .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); transform: scale(1.05); }
@@ -25,19 +25,27 @@
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
 
-        /* Ventanas de Pago (Estética Unificada) */
+        /* Estética de Ventanas de Pago */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
         
-        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 12px; margin-bottom: 12px; border: 1px dashed #222; cursor: pointer; transition: 0.3s; }
+        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 12px; margin-bottom: 12px; border: 1px dashed #222; cursor: pointer; position: relative; }
         .copy-box small { color: #555; text-transform: uppercase; font-size: 0.65rem; font-weight: 700; display: block; margin-bottom: 4px; }
         .copy-box b { color: var(--o); font-size: 1.05rem; display: block; word-break: break-all; }
         .copy-box.success { border-color: var(--v); box-shadow: 0 0 15px rgba(46, 204, 113, 0.2); }
 
+        /* Botones Maestros */
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; font-weight: 700; }
+
+        /* Panel de Administración */
+        .admin-thumb-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
+        .thumb-wrap { position: relative; border: 1px solid #222; border-radius: 8px; overflow: hidden; height: 120px; }
+        .thumb-img { width: 100%; height: 100%; object-fit: cover; }
+        .btn-del { position: absolute; top: 5px; right: 5px; background: var(--r); color: #fff; border: none; border-radius: 50%; width: 28px; height: 28px; font-weight: 900; cursor: pointer; }
+        .rate-input { width: 80px; background: #111; color: var(--o); border: 1px solid #333; text-align: center; padding: 8px; border-radius: 5px; font-weight: bold; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -66,19 +74,14 @@
             <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)">
                 <small>PAYPAL (MERCADO GLOBAL)</small>
                 <b>randallesc061376@gmail.com</b>
-                <span style="color:#555; font-size: 0.7rem;">Randall Sánchez C.</span>
             </div>
-            
             <div class="copy-box" onclick="copy('70835833', this)">
                 <small>SINPE MÓVIL (COSTA RICA)</small>
                 <b>70835833</b>
-                <span style="color:#555; font-size: 0.7rem;">Randall Sánchez C.</span>
             </div>
-
             <div class="copy-box" onclick="copy('CR80080315001000035641', this)">
-                <small>IBAN MUTUAL ALAJUELA (COSTA RICA)</small>
+                <small>IBAN MUTUAL (COSTA RICA)</small>
                 <b>CR80080315001000035641</b>
-                <span style="color:#555; font-size: 0.7rem;">Randall Sánchez C.</span>
             </div>
         </div>
     </div>
@@ -99,7 +102,7 @@
         <div class="acc-body">
             <input type="file" id="up-file" style="display:none" onchange="uploadFile(this)" accept="image/*">
             <button class="btn-gold" id="btn-up" style="width:100%; margin:0 0 15px 0" onclick="document.getElementById('up-file').click()">+ CARGAR NUEVA LÁMINA</button>
-            <div id="admin-gallery-list" style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px;"></div>
+            <div id="admin-gallery-list" class="admin-thumb-grid"></div>
         </div>
     </div>
 
@@ -126,7 +129,7 @@
     const db = firebase.database(), st = firebase.storage();
 
     let rates = { cr: 500, ni: 37, hn: 24.6, gt: 7.7, usd: 1 }, iso = 'cr', currentPlan = 'ACCESO HOY', adminClicks = 0;
-    const uid = localStorage.getItem('fc_id') || 'ID-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+    const uid = localStorage.getItem('fc_id') || 'UID-' + Math.random().toString(36).substr(2, 6).toUpperCase();
     localStorage.setItem('fc_id', uid);
 
     function init() {
@@ -163,6 +166,14 @@
         setTimeout(()=>el.classList.remove('success'), 800); 
     }
 
+    // MOTOR DE WHATSAPP (Formato Exacto Randall)
+    function sendWhatsApp() {
+        const d = new Date().getDate().toString().padStart(2, '0');
+        const key = `I-${d}`;
+        const text = `Plan ${currentPlan}\nID: ${uid}\n\nEsta es su clave: \`${key}\` (Toque la clave para copiar)\nEn este momento nuestro equipo válida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
+        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(text)}`;
+    }
+
     async function uploadFile(inp) {
         const file = inp.files[0]; if(!file) return;
         const btn = document.getElementById('btn-up');
@@ -173,7 +184,7 @@
             const url = await ref.getDownloadURL();
             await db.ref('laminas').push(url);
             alert("¡Lámina Guardada!"); 
-        } catch (e) { alert("Error"); }
+        } catch (e) { alert("Error al subir"); }
         btn.innerText = "+ CARGAR NUEVA LÁMINA"; btn.disabled = false;
     }
 
@@ -182,8 +193,9 @@
             const cont = document.getElementById('gallery-container'), adm = document.getElementById('admin-gallery-list');
             cont.innerHTML = ''; adm.innerHTML = '';
             ss.forEach(s => {
-                cont.innerHTML += `<img src="${s.val()}" style="width:100%; border-radius:12px; border:1px solid #222;">`;
-                adm.innerHTML += `<div style="position:relative; height:120px; border:1px solid #222; border-radius:8px; overflow:hidden;"><img src="${s.val()}" style="width:100%; height:100%; object-fit:cover;"><button onclick="db.ref('laminas/${s.key}').remove()" style="position:absolute; top:5px; right:5px; background:var(--r); color:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer;">X</button></div>`;
+                const url = s.val();
+                cont.innerHTML += `<img src="${url}" style="width:100%; border-radius:12px; border:1px solid #222; margin-bottom:15px;">`;
+                adm.innerHTML += `<div class="thumb-wrap"><img src="${url}" class="thumb-img"><button class="btn-del" onclick="db.ref('laminas/${s.key}').remove()">X</button></div>`;
             });
         });
     }
@@ -191,7 +203,7 @@
     function renderAdminRates() {
         const d = document.getElementById('admin-rates-ui'); d.innerHTML = '';
         ['cr','ni','hn','gt'].forEach(k => {
-            d.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center;"><span>${k.toUpperCase()}</span><input type="number" id="r-${k}" value="${rates[k]}" style="width:80px; background:#111; color:var(--o); border:1px solid #333; text-align:center; padding:8px; border-radius:5px;"></div>`;
+            d.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><span>${k.toUpperCase()}</span><input type="number" id="r-${k}" value="${rates[k]}" class="rate-input"></div>`;
         });
     }
 
@@ -207,26 +219,20 @@
             list.innerHTML = '';
             ss.forEach(c => {
                 const u = c.val();
-                list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #111;">
+                list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #111;">
                     <small style="color:${u.status==='active'?'var(--v)':'#555'}">${c.key}</small>
                     <div>
-                        <button onclick="db.ref('users/${c.key}').update({status:'active'})" style="background:var(--v); border:none; color:white; padding:5px 10px; border-radius:4px; margin-right:5px">✓</button>
-                        <button onclick="db.ref('users/${c.key}').update({status:'banned'})" style="background:var(--r); border:none; color:white; padding:5px 10px; border-radius:4px">X</button>
+                        <button onclick="db.ref('users/${c.key}').update({status:'active'})" style="background:var(--v); border:none; color:white; padding:6px 12px; border-radius:6px; margin-right:5px; cursor:pointer;">✓</button>
+                        <button onclick="db.ref('users/${c.key}').update({status:'banned'})" style="background:var(--r); border:none; color:white; padding:6px 12px; border-radius:6px; cursor:pointer;">X</button>
                     </div>
                 </div>`;
             });
         });
     }
 
-    function sendWhatsApp() {
-        const d = new Date().getDate().toString().padStart(2, '0');
-        const text = `Plan: ${currentPlan}\nID: ${uid}\nClave: I-${d}\n\nAdjunte comprobante de PayPal, SINPE o IBAN.`;
-        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(text)}`;
-    }
-
     function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Pendiente de validación."); }); }
     function showVIP() { document.getElementById('v-main').classList.remove('active'); document.getElementById('v-vip').classList.add('active'); }
-    function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("PASS")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); renderUsers(); } adminClicks=0; } }
+    function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("ACCESO MAESTRO")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); renderUsers(); } adminClicks=0; } }
 
     init();
 </script>
