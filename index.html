@@ -13,53 +13,53 @@
         body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
         header { padding: 30px 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
+        
+        /* Vistas */
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; }
         .view.active { display: flex; }
         
+        /* Navegación Geo (Banderas Blindadas) */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
         .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); transform: scale(1.05); }
 
+        /* Tarjetas de Planes */
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
 
-        /* Estética de Pagos Recuperada */
+        /* Estética de Pagos (Recuperada) */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
-        .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 1px; }
+        .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
-
-        .copy-box { 
-            background: #0f0f0f; 
-            padding: 18px; 
-            border-radius: 12px; 
-            margin-bottom: 12px; 
-            border: 1px dashed #222; 
-            cursor: pointer; 
-            transition: 0.3s;
-        }
-        .copy-box small { color: #555; text-transform: uppercase; font-size: 0.65rem; font-weight: 700; letter-spacing: 1px; display: block; margin-bottom: 4px; }
-        .copy-box b { color: var(--o); font-size: 1.05rem; display: block; font-family: monospace; }
+        .copy-box { background: #0f0f0f; padding: 18px; border-radius: 12px; margin-bottom: 12px; border: 1px dashed #222; cursor: pointer; }
+        .copy-box small { color: #555; text-transform: uppercase; font-size: 0.65rem; font-weight: 700; display: block; margin-bottom: 4px; }
+        .copy-box b { color: var(--o); font-size: 1.05rem; display: block; }
         .copy-box span { color: #888; font-size: 0.8rem; display: block; margin-top: 4px; }
-        .copy-box.success { border-color: var(--v); box-shadow: 0 0 15px rgba(46, 204, 113, 0.2); background: rgba(46, 204, 113, 0.02); }
+        .copy-box.success { border-color: var(--v); box-shadow: 0 0 15px rgba(46, 204, 113, 0.2); }
 
-        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+        /* Botones */
+        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; font-weight: 700; }
-        
+
+        /* Galería (El Alma del Proyecto) */
         .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; }
         .lamina-img { width: 100%; border-radius: 10px; border: 1px solid #222; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px; }
+        .thumb-wrap { position: relative; }
+        .thumb-img { width: 100%; height: 75px; object-fit: cover; border-radius: 6px; }
+        .btn-del { position: absolute; top: -5px; right: -5px; background: #ff4444; color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: 900; }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
 <header onclick="adminAccess()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div id="tagline" style="font-size: 0.75rem; color: #666; letter-spacing: 2.5px; margin-top: 5px;">SALA PRIVADA • SELECCIONE PAÍS</div>
 </header>
 
 <div id="v-main" class="view active">
-    <div class="geo-grid" id="geo-nav">
+    <div class="geo-grid">
         <img src="https://flagcdn.com/cr.svg" id="f-cr" class="flag" onclick="setLoc('cr')">
         <img src="https://flagcdn.com/ni.svg" id="f-ni" class="flag" onclick="setLoc('ni')">
         <img src="https://flagcdn.com/pa.svg" id="f-pa" class="flag" onclick="setLoc('pa')">
@@ -73,53 +73,43 @@
     <div id="planes-list"></div>
 
     <div class="acc-item">
-        <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL / GRUPO MUTUAL <span>▼</span></div>
+        <div class="acc-head" onclick="this.nextElementSibling.classList.toggle('show')">PAGOS DISPONIBLES ▼</div>
         <div class="acc-body show">
             <div class="copy-box" onclick="copy('70835833', this)">
-                <small>NÚMERO SINPE MÓVIL</small>
+                <small>SINPE MÓVIL</small>
                 <b>70835833</b>
                 <span>Randall Sánchez C.</span>
             </div>
-            <div class="copy-box" onclick="copy('CR80080315001000035641', this)">
-                <small>CUENTA IBAN (MUTUAL ALAJUELA)</small>
-                <b>CR80080315001000035641</b>
-                <span>Randall Sánchez C.</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="acc-item">
-        <div class="acc-head" onclick="toggleAcc(this)">2. PAYPAL / INTERNACIONAL <span>▼</span></div>
-        <div class="acc-body">
             <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)">
-                <small>CORREO ELECTRÓNICO</small>
+                <small>PAYPAL / INTERNACIONAL</small>
                 <b>randallesc061376@gmail.com</b>
                 <span>Randall Sánchez C.</span>
             </div>
         </div>
     </div>
-
-    <button class="btn-gold" onclick="requestEntry()">ENVIAR COMPROBANTE DE PAGO</button>
-    <button class="btn-dark" onclick="checkActive()">YA TENGO MI CLAVE</button>
+    <button class="btn-gold" onclick="sendWhatsApp()">ENVIAR COMPROBANTE DE PAGO</button>
 </div>
 
 <div id="v-vip" class="view">
     <h4 style="text-align:center; color:var(--o); padding:20px; letter-spacing:2px;">CONTENIDO EXCLUSIVO VIP</h4>
-    <div id="gallery-vip" class="gallery-grid"></div>
+    <div id="gallery-container" class="gallery-grid"></div>
     <button class="btn-dark" onclick="location.reload()">CERRAR SESIÓN</button>
 </div>
 
 <div id="v-admin" class="view">
     <div class="acc-item">
-        <div class="acc-head" style="color:var(--o)">LÁMINAS Y TASAS</div>
+        <div class="acc-head" style="color:var(--o)">GESTIÓN DE LÁMINAS ▼</div>
         <div class="acc-body show">
-            <div id="rates-admin-ui"></div>
-            <hr style="border:0; border-top:1px solid #222; margin:20px 0">
-            <input type="file" id="f-up" style="display:none" onchange="uploadLaminas(this)">
-            <button class="btn-gold" style="width:100%; margin:0" onclick="document.getElementById('f-up').click()">+ CARGAR LÁMINA</button>
+            <input type="file" id="up-file" style="display:none" onchange="uploadFile(this)">
+            <button class="btn-gold" style="width:100%; margin:0" onclick="document.getElementById('up-file').click()">+ CARGAR NUEVA LÁMINA</button>
+            <div id="admin-gallery-list" class="admin-thumb-grid"></div>
         </div>
     </div>
-    <button class="btn-dark" onclick="location.reload()">SALIR</button>
+    <div class="acc-item">
+        <div class="acc-head" style="color:var(--o)">TASAS DE CAMBIO ▼</div>
+        <div class="acc-body show" id="admin-rates-ui"></div>
+    </div>
+    <button class="btn-dark" onclick="location.reload()">SALIR DEL PANEL</button>
 </div>
 
 <script>
@@ -127,12 +117,22 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database(), st = firebase.storage();
 
-    let rates = { cr: 500, ni: 37, hn: 24.6, gt: 7.7, usd: 1 }, iso = 'cr', plan = '30 DÍAS', adminClicks = 0;
-    const uid = localStorage.getItem('fc_id') || 'ID-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+    let rates = { cr: 500, ni: 37, hn: 24.6, gt: 7.7, usd: 1 }, iso = 'cr', currentPlan = '30 DÍAS', adminClicks = 0;
+    const uid = localStorage.getItem('fc_id') || 'UID-' + Math.random().toString(36).substr(2, 6).toUpperCase();
     localStorage.setItem('fc_id', uid);
 
     function init() {
-        db.ref('rates').on('value', ss => { if(ss.val()){ rates = ss.val(); render(); renderAdmin(); } });
+        // Escucha de Tasas en tiempo real
+        db.ref('rates').on('value', ss => { if(ss.val()){ rates = ss.val(); render(); renderAdminRates(); } });
+        
+        // Verificación de acceso para el cliente (Si está activo, entra a la galería)
+        db.ref('users/'+uid).on('value', ss => {
+            if(ss.val()?.status === 'active'){
+                document.getElementById('v-main').classList.remove('active');
+                document.getElementById('v-vip').classList.add('active');
+                loadGallery();
+            }
+        });
         setLoc('cr');
     }
 
@@ -147,49 +147,62 @@
         const p = document.getElementById('planes-list');
         const list = {"HOY":1, "7 DÍAS":5, "30 DÍAS":20};
         const isUSD = ['pa','sv','bz','un'].includes(iso);
-        const sym = iso==='cr'?'₡':(iso==='ni'?'C$':'$');
-        
+        const sym = iso==='cr'?'₡':'$';
         p.innerHTML = '';
         Object.entries(list).forEach(([n,v]) => {
             const val = Math.round(v * (isUSD ? rates.usd : rates[iso]));
-            p.innerHTML += `<div class="card ${plan==n?'sel':''}" onclick="selPlan('${n}')"><span>${n}</span><b>${sym}${val.toLocaleString()}</b></div>`;
+            p.innerHTML += `<div class="card ${currentPlan==n?'sel':''}" onclick="currentPlan='${n}';render()"><span>Plan ${n}</span><b>${sym}${val.toLocaleString()}</b></div>`;
         });
     }
 
-    function selPlan(n){ plan = n; render(); }
-    function toggleAcc(el){ el.nextElementSibling.classList.toggle('show'); }
-
-    function copy(t, el) { 
-        navigator.clipboard.writeText(t); 
-        el.classList.add('success'); 
-        setTimeout(()=>el.classList.remove('success'), 600); 
+    function sendWhatsApp() {
+        const d = new Date().getDate().toString().padStart(2, '0');
+        const key = `I-${d}`;
+        const text = `Plan ${currentPlan}\nID: ${uid}\n\nEsta es su clave: \`${key}\` (Toque la clave para copiar)\nEn este momento nuestro equipo válida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
+        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(text)}`;
     }
 
-    function renderAdmin() {
-        const d = document.getElementById('rates-admin-ui'); d.innerHTML = '';
-        ['cr','ni','hn','gt'].forEach(k => {
-            d.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:8px"><span>${k.toUpperCase()}</span><input type="number" id="r-${k}" value="${rates[k]}" style="width:80px; background:#111; color:var(--o); border:1px solid #333; text-align:center"></div>`;
+    // --- MOTOR DE GALERÍA (LÁMINAS) ---
+    async function uploadFile(inp) {
+        const file = inp.files[0]; if(!file) return;
+        alert("Subiendo lámina...");
+        const ref = st.ref('laminas/'+Date.now());
+        await ref.put(file);
+        const url = await ref.getDownloadURL();
+        db.ref('laminas').push(url);
+    }
+
+    function loadGallery() {
+        db.ref('laminas').on('value', ss => {
+            const cont = document.getElementById('gallery-container'), adm = document.getElementById('admin-gallery-list');
+            cont.innerHTML = ''; adm.innerHTML = '';
+            ss.forEach(s => {
+                const url = s.val(), key = s.key;
+                cont.innerHTML += `<img src="${url}" class="lamina-img" onclick="window.open('${url}')">`;
+                adm.innerHTML += `<div class="thumb-wrap"><img src="${url}" class="thumb-img"><button class="btn-del" onclick="db.ref('laminas/${key}').remove()">X</button></div>`;
+            });
         });
-        d.innerHTML += `<button class="btn-gold" style="width:100%; margin-top:15px" onclick="saveR()">GUARDAR CAMBIOS</button>`;
     }
 
-    function saveR() {
+    // --- MOTOR DE TASAS (ADMIN) ---
+    function renderAdminRates() {
+        const d = document.getElementById('admin-rates-ui'); d.innerHTML = '';
+        ['cr','ni', 'hn', 'gt'].forEach(k => {
+            d.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px"><span>${k.toUpperCase()}</span><input type="number" id="r-${k}" value="${rates[k]}" style="width:80px; background:#111; color:var(--o); border:1px solid #333; text-align:center"></div>`;
+        });
+        d.innerHTML += `<button class="btn-gold" style="width:100%" onclick="saveRates()">GUARDAR TASAS</button>`;
+    }
+
+    function saveRates() {
         const nr = {...rates};
         ['cr','ni','hn','gt'].forEach(k => nr[k] = parseFloat(document.getElementById('r-'+k).value));
-        db.ref('rates').set(nr).then(() => alert("Tasas Blindadas"));
+        db.ref('rates').set(nr).then(() => alert("Tasas guardadas permanentemente."));
     }
 
-    function requestEntry() {
-        const d = new Date().getDate().toString().padStart(2, '0');
-        const key = `${uid.charAt(1)}${uid.charAt(3)}${d}`;
-        const msg = `Hola!\nPlan ${plan}\nID: ${uid}\nClave: \`${key}\` (Tocar para copiar)`;
-        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
-    }
-
-    function adminAccess(){ adminClicks++; if(adminClicks>=5){ if(prompt("PASS")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); } adminClicks=0; } }
+    function copy(t, el){ navigator.clipboard.writeText(t); el.classList.add('success'); setTimeout(()=>el.classList.remove('success'), 600); }
+    function adminAccess(){ adminClicks++; if(adminClicks>=5){ if(prompt("PASS")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); loadGallery(); } adminClicks=0; } }
 
     init();
 </script>
 </body>
-            </html>
-            
+</html>
