@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • PLATINUM FINAL</title>
+    <title>FRAN CRUZ VIP • OPERACIONES</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
@@ -18,12 +18,14 @@
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
 
+        /* INTERFAZ CLIENTE */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 10px; background: #0f0f0f; border-radius: 15px; }
         .flag { width: 100%; height: 25px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 10px var(--o); }
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin: 0 20px 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.2rem; }
+        
         .acc-item { border: 1px solid #1a1a1a; border-radius: 10px; margin: 0 20px 8px; overflow: hidden; }
         .acc-head { background: #111; padding: 15px; font-size: 0.8rem; font-weight: bold; color: #888; cursor: pointer; display: flex; justify-content: space-between; }
         .acc-body { display: none; background: #080808; padding: 15px; border-top: 1px solid #1a1a1a; text-align: center; }
@@ -33,6 +35,7 @@
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; margin: 15px 20px; cursor: pointer; text-transform: uppercase; }
         .btn-outline { width: calc(100% - 40px); background: transparent; color: var(--o); border: 1px solid var(--o); padding: 15px; border-radius: 12px; font-weight: 800; margin: 0 20px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
 
+        /* PANEL DE CONTROL (CEREBRO) */
         .adm-container { padding: 20px; }
         .adm-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 15px; margin-bottom: 20px; }
         .adm-label { font-size: 0.75rem; color: var(--o); font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: block; letter-spacing: 1px; }
@@ -96,25 +99,25 @@
 <div id="v-admin" class="view">
     <div class="adm-container">
         <div class="adm-card">
-            <span class="adm-label">Control de Usuarios</span>
+            <span class="adm-label">Torre de Control de Usuarios</span>
             <div id="admin-user-list"><p style="font-size:0.7rem; color:#444">Cargando...</p></div>
         </div>
         <div class="adm-card">
-            <span class="adm-label">Galería</span>
+            <span class="adm-label">Gestión de Galería</span>
             <input type="file" id="f-upload" class="adm-input" accept="image/*">
             <div class="prog-cont" id="p-cont"><div class="prog-bar" id="p-bar"></div></div>
             <button class="btn-gold" style="margin:0; width:100%" onclick="uploadImg()">PUBLICAR LÁMINA</button>
             <div id="admin-gallery" class="grid-gal"></div>
         </div>
         <div class="adm-card">
-            <span class="adm-label">Tipos de Cambio</span>
+            <span class="adm-label">Tipos de Cambio Globales</span>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
-                <div><small style="font-size:9px">₡ CR</small><input type="number" id="rate-cr" class="adm-input" value="540"></div>
-                <div><small style="font-size:9px">C$ NI</small><input type="number" id="rate-ni" class="adm-input" value="37"></div>
+                <div><small style="font-size:9px">₡ COSTA RICA</small><input type="number" id="rate-cr" class="adm-input" value="540"></div>
+                <div><small style="font-size:9px">C$ NICARAGUA</small><input type="number" id="rate-ni" class="adm-input" value="37"></div>
             </div>
-            <button class="btn-gold" style="margin:5px 0; width:100%; height:40px; padding:0" onclick="saveRates()">ACTUALIZAR</button>
+            <button class="btn-gold" style="margin:5px 0; width:100%; height:40px; padding:0" onclick="saveRates()">ACTUALIZAR TASAS</button>
         </div>
-        <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">CERRAR SESIÓN</button>
+        <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">SALIR DEL PANEL</button>
     </div>
 </div>
 
@@ -129,13 +132,14 @@
     const db = firebase.database(); const st = firebase.storage();
 
     let curTasa = 540, curSim = "₡", curP = "30 DÍAS", curU = 20, clicks = 0;
-    let myID = localStorage.getItem('fc_id') || 'VIP' + Math.floor(Math.random()*9000+1000);
+    let myID = localStorage.getItem('fc_id') || 'UID-' + Math.random().toString(36).substr(2, 6).toUpperCase();
     localStorage.setItem('fc_id', myID);
 
+    // ACCESO AL CEREBRO (TOCAR LOGO 5 VECES)
     function adminAccess() {
         clicks++;
         if(clicks >= 5) {
-            if(prompt("KEYPASS:") === "1376") {
+            if(prompt("PASS DE LA TORRE:") === "1376") {
                 document.getElementById('v-client').classList.remove('active');
                 document.getElementById('v-admin').classList.add('active');
                 loadAdminData();
@@ -164,7 +168,7 @@
         pCont.style.display = 'block';
         const ref = st.ref('laminas/' + Date.now()); const task = ref.put(file);
         task.on('state_changed', s => { pBar.style.width = (s.bytesTransferred / s.totalBytes * 100) + '%'; }, null, () => {
-            task.snapshot.ref.getDownloadURL().then(url => { db.ref('gallery').push({url, time: Date.now()}); pCont.style.display = 'none'; pBar.style.width = '0%'; alert("PUBLICADA"); });
+            task.snapshot.ref.getDownloadURL().then(url => { db.ref('gallery').push({url, time: Date.now()}); pCont.style.display = 'none'; pBar.style.width = '0%'; alert("PUBLICADO CON ÉXITO"); });
         });
     }
 
@@ -175,8 +179,8 @@
         });
     }
 
-    function deleteImg(key) { if(confirm("¿Eliminar?")) db.ref('gallery/' + key).remove(); }
-    function saveRates() { db.ref('rates').set({cr: document.getElementById('rate-cr').value, ni: document.getElementById('rate-ni').value}); alert("ACTUALIZADO"); }
+    function deleteImg(key) { if(confirm("¿Eliminar lámina?")) db.ref('gallery/' + key).remove(); }
+    function saveRates() { db.ref('rates').set({cr: document.getElementById('rate-cr').value, ni: document.getElementById('rate-ni').value}); alert("TASAS ACTUALIZADAS"); }
 
     function setLoc(n, s, t) { curTasa = t; curSim = s; document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); event.target.classList.add('active'); updatePrices(); }
     function updatePrices() { const base = [1, 5, 20]; document.querySelectorAll('.p-val').forEach((el, i) => { el.innerText = curSim + Math.round(base[i] * curTasa).toLocaleString(); }); }
@@ -184,18 +188,15 @@
     function copy(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
     function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
 
-    // NUEVA LÓGICA: 2 Dígitos ALEATORIOS del ID + Día de la transacción
+    // SOLICITUD CON CLAVE DINÁMICA Y MENSAJE SIMPLIFICADO
     function requestAccess() {
         const day = new Date().getDate().toString().padStart(2, '0');
-        
-        // Elige dos posiciones al azar dentro de la cadena del ID (ej: "VIP4521")
         const pos1 = Math.floor(Math.random() * myID.length);
         let pos2 = Math.floor(Math.random() * myID.length);
-        while(pos1 === pos2) pos2 = Math.floor(Math.random() * myID.length); // Evita repetir posición
+        while(pos1 === pos2) pos2 = Math.floor(Math.random() * myID.length);
 
         const char1 = myID.charAt(pos1);
         const char2 = myID.charAt(pos2);
-        
         const dynamicKey = `${char1}${char2}${day}`;
 
         db.ref('users/' + myID).set({
@@ -206,8 +207,8 @@
             time: Date.now()
         });
 
-        const msg = `Solicito ${curP}. ID: ${myID}`;
-        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
+        const cuerpoMensaje = `Hola. Quiero mi membresía ${curP}.\n\nID: ${myID}\n\nAdvertencia: debe adjuntar su comprobante de pago.`;
+        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(cuerpoMensaje)}`;
     }
 
     function checkMyKey() {
@@ -224,4 +225,5 @@
     }
 </script>
 </body>
-</html>
+            </html>
+                
