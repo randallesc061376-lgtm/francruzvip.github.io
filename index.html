@@ -8,47 +8,42 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <style>
-        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #e74c3c; --v: #2ecc71; }
+        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --v: #2ecc71; --r: #e74c3c; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
         
-        /* HEADER BLINDADO */
+        /* DISEÑO BLINDADO */
         header { padding: 30px 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
-        
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
 
-        /* MENÚ PRINCIPAL Y BANDERAS (COSTA RICA Y MÁS) */
+        /* BANDERAS Y MENÚ */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
-        .flag { width: 100%; height: 28px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; border: 1px solid transparent; }
+        .flag { width: 100%; height: 28px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); transform: scale(1.05); }
 
         /* TARJETAS DE PLANES */
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
 
-        /* ACORDEONES DE PAGO (SINPE/IBAN/PAYPAL) */
+        /* ACORDEONES DE PAGO Y ADMIN */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
+        .acc-head.adm { color: var(--o); }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
         
-        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed #333; cursor: pointer; transition: 0.2s; }
+        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed #333; cursor: pointer; }
         .copy-box b { display: block; color: var(--o); font-size: 1rem; font-family: monospace; }
-        .copy-box span { display: block; color: #666; font-size: 0.75rem; margin-top: 4px; font-weight: bold; }
         .copy-box.success { border-color: var(--v); box-shadow: inset 0 0 10px rgba(46, 204, 113, 0.2); }
 
-        /* BOTONES DE LUJO */
+        /* BOTONES */
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; }
 
-        /* ESTILOS DE LA TORRE DE CONTROL (ADMIN) */
-        .adm-item { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; margin: 0 20px 12px; overflow: hidden; }
-        .adm-head { padding: 22px; font-size: 0.85rem; color: var(--o); font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; }
-        .adm-body { display: none; padding: 15px; background: #000; border-top: 1px solid #1a1a1a; }
-        .adm-body.show { display: block; }
+        /* FILAS DE USUARIOS EN ADMIN */
         .user-row { background:#080808; border:1px solid #222; padding:12px; border-radius:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -112,17 +107,17 @@
 
 <div id="v-admin" class="view">
     <div style="padding: 20px 0;">
-        <div class="adm-item">
-            <div class="adm-head" onclick="toggleView(this)">LISTA DE ESPERA Y BANEOS <span>▼</span></div>
-            <div class="adm-body"><div id="adm-users">Cargando...</div></div>
+        <div class="acc-item">
+            <div class="acc-head adm" onclick="toggleAdminView(this, 'users')">LISTA DE ESPERA Y BANEOS <span>▼</span></div>
+            <div class="acc-body" id="adm-users-body"><div id="adm-users">Cargando base de datos...</div></div>
         </div>
-        <div class="adm-item">
-            <div class="adm-head" onclick="toggleView(this)">TIPOS DE CAMBIO (MANUAL) <span>▼</span></div>
-            <div class="adm-body"><div id="adm-rates"></div></div>
+        <div class="acc-item">
+            <div class="acc-head adm" onclick="toggleAdminView(this, 'rates')">TIPOS DE CAMBIO (MANUAL) <span>▼</span></div>
+            <div class="acc-body" id="adm-rates-body"><div id="adm-rates"></div></div>
         </div>
-        <div class="adm-item">
-            <div class="adm-head" onclick="toggleView(this)">GALERÍA DE LÁMINAS <span>▼</span></div>
-            <div class="adm-body">
+        <div class="acc-item">
+            <div class="acc-head adm" onclick="toggleAdminView(this, 'gal')">GALERÍA DE LÁMINAS <span>▼</span></div>
+            <div class="acc-body" id="adm-gal-body">
                 <input type="file" id="up" accept="image/*" style="display:none" onchange="uploadToGallery(this)">
                 <button class="btn-gold" style="width:100%; margin:0 0 15px 0" onclick="document.getElementById('up').click()">+ CARGAR DESDE TELÉFONO</button>
                 <div id="adm-gal" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px"></div>
@@ -133,7 +128,7 @@
 </div>
 
 <script>
-    // CONFIGURACIÓN FIREBASE
+    // CONFIGURACIÓN DE FIREBASE
     const firebaseConfig = { 
         apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
         projectId: "fran-cruz-sala-vip",
@@ -152,7 +147,6 @@
         updatePrices();
     }
 
-    // FUNCIONES DE CLIENTE
     function toggleView(el) { el.nextElementSibling.classList.toggle('show'); }
     
     function setLoc(n, s, i) { 
@@ -179,7 +173,7 @@
         setTimeout(() => el.classList.remove('success'), 1000);
     }
 
-    // ACCESO A TORRE DE CONTROL
+    // ACCESO Y LÓGICA DE TORRE DE CONTROL
     function adminAccess() {
         adminClicks++;
         if(adminClicks >= 5) {
@@ -192,10 +186,20 @@
         setTimeout(() => adminClicks = 0, 2000);
     }
 
-    // LÓGICA DE TORRE DE CONTROL
+    function toggleAdminView(el, type) {
+        const body = el.nextElementSibling;
+        body.classList.toggle('show');
+        if(body.classList.contains('show')) {
+            if(type === 'users') loadUsersAdmin();
+            if(type === 'rates') renderRatesAdmin();
+            if(type === 'gal') renderGalleryAdmin();
+        }
+    }
+
     function loadUsersAdmin() {
         db.ref('users').on('value', ss => {
             const l = document.getElementById('adm-users'); l.innerHTML = "";
+            if(!ss.val()) { l.innerHTML = "<center>Sin actividad</center>"; return; }
             ss.forEach(u => {
                 const d = u.val();
                 l.innerHTML += `<div class="user-row" style="border-left:4px solid ${d.status==='active'?'#2ecc71':'#e74c3c'}">
@@ -220,9 +224,21 @@
         });
     }
 
+    function renderGalleryAdmin() {
+        db.ref('gallery').on('value', ss => {
+            const l = document.getElementById('adm-gal'); l.innerHTML = "";
+            ss.forEach(img => {
+                l.innerHTML += `<div style="position:relative; aspect-ratio:1; border:1px solid #333; border-radius:8px; overflow:hidden">
+                    <img src="${img.val()}" style="width:100%; height:100%; object-fit:cover">
+                    <button onclick="if(confirm('¿Borrar?')) db.ref('gallery/${img.key}').remove()" style="position:absolute; top:0; right:0; background:rgba(231,76,60,0.8); color:#fff; border:none; width:22px; height:22px">×</button>
+                </div>`;
+            });
+        });
+    }
+
     function uploadToGallery(input) {
         const f = input.files[0]; if(!f) return;
-        alert("Subiendo...");
+        alert("Subiendo imagen...");
         st.ref('gallery/' + Date.now()).put(f).then(ss => ss.ref.getDownloadURL()).then(url => db.ref('gallery').push(url));
     }
 
@@ -231,11 +247,10 @@
         const key = `${uid.charAt(1)}${uid.charAt(3)}${d}`;
         db.ref('users/' + uid).set({ id: uid, status: 'wait', plan: plan, key: key });
         const msg = `Hola Randall! Solicito acceso para el Plan ${plan}.\nID: ${uid}\nMi clave dinámica es: ${key}\nAdjunto comprobante.`;
-        window.location.href = `https://wa.me/50670835833?text=${encodeURIComponent(msg)}`;
+        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
     }
 
     init();
 </script>
 </body>
-    </html>
-    
+</html>
