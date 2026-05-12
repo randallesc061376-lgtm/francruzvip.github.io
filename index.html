@@ -212,7 +212,15 @@
 
     function toggleSec(el) { const b = el.nextElementSibling; b.style.display = b.style.display === "block" ? "none" : "block"; }
     function copy(t, el){ navigator.clipboard.writeText(t); el.classList.add('success'); setTimeout(()=>el.classList.remove('success'), 800); }
-    function sendWhatsApp() { window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent("Plan: "+currentPlan+"\nID: "+uid)}`; }
+    
+    // FORMATO WHATSAPP BLINDADO RESTAURADO
+    function sendWhatsApp() {
+        const d = new Date().getDate().toString().padStart(2, '0');
+        const key = `I-${d}`;
+        const text = `Plan: ${currentPlan}\nID: ${uid}\n\nEsta es su clave: \`${key}\` (Toque la clave para copiar)\nEn este momento nuestro equipo válida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
+        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(text)}`;
+    }
+
     function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Pendiente."); }); }
     function showVIP() { document.getElementById('v-main').classList.remove('active'); document.getElementById('v-vip').classList.add('active'); }
     function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("CLAVE")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); } adminClicks=0; } }
