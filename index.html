@@ -10,48 +10,37 @@
     <style>
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --v: #2ecc71; --r: #ff4444; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
-        body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
-        
+        body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; }
         header { padding: 30px 20px; text-align: center; border-bottom: 1px solid #111; cursor: pointer; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
-
         .view { display: none; width: 100%; max-width: 420px; margin: auto; padding-bottom: 50px; }
         .view.active { display: block; }
-
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
-        .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
+        .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); transform: scale(1.05); }
-
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
-
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 15px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
-
         .copy-box { background: #0f0f0f; padding: 15px; border-radius: 12px; margin-bottom: 12px; border: 1px dashed #222; cursor: pointer; }
-        .copy-box small { color: #555; text-transform: uppercase; font-size: 0.65rem; font-weight: 700; display: block; margin-bottom: 4px; }
+        .copy-box small { color: #555; text-transform: uppercase; font-size: 0.65rem; display: block; margin-bottom: 4px; }
         .copy-box b { color: var(--o); font-size: 1.05rem; display: block; word-break: break-all; }
-        .copy-box.success { border-color: var(--v); box-shadow: 0 0 15px rgba(46, 204, 113, 0.2); }
-
-        /* PANEL ADMIN */
-        .btn-up-admin { width: 100%; background: var(--g); color: #000; border: none; padding: 25px; border-radius: 18px; font-weight: 900; margin-bottom: 15px; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
-        .btn-save-admin { width: 100%; background: var(--v); color: #fff; border: none; padding: 22px; border-radius: 18px; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-        .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding-top: 10px; }
+        .copy-box.success { border-color: var(--v); }
+        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; }
+        .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; font-weight: 700; text-transform: uppercase; }
+        /* ADMIN STYLES */
+        .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px; }
         .thumb-wrap { position: relative; border: 1px solid #222; border-radius: 8px; overflow: hidden; height: 90px; }
         .thumb-img { width: 100%; height: 100%; object-fit: cover; }
-        .btn-del { position: absolute; top: 2px; right: 2px; background: var(--r); border: none; border-radius: 50%; width: 20px; height: 20px; color: #fff; font-size: 10px; cursor: pointer; }
+        .btn-del { position: absolute; top: 2px; right: 2px; background: var(--r); border: none; border-radius: 50%; width: 22px; height: 22px; color: #fff; cursor: pointer; font-weight: bold; }
         .rate-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #080808; border-radius: 8px; margin-bottom: 8px; border: 1px solid #1a1a1a; }
         .rate-input { width: 90px; background: #000; color: var(--o); border: 1px solid var(--o); text-align: center; padding: 6px; border-radius: 5px; font-weight: bold; }
         .user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #0c0c0c; border-radius: 8px; margin-bottom: 6px; }
-
-        /* BOTONES FRONT */
-        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; }
-        .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; font-weight: 700; text-transform: uppercase; }
-        .btn-act { background: var(--v); border: none; color: #fff; padding: 8px 12px; border-radius: 5px; font-weight: bold; }
-        .btn-ban { background: var(--r); border: none; color: #fff; padding: 8px 12px; border-radius: 5px; font-weight: bold; margin-left: 5px; }
+        .btn-act { background: var(--v); border: none; color: #fff; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+        .btn-ban { background: var(--r); border: none; color: #fff; padding: 8px 12px; border-radius: 5px; cursor: pointer; margin-left: 5px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -108,17 +97,19 @@
         <div class="acc-head" onclick="toggleSec(this)">1. GESTIÓN DE LÁMINAS VIP ▼</div>
         <div class="acc-body show">
             <input type="file" id="up-file" multiple style="display:none" onchange="subirLaminas(this)">
-            <button class="btn-up-admin" id="up-btn-ui" onclick="document.getElementById('up-file').click()">+ CARGAR LÁMINA</button>
+            <button class="btn-gold" id="up-btn-ui" onclick="document.getElementById('up-file').click()">+ CARGAR LÁMINA</button>
             <div id="admin-gallery" class="admin-thumb-grid"></div>
         </div>
     </div>
+
     <div class="acc-item">
         <div class="acc-head" onclick="toggleSec(this)">2. TASAS Y MONEDAS GLOBALES ▼</div>
         <div class="acc-body">
             <div id="rates-editor"></div>
-            <button class="btn-save-admin" onclick="saveRates()">GUARDAR CAMBIOS GLOBAL</button>
+            <button class="btn-gold" style="background:var(--v); color:#fff;" onclick="saveRates()">GUARDAR CAMBIOS GLOBAL</button>
         </div>
     </div>
+
     <div class="acc-item">
         <div class="acc-head" onclick="toggleSec(this)">3. BANEO Y ACTIVACIÓN ▼</div>
         <div class="acc-body">
@@ -129,7 +120,12 @@
 </div>
 
 <script>
-    const firebaseConfig = { apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", projectId: "fran-cruz-sala-vip", databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com", storageBucket: "fran-cruz-sala-vip.appspot.com" };
+    const firebaseConfig = { 
+        apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
+        projectId: "fran-cruz-sala-vip", 
+        databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com", 
+        storageBucket: "fran-cruz-sala-vip.appspot.com" 
+    };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database(), st = firebase.storage();
 
@@ -143,6 +139,7 @@
         loadGallery(); loadUsers(); setLoc('cr');
     }
 
+    // GESTIÓN DE IMÁGENES
     async function subirLaminas(inp) {
         const files = Array.from(inp.files).slice(0, 15);
         if(!files.length) return;
@@ -156,7 +153,7 @@
             await db.ref('laminas').push(url);
         }
         btn.innerText = "+ CARGAR LÁMINA"; btn.disabled = false;
-        alert("OK: Labor terminada.");
+        alert("Carga completa.");
     }
 
     function loadGallery() {
@@ -171,6 +168,7 @@
         });
     }
 
+    // GESTIÓN DE TASAS
     function renderAdminRates() {
         const editor = document.getElementById('rates-editor');
         const labels = { cr: "Costa Rica", ni: "Nicaragua", hn: "Honduras", gt: "Guatemala" };
@@ -183,9 +181,10 @@
     function saveRates() {
         const nr = {...rates};
         ['cr','ni','hn','gt'].forEach(k => nr[k] = parseFloat(document.getElementById('adm-'+k).value));
-        db.ref('rates').set(nr).then(() => alert("Tasas guardadas."));
+        db.ref('rates').set(nr).then(() => alert("Tasas actualizadas globalmente."));
     }
 
+    // GESTIÓN DE USUARIOS
     function loadUsers() {
         db.ref('users').on('value', ss => {
             const list = document.getElementById('user-list');
@@ -199,6 +198,7 @@
         });
     }
 
+    // LÓGICA DE INTERFAZ
     function setLoc(c) { iso = c; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); document.getElementById('f-'+c).classList.add('active'); render(); }
     
     function render() {
@@ -213,7 +213,7 @@
     function toggleSec(el) { const b = el.nextElementSibling; b.style.display = b.style.display === "block" ? "none" : "block"; }
     function copy(t, el){ navigator.clipboard.writeText(t); el.classList.add('success'); setTimeout(()=>el.classList.remove('success'), 800); }
     
-    // FORMATO WHATSAPP BLINDADO RESTAURADO
+    // FORMATO WHATSAPP PROPIEDAD DE RANDALL SÁNCHEZ C.
     function sendWhatsApp() {
         const d = new Date().getDate().toString().padStart(2, '0');
         const key = `I-${d}`;
@@ -221,11 +221,12 @@
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(text)}`;
     }
 
-    function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Pendiente."); }); }
-    function showVIP() { document.getElementById('v-main').classList.remove('active'); document.getElementById('v-vip').classList.add('active'); }
-    function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("CLAVE")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); } adminClicks=0; } }
+    function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Su acceso está en proceso de validación."); }); }
+    function showVIP() { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('v-vip').classList.add('active'); }
+    function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("CLAVE DE ACCESO")==="1376"){ document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('v-admin').classList.add('active'); } adminClicks=0; } }
 
     init();
 </script>
 </body>
-</html>
+    </html>
+    
