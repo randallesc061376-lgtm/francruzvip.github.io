@@ -12,23 +12,19 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
         
-        /* DISEÑO BLINDADO */
         header { padding: 30px 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
 
-        /* BANDERAS Y MENÚ */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
         .flag { width: 100%; height: 28px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); transform: scale(1.05); }
 
-        /* TARJETAS DE PLANES */
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
 
-        /* ACORDEONES DE PAGO Y ADMIN */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
         .acc-head.adm { color: var(--o); }
@@ -39,11 +35,9 @@
         .copy-box b { display: block; color: var(--o); font-size: 1rem; font-family: monospace; }
         .copy-box.success { border-color: var(--v); box-shadow: inset 0 0 10px rgba(46, 204, 113, 0.2); }
 
-        /* BOTONES */
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; }
 
-        /* FILAS DE USUARIOS EN ADMIN */
         .user-row { background:#080808; border:1px solid #222; padding:12px; border-radius:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -128,7 +122,6 @@
 </div>
 
 <script>
-    // CONFIGURACIÓN DE FIREBASE
     const firebaseConfig = { 
         apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
         projectId: "fran-cruz-sala-vip",
@@ -173,7 +166,6 @@
         setTimeout(() => el.classList.remove('success'), 1000);
     }
 
-    // ACCESO Y LÓGICA DE TORRE DE CONTROL
     function adminAccess() {
         adminClicks++;
         if(adminClicks >= 5) {
@@ -246,7 +238,10 @@
         const d = new Date().getDate().toString().padStart(2, '0');
         const key = `${uid.charAt(1)}${uid.charAt(3)}${d}`;
         db.ref('users/' + uid).set({ id: uid, status: 'wait', plan: plan, key: key });
-        const msg = `Hola Randall! Solicito acceso para el Plan ${plan}.\nID: ${uid}\nMi clave dinámica es: ${key}\nAdjunto comprobante.`;
+        
+        // FORMATO DE MENSAJE CORREGIDO
+        const msg = `Hola!\nPlan ${plan}\nID: ${uid}\n\nEsta es su clave: ${key} (Toque la clave para copiar)\nNuestro equipo válida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
+        
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
     }
 
