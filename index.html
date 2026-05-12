@@ -23,7 +23,7 @@
         .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
         .flag.active { opacity: 1; border: 1px solid var(--o); transform: scale(1.05); }
 
-        /* PLANES */
+        /* PLANES BLINDADOS */
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
@@ -39,7 +39,7 @@
         .copy-box b { color: var(--o); font-size: 1.05rem; display: block; word-break: break-all; }
         .copy-box.success { border-color: var(--v); }
 
-        /* ADMIN - GALERÍA Y USUARIOS */
+        /* PANEL ADMIN */
         .admin-box { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; margin: 15px 20px; padding: 15px; }
         .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .thumb-wrap { position: relative; height: 90px; border: 1px solid #222; border-radius: 8px; overflow: hidden; }
@@ -105,9 +105,9 @@
 
 <div id="v-admin" class="view">
     <div class="admin-box">
-        <strong>1. GESTIÓN DE LÁMINAS (CON BARRA DE PROGRESO)</strong>
-        <input type="file" id="up-file" multiple accept="image/*" style="display:none" onchange="subirLaminas(this)">
-        <button class="btn-gold" id="up-btn-ui" onclick="document.getElementById('up-file').click()">+ SELECCIONAR DE GALERÍA</button>
+        <strong>1. GESTIÓN DE LÁMINAS (AVANCE REAL)</strong>
+        <input type="file" id="up-file" multiple accept="image/*" style="display:none" onchange="iniciarCarga(this)">
+        <button class="btn-gold" id="up-btn-ui" onclick="document.getElementById('up-file').click()">+ CARGAR LÁMINA</button>
         <div id="admin-gallery" class="admin-thumb-grid"></div>
     </div>
 
@@ -126,6 +126,7 @@
 </div>
 
 <script>
+    // CONEXIÓN BLINDADA A FIREBASE
     const firebaseConfig = { 
         apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
         projectId: "fran-cruz-sala-vip", 
@@ -145,30 +146,31 @@
         syncGallery(); loadUsers(); setLoc('cr');
     }
 
-    // FUNCIÓN DE CARGA CORREGIDA CON BARRA DE PROGRESO REAL
-    async function subirLaminas(inp) {
-        const files = Array.from(inp.files).slice(0, 15);
-        if (!files.length) return;
+    // "CONEXIÓN DE CABLES" PARA CARGA RÁPIDA DESDE CELULAR
+    async function iniciarCarga(input) {
+        const archivos = Array.from(input.files);
+        if (!archivos.length) return;
 
         const btn = document.getElementById('up-btn-ui');
         btn.disabled = true;
-        
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const ref = st.ref('laminas/' + Date.now() + "_" + i);
-            const uploadTask = ref.put(file);
 
-            await new Promise((resolve, reject) => {
+        for (let i = 0; i < archivos.length; i++) {
+            const file = archivos[i];
+            const nombreUnico = `${Date.now()}_${i}_${file.name}`;
+            const storageRef = st.ref('laminas/' + nombreUnico);
+            const uploadTask = storageRef.put(file);
+
+            await new Promise((resolve) => {
                 uploadTask.on('state_changed', 
                     (snapshot) => {
-                        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                        btn.innerText = `SUBIENDO ${i + 1}/${files.length} (${progress}%)`;
-                        btn.style.background = `linear-gradient(90deg, #2ecc71 ${progress}%, #d4af37 ${progress}%)`;
+                        const progreso = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                        btn.innerText = `SUBIENDO ${i + 1}/${archivos.length} (${progreso}%)`;
+                        btn.style.background = `linear-gradient(90deg, #2ecc71 ${progreso}%, #d4af37 ${progreso}%)`;
                     }, 
                     (error) => {
-                        console.error("Error:", error);
-                        alert("Error de conexión en lámina " + (i+1) + ". Reintentando...");
-                        reject(error);
+                        console.error("Error en cableado:", error);
+                        alert("Error al subir una imagen. Reintentando...");
+                        resolve(); // Salta a la siguiente para no bloquear el proceso
                     }, 
                     async () => {
                         const url = await uploadTask.snapshot.ref.getDownloadURL();
@@ -182,10 +184,10 @@
         btn.innerText = "¡CARGA COMPLETADA!";
         btn.style.background = "var(--v)";
         setTimeout(() => { 
-            btn.innerText = "+ SELECCIONAR DE GALERÍA"; 
+            btn.innerText = "+ CARGAR LÁMINA"; 
             btn.style.background = "var(--g)"; 
             btn.disabled = false; 
-        }, 3000);
+        }, 2500);
     }
 
     function syncGallery() {
@@ -211,7 +213,7 @@
     function saveRates() {
         const nr = {...rates};
         ['cr','ni','hn','gt','usd'].forEach(k => nr[k] = parseFloat(document.getElementById('adm-'+k).value));
-        db.ref('rates').set(nr).then(() => alert("Tasas guardadas correctamente."));
+        db.ref('rates').set(nr).then(() => alert("Tasas guardadas."));
     }
 
     function loadUsers() {
@@ -220,8 +222,8 @@
             ss.forEach(u => {
                 const d = u.val();
                 list.innerHTML += `<div class="rate-row"><div><b>ID: ${u.key}</b><br><small>${d.status || 'espera'}</small></div>
-                <div><button onclick="db.ref('users/${u.key}').update({status:'active'})" style="background:var(--v); color:#fff; border:none; padding:8px; border-radius:4px;">ACT</button>
-                <button onclick="db.ref('users/${u.key}').update({status:'banned'})" style="background:var(--r); color:#fff; border:none; padding:8px; border-radius:4px; margin-left:5px;">BAN</button></div></div>`;
+                <div><button onclick="db.ref('users/${u.key}').update({status:'active'})" style="background:var(--v); border:none; padding:8px; border-radius:4px;">ACT</button>
+                <button onclick="db.ref('users/${u.key}').update({status:'banned'})" style="background:var(--r); border:none; padding:8px; border-radius:4px; margin-left:5px;">BAN</button></div></div>`;
             });
         });
     }
@@ -246,7 +248,7 @@
 
     function toggleSec(el) { const b = el.nextElementSibling; b.style.display = b.style.display === "block" ? "none" : "block"; }
     function copy(t, el){ navigator.clipboard.writeText(t); el.classList.add('success'); setTimeout(()=>el.classList.remove('success'), 800); }
-    function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Pendiente de validación."); }); }
+    function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Validación pendiente."); }); }
     function showVIP() { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('v-vip').classList.add('active'); }
     function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("CLAVE")==="1376"){ document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('v-admin').classList.add('active'); } adminClicks=0; } }
 
