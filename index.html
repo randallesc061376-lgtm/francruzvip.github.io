@@ -18,14 +18,17 @@
         .view { display: none; width: 100%; max-width: 420px; margin: auto; padding-bottom: 50px; }
         .view.active { display: block; }
 
+        /* BANDERAS */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
         .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
         .flag.active { opacity: 1; border: 1px solid var(--o); transform: scale(1.05); }
 
+        /* PLANES */
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.1); }
         .card b { color: var(--o); font-size: 1.3rem; }
 
+        /* MÉTODOS DE PAGO */
         .section-title { margin: 25px 20px 10px; font-size: 0.75rem; color: var(--o); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
         .copy-box { background: #0a0a0a; padding: 18px; border-radius: 14px; margin: 0 20px 12px; border: 1px solid #1a1a1a; transition: 0.4s; cursor: pointer; }
         .copy-box.active { border: 2px solid var(--neon); box-shadow: 0 0 15px rgba(57, 255, 20, 0.4); background: #0f0f0f; }
@@ -33,11 +36,12 @@
         .copy-box b { color: #fff; font-size: 1rem; word-break: break-all; }
         .copy-box.active b { color: var(--o); }
 
+        /* BOTONES */
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 10px 20px; cursor: pointer; text-transform: uppercase; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 5px 20px; cursor: pointer; font-weight: 700; }
         
         /* ADMIN */
-        .admin-box { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; margin: 15px 20px; padding: 15px; }
+        .admin-box { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; margin: 15px 20px; padding: 20px; }
         .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .thumb-wrap { position: relative; height: 90px; border: 1px solid #222; border-radius: 8px; overflow: hidden; }
         .thumb-img { width: 100%; height: 100%; object-fit: cover; }
@@ -64,7 +68,7 @@
 
     <div id="planes-list"></div>
 
-    <div class="section-title">Métodos de Pago Disponibles</div>
+    <div class="section-title">MÉTODOS DE PAGO DISPONIBLES</div>
     <div id="payment-group">
         <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)">
             <small>PAYPAL (Mundial)</small>
@@ -91,12 +95,12 @@
 
 <div id="v-admin" class="view">
     <div class="admin-box">
-        <strong>GESTIÓN DE LÁMINAS</strong>
+        <strong style="color:var(--o); display:block; margin-bottom:15px; font-size:0.8rem; letter-spacing:1px;">1. GESTIÓN DE LÁMINAS VIP</strong>
         <input type="file" id="up-file" multiple accept="image/*" style="display:none" onchange="uploadLaminas(this)">
         <button class="btn-gold" id="up-btn" onclick="document.getElementById('up-file').click()">+ CARGAR LÁMINA</button>
         <div id="admin-gallery" class="admin-thumb-grid"></div>
     </div>
-    <button class="btn-dark" onclick="location.reload()">SALIR</button>
+    <button class="btn-dark" onclick="location.reload()">SALIR DEL PANEL</button>
 </div>
 
 <script>
@@ -109,7 +113,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database(), st = firebase.storage();
 
-    // TIPO DE CAMBIO CORREGIDO PARA EVITAR ERROR DE 1030 COLONES
     let rates = { cr: 515, ni: 36.8, pa: 1, hn: 24.5, sv: 1, gt: 7.7, bz: 2, un: 1 };
     let iso = 'cr', currentPlan = '30 DÍAS GOLD', adminClicks = 0;
     const uid = localStorage.getItem('fc_id') || 'ID-' + Math.random().toString(36).substr(2, 6).toUpperCase();
@@ -121,18 +124,39 @@
         setLoc('cr');
     }
 
+    // CARGA ROBUSTA CON MONITOREO DE ESTADO PARA EVITAR BLOQUEOS (REEMPLAZO TÉCNICO)
     async function uploadLaminas(input) {
         const files = Array.from(input.files);
         const btn = document.getElementById('up-btn');
+        if (files.length === 0) return;
+
         for (let i = 0; i < files.length; i++) {
-            btn.innerText = `CARGANDO... ${Math.round((i/files.length)*100)}%`;
-            const name = Date.now() + "_" + i;
+            const file = files[i];
+            const name = `${Date.now()}_${i}_${file.name.replace(/\s+/g, '_')}`;
             const ref = st.ref('laminas/' + name);
-            await ref.put(files[i]);
-            const url = await ref.getDownloadURL();
-            await db.ref('laminas').push({url, name});
+            
+            btn.innerText = `CARGANDO ${i + 1}/${files.length}...`;
+            
+            const task = ref.put(file);
+
+            // Escucha activa de eventos para evitar el congelamiento en 0%
+            await new Promise((resolve, reject) => {
+                task.on('state_changed', 
+                    (snap) => {
+                        const prog = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+                        btn.innerText = `SUBIENDO ${i + 1}/${files.length} (${prog}%)`;
+                    }, 
+                    (err) => { reject(err); }, 
+                    async () => {
+                        const url = await ref.getDownloadURL();
+                        await db.ref('laminas').push({ url, name, time: firebase.database.ServerValue.TIMESTAMP });
+                        resolve();
+                    }
+                );
+            });
         }
         btn.innerText = "+ CARGAR LÁMINA";
+        input.value = "";
     }
 
     function syncGallery() {
@@ -141,20 +165,19 @@
             v.innerHTML = ''; a.innerHTML = '';
             ss.forEach(s => {
                 const item = s.val(); const url = item.url || item;
-                v.innerHTML = `<img src="${url}" style="width:100%; border-radius:15px; margin-bottom:15px;">` + v.innerHTML;
+                v.innerHTML = `<img src="${url}" style="width:100%; border-radius:15px; margin-bottom:15px; border:1px solid #1a1a1a;">` + v.innerHTML;
                 a.innerHTML += `<div class="thumb-wrap"><button class="btn-del" onclick="deleteImg('${s.key}', '${item.name}')">X</button><img src="${url}" class="thumb-img"></div>`;
             });
         });
     }
 
-    function deleteImg(key, name) { if(confirm("¿Eliminar?")){ st.ref('laminas/'+name).delete(); db.ref('laminas/'+key).remove(); } }
+    function deleteImg(key, name) { if(confirm("¿Eliminar lámina definitivamente?")){ st.ref('laminas/'+name).delete(); db.ref('laminas/'+key).remove(); } }
 
     function setLoc(c) { iso = c; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); document.getElementById('f-'+c).classList.add('active'); render(); }
 
     function render() {
         const p = document.getElementById('planes-list'), sym = (iso==='cr'?'₡':(iso==='ni'?'C$':'$'));
         p.innerHTML = '';
-        // PRECIOS BASE: HOY $1, SILVER $5, GOLD $20
         const planes = [{n: "ACCESO HOY", v: 1}, {n: "7 DÍAS SILVER", v: 5}, {n: "30 DÍAS GOLD", v: 20}];
         planes.forEach(pl => {
             const val = Math.round(pl.v * rates[iso]);
@@ -162,9 +185,12 @@
         });
     }
 
-    function copy(t, el) { navigator.clipboard.writeText(t); document.querySelectorAll('.copy-box').forEach(b => b.classList.remove('active')); el.classList.add('active'); }
+    function copy(t, el) { 
+        navigator.clipboard.writeText(t); 
+        document.querySelectorAll('.copy-box').forEach(b => b.classList.remove('active')); 
+        el.classList.add('active'); 
+    }
 
-    // FORMATO DE WHATSAPP RESTAURADO SEGÚN TU ORDEN ORIGINAL
     function sendWhatsApp() {
         const d = new Date().getDate().toString().padStart(2, '0');
         const key = `I-${d}`;
@@ -177,14 +203,14 @@
             if(ss.val()?.status==='active') {
                 document.getElementById('v-main').classList.remove('active');
                 document.getElementById('v-vip').classList.add('active');
-            } else alert("Validación pendiente.");
+            } else alert("Validación pendiente. Envíe su comprobante.");
         });
     }
 
     function adminAccess() {
         adminClicks++;
         if(adminClicks >= 5) {
-            const p = prompt("CLAVE:");
+            const p = prompt("CLAVE DE ACCESO:");
             if(p === "1376") {
                 document.getElementById('v-main').classList.remove('active');
                 document.getElementById('v-admin').classList.add('active');
