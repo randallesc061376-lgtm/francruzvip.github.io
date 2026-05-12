@@ -22,27 +22,27 @@
         .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); transform: scale(1.05); }
 
-        /* Tarjetas de Planes */
+        /* Planes */
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
 
-        /* Estética de Pagos Profesional */
+        /* Estética de Pagos Blindada */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
-        .copy-box { background: #0f0f0f; padding: 18px; border-radius: 12px; margin-bottom: 12px; border: 1px dashed #222; cursor: pointer; transition: 0.3s; }
+        .copy-box { background: #0f0f0f; padding: 18px; border-radius: 12px; margin-bottom: 12px; border: 1px dashed #222; cursor: pointer; }
         .copy-box small { color: #555; text-transform: uppercase; font-size: 0.65rem; font-weight: 700; display: block; margin-bottom: 4px; }
         .copy-box b { color: var(--o); font-size: 1.05rem; display: block; word-break: break-all; }
         .copy-box span { color: #888; font-size: 0.8rem; display: block; margin-top: 4px; }
         .copy-box.success { border-color: var(--v); box-shadow: 0 0 15px rgba(46, 204, 113, 0.2); }
 
         /* Botones */
-        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; }
+        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; font-weight: 700; }
 
-        /* Galería */
+        /* Galería VIP */
         .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; }
         .lamina-img { width: 100%; border-radius: 10px; border: 1px solid #222; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px; }
@@ -74,27 +74,15 @@
     <div class="acc-item">
         <div class="acc-head" onclick="this.nextElementSibling.classList.toggle('show')">1. MÉTODOS DE PAGO CR ▼</div>
         <div class="acc-body show">
-            <div class="copy-box" onclick="copy('70835833', this)">
-                <small>SINPE MÓVIL</small>
-                <b>70835833</b>
-                <span>Randall Sánchez C.</span>
-            </div>
-            <div class="copy-box" onclick="copy('CR80080315001000035641', this)">
-                <small>CUENTA IBAN (MUTUAL)</small>
-                <b>CR80080315001000035641</b>
-                <span>Randall Sánchez C.</span>
-            </div>
+            <div class="copy-box" onclick="copy('70835833', this)"><small>SINPE MÓVIL</small><b>70835833</b><span>Randall Sánchez C.</span></div>
+            <div class="copy-box" onclick="copy('CR80080315001000035641', this)"><small>CUENTA IBAN (MUTUAL)</small><b>CR80080315001000035641</b><span>Randall Sánchez C.</span></div>
         </div>
     </div>
 
     <div class="acc-item">
         <div class="acc-head" onclick="this.nextElementSibling.classList.toggle('show')">2. PAYPAL / INTERNACIONAL ▼</div>
         <div class="acc-body">
-            <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)">
-                <small>CORREO PAYPAL</small>
-                <b>randallesc061376@gmail.com</b>
-                <span>Randall Sánchez C.</span>
-            </div>
+            <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)"><small>CORREO PAYPAL</small><b>randallesc061376@gmail.com</b><span>Randall Sánchez C.</span></div>
         </div>
     </div>
 
@@ -110,7 +98,7 @@
 
 <div id="v-admin" class="view">
     <div class="acc-item">
-        <div class="acc-head" style="color:var(--o)">ADMINISTRAR LÁMINAS</div>
+        <div class="acc-head" style="color:var(--o)">LÁMINAS VIP</div>
         <div class="acc-body show">
             <input type="file" id="up-file" style="display:none" onchange="uploadFile(this)">
             <button class="btn-gold" style="width:100%; margin:0" onclick="document.getElementById('up-file').click()">+ SUBIR LÁMINA</button>
@@ -161,7 +149,8 @@
     function sendWhatsApp() {
         const d = new Date().getDate().toString().padStart(2, '0');
         const key = `I-${d}`;
-        const text = `Plan ${currentPlan}\nID: ${uid}\n\nEsta es su clave: \`${key}\` (Toque la clave para copiar)\nEn este momento nuestro equipo válida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
+        // CORRECCIÓN: "valida" sin tilde
+        const text = `Plan ${currentPlan}\nID: ${uid}\n\nEsta es su clave: \`${key}\` (Toque la clave para copiar)\nEn este momento nuestro equipo valida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(text)}`;
     }
 
@@ -208,7 +197,7 @@
     function saveRates() {
         const nr = {...rates};
         ['cr','ni','hn','gt'].forEach(k => nr[k] = parseFloat(document.getElementById('r-'+k).value));
-        db.ref('rates').set(nr).then(() => alert("Tasas Blindadas Permanentemente."));
+        db.ref('rates').set(nr).then(() => alert("Tasas Blindadas."));
     }
 
     function copy(t, el){ navigator.clipboard.writeText(t); el.classList.add('success'); setTimeout(()=>el.classList.remove('success'), 600); }
