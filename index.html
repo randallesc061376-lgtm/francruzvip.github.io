@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • OFICIAL</title>
+    <title>FRAN CRUZ VIP • PROPIEDAD PRIVADA</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
@@ -18,29 +18,30 @@
         .view { display: none; width: 100%; max-width: 420px; margin: auto; padding-bottom: 50px; }
         .view.active { display: block; }
 
-        /* BLOQUE DE BANDERAS BLINDADO */
+        /* BANDERAS BLINDADAS */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
         .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
         .flag.active { opacity: 1; border: 1px solid var(--o); transform: scale(1.05); }
 
+        /* PLANES BLINDADOS ($20 GOLD) */
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
 
-        /* BLOQUE DE PAGOS RESTAURADO Y BLINDADO */
+        /* PAGOS BLINDADOS (PAYPAL, SINPE, IBAN) */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 15px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
 
-        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 12px; margin-bottom: 12px; border: 1px dashed #222; cursor: pointer; position: relative; }
+        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 12px; margin-bottom: 12px; border: 1px dashed #222; cursor: pointer; }
         .copy-box small { color: #555; text-transform: uppercase; font-size: 0.65rem; font-weight: 700; display: block; margin-bottom: 4px; }
         .copy-box b { color: var(--o); font-size: 1.05rem; display: block; word-break: break-all; }
         .copy-box.success { border-color: var(--v); box-shadow: 0 0 15px rgba(46, 204, 113, 0.2); }
 
-        /* MÓDULOS ADMIN (REPARADOS) */
+        /* ADMIN PANEL (MOTOR REPARADO) */
         .admin-thumb-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .thumb-wrap { position: relative; border: 1px solid #222; border-radius: 8px; overflow: hidden; height: 110px; }
+        .thumb-wrap { position: relative; border: 1px solid #222; border-radius: 8px; overflow: hidden; height: 110px; background: #111; }
         .thumb-img { width: 100%; height: 100%; object-fit: cover; }
         .btn-del { position: absolute; top: 5px; right: 5px; background: var(--r); border: none; border-radius: 50%; width: 22px; height: 22px; color: #fff; font-weight: bold; cursor: pointer; }
         
@@ -51,7 +52,7 @@
         .u-info b { color: var(--o); font-size: 0.85rem; display: block; }
         .u-info small { font-size: 0.7rem; color: #666; }
 
-        /* BOTONES */
+        /* BOTONERÍA */
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; font-weight: 700; text-transform: uppercase; }
         .btn-act { background: var(--v); border: none; color: #fff; padding: 8px 12px; border-radius: 5px; font-weight: bold; }
@@ -139,6 +140,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database(), st = firebase.storage();
 
+    // Rates base y blindaje de precio Gold $20
     let rates = { cr: 500, ni: 37, hn: 24, gt: 7.7, usd: 1 }, iso = 'cr', currentPlan = 'ACCESO HOY', adminClicks = 0;
     const uid = localStorage.getItem('fc_id') || 'ID-' + Math.random().toString(36).substr(2, 6).toUpperCase();
     localStorage.setItem('fc_id', uid);
@@ -149,31 +151,33 @@
         loadGallery(); loadUsers(); setLoc('cr');
     }
 
-    // --- FRONT (BLINDADO) ---
     function setLoc(c) { iso = c; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); document.getElementById('f-'+c).classList.add('active'); render(); }
+    
     function render() {
         const p = document.getElementById('planes-list'), symbols = { 'cr':'₡', 'ni':'C$', 'hn':'L', 'gt':'Q' };
         const sym = symbols[iso] || '$', isUSD = ['pa','sv','bz','un'].includes(iso);
         p.innerHTML = '';
-        Object.entries({"ACCESO HOY":1, "7 DÍAS SILVER":5, "30 DÍAS GOLD":15}).forEach(([n,v]) => {
+        // BLINDAJE: HOY $1, SILVER $5, GOLD $20 (Precio corregido y blindado)
+        Object.entries({"ACCESO HOY":1, "7 DÍAS SILVER":5, "30 DÍAS GOLD":20}).forEach(([n,v]) => {
             const val = Math.round(v * (isUSD ? rates.usd : rates[iso]));
             p.innerHTML += `<div class="card ${currentPlan===n?'sel':''}" onclick="currentPlan='${n}';render()"><span>${n}</span><b>${sym}${val.toLocaleString()}</b></div>`;
         });
     }
+
     function toggleSec(el) { const b = el.nextElementSibling; const s = b.style.display === "block"; b.style.display = s ? "none" : "block"; }
     function copy(t, el){ navigator.clipboard.writeText(t); el.classList.add('success'); setTimeout(()=>el.classList.remove('success'), 800); }
 
-    // --- ADMIN LÓGICA (REPARADA) ---
+    // ADMIN: GALERÍA Y CARGA
     async function uploadImage(inp) {
         const file = inp.files[0]; if(!file) return;
         const btn = document.getElementById('up-btn-ui');
-        btn.innerText = "SUBIENDO..."; btn.disabled = true;
+        btn.innerText = "GUARDANDO..."; btn.disabled = true;
         try {
             const ref = st.ref('laminas/' + Date.now());
             await ref.put(file);
             const url = await ref.getDownloadURL();
             await db.ref('laminas').push(url);
-            alert("Imagen publicada");
+            alert("Lámina publicada con éxito");
         } catch (e) { alert("Error: " + e.message); }
         finally { btn.innerText = "+ CARGAR LÁMINA"; btn.disabled = false; }
     }
@@ -190,6 +194,7 @@
         });
     }
 
+    // ADMIN: TASAS Y USUARIOS
     function renderAdminRates() {
         const editor = document.getElementById('rates-editor');
         const labels = { cr: "C. Rica", ni: "Nicaragua", hn: "Honduras", gt: "Guatemala" };
@@ -202,7 +207,7 @@
     function saveRates() {
         const nr = {...rates};
         ['cr','ni','hn','gt'].forEach(k => nr[k] = parseFloat(document.getElementById('adm-'+k).value));
-        db.ref('rates').set(nr).then(() => alert("Tasas guardadas"));
+        db.ref('rates').set(nr).then(() => alert("Tasas globales actualizadas"));
     }
 
     function loadUsers() {
@@ -211,22 +216,24 @@
             list.innerHTML = '';
             ss.forEach(u => {
                 const d = u.val();
-                list.innerHTML += `<div class="user-row"><div class="u-info"><b>ID: ${u.key}</b><small>${d.status || 'pendiente'}</small></div>
+                list.innerHTML += `<div class="user-row"><div class="u-info"><b>ID: ${u.key}</b><small>Estado: ${d.status || 'pendiente'}</small></div>
                 <div><button class="btn-act" onclick="db.ref('users/${u.key}').update({status:'active'})">✓</button>
                 <button class="btn-ban" onclick="db.ref('users/${u.key}').update({status:'banned'})">X</button></div></div>`;
             });
         });
     }
 
+    // WHATSAPP FORMATO BLINDADO
     function sendWhatsApp() {
-        const key = `I-${new Date().getDate()}`;
+        const d = new Date().getDate().toString().padStart(2, '0');
+        const key = `I-${d}`;
         const text = `Plan: ${currentPlan}\nID: ${uid}\n\nEsta es su clave: \`${key}\` (Toque la clave para copiar)\nEn este momento nuestro equipo válida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(text)}`;
     }
 
-    function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Validación pendiente."); }); }
+    function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Esperando confirmación de pago."); }); }
     function showVIP() { document.getElementById('v-main').classList.remove('active'); document.getElementById('v-vip').classList.add('active'); }
-    function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("CLAVE ADMIN")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); } adminClicks=0; } }
+    function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("ACCESO MAESTRO")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); } adminClicks=0; } }
 
     init();
 </script>
