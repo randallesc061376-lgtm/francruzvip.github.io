@@ -23,12 +23,10 @@
         .card b { color: var(--o); font-size: 1.3rem; }
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
-        .acc-head.adm { color: var(--o); }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
         .copy-box { background: #0f0f0f; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed #333; cursor: pointer; }
-        .copy-box b { display: block; color: var(--o); font-size: 1rem; font-family: monospace; }
-        .copy-box.success { border-color: var(--v); box-shadow: inset 0 0 10px rgba(46, 204, 113, 0.2); }
+        .copy-box b { display: block; color: var(--o); font-size: 0.95rem; font-family: monospace; }
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; }
         .user-row { background:#080808; border:1px solid #222; padding:12px; border-radius:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
@@ -76,6 +74,17 @@
         </div>
     </div>
 
+    <div class="acc-item">
+        <div class="acc-head" onclick="toggleView(this)">2. PAYPAL / INTERNACIONAL <span>▼</span></div>
+        <div class="acc-body">
+            <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)">
+                <small style="color:#555">CORREO / TITULAR</small>
+                <b>randallesc061376@gmail.com</b>
+                <span>Randall Sánchez C.</span>
+            </div>
+        </div>
+    </div>
+
     <button class="btn-gold" onclick="requestAccess()">ENVIAR COMPROBANTE DE PAGO</button>
     <button class="btn-dark" onclick="checkKey()">YA TENGO MI CLAVE</button>
 </div>
@@ -83,14 +92,14 @@
 <div id="v-admin" class="view">
     <div style="padding: 20px 0;">
         <div class="acc-item">
-            <div class="acc-head adm" onclick="toggleAdminView(this, 'users')">LISTA DE ESPERA Y BANEOS <span>▼</span></div>
-            <div class="acc-body" id="adm-users-body"><div id="adm-users">Cargando base de datos...</div></div>
+            <div class="acc-head" style="color:var(--o)" onclick="toggleAdminView(this, 'users')">LISTA DE ESPERA <span>▼</span></div>
+            <div class="acc-body" id="adm-users-body"><div id="adm-users">Cargando...</div></div>
         </div>
         <div class="acc-item">
-            <div class="acc-head adm" onclick="toggleAdminView(this, 'rates')">TIPOS DE CAMBIO (MANUAL) <span>▼</span></div>
+            <div class="acc-head" style="color:var(--o)" onclick="toggleAdminView(this, 'rates')">TASAS DE CAMBIO <span>▼</span></div>
             <div class="acc-body" id="adm-rates-body"><div id="adm-rates"></div></div>
         </div>
-        <button class="btn-dark" onclick="location.reload()">CERRAR PANEL</button>
+        <button class="btn-dark" onclick="location.reload()">SALIR DEL PANEL</button>
     </div>
 </div>
 
@@ -120,7 +129,7 @@
     }
 
     function selP(el, p) { plan = p; document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); el.classList.add('sel'); }
-    function copy(t, el) { navigator.clipboard.writeText(t); el.classList.add('success'); setTimeout(() => el.classList.remove('success'), 1000); }
+    function copy(t, el) { navigator.clipboard.writeText(t); alert('Copiado: ' + t); }
 
     function requestAccess() {
         const d = new Date().getDate().toString().padStart(2, '0');
@@ -136,12 +145,13 @@
         const expiry = new Date();
         expiry.setHours(23, 59, 59, 999);
         if (days > 1) expiry.setDate(expiry.getDate() + (days - 1));
-        db.ref('users/' + id).update({ status: 'active', expiresAt: expiry.getTime() });
+        db.ref('users/' + id).update({ status: 'active', expiresAt: expiry.getTime() }).then(() => alert('Usuario Activado'));
     }
 
     function toggleAdminView(el, type) { 
         const body = el.nextElementSibling; body.classList.toggle('show'); 
         if(body.classList.contains('show') && type === 'users') loadUsersAdmin();
+        if(body.classList.contains('show') && type === 'rates') renderRatesAdmin();
     }
 
     function loadUsersAdmin() {
@@ -151,10 +161,21 @@
                 const d = u.val();
                 const dMap = { "HOY": 1, "7 DÍAS": 7, "30 DÍAS": 30 };
                 l.innerHTML += `<div class="user-row">
-                    <small>${d.id}<br>${d.plan}</small>
-                    <button onclick="activateUser('${d.id}', ${dMap[d.plan]})" style="background:var(--v); border:none; padding:8px; border-radius:5px">✓</button>
+                    <small><b>${d.id}</b><br>${d.plan}</small>
+                    <button onclick="activateUser('${d.id}', ${dMap[d.plan]})" style="background:var(--v); border:none; padding:10px; border-radius:5px; font-weight:bold">ACTIVAR</button>
                 </div>`;
             });
+        });
+    }
+
+    function renderRatesAdmin() {
+        const l = document.getElementById('adm-rates'); l.innerHTML = "";
+        Object.entries(rates).forEach(([k, v]) => {
+            if(k === 'usd') return;
+            l.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px">
+                <span style="text-transform:uppercase">${k}</span>
+                <input type="number" value="${v}" style="background:#000; color:var(--o); border:1px solid var(--o); width:80px; text-align:center" onchange="db.ref('settings/rates/${k}').set(parseFloat(this.value))">
+            </div>`;
         });
     }
 
