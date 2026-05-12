@@ -3,44 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • V12 PACTADA</title>
+    <title>FRAN CRUZ VIP • V14 BILATERAL</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <style>
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
-        body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; }
-        header { padding: 15px; text-align: center; border-bottom: 1px solid #111; cursor: pointer; }
-        .logo { color: var(--o); font-size: 1.6rem; font-weight: 900; letter-spacing: 2px; }
-        .view { display: none; width: 100%; max-width: 420px; margin: auto; padding: 10px; }
-        .view.active { display: flex; flex-direction: column; animation: fadeIn 0.3s; }
-        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; background: #0f0f0f; padding: 8px; border-radius: 8px; }
-        .flag { width: 100%; height: 20px; opacity: 0.3; cursor: pointer; object-fit: cover; border-radius: 2px; }
-        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 5px var(--o); }
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 8px; padding: 12px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.05); }
-        .card b { color: var(--o); }
-        .acc-item { border: 1px solid #1a1a1a; border-radius: 8px; margin-bottom: 6px; overflow: hidden; }
-        .acc-head { background: #111; padding: 10px; font-size: 0.7rem; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; color: #666; }
-        .acc-body { display: none; background: #080808; padding: 12px; text-align: center; border-top: 1px solid #111; }
-        .acc-body.active { display: block; }
-        .titular { font-size: 0.7rem; color: var(--o); font-weight: 800; margin-bottom: 10px; border-bottom: 1px solid #1a1a1a; padding-bottom: 5px; text-transform: uppercase; }
-        .copy-box { background: #111; padding: 10px; border-radius: 5px; margin: 4px 0; color: #fff; cursor: pointer; border: 1px dashed var(--o); font-size: 0.8rem; font-weight: bold; }
-        .btn-gold { width: 100%; background: var(--g); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; margin-top: 10px; cursor: pointer; text-transform: uppercase; }
+        body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
+        header { padding: 20px; text-align: center; border-bottom: 1px solid #111; cursor: pointer; }
+        .logo { color: var(--o); font-size: 1.8rem; font-weight: 900; letter-spacing: 3px; text-shadow: 0 0 10px rgba(212,175,55,0.3); }
+        .view { display: none; width: 100%; max-width: 420px; margin: auto; padding: 15px; }
+        .view.active { display: flex; flex-direction: column; animation: fadeIn 0.4s ease; }
+        .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; background: #0a0a0a; padding: 10px; border-radius: 12px; border: 1px solid #111; }
+        .flag { width: 100%; height: 25px; opacity: 0.3; cursor: pointer; object-fit: cover; border-radius: 3px; transition: 0.3s; }
+        .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 8px var(--o); transform: scale(1.05); }
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 10px; padding: 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+        .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
+        .card b { color: var(--o); font-size: 1.1rem; }
+        .acc-item { border: 1px solid #1a1a1a; border-radius: 10px; margin-bottom: 8px; overflow: hidden; background: #080808; }
+        .acc-head { background: #111; padding: 12px; font-size: 0.75rem; font-weight: 800; cursor: pointer; display: flex; justify-content: space-between; color: #888; text-transform: uppercase; }
+        .acc-body { display: none; padding: 15px; text-align: center; border-top: 1px solid #111; }
+        .acc-body.active { display: block; animation: slideDown 0.3s ease; }
+        .titular { font-size: 0.75rem; color: var(--o); font-weight: 900; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid #1a1a1a; padding-bottom: 8px; }
+        .label-gold { font-size: 0.65rem; color: var(--o); font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 5px; opacity: 0.8; }
+        .copy-box { background: #111; padding: 12px; border-radius: 6px; margin-bottom: 12px; color: #fff; cursor: pointer; border: 1px dashed var(--o); font-size: 0.9rem; font-weight: 700; letter-spacing: 1px; }
+        .btn-main { width: 100%; background: var(--g); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
         
-        .adm-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; margin-bottom: 10px; }
-        .adm-label { color: var(--o); font-weight: 800; font-size: 0.65rem; text-transform: uppercase; margin-bottom: 10px; display: block; letter-spacing: 1px; }
-        .tasa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .tasa-input { background: #000; border: 1px solid #222; color: #fff; padding: 10px; border-radius: 6px; text-align: center; font-size: 0.8rem; }
-        .user-row { background: #000; border-bottom: 1px solid #111; padding: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; }
+        /* ADMIN */
+        .adm-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin-bottom: 15px; }
+        .adm-label { color: var(--o); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 12px; display: block; letter-spacing: 1.5px; }
+        .tasa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        .tasa-input { background: #000; border: 1px solid #222; color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 0.9rem; }
+        .user-row { background: #111; border-radius: 8px; padding: 12px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1a1a1a; }
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideDown { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
+
 <header onclick="adminAccess()">
     <div class="logo">FRAN CRUZ VIP</div>
-    <div id="tagline" style="font-size: 0.55rem; color: #444;">SALA PRIVADA • COSTA RICA</div>
+    <div id="tagline" style="font-size: 0.6rem; color: #555; font-weight: 700; margin-top: 5px;">SALA PRIVADA • COSTA RICA</div>
 </header>
 
 <div id="v-client" class="view active">
@@ -54,32 +58,46 @@
         <img src="https://flagcdn.com/bz.svg" class="flag" onclick="setLoc('BELICE', '$', 'usd')">
         <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('WORLDWIDE', '$', 'usd')">
     </div>
-    <div class="card" onclick="selP(this, 'HOY', 1)"><span>ACCESO HOY</span><b class="p-val">₡540</b></div>
-    <div class="card sel" onclick="selP(this, '30 DÍAS GOLD', 20)"><span>30 DÍAS GOLD</span><b class="p-val">₡10,800</b></div>
+
+    <div class="card" onclick="selP(this, 'HOY', 1)">
+        <span>ACCESO HOY</span>
+        <b class="p-val">₡540</b>
+    </div>
+    <div class="card sel" onclick="selP(this, '30 DÍAS GOLD', 20)">
+        <span>30 DÍAS GOLD</span>
+        <b class="p-val">₡10,800</b>
+    </div>
+
     <div class="acc-item">
         <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL / GRUPO MUTUAL <span>▼</span></div>
         <div class="acc-body active">
             <div class="titular">A NOMBRE DE: RANDALL SÁNCHEZ C.</div>
+            <span class="label-gold">SINPE MÓVIL CR</span>
             <div class="copy-box" onclick="copy('70835833')">70835833</div>
+            <span class="label-gold">IBAN MUTUAL ALAJUELA</span>
             <div class="copy-box" onclick="copy('CR80080315001000035641')">CR80...641</div>
         </div>
     </div>
+
     <div class="acc-item">
         <div class="acc-head" onclick="toggleAcc(this)">2. PAYPAL <span>▼</span></div>
         <div class="acc-body">
             <div class="titular">A NOMBRE DE: RANDALL SÁNCHEZ C.</div>
+            <span class="label-gold">PAYPAL</span>
             <div class="copy-box" onclick="copy('randallesc061376@gmail.com')">randallesc061376@gmail.com</div>
         </div>
     </div>
-    <button class="btn-gold" onclick="requestAccess()">SOLICITAR ACCESO VIP</button>
-    <button class="btn-outline" style="width:100%; background:transparent; border:1px solid #111; color:#333; padding:10px; border-radius:8px; margin-top:8px; font-size:0.6rem">YA TENGO MI CLAVE</button>
+
+    <button class="btn-main" onclick="requestAccess()">SOLICITAR ACCESO VIP</button>
+    <button style="background:transparent; border:none; color:#444; font-size:0.7rem; font-weight:bold; margin-top:15px; cursor:pointer">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-admin" class="view">
     <div class="adm-card">
-        <span class="adm-label">VALIDACIÓN DE PAGOS</span>
-        <div id="admin-user-list">Cargando solicitudes...</div>
+        <span class="adm-label">CONTROL DE ACCESOS</span>
+        <div id="admin-user-list" style="max-height: 200px; overflow-y: auto;">Cargando...</div>
     </div>
+
     <div class="adm-card">
         <span class="adm-label">TIPOS DE CAMBIO</span>
         <div class="tasa-grid">
@@ -88,22 +106,37 @@
             <input type="number" id="tasa_gt" class="tasa-input" placeholder="Q GT">
             <input type="number" id="tasa_hn" class="tasa-input" placeholder="L HN">
         </div>
-        <button class="btn-gold" onclick="saveTasas()">ACTUALIZAR PANEL</button>
+        <button class="btn-main" onclick="saveTasas()">ACTUALIZAR PRECIOS</button>
     </div>
-    <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">CERRAR PANEL</button>
+    
+    <button class="btn-main" style="background:#222; color:#fff" onclick="location.reload()">CERRAR SESIÓN</button>
 </div>
 
 <script>
-    const firebaseConfig = { apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", projectId: "fran-cruz-sala-vip", databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com" };
+    // CONFIGURACIÓN FIREBASE
+    const firebaseConfig = { 
+        apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
+        projectId: "fran-cruz-sala-vip", 
+        databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com" 
+    };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    
+
+    // ESTADO INICIAL
     let rates = { cr: 540, ni: 37, gt: 7.7, hn: 24.6, usd: 1 };
     let curKey = 'cr', curSim = "₡", curP = "30 DÍAS GOLD", clicks = 0;
+    
+    // IDENTIFICACIÓN CLIENTE
     let myID = localStorage.getItem('fc_id') || 'UID-' + Math.random().toString(36).substr(2, 6).toUpperCase();
     localStorage.setItem('fc_id', myID);
 
-    db.ref('tasas').on('value', ss => { if(ss.val()) { rates = {...rates, ...ss.val()}; updatePrices(); } });
+    // ESCUCHAR CAMBIOS EN FIREBASE
+    db.ref('tasas').on('value', ss => { 
+        if(ss.val()) { 
+            rates = {...rates, ...ss.val()}; 
+            updatePrices(); 
+        } 
+    });
 
     function setLoc(n, s, k) {
         curKey = k; curSim = s;
@@ -120,19 +153,41 @@
         });
     }
 
-    function selP(el, p) { curP = p; document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); el.classList.add('sel'); }
-    function copy(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
-    function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
-
-    function requestAccess() {
-        window.open(`https://wa.me/50664535475?text=${encodeURIComponent('Solicito ' + curP + '. ID: ' + myID)}`);
-        db.ref('users/' + myID).set({ id: myID, status: 'wait', plan: curP });
+    function selP(el, p) { 
+        curP = p; 
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); 
+        el.classList.add('sel'); 
     }
 
+    function copy(t) { 
+        navigator.clipboard.writeText(t); 
+        alert("Copiado al portapapeles"); 
+    }
+
+    function toggleAcc(el) { 
+        el.nextElementSibling.classList.toggle('active'); 
+    }
+
+    function requestAccess() {
+        const d = new Date().getDate().toString().padStart(2, '0');
+        const key = myID.substr(-2) + d;
+        const msg = `Solicito ${curP}. ID: ${myID} | CLAVE GENERADA: ${key}`;
+        
+        window.open(`https://wa.me/50664535475?text=${encodeURIComponent(msg)}`);
+        
+        db.ref('users/' + myID).set({ 
+            id: myID, 
+            status: 'wait', 
+            plan: curP, 
+            date: new Date().toLocaleString() 
+        });
+    }
+
+    // PANEL ADMINISTRATIVO
     function adminAccess() {
         clicks++;
         if(clicks >= 5) {
-            if(prompt("PASS:") === "1376") {
+            if(prompt("CLAVE DE ACCESO:") === "1376") {
                 document.getElementById('v-client').classList.remove('active');
                 document.getElementById('v-admin').classList.add('active');
                 loadAdmin();
@@ -147,13 +202,18 @@
         document.getElementById('tasa_ni').value = rates.ni;
         document.getElementById('tasa_gt').value = rates.gt;
         document.getElementById('tasa_hn').value = rates.hn;
+
         db.ref('users').on('value', ss => {
             const list = document.getElementById('admin-user-list');
             list.innerHTML = "";
             ss.forEach(u => {
                 const user = u.val();
                 if(user.status === 'wait') {
-                    list.innerHTML += `<div class="user-row"><span>${user.id}</span><button onclick="db.ref('users/${user.id}').update({status:'active'})" style="background:green; border:none; color:white; padding:5px 10px; border-radius:4px">OK</button></div>`;
+                    list.innerHTML += `
+                        <div class="user-row">
+                            <div style="font-size:0.6rem"><b>${user.id}</b><br>${user.plan}</div>
+                            <button onclick="db.ref('users/${user.id}').update({status:'active'})" style="background:#d4af37; border:none; padding:8px 12px; border-radius:6px; font-weight:bold; cursor:pointer">VALIDAR</button>
+                        </div>`;
                 }
             });
         });
@@ -166,8 +226,10 @@
             gt: document.getElementById('tasa_gt').value,
             hn: document.getElementById('tasa_hn').value
         };
-        db.ref('tasas').update(t).then(() => alert("Panel Actualizado"));
+        db.ref('tasas').update(t).then(() => alert("Tasas actualizadas en tiempo real"));
     }
 </script>
+
 </body>
-</html>
+    </html>
+    
