@@ -8,28 +8,57 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <style>
-        :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --v: #2ecc71; --r: #e74c3c; }
+        :root { 
+            --o: #d4af37; 
+            --n: #050505; 
+            --g: linear-gradient(180deg, #f9e498, #d4af37); 
+            --v: #2ecc71; 
+            --r: #e74c3c;
+            --neon-v: 0 0 10px rgba(46, 204, 113, 0.4), 0 0 20px rgba(46, 204, 113, 0.2);
+        }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
+        
         header { padding: 30px 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
+
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
         .flag { width: 100%; height: 28px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); transform: scale(1.05); }
+
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
+
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
+        .acc-head.adm { color: var(--o); }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
-        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed #333; cursor: pointer; }
+        
+        .copy-box { 
+            background: #0f0f0f; 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin-bottom: 15px; 
+            border: 1px dashed #333; 
+            cursor: pointer; 
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+        }
         .copy-box b { display: block; color: var(--o); font-size: 0.95rem; font-family: monospace; }
+        .copy-box.success { 
+            border-color: var(--v); 
+            box-shadow: var(--neon-v); 
+            background: rgba(46, 204, 113, 0.05);
+        }
+
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; }
+
         .user-row { background:#080808; border:1px solid #222; padding:12px; border-radius:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -53,9 +82,9 @@
     </div>
 
     <div id="planes">
-        <div class="card" onclick="selP(this, 'HOY', 1)"><span>ACCESO HOY</span><b class="p-val">--</b></div>
-        <div class="card" onclick="selP(this, '7 DÍAS', 5)"><span>7 DÍAS SILVER</span><b class="p-val">--</b></div>
-        <div class="card sel" onclick="selP(this, '30 DÍAS', 20)"><span>30 DÍAS GOLD</span><b class="p-val">--</b></div>
+        <div class="card" onclick="selP(this, 'HOY', 1)"><span>ACCESO HOY</span><b class="p-val">₡--</b></div>
+        <div class="card" onclick="selP(this, '7 DÍAS', 5)"><span>7 DÍAS SILVER</span><b class="p-val">₡--</b></div>
+        <div class="card sel" onclick="selP(this, '30 DÍAS', 20)"><span>30 DÍAS GOLD</span><b class="p-val">₡--</b></div>
     </div>
 
     <div class="acc-item">
@@ -92,11 +121,11 @@
 <div id="v-admin" class="view">
     <div style="padding: 20px 0;">
         <div class="acc-item">
-            <div class="acc-head" style="color:var(--o)" onclick="toggleAdminView(this, 'users')">LISTA DE ESPERA <span>▼</span></div>
+            <div class="acc-head adm" onclick="toggleAdminView(this, 'users')">LISTA DE ESPERA <span>▼</span></div>
             <div class="acc-body" id="adm-users-body"><div id="adm-users">Cargando...</div></div>
         </div>
         <div class="acc-item">
-            <div class="acc-head" style="color:var(--o)" onclick="toggleAdminView(this, 'rates')">TASAS DE CAMBIO <span>▼</span></div>
+            <div class="acc-head adm" onclick="toggleAdminView(this, 'rates')">TASAS DE CAMBIO <span>▼</span></div>
             <div class="acc-body" id="adm-rates-body"><div id="adm-rates"></div></div>
         </div>
         <button class="btn-dark" onclick="location.reload()">SALIR DEL PANEL</button>
@@ -121,7 +150,7 @@
     function setLoc(n, s, i) { iso = i; sim = s; document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); event.target.classList.add('active'); updatePrices(); }
 
     function updatePrices() {
-        const base = [1, 5, 20]; // Blindado: Gold a $20
+        const base = [1, 5, 20]; 
         document.querySelectorAll('.p-val').forEach((el, i) => {
             const val = Math.round(base[i] * (rates[iso] || 1));
             el.innerText = sim + val.toLocaleString();
@@ -129,7 +158,13 @@
     }
 
     function selP(el, p) { plan = p; document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); el.classList.add('sel'); }
-    function copy(t, el) { navigator.clipboard.writeText(t); alert('Copiado: ' + t); }
+    
+    function copy(t, el) { 
+        navigator.clipboard.writeText(t);
+        // Efecto de parpadeo neón verde elegante
+        el.classList.add('success');
+        setTimeout(() => el.classList.remove('success'), 600); // Duración sofisticada
+    }
 
     function requestAccess() {
         const d = new Date().getDate().toString().padStart(2, '0');
@@ -140,46 +175,12 @@
     }
 
     function adminAccess() { adminClicks++; if(adminClicks >= 5) { if(prompt("PASS:") === "1376") { document.getElementById('v-client').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); } adminClicks = 0; } setTimeout(() => adminClicks = 0, 2000); }
-    
-    function activateUser(id, days) {
-        const expiry = new Date();
-        expiry.setHours(23, 59, 59, 999);
-        if (days > 1) expiry.setDate(expiry.getDate() + (days - 1));
-        db.ref('users/' + id).update({ status: 'active', expiresAt: expiry.getTime() }).then(() => alert('Usuario Activado'));
-    }
-
-    function toggleAdminView(el, type) { 
-        const body = el.nextElementSibling; body.classList.toggle('show'); 
-        if(body.classList.contains('show') && type === 'users') loadUsersAdmin();
-        if(body.classList.contains('show') && type === 'rates') renderRatesAdmin();
-    }
-
-    function loadUsersAdmin() {
-        db.ref('users').on('value', ss => {
-            const l = document.getElementById('adm-users'); l.innerHTML = "";
-            ss.forEach(u => {
-                const d = u.val();
-                const dMap = { "HOY": 1, "7 DÍAS": 7, "30 DÍAS": 30 };
-                l.innerHTML += `<div class="user-row">
-                    <small><b>${d.id}</b><br>${d.plan}</small>
-                    <button onclick="activateUser('${d.id}', ${dMap[d.plan]})" style="background:var(--v); border:none; padding:10px; border-radius:5px; font-weight:bold">ACTIVAR</button>
-                </div>`;
-            });
-        });
-    }
-
-    function renderRatesAdmin() {
-        const l = document.getElementById('adm-rates'); l.innerHTML = "";
-        Object.entries(rates).forEach(([k, v]) => {
-            if(k === 'usd') return;
-            l.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px">
-                <span style="text-transform:uppercase">${k}</span>
-                <input type="number" value="${v}" style="background:#000; color:var(--o); border:1px solid var(--o); width:80px; text-align:center" onchange="db.ref('settings/rates/${k}').set(parseFloat(this.value))">
-            </div>`;
-        });
-    }
+    function toggleAdminView(el, type) { const body = el.nextElementSibling; body.classList.toggle('show'); if(body.classList.contains('show') && type === 'users') loadUsersAdmin(); if(body.classList.contains('show') && type === 'rates') renderRatesAdmin(); }
+    function loadUsersAdmin() { db.ref('users').on('value', ss => { const l = document.getElementById('adm-users'); l.innerHTML = ""; if(!ss.val()) { l.innerHTML = "<center>Sin actividad</center>"; return; } ss.forEach(u => { const d = u.val(); const dMap = { "HOY": 1, "7 DÍAS": 7, "30 DÍAS": 30 }; l.innerHTML += `<div class="user-row"><small><b>${d.id}</b><br>${d.plan}</small><button onclick="activateUser('${d.id}', ${dMap[d.plan]})" style="background:var(--v); border:none; padding:10px; border-radius:5px; font-weight:bold">ACTIVAR</button></div>`; }); }); }
+    function renderRatesAdmin() { const l = document.getElementById('adm-rates'); l.innerHTML = ""; Object.entries(rates).forEach(([k, v]) => { if(k === 'usd') return; l.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px"><span style="text-transform:uppercase">${k}</span><input type="number" value="${v}" style="background:#000; color:var(--o); border:1px solid var(--o); width:80px; text-align:center" onchange="db.ref('settings/rates/${k}').set(parseFloat(this.value))"></div>`; }); }
 
     init();
 </script>
 </body>
-</html>
+                </html>
+                
