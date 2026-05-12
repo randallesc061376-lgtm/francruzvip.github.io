@@ -11,47 +11,31 @@
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --v: #2ecc71; --r: #ff4444; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
-        
         header { padding: 30px 20px; text-align: center; border-bottom: 1px solid #111; cursor: pointer; }
         .logo { color: var(--o); font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
-
         .view { display: none; width: 100%; max-width: 420px; margin: auto; padding-bottom: 50px; }
         .view.active { display: block; }
-
-        /* BANDERAS BLINDADAS */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
-        .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
+        .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); transform: scale(1.05); }
-
-        /* PLANES BLINDADOS */
         .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 22px 18px; margin: 0 20px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
-
-        /* PAGOS BLINDADOS */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 15px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
-
         .copy-box { background: #0f0f0f; padding: 15px; border-radius: 12px; margin-bottom: 12px; border: 1px dashed #222; cursor: pointer; }
-        .copy-box small { color: #555; text-transform: uppercase; font-size: 0.65rem; font-weight: 700; display: block; margin-bottom: 4px; }
         .copy-box b { color: var(--o); font-size: 1.05rem; display: block; word-break: break-all; }
-        .copy-box.success { border-color: var(--v); }
-
-        /* PANEL ADMIN */
         .admin-box { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; margin: 15px 20px; padding: 15px; }
         .admin-thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .thumb-wrap { position: relative; height: 90px; border: 1px solid #222; border-radius: 8px; overflow: hidden; }
         .thumb-img { width: 100%; height: 100%; object-fit: cover; }
         .btn-del { position: absolute; top: 2px; right: 2px; background: var(--r); border: none; border-radius: 50%; width: 22px; height: 22px; color: #fff; cursor: pointer; font-weight: bold; }
-        
+        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; }
+        .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; font-weight: 700; text-transform: uppercase; }
         .rate-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #080808; border-radius: 8px; margin-bottom: 5px; border: 1px solid #1a1a1a; }
         .rate-input { width: 80px; background: #000; color: var(--o); border: 1px solid var(--o); text-align: center; padding: 5px; border-radius: 4px; }
-
-        /* BOTONES */
-        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; font-weight: 700; text-transform: uppercase; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -71,62 +55,45 @@
         <img src="https://flagcdn.com/bz.svg" id="f-bz" class="flag" onclick="setLoc('bz')">
         <img src="https://flagcdn.com/un.svg" id="f-un" class="flag" onclick="setLoc('un')">
     </div>
-
     <div id="planes-list"></div>
-
     <div class="acc-item">
         <div class="acc-head" onclick="toggleSec(this)">PAGOS DISPONIBLES ▼</div>
         <div class="acc-body show">
-            <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)">
-                <small>PAYPAL (MERCADO GLOBAL)</small>
-                <b>randallesc061376@gmail.com</b>
-            </div>
-            <div class="copy-box" onclick="copy('70835833', this)">
-                <small>SINPE MÓVIL (COSTA RICA)</small>
-                <b>70835833</b>
-                <span style="font-size:0.75rem; color:#666;">Randall Sánchez C.</span>
-            </div>
-            <div class="copy-box" onclick="copy('CR80080315001000035641', this)">
-                <small>IBAN MUTUAL (COSTA RICA)</small>
-                <b>CR80080315001000035641</b>
-            </div>
+            <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)"><small>PAYPAL</small><b>randallesc061376@gmail.com</b></div>
+            <div class="copy-box" onclick="copy('70835833', this)"><small>SINPE MÓVIL</small><b>70835833</b></div>
+            <div class="copy-box" onclick="copy('CR80080315001000035641', this)"><small>IBAN MUTUAL</small><b>CR80080315001000035641</b></div>
         </div>
     </div>
-
     <button class="btn-gold" onclick="sendWhatsApp()">ENVIAR COMPROBANTE</button>
     <button class="btn-dark" onclick="checkStatus()">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-vip" class="view">
-    <h4 style="text-align:center; color:var(--o); padding:20px; letter-spacing:2px;">SALA VIP ACTIVA</h4>
+    <h4 style="text-align:center; color:var(--o); padding:20px;">SALA VIP ACTIVA</h4>
     <div id="gallery-vip" style="padding:0 20px;"></div>
     <button class="btn-dark" onclick="location.reload()">CERRAR SESIÓN</button>
 </div>
 
 <div id="v-admin" class="view">
     <div class="admin-box">
-        <strong>1. GESTIÓN DE LÁMINAS (AVANCE REAL)</strong>
-        <input type="file" id="up-file" multiple accept="image/*" style="display:none" onchange="iniciarCarga(this)">
-        <button class="btn-gold" id="up-btn-ui" onclick="document.getElementById('up-file').click()">+ CARGAR LÁMINA</button>
+        <strong>1. CARGAR IMÁGENES (COMPRESIÓN ACTIVA)</strong>
+        <input type="file" id="up-file" multiple accept="image/*" style="display:none" onchange="subirLaminasOptimizado(this)">
+        <button class="btn-gold" id="up-btn-ui" onclick="document.getElementById('up-file').click()">+ SELECCIONAR DE GALERÍA</button>
         <div id="admin-gallery" class="admin-thumb-grid"></div>
     </div>
-
     <div class="admin-box">
-        <strong>2. TASAS POR PAÍS</strong>
-        <div id="rates-editor" style="margin-top:10px;"></div>
-        <button class="btn-gold" style="background:var(--v); color:#fff; height:45px; padding:0;" onclick="saveRates()">GUARDAR TASAS</button>
+        <strong>2. TASAS Y MONEDAS</strong>
+        <div id="rates-editor"></div>
+        <button class="btn-gold" style="background:var(--v); height:40px; color:#fff;" onclick="saveRates()">GUARDAR CAMBIOS</button>
     </div>
-
     <div class="admin-box">
-        <strong>3. LISTA DE ESPERA / BANEO</strong>
-        <div id="user-list" style="margin-top:10px;"></div>
+        <strong>3. CLIENTES / CONTROL</strong>
+        <div id="user-list"></div>
     </div>
-
-    <button class="btn-dark" onclick="location.reload()">SALIR DEL PANEL</button>
+    <button class="btn-dark" onclick="location.reload()">SALIR</button>
 </div>
 
 <script>
-    // CONEXIÓN BLINDADA A FIREBASE
     const firebaseConfig = { 
         apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
         projectId: "fran-cruz-sala-vip", 
@@ -146,32 +113,30 @@
         syncGallery(); loadUsers(); setLoc('cr');
     }
 
-    // "CONEXIÓN DE CABLES" PARA CARGA RÁPIDA DESDE CELULAR
-    async function iniciarCarga(input) {
+    // CARGA OPTIMIZADA CON COMPRESIÓN PARA EVITAR QUE SE PEGUE
+    async function subirLaminasOptimizado(input) {
         const archivos = Array.from(input.files);
         if (!archivos.length) return;
-
         const btn = document.getElementById('up-btn-ui');
         btn.disabled = true;
 
         for (let i = 0; i < archivos.length; i++) {
+            btn.innerText = `PROCESANDO ${i+1}/${archivos.length}...`;
             const file = archivos[i];
-            const nombreUnico = `${Date.now()}_${i}_${file.name}`;
-            const storageRef = st.ref('laminas/' + nombreUnico);
-            const uploadTask = storageRef.put(file);
+            
+            // Compresión rápida usando Canvas antes de enviar
+            const optimizedBlob = await compressImage(file);
+            const storageRef = st.ref('laminas/' + Date.now() + "_" + i);
+            const uploadTask = storageRef.put(optimizedBlob);
 
             await new Promise((resolve) => {
                 uploadTask.on('state_changed', 
                     (snapshot) => {
-                        const progreso = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                        btn.innerText = `SUBIENDO ${i + 1}/${archivos.length} (${progreso}%)`;
-                        btn.style.background = `linear-gradient(90deg, #2ecc71 ${progreso}%, #d4af37 ${progreso}%)`;
+                        const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                        btn.innerText = `SUBIENDO ${i + 1}/${archivos.length} (${prog}%)`;
+                        btn.style.background = `linear-gradient(90deg, #2ecc71 ${prog}%, #d4af37 ${prog}%)`;
                     }, 
-                    (error) => {
-                        console.error("Error en cableado:", error);
-                        alert("Error al subir una imagen. Reintentando...");
-                        resolve(); // Salta a la siguiente para no bloquear el proceso
-                    }, 
+                    () => resolve(), // En caso de error, saltar a la siguiente
                     async () => {
                         const url = await uploadTask.snapshot.ref.getDownloadURL();
                         await db.ref('laminas').push(url);
@@ -180,14 +145,29 @@
                 );
             });
         }
-
-        btn.innerText = "¡CARGA COMPLETADA!";
+        btn.innerText = "¡OK! CARGA TERMINADA";
         btn.style.background = "var(--v)";
-        setTimeout(() => { 
-            btn.innerText = "+ CARGAR LÁMINA"; 
-            btn.style.background = "var(--g)"; 
-            btn.disabled = false; 
-        }, 2500);
+        setTimeout(() => { btn.innerText = "+ SELECCIONAR DE GALERÍA"; btn.style.background = "var(--g)"; btn.disabled = false; }, 2000);
+    }
+
+    function compressImage(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const scale = 0.7; // Reducir calidad al 70% para velocidad extrema
+                    canvas.width = img.width * scale;
+                    canvas.height = img.height * scale;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    canvas.toBlob((blob) => resolve(blob || file), 'image/jpeg', 0.7);
+                };
+            };
+        });
     }
 
     function syncGallery() {
@@ -202,6 +182,7 @@
         });
     }
 
+    // TASAS Y USUARIOS (BLINDADO)
     function renderAdminRates() {
         const editor = document.getElementById('rates-editor'), labels = { cr:"CR", ni:"NI", hn:"HN", gt:"GT", usd:"USD" };
         editor.innerHTML = '';
@@ -222,8 +203,8 @@
             ss.forEach(u => {
                 const d = u.val();
                 list.innerHTML += `<div class="rate-row"><div><b>ID: ${u.key}</b><br><small>${d.status || 'espera'}</small></div>
-                <div><button onclick="db.ref('users/${u.key}').update({status:'active'})" style="background:var(--v); border:none; padding:8px; border-radius:4px;">ACT</button>
-                <button onclick="db.ref('users/${u.key}').update({status:'banned'})" style="background:var(--r); border:none; padding:8px; border-radius:4px; margin-left:5px;">BAN</button></div></div>`;
+                <div><button onclick="db.ref('users/${u.key}').update({status:'active'})" style="background:var(--v); color:#fff; border:none; padding:5px; border-radius:4px;">ACT</button>
+                <button onclick="db.ref('users/${u.key}').update({status:'banned'})" style="background:var(--r); color:#fff; border:none; padding:5px; border-radius:4px; margin-left:5px;">BAN</button></div></div>`;
             });
         });
     }
@@ -231,12 +212,11 @@
     function sendWhatsApp() {
         const d = new Date().getDate().toString().padStart(2, '0');
         const key = `I-${d}`;
-        const text = `Plan: ${currentPlan}\nID: ${uid}\n\nEsta es su clave: \`${key}\` (Toque la clave para copiar)\nEn este momento nuestro equipo válida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
+        const text = `Plan: ${currentPlan}\nID: ${uid}\n\nEsta es su clave: \`${key}\` \nEn este momento nuestro equipo válida su autorización\n\n⚠️ Advertencia! Debe adjuntar su comprobante de pago`;
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(text)}`;
     }
 
     function setLoc(c) { iso = c; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); document.getElementById('f-'+c).classList.add('active'); render(); }
-    
     function render() {
         const p = document.getElementById('planes-list'), sym = iso === 'cr' ? '₡' : (['ni','hn','gt'].includes(iso) ? 'C$' : '$');
         p.innerHTML = '';
@@ -248,7 +228,7 @@
 
     function toggleSec(el) { const b = el.nextElementSibling; b.style.display = b.style.display === "block" ? "none" : "block"; }
     function copy(t, el){ navigator.clipboard.writeText(t); el.classList.add('success'); setTimeout(()=>el.classList.remove('success'), 800); }
-    function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Validación pendiente."); }); }
+    function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Pendiente de validación."); }); }
     function showVIP() { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('v-vip').classList.add('active'); }
     function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("CLAVE")==="1376"){ document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('v-admin').classList.add('active'); } adminClicks=0; } }
 
