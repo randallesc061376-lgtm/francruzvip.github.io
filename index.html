@@ -11,10 +11,13 @@
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
+        
         header { padding: 30px 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
         .logo { color: var(--o); font-size: 2rem; font-weight: 900; letter-spacing: 4px; }
+        
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
+
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 10px; background: #0f0f0f; border-radius: 15px; }
         .flag { width: 100%; height: 25px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 10px var(--o); }
@@ -26,8 +29,10 @@
         .acc-body { display: none; background: #080808; padding: 15px; border-top: 1px solid #1a1a1a; text-align: center; }
         .acc-body.active { display: block; }
         .copy-box { background: #111; padding: 12px; border-radius: 8px; margin: 8px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; }
+        
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; margin: 15px 20px; cursor: pointer; text-transform: uppercase; }
-        .btn-secondary { background: transparent; border: none; color: #555; font-size: 0.8rem; font-weight: bold; margin: 5px auto; width: 100%; cursor: pointer; display: block; text-transform: uppercase; }
+        .btn-outline { width: calc(100% - 40px); background: transparent; color: var(--o); border: 1px solid var(--o); padding: 15px; border-radius: 12px; font-weight: 800; margin: 0 20px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+
         .adm-container { padding: 20px; }
         .adm-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 15px; margin-bottom: 20px; }
         .adm-label { font-size: 0.75rem; color: var(--o); font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: block; letter-spacing: 1px; }
@@ -39,12 +44,14 @@
         .btn-action { border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.7rem; }
         .btn-approve { background: #2ecc71; color: #fff; }
         .btn-ban { background: #e74c3c; color: #fff; margin-left: 5px; }
+
         .prog-cont { width: 100%; background: #111; height: 8px; border-radius: 4px; margin: 10px 0; display: none; overflow: hidden; }
         .prog-bar { width: 0%; height: 100%; background: var(--g); transition: 0.3s; }
         .grid-gal { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .img-wrap { position: relative; aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 1px solid #222; }
         .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
         .btn-del { position: absolute; top: 0; right: 0; background: rgba(231,76,60,0.9); color: #fff; border: none; padding: 4px 8px; font-size: 10px; cursor: pointer; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -83,57 +90,52 @@
         </div>
     </div>
     <button class="btn-gold" onclick="requestAccess()">ENVIAR COMPROBANTE DE PAGO</button>
-    <button class="btn-secondary" onclick="checkKey()">YA TENGO MI CLAVE</button>
+    <button class="btn-outline" onclick="checkMyKey()">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-admin" class="view">
     <div class="adm-container">
         <div class="adm-card">
-            <span class="adm-label">Control de Usuarios y Baneo</span>
+            <span class="adm-label">Control de Usuarios</span>
             <div id="admin-user-list"><p style="font-size:0.7rem; color:#444">Cargando...</p></div>
         </div>
         <div class="adm-card">
-            <span class="adm-label">Gestión de Galería (10 Láminas)</span>
+            <span class="adm-label">Galería</span>
             <input type="file" id="f-upload" class="adm-input" accept="image/*">
             <div class="prog-cont" id="p-cont"><div class="prog-bar" id="p-bar"></div></div>
             <button class="btn-gold" style="margin:0; width:100%" onclick="uploadImg()">PUBLICAR LÁMINA</button>
             <div id="admin-gallery" class="grid-gal"></div>
         </div>
         <div class="adm-card">
-            <span class="adm-label">Tipos de Cambio ($1 USD)</span>
+            <span class="adm-label">Tipos de Cambio</span>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
                 <div><small style="font-size:9px">₡ CR</small><input type="number" id="rate-cr" class="adm-input" value="540"></div>
                 <div><small style="font-size:9px">C$ NI</small><input type="number" id="rate-ni" class="adm-input" value="37"></div>
             </div>
-            <button class="btn-gold" style="margin:5px 0; width:100%; height:40px; padding:0" onclick="saveRates()">ACTUALIZAR CAMBIOS</button>
-        </div>
-        <div class="adm-card">
-            <span class="adm-label">Seguridad del Panel</span>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
-                <div><small style="font-size:9px">TOQUES</small><input type="number" id="cfg-clicks" class="adm-input" value="5"></div>
-                <div><small style="font-size:9px">KEYPASS</small><input type="text" id="cfg-pass" class="adm-input" value="1376"></div>
-            </div>
-            <button class="btn-gold" style="margin:5px 0; width:100%; height:40px; padding:0" onclick="saveSecurity()">GUARDAR AJUSTES</button>
+            <button class="btn-gold" style="margin:5px 0; width:100%; height:40px; padding:0" onclick="saveRates()">ACTUALIZAR</button>
         </div>
         <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">CERRAR SESIÓN</button>
     </div>
 </div>
 
 <script>
-    const firebaseConfig = { apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", projectId: "fran-cruz-sala-vip", databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com", storageBucket: "fran-cruz-sala-vip.firebasestorage.app" };
+    const firebaseConfig = { 
+        apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
+        projectId: "fran-cruz-sala-vip",
+        databaseURL: "https://fran-cruz-sala-vip-default-rtdb.firebaseio.com",
+        storageBucket: "fran-cruz-sala-vip.firebasestorage.app" 
+    };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database(); const st = firebase.storage();
+
     let curTasa = 540, curSim = "₡", curP = "30 DÍAS", curU = 20, clicks = 0;
-    let reqClicks = 5, masterKey = "1376";
     let myID = localStorage.getItem('fc_id') || 'VIP' + Math.floor(Math.random()*9000+1000);
     localStorage.setItem('fc_id', myID);
 
-    db.ref('config').on('value', ss => { if(ss.val()){ reqClicks = ss.val().clicks; masterKey = ss.val().pass; } });
-
     function adminAccess() {
         clicks++;
-        if(clicks >= reqClicks) {
-            if(prompt("KEYPASS ADMINISTRADOR:") === masterKey) {
+        if(clicks >= 5) {
+            if(prompt("KEYPASS:") === "1376") {
                 document.getElementById('v-client').classList.remove('active');
                 document.getElementById('v-admin').classList.add('active');
                 loadAdminData();
@@ -175,19 +177,51 @@
 
     function deleteImg(key) { if(confirm("¿Eliminar?")) db.ref('gallery/' + key).remove(); }
     function saveRates() { db.ref('rates').set({cr: document.getElementById('rate-cr').value, ni: document.getElementById('rate-ni').value}); alert("ACTUALIZADO"); }
-    function saveSecurity() { db.ref('config').set({clicks: document.getElementById('cfg-clicks').value, pass: document.getElementById('cfg-pass').value}); alert("GUARDADO"); }
 
     function setLoc(n, s, t) { curTasa = t; curSim = s; document.getElementById('tagline').innerText = `SALA PRIVADA • ${n}`; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); event.target.classList.add('active'); updatePrices(); }
     function updatePrices() { const base = [1, 5, 20]; document.querySelectorAll('.p-val').forEach((el, i) => { el.innerText = curSim + Math.round(base[i] * curTasa).toLocaleString(); }); }
     function selP(el, p, u) { curP = p; curU = u; document.querySelectorAll('.card').forEach(c => c.classList.remove('sel')); el.classList.add('sel'); }
     function copy(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
     function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
+
+    // NUEVA LÓGICA: 2 Dígitos ALEATORIOS del ID + Día de la transacción
     function requestAccess() {
-        const key = `${myID}-${new Date().getDate()}`;
-        db.ref('users/' + myID).set({id: myID, status: 'wait', plan: curP, key: key, time: Date.now()});
-        window.location.href = `https://wa.me/50664535475?text=Solicito ${curP}. ID: ${myID}`;
+        const day = new Date().getDate().toString().padStart(2, '0');
+        
+        // Elige dos posiciones al azar dentro de la cadena del ID (ej: "VIP4521")
+        const pos1 = Math.floor(Math.random() * myID.length);
+        let pos2 = Math.floor(Math.random() * myID.length);
+        while(pos1 === pos2) pos2 = Math.floor(Math.random() * myID.length); // Evita repetir posición
+
+        const char1 = myID.charAt(pos1);
+        const char2 = myID.charAt(pos2);
+        
+        const dynamicKey = `${char1}${char2}${day}`;
+
+        db.ref('users/' + myID).set({
+            id: myID, 
+            status: 'wait', 
+            plan: curP, 
+            key: dynamicKey, 
+            time: Date.now()
+        });
+
+        const msg = `Solicito ${curP}. ID: ${myID}`;
+        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
     }
-    function checkKey() { alert("Función de verificación en desarrollo"); }
+
+    function checkMyKey() {
+        const userKey = prompt("INGRESE SU CLAVE DE ACCESO:");
+        if(!userKey) return;
+        db.ref('users/' + myID).once('value', ss => {
+            const data = ss.val();
+            if(data && data.status === 'active' && data.key === userKey) {
+                alert("ACCESO CONCEDIDO");
+            } else {
+                alert("CLAVE O ESTADO INVÁLIDO");
+            }
+        });
+    }
 </script>
 </body>
 </html>
