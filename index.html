@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • GLOBAL CONTROL</title>
+    <title>FRAN CRUZ VIP • TOTAL CONTROL</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
@@ -17,7 +17,7 @@
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; }
         .view.active { display: flex; }
         
-        /* Banderas y Planes (Blindado) */
+        /* Estética Blindada */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid #111; }
         .flag { width: 100%; height: 28px; opacity: 0.3; border-radius: 4px; cursor: pointer; object-fit: cover; transition: 0.3s; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 12px rgba(212,175,55,0.4); transform: scale(1.05); }
@@ -25,26 +25,19 @@
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
         .card b { color: var(--o); font-size: 1.3rem; }
 
-        /* Acordeones de Pago */
+        /* Ventanas de Pago (Estética Unificada) */
         .acc-item { border: 1px solid #1a1a1a; border-radius: 12px; margin: 0 20px 10px; overflow: hidden; background: #0a0a0a; }
         .acc-head { padding: 18px; font-size: 0.85rem; font-weight: 800; color: #888; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
         .acc-body { display: none; background: #000; padding: 15px; border-top: 1px solid #1a1a1a; }
         .acc-body.show { display: block; }
         
-        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 12px; margin-bottom: 12px; border: 1px dashed #222; cursor: pointer; position: relative; }
+        .copy-box { background: #0f0f0f; padding: 15px; border-radius: 12px; margin-bottom: 12px; border: 1px dashed #222; cursor: pointer; transition: 0.3s; }
         .copy-box small { color: #555; text-transform: uppercase; font-size: 0.65rem; font-weight: 700; display: block; margin-bottom: 4px; }
         .copy-box b { color: var(--o); font-size: 1.05rem; display: block; word-break: break-all; }
         .copy-box.success { border-color: var(--v); box-shadow: 0 0 15px rgba(46, 204, 113, 0.2); }
 
-        /* Botones */
         .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 22px; border-radius: 15px; font-weight: 900; margin: 20px 20px 10px; cursor: pointer; text-transform: uppercase; }
         .btn-dark { width: calc(100% - 40px); background: #111; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 12px; margin: 10px 20px; cursor: pointer; font-weight: 700; }
-
-        /* Admin Gallery */
-        .admin-thumb-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
-        .thumb-wrap { position: relative; border: 1px solid #222; border-radius: 8px; overflow: hidden; height: 120px; }
-        .thumb-img { width: 100%; height: 100%; object-fit: cover; }
-        .btn-del { position: absolute; top: 5px; right: 5px; background: var(--r); color: #fff; border: none; border-radius: 50%; width: 28px; height: 28px; font-weight: 900; cursor: pointer; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -71,14 +64,21 @@
         <div class="acc-head" onclick="toggleSec(this)">PAGOS DISPONIBLES ▼</div>
         <div class="acc-body show">
             <div class="copy-box" onclick="copy('randallesc061376@gmail.com', this)">
-                <small>PAYPAL (GLOBAL)</small>
+                <small>PAYPAL (MERCADO GLOBAL)</small>
                 <b>randallesc061376@gmail.com</b>
-                <span style="color:#555; font-size: 0.75rem;">Randall Sánchez C.</span>
+                <span style="color:#555; font-size: 0.7rem;">Randall Sánchez C.</span>
             </div>
+            
             <div class="copy-box" onclick="copy('70835833', this)">
-                <small>SINPE MÓVIL (CR)</small>
+                <small>SINPE MÓVIL (COSTA RICA)</small>
                 <b>70835833</b>
-                <span style="color:#555; font-size: 0.75rem;">Randall Sánchez C.</span>
+                <span style="color:#555; font-size: 0.7rem;">Randall Sánchez C.</span>
+            </div>
+
+            <div class="copy-box" onclick="copy('CR80080315001000035641', this)">
+                <small>IBAN MUTUAL ALAJUELA (COSTA RICA)</small>
+                <b>CR80080315001000035641</b>
+                <span style="color:#555; font-size: 0.7rem;">Randall Sánchez C.</span>
             </div>
         </div>
     </div>
@@ -99,7 +99,7 @@
         <div class="acc-body">
             <input type="file" id="up-file" style="display:none" onchange="uploadFile(this)" accept="image/*">
             <button class="btn-gold" id="btn-up" style="width:100%; margin:0 0 15px 0" onclick="document.getElementById('up-file').click()">+ CARGAR NUEVA LÁMINA</button>
-            <div id="admin-gallery-list" class="admin-thumb-grid"></div>
+            <div id="admin-gallery-list" style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px;"></div>
         </div>
     </div>
 
@@ -132,8 +132,7 @@
     function init() {
         db.ref('rates').on('value', ss => { if(ss.val()){ rates = ss.val(); render(); renderAdminRates(); } });
         db.ref('users/'+uid).on('value', ss => { if(ss.val()?.status === 'active') showVIP(); });
-        setLoc('cr');
-        loadGallery();
+        setLoc('cr'); loadGallery();
     }
 
     function setLoc(c) { iso = c; document.querySelectorAll('.flag').forEach(f => f.classList.remove('active')); document.getElementById('f-'+c).classList.add('active'); render(); }
@@ -164,7 +163,6 @@
         setTimeout(()=>el.classList.remove('success'), 800); 
     }
 
-    // --- CARGA DE LÁMINAS CON FEEDBACK ---
     async function uploadFile(inp) {
         const file = inp.files[0]; if(!file) return;
         const btn = document.getElementById('btn-up');
@@ -175,7 +173,7 @@
             const url = await ref.getDownloadURL();
             await db.ref('laminas').push(url);
             alert("¡Lámina Guardada!"); 
-        } catch (e) { alert("Error al subir"); }
+        } catch (e) { alert("Error"); }
         btn.innerText = "+ CARGAR NUEVA LÁMINA"; btn.disabled = false;
     }
 
@@ -184,9 +182,8 @@
             const cont = document.getElementById('gallery-container'), adm = document.getElementById('admin-gallery-list');
             cont.innerHTML = ''; adm.innerHTML = '';
             ss.forEach(s => {
-                const url = s.val();
-                cont.innerHTML += `<img src="${url}" style="width:100%; border-radius:12px; border:1px solid #222;">`;
-                adm.innerHTML += `<div class="thumb-wrap"><img src="${url}" class="thumb-img"><button class="btn-del" onclick="db.ref('laminas/${s.key}').remove()">X</button></div>`;
+                cont.innerHTML += `<img src="${s.val()}" style="width:100%; border-radius:12px; border:1px solid #222;">`;
+                adm.innerHTML += `<div style="position:relative; height:120px; border:1px solid #222; border-radius:8px; overflow:hidden;"><img src="${s.val()}" style="width:100%; height:100%; object-fit:cover;"><button onclick="db.ref('laminas/${s.key}').remove()" style="position:absolute; top:5px; right:5px; background:var(--r); color:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer;">X</button></div>`;
             });
         });
     }
@@ -194,14 +191,14 @@
     function renderAdminRates() {
         const d = document.getElementById('admin-rates-ui'); d.innerHTML = '';
         ['cr','ni','hn','gt'].forEach(k => {
-            d.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center;"><span>${k.toUpperCase()}</span><input type="number" id="r-${k}" value="${rates[k]}" class="rate-input"></div>`;
+            d.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center;"><span>${k.toUpperCase()}</span><input type="number" id="r-${k}" value="${rates[k]}" style="width:80px; background:#111; color:var(--o); border:1px solid #333; text-align:center; padding:8px; border-radius:5px;"></div>`;
         });
     }
 
     function saveRates() {
         const nr = {...rates};
         ['cr','ni','hn','gt'].forEach(k => nr[k] = parseFloat(document.getElementById('r-'+k).value));
-        db.ref('rates').set(nr).then(() => alert("Tasas Actualizadas Globalmente"));
+        db.ref('rates').set(nr).then(() => alert("Tasas Actualizadas"));
     }
 
     function renderUsers() {
@@ -223,13 +220,13 @@
 
     function sendWhatsApp() {
         const d = new Date().getDate().toString().padStart(2, '0');
-        const text = `Plan: ${currentPlan}\nID: ${uid}\nClave: I-${d}\n\nAdjunte su comprobante (SINPE o PayPal).`;
+        const text = `Plan: ${currentPlan}\nID: ${uid}\nClave: I-${d}\n\nAdjunte comprobante de PayPal, SINPE o IBAN.`;
         window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(text)}`;
     }
 
-    function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Pendiente de autorización."); }); }
+    function checkStatus() { db.ref('users/'+uid).once('value', ss => { if(ss.val()?.status==='active') showVIP(); else alert("Pendiente de validación."); }); }
     function showVIP() { document.getElementById('v-main').classList.remove('active'); document.getElementById('v-vip').classList.add('active'); }
-    function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("ACCESO MAESTRO")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); renderUsers(); } adminClicks=0; } }
+    function adminAccess() { adminClicks++; if(adminClicks>=5){ if(prompt("PASS")==="1376"){ document.getElementById('v-main').classList.remove('active'); document.getElementById('v-admin').classList.add('active'); renderUsers(); } adminClicks=0; } }
 
     init();
 </script>
