@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FRAN CRUZ VIP • CENTRAL OPERATIVA</title>
+    <title>FRAN CRUZ VIP • BLINDADO</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
     <style>
         :root { --o: #d4af37; --n: #050505; --g: linear-gradient(180deg, #f9e498, #d4af37); --r: #e74c3c; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; user-select: none; }
-        body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; }
+        body { background: var(--n); color: #fff; margin: 0; min-height: 100vh; overflow-x: hidden; }
         
         header { padding: 30px 20px; text-align: center; cursor: pointer; border-bottom: 1px solid #111; }
         .logo { color: var(--o); font-size: 2rem; font-weight: 900; letter-spacing: 4px; }
@@ -18,41 +18,33 @@
         .view { display: none; width: 100%; max-width: 420px; margin: auto; flex-direction: column; padding-bottom: 50px; animation: fadeIn 0.3s; }
         .view.active { display: flex; }
 
-        /* INTERFAZ CLIENTE */
+        /* --- MENÚ PRINCIPAL BLINDADO --- */
         .geo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px; padding: 10px; background: #0f0f0f; border-radius: 15px; }
         .flag { width: 100%; height: 25px; opacity: 0.4; border-radius: 4px; cursor: pointer; object-fit: cover; }
         .flag.active { opacity: 1; border: 1px solid var(--o); box-shadow: 0 0 10px var(--o); }
-        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin: 0 20px 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        
+        .card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin: 0 20px 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
         .card.sel { border: 1px solid var(--o); background: rgba(212,175,55,0.08); }
+        .card span { font-size: 0.9rem; font-weight: 600; color: #eee; }
         .card b { color: var(--o); font-size: 1.2rem; }
-        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; margin: 15px 20px; cursor: pointer; text-transform: uppercase; }
 
-        /* PANEL ADMINISTRADOR PRO */
+        .acc-item { border: 1px solid #1a1a1a; border-radius: 10px; margin: 0 20px 8px; overflow: hidden; }
+        .acc-head { background: #111; padding: 15px; font-size: 0.8rem; font-weight: bold; color: #888; cursor: pointer; display: flex; justify-content: space-between; }
+        .acc-body { display: none; background: #080808; padding: 15px; border-top: 1px solid #1a1a1a; text-align: center; }
+        .acc-body.active { display: block; }
+        
+        .copy-box { background: #111; padding: 12px; border-radius: 8px; margin: 8px 0; font-family: monospace; color: var(--o); cursor: pointer; border: 1px dashed #333; }
+        .btn-gold { width: calc(100% - 40px); background: var(--g); color: #000; border: none; padding: 20px; border-radius: 14px; font-weight: 900; margin: 15px 20px; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
+        .btn-outline { width: calc(100% - 40px); background: transparent; color: var(--o); border: 1px solid var(--o); padding: 15px; border-radius: 12px; font-weight: 800; margin: 0 20px; cursor: pointer; text-transform: uppercase; }
+
+        /* --- PANEL ADMINISTRADOR PRO --- */
         .adm-sect { margin: 20px; background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 15px; padding: 15px; }
         .adm-label { font-size: 0.7rem; color: var(--o); font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 10px; letter-spacing: 1px; }
-        
-        /* Lista Espera y Usuarios */
         .user-row { background: #000; border: 1px solid #222; padding: 12px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .user-info b { font-size: 0.9rem; color: #fff; }
-        .user-info span { font-size: 0.65rem; color: #666; display: block; }
-        .badge { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
-        .badge.wait { background: var(--o); color: #000; }
-        .badge.active { background: #2ecc71; color: #fff; }
-        .badge.banned { background: var(--r); color: #fff; }
-
-        /* Galería */
+        .btn-adm { background: #1a1a1a; color: #fff; border: 1px solid #333; padding: 8px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; }
         .gal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
         .gal-item { position: relative; aspect-ratio: 1; border: 1px solid #222; border-radius: 5px; overflow: hidden; }
         .gal-item img { width: 100%; height: 100%; object-fit: cover; }
-        .gal-del { position: absolute; top: 2px; right: 2px; background: var(--r); border: none; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; cursor: pointer; }
-
-        /* Tipos de Cambio */
-        .tasa-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #111; }
-        .tasa-row input { background: #111; border: 1px solid #333; color: var(--o); width: 80px; text-align: center; border-radius: 5px; padding: 5px; font-weight: bold; }
-
-        .btn-adm { background: #1a1a1a; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; cursor: pointer; }
-        .btn-approve { background: #2ecc71; color: #fff; border: none; }
-        .btn-ban { background: var(--r); color: #fff; border: none; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -68,38 +60,55 @@
     <div class="geo-grid">
         <img src="https://flagcdn.com/cr.svg" class="flag active" onclick="setLoc('COSTA RICA', '₡', 'cr')">
         <img src="https://flagcdn.com/ni.svg" class="flag" onclick="setLoc('NICARAGUA', 'C$', 'ni')">
+        <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setLoc('PANAMÁ', '$', 'usd')">
         <img src="https://flagcdn.com/hn.svg" class="flag" onclick="setLoc('HONDURAS', 'L', 'hn')">
         <img src="https://flagcdn.com/gt.svg" class="flag" onclick="setLoc('GUATEMALA', 'Q', 'gt')">
-        <img src="https://flagcdn.com/pa.svg" class="flag" onclick="setLoc('PANAMÁ', '$', 'usd')">
         <img src="https://flagcdn.com/un.svg" class="flag" onclick="setLoc('WORLDWIDE', '$', 'usd')">
     </div>
-    <div id="pricing-area"></div>
+
+    <div id="pricing-area">
+        <div class="card" onclick="selP(this, 'HOY', 1)"><span>ACCESO HOY</span><b id="p1">₡540</b></div>
+        <div class="card" onclick="selP(this, '7 DÍAS', 5)"><span>7 DÍAS SILVER</span><b id="p2">₡2,700</b></div>
+        <div class="card sel" onclick="selP(this, '30 DÍAS', 20)"><span>30 DÍAS GOLD</span><b id="p3">₡10,800</b></div>
+    </div>
+
+    <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc(this)">1. SINPE MÓVIL / GRUPO MUTUAL <span>▼</span></div>
+        <div class="acc-body active">
+            <div class="copy-box" onclick="copy('70835833')">70835833</div>
+            <div class="copy-box" onclick="copy('CR80080315001000035641')">CR80...641</div>
+        </div>
+    </div>
+    <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc(this)">2. PAYPAL <span>▼</span></div>
+        <div class="acc-body">
+            <div class="copy-box" onclick="copy('randallesc061376@gmail.com')">randallesc061376@gmail.com</div>
+        </div>
+    </div>
+
     <button class="btn-gold" onclick="requestAccess()">ENVIAR COMPROBANTE DE PAGO</button>
+    <button class="btn-outline" onclick="checkKey()">YA TENGO MI CLAVE</button>
 </div>
 
 <div id="v-admin" class="view">
     <div class="adm-sect">
-        <span class="adm-label">Torre de Control de Usuarios</span>
-        <div id="adm-user-list">Cargando...</div>
+        <span class="adm-label">Control de Usuarios</span>
+        <div id="adm-user-list"></div>
     </div>
-
     <div class="adm-sect">
-        <span class="adm-label">Tipos de Cambio (vs USD)</span>
+        <span class="adm-label">Tipos de Cambio</span>
         <div id="adm-tasas-list"></div>
     </div>
-
     <div class="adm-sect">
-        <span class="adm-label">Galería de Láminas</span>
+        <span class="adm-label">Galería</span>
         <input type="file" id="img-upload" style="display:none" onchange="uploadImg(this)">
-        <button class="btn-adm" style="width:100%; margin-bottom:10px" onclick="document.getElementById('img-upload').click()">+ AGREGAR IMAGEN</button>
+        <button class="btn-adm" style="width:100%" onclick="document.getElementById('img-upload').click()">+ SUBIR LÁMINA</button>
         <div id="adm-galery" class="gal-grid"></div>
     </div>
-
     <button class="btn-gold" style="background:#222; color:#fff" onclick="location.reload()">CERRAR PANEL</button>
 </div>
 
 <script>
-    // CONFIGURACIÓN FIREBASE BLINDADA
     const firebaseConfig = { 
         apiKey: "AIzaSyCYxi6Fl8LpAUEdLht-RU76X4gKiBNT2LE", 
         projectId: "fran-cruz-sala-vip",
@@ -116,14 +125,12 @@
     let tasas = { cr: 540, ni: 37, hn: 24.6, gt: 7.7, usd: 1 };
     let curCountry = 'cr', curSim = '₡', curPlan = '30 DÍAS', clicks = 0;
 
-    // INICIO: CARGAR DATOS EN TIEMPO REAL
     function init() {
-        db.ref('settings/tasas').on('value', ss => { if(ss.val()) { tasas = ss.val(); updateUI(); renderTasasAdm(); } });
+        db.ref('settings/tasas').on('value', ss => { if(ss.val()) { tasas = ss.val(); updatePrices(); renderTasasAdm(); } });
         db.ref('gallery').on('value', ss => renderGalery(ss.val()));
         db.ref('users').on('value', ss => renderUsersAdm(ss.val()));
     }
 
-    // GESTIÓN DE ADMINISTRACIÓN
     function adminAccess() {
         clicks++;
         if(clicks >= 5) {
@@ -136,23 +143,47 @@
         setTimeout(() => clicks = 0, 2000);
     }
 
+    // CLIENTE: LÓGICA DE INTERFAZ
+    function setLoc(name, sim, key) { 
+        curCountry = key; curSim = sim; 
+        document.getElementById('tagline').innerText = `SALA PRIVADA • ${name}`;
+        document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
+        event.target.classList.add('active');
+        updatePrices();
+    }
+
+    function updatePrices() {
+        const base = [1, 5, 20];
+        const ids = ['p1', 'p2', 'p3'];
+        ids.forEach((id, i) => {
+            const val = Math.round(base[i] * tasas[curCountry]).toLocaleString();
+            document.getElementById(id).innerText = curSim + val;
+        });
+    }
+
+    function selP(el, p) { 
+        curPlan = p; 
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
+        el.classList.add('sel');
+    }
+
+    function toggleAcc(el) { el.nextElementSibling.classList.toggle('active'); }
+    function copy(t) { navigator.clipboard.writeText(t); alert("Copiado"); }
+
+    function requestAccess() {
+        const day = new Date().getDate().toString().padStart(2, '0');
+        const dKey = `${curID.charAt(0)}${curID.charAt(1)}${day}`;
+        db.ref('users/' + curID).set({ id: curID, status: 'wait', plan: curPlan, key: dKey, time: Date.now() });
+        const msg = `Hola!\nPlan ${curPlan}\nID: ${curID}\n\nEsta es su clave: \`${dKey}\` (Toque para copiar)\nNuestro equipo válida su autorización\n\n⚠️Advertencia! Adjunte comprobante de pago`;
+        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
+    }
+
+    // ADMINISTRADOR: ACCIONES
     function renderUsersAdm(data) {
         const list = document.getElementById('adm-user-list'); list.innerHTML = "";
-        if(!data) return list.innerHTML = "Sin solicitudes";
+        if(!data) return;
         Object.values(data).forEach(u => {
-            list.innerHTML += `
-                <div class="user-row">
-                    <div class="user-info">
-                        <b>${u.id}</b> <span class="badge ${u.status}">${u.status}</span>
-                        <span>Plan: ${u.plan} | Clave: ${u.key || 'N/A'}</span>
-                    </div>
-                    <div>
-                        ${u.status === 'wait' ? `<button class="btn-adm btn-approve" onclick="upStatus('${u.id}', 'active')">✓</button>` : ''}
-                        <button class="btn-adm ${u.status==='banned'?'btn-approve':'btn-ban'}" onclick="upStatus('${u.id}', '${u.status==='banned'?'wait':'banned'}')">
-                            ${u.status==='banned'?'UNBAN':'BAN'}
-                        </button>
-                    </div>
-                </div>`;
+            list.innerHTML += `<div class="user-row"><span>${u.id} (${u.status})</span><button class="btn-adm" onclick="upStatus('${u.id}', 'active')">✓</button></div>`;
         });
     }
 
@@ -160,64 +191,12 @@
         const list = document.getElementById('adm-tasas-list'); list.innerHTML = "";
         Object.entries(tasas).forEach(([k, v]) => {
             if(k === 'usd') return;
-            list.innerHTML += `<div class="tasa-row"><span>${k.toUpperCase()}</span><input type="number" value="${v}" onchange="upTasa('${k}', this.value)"></div>`;
+            list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px"><span>${k.toUpperCase()}</span><input type="number" value="${v}" style="width:60px" onchange="upTasa('${k}', this.value)"></div>`;
         });
     }
 
-    function renderGalery(data) {
-        const grid = document.getElementById('adm-galery'); grid.innerHTML = "";
-        if(!data) return;
-        Object.entries(data).forEach(([id, url]) => {
-            grid.innerHTML += `<div class="gal-item"><img src="${url}"><button class="gal-del" onclick="delImg('${id}')">X</button></div>`;
-        });
-    }
-
-    // ACCIONES TÉCNICAS
     function upStatus(id, s) { db.ref('users/' + id).update({ status: s }); }
     function upTasa(k, v) { db.ref('settings/tasas/' + k).set(parseFloat(v)); }
-    function delImg(id) { if(confirm("¿Borrar lámina?")) db.ref('gallery/' + id).remove(); }
-    
-    function uploadImg(input) {
-        const file = input.files[0]; if(!file) return;
-        const ref = st.ref('gallery/' + Date.now());
-        ref.put(file).then(ss => ss.ref.getDownloadURL()).then(url => {
-            db.ref('gallery').push(url);
-            alert("Lámina agregada");
-        });
-    }
-
-    // LÓGICA DE CLIENTE
-    function setLoc(name, sim, key) { 
-        curCountry = key; curSim = sim; 
-        document.getElementById('tagline').innerText = `SALA PRIVADA • ${name}`;
-        document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
-        event.target.classList.add('active');
-        updateUI();
-    }
-
-    function updateUI() {
-        const container = document.getElementById('pricing-area');
-        const vals = [1, 5, 20];
-        const labels = ['ACCESO HOY', '7 DÍAS SILVER', '30 DÍAS GOLD'];
-        container.innerHTML = "";
-        vals.forEach((v, i) => {
-            const price = Math.round(v * tasas[curCountry]).toLocaleString();
-            container.innerHTML += `
-                <div class="card ${curPlan === labels[i] ? 'sel' : ''}" onclick="selP('${labels[i]}')">
-                    <span>${labels[i]}</span><b>${curSim}${price}</b>
-                </div>`;
-        });
-    }
-
-    function selP(p) { curPlan = p; updateUI(); }
-
-    function requestAccess() {
-        const day = new Date().getDate().toString().padStart(2, '0');
-        const dKey = `${curID.charAt(0)}${curID.charAt(1)}${day}`; // Lógica de clave dinámica
-        db.ref('users/' + curID).set({ id: curID, status: 'wait', plan: curPlan, key: dKey, time: Date.now() });
-        const msg = `Hola!\nPlan ${curPlan}\nID: ${curID}\n\nEsta es su clave: \`${dKey}\` (Toque para copiar)\nNuestro equipo válida su autorización\n\n⚠️Advertencia! Adjunte comprobante de pago`;
-        window.location.href = `https://wa.me/50664535475?text=${encodeURIComponent(msg)}`;
-    }
 
     init();
 </script>
